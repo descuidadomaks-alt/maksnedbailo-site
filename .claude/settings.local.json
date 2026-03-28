@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 . --typescript --tailwind --app --no-src-dir --no-git --import-alias \"@/*\" --yes)",
+      "Bash(npm --version)",
+      "Bash(cmd /c \"where node 2>&1 && node --version && npm --version\")",
+      "Bash(cmd /c \"where node\")",
+      "Read(//c/Users/Asus/AppData/Roaming/**)",
+      "Read(//c//**)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(ls \"D:\\\\Claude Code\\\\maksnedbailo-site\\\\public\"\" && echo \"---\" && ls \"D:Claude Codemaksnedbailo-site\"\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx next:*)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 6852 /F)",
+      "Bash(taskkill /PID 18696 /F)",
+      "Bash(cmd //c \"taskkill /PID 6852 /F && taskkill /PID 18696 /F\")",
+      "Bash(cmd //c \"taskkill /F /IM node.exe\")",
+      "Bash(cmd //c \"del /f \"\"D:\\\\Claude Code\\\\maksnedbailo-site\\\\.git\\\\index.lock\"\"\")",
+      "Bash(powershell -Command \"Remove-Item -Force ''.git\\\\index.lock'' -ErrorAction SilentlyContinue\")",
+      "Bash(powershell.exe -Command \"Remove-Item -Force ''.git\\\\index.lock'' -ErrorAction SilentlyContinue; Write-Output cleared\")",
+      "Bash(powershell.exe -Command \"Remove-Item -Recurse -Force ''.git''; Write-Output done\")",
+      "Bash(cmd //c \"taskkill /F /IM git.exe\")"
+    ]
+  }
+}
