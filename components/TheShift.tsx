@@ -86,15 +86,17 @@ export default function TheShift() {
                 {t(content.shift.p3, lang)}
               </motion.p>
 
-              <motion.blockquote
+              <motion.div
                 custom={4}
                 variants={fadeUp}
                 initial="hidden"
                 animate={inView ? "visible" : "hidden"}
-                className="border-l-2 border-accent/20 pl-4 italic text-accent/50 font-playfair text-lg leading-relaxed mt-2"
+                className="mt-2 border-l-2 border-accent/30 pl-5 py-1"
               >
-                {t(content.shift.closer, lang)}
-              </motion.blockquote>
+                <p className="font-sora text-[15px] font-normal text-fg/75 leading-relaxed">
+                  {t(content.shift.closer, lang)}
+                </p>
+              </motion.div>
             </div>
           </div>
         </div>

@@ -1,15 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 
+const BAR_HEIGHT = 28;
+
 export default function Nav() {
   const { lang, setLang } = useLang();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > BAR_HEIGHT);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="fixed left-0 right-0 z-50 backdrop-blur-xl bg-[#060608]/80 border-b border-white/5" style={{ top: "36px" }}>
-      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <nav
+      className="fixed left-0 right-0 z-50 backdrop-blur-xl bg-[#060608]/80 border-b border-white/5 transition-all duration-300"
+      style={{ top: scrolled ? "0px" : `${BAR_HEIGHT}px` }}
+    >
+      <div
+        className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "h-14" : "h-16"
+        }`}
+      >
         {/* Logo */}
         <Link
           href="/"

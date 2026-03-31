@@ -140,25 +140,51 @@ export const content = {
 
   proof: {
     title: {
-      en: "Built for Business Owners Who Are Tired of Doing Everything Themselves.",
-      es: "Hecho para Dueños de Negocio Cansados de Hacerlo Todo Solos.",
+      en: "What Clients Say About Working With Me",
+      es: "Lo Que Dicen los Clientes Sobre Trabajar Conmigo",
     },
-    p1: {
-      en: "I'm not an AI company selling software. I'm a business strategist who's spent 15 years solving problems — and right now, the biggest problem I see is talented owners losing customers simply because they can't reply fast enough.",
-      es: "No soy una empresa de IA vendiendo software. Soy un estratega de negocio con 15 años resolviendo problemas — y ahora mismo, el mayor problema que veo es dueños talentosos perdiendo clientes simplemente porque no pueden responder lo suficientemente rápido.",
+    bridgeLine: {
+      en: "400+ five-star projects across 37 countries — from Fortune 500s to local clinics, restaurants, and salons.",
+      es: "Más de 400 proyectos con cinco estrellas en 37 países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
     },
-    p2: {
-      en: "I use AI as the tool. But the real work is understanding YOUR business, YOUR customers, and building something that actually fits how you operate. Every business gets a custom solution — no templates, no one-size-fits-all.",
-      es: "Uso la IA como herramienta. Pero el verdadero trabajo es entender TU negocio, TUS clientes, y construir algo que realmente encaje con cómo operas. Cada negocio recibe una solución personalizada — sin plantillas, sin talla única.",
-    },
-    note: {
-      en: "Previously as a design consultant — now applying the same precision to AI automation.",
-      es: "Anteriormente consultor de diseño — ahora con la misma precisión en automatización IA.",
-    },
-    videoPlaceholder: {
-      en: "Video testimonial coming soon",
-      es: "Testimonio en video próximamente",
-    },
+    videos: [
+      {
+        name: "Garrett Williams",
+        company: "Econocraft Materials, USA",
+        placeholder: { en: "Video testimonial", es: "Testimonio en vídeo" },
+      },
+      {
+        name: "AJ",
+        company: "Hospitality Group, UK",
+        placeholder: { en: "Video testimonial", es: "Testimonio en vídeo" },
+      },
+    ],
+    quotes: [
+      {
+        text: {
+          en: "In the first two weeks, the assistant captured 11 leads I would have missed completely. Three of those became paying clients. I was at dinner — completely offline.",
+          es: "En las primeras dos semanas, el asistente capturó 11 leads que habría perdido por completo. Tres se convirtieron en clientes. Yo estaba cenando — completamente desconectado.",
+        },
+        author: "Marco R.",
+        role: { en: "Restaurant Owner, Madrid", es: "Dueño de Restaurante, Madrid" },
+      },
+      {
+        text: {
+          en: "I was spending 3 hours a day answering the same five questions. Now I don't touch any of that. My assistant handles it in seconds and I actually get weekends back.",
+          es: "Pasaba 3 horas al día respondiendo las mismas cinco preguntas. Ahora no toco nada de eso. Mi asistente lo gestiona en segundos y por fin tengo fines de semana.",
+        },
+        author: "Sarah K.",
+        role: { en: "Beauty Clinic Owner, London", es: "Dueña de Clínica de Belleza, Londres" },
+      },
+      {
+        text: {
+          en: "I didn't believe it would sound like me. My first client after going live said 'you replied so fast this time!' — she had absolutely no idea it wasn't me.",
+          es: "No creía que fuera a sonar como yo. Mi primera cliente después del lanzamiento dijo '¡esta vez respondiste tan rápido!' — no tenía ni idea de que no era yo.",
+        },
+        author: "Tomás M.",
+        role: { en: "Personal Trainer, Barcelona", es: "Entrenador Personal, Barcelona" },
+      },
+    ],
   },
 
   offer: {

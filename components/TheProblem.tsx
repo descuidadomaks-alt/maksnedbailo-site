@@ -38,7 +38,7 @@ function StatCard({
 }) {
   return (
     <div
-      className={`group bg-white/[0.015] border rounded-xl p-7 text-center transition-all duration-300 hover:bg-white/[0.025] ${
+      className={`group h-full bg-white/[0.015] border rounded-xl p-7 text-center transition-all duration-300 hover:bg-white/[0.025] flex flex-col justify-center ${
         accentBorder
           ? "border-accent/15 hover:border-accent/25"
           : "border-white/[0.04] hover:border-accent/10"
@@ -70,13 +70,14 @@ export default function TheProblem() {
     <section ref={ref} className="section-divider py-24 md:py-32">
       <div className="max-w-6xl mx-auto px-6">
         {/* Stat cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16 items-stretch">
           {/* Card 1 */}
           <motion.div
             custom={0}
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
+            className="h-full"
           >
             <StatCard>
               <div className="font-playfair text-[42px] font-normal text-accent leading-none mb-3">
@@ -94,6 +95,7 @@ export default function TheProblem() {
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
+            className="h-full"
           >
             <StatCard>
               <div className="font-playfair text-[42px] font-normal text-accent leading-none mb-3">
@@ -111,6 +113,7 @@ export default function TheProblem() {
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
+            className="h-full"
           >
             <StatCard accentBorder>
               <a
@@ -141,14 +144,22 @@ export default function TheProblem() {
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="text-center max-w-[600px] mx-auto mb-20"
+          className="text-center max-w-[580px] mx-auto mb-20"
         >
-          <blockquote className="font-playfair text-lg italic text-fg/35 mb-3">
-            {t(content.problem.quote, lang)}
-          </blockquote>
-          <figcaption className="font-sora text-[12px] text-fg/20 tracking-wide">
-            {t(content.problem.quoteAttribution, lang)}
-          </figcaption>
+          <div
+            className="rounded-xl px-8 py-6"
+            style={{
+              background: "rgba(212,255,43,0.03)",
+              border: "1px solid rgba(212,255,43,0.07)",
+            }}
+          >
+            <blockquote className="font-playfair text-[17px] italic text-fg/50 mb-3 leading-relaxed">
+              {t(content.problem.quote, lang)}
+            </blockquote>
+            <figcaption className="font-sora text-[11px] text-fg/25 tracking-wide uppercase">
+              {t(content.problem.quoteAttribution, lang)}
+            </figcaption>
+          </div>
         </motion.figure>
 
         {/* Title + body */}

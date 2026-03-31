@@ -36,8 +36,25 @@ export default function TheOffer() {
   const checklist = t(content.offer.checklist, lang);
 
   return (
-    <section ref={ref} className="section-divider py-24 md:py-32">
-      <div className="max-w-6xl mx-auto px-6">
+    <section ref={ref} className="section-divider py-24 md:py-32 relative overflow-hidden">
+      {/* Ambient glow left */}
+      <div
+        className="absolute left-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(212,255,43,0.04) 0%, transparent 70%)",
+          animation: "offerGlow 6s ease-in-out infinite",
+        }}
+      />
+      {/* Ambient glow right */}
+      <div
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] pointer-events-none"
+        style={{
+          background: "radial-gradient(circle, rgba(212,255,43,0.03) 0%, transparent 70%)",
+          animation: "offerGlow 6s ease-in-out infinite 3s",
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 relative">
         <div className="max-w-[720px] mx-auto">
           <motion.div
             custom={0}
@@ -130,7 +147,7 @@ export default function TheOffer() {
                 href={content.offer.cta2Link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 border border-green-500/25 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/50 hover:bg-green-500/5 transition-all duration-200"
+                className="flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#1fbd5a] transition-all duration-200"
               >
                 <WhatsAppIcon />
                 {t(content.offer.cta2, lang)}
@@ -139,6 +156,13 @@ export default function TheOffer() {
           </motion.div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes offerGlow {
+          0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+          50% { opacity: 0.5; transform: translateY(-50%) scale(1.15); }
+        }
+      `}</style>
     </section>
   );
 }
