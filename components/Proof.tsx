@@ -14,12 +14,27 @@ const fadeUp = {
   }),
 };
 
-function PlayIcon() {
+function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: string; company: string }) {
   return (
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-      <circle cx="22" cy="22" r="21" stroke="rgba(240,236,230,0.12)" strokeWidth="1" />
-      <path d="M18 14.5L32 22L18 29.5V14.5Z" fill="rgba(240,236,230,0.3)" />
-    </svg>
+    <div className="flex flex-col gap-2">
+      <div
+        className="relative rounded-xl overflow-hidden bg-black"
+        style={{ aspectRatio: "9/16" }}
+      >
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`}
+          title={`Testimonial from ${name}`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full border-0"
+          loading="lazy"
+        />
+      </div>
+      <div className="text-center">
+        <p className="font-sora text-[12px] font-semibold text-fg/65">{name}</p>
+        <p className="font-sora text-[10px] text-fg/30 mt-0.5">{company}</p>
+      </div>
+    </div>
   );
 }
 
@@ -75,40 +90,21 @@ export default function Proof() {
         {/* Main grid: video left, quotes right */}
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-12 items-start mb-10">
 
-          {/* Left: 2 landscape video placeholders */}
+          {/* Left: 2 portrait YouTube Shorts side by side */}
           <motion.div
             custom={1}
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
-            className="flex flex-col gap-4"
+            className="grid grid-cols-2 gap-4"
           >
             {content.proof.videos.map((video, i) => (
-              <div
+              <VideoEmbed
                 key={i}
-                className="relative rounded-xl overflow-hidden bg-white/[0.02] border border-white/[0.05] flex items-center justify-center"
-                style={{ aspectRatio: "16/9" }}
-              >
-                {/* Subtle gradient bg */}
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(212,255,43,0.02) 0%, rgba(255,255,255,0.01) 100%)",
-                  }}
-                />
-                <div className="relative z-10 flex flex-col items-center gap-3 text-center px-6">
-                  <PlayIcon />
-                  <div>
-                    <p className="font-sora text-[14px] font-semibold text-fg/70">
-                      {video.name}
-                    </p>
-                    <p className="font-sora text-[11px] text-fg/30 mt-0.5">
-                      {video.company}
-                    </p>
-                  </div>
-                </div>
-              </div>
+                youtubeId={video.youtubeId}
+                name={video.name}
+                company={video.company}
+              />
             ))}
           </motion.div>
 

@@ -151,12 +151,12 @@ export const content = {
       {
         name: "Garrett Williams",
         company: "Econocraft Materials, USA",
-        placeholder: { en: "Video testimonial", es: "Testimonio en vídeo" },
+        youtubeId: "3Gzbg1rI5Tg",
       },
       {
         name: "AJ",
         company: "Hospitality Group, UK",
-        placeholder: { en: "Video testimonial", es: "Testimonio en vídeo" },
+        youtubeId: "pVgC-3GciSw",
       },
     ],
     quotes: [
