@@ -63,6 +63,41 @@ export default function TheOffer() {
             animate={inView ? "visible" : "hidden"}
             className="bg-white/[0.015] border border-accent/[0.08] rounded-2xl p-8 md:p-12"
           >
+            {/* Response-time visual strip */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-sora text-[11px] text-fg/25 uppercase tracking-widest">
+                  {lang === "es" ? "Antes" : "Before"}
+                </span>
+                <div
+                  className="rounded-lg px-4 py-2.5 text-center"
+                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+                >
+                  <span className="font-playfair text-[28px] text-fg/30 leading-none">19h</span>
+                </div>
+                <span className="font-sora text-[10px] text-fg/20">avg response</span>
+              </div>
+
+              <div className="flex flex-col items-center gap-1.5 px-2">
+                <svg width="32" height="10" viewBox="0 0 32 10" fill="none">
+                  <path d="M0 5H28M28 5L24 1M28 5L24 9" stroke="rgba(212,255,43,0.3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+
+              <div className="flex flex-col items-center gap-1">
+                <span className="font-sora text-[11px] text-accent/50 uppercase tracking-widest">
+                  {lang === "es" ? "Después" : "After"}
+                </span>
+                <div
+                  className="rounded-lg px-4 py-2.5 text-center"
+                  style={{ background: "rgba(212,255,43,0.06)", border: "1px solid rgba(212,255,43,0.15)" }}
+                >
+                  <span className="font-playfair text-[28px] text-accent leading-none">&lt;60s</span>
+                </div>
+                <span className="font-sora text-[10px] text-fg/20">24/7, automatic</span>
+              </div>
+            </div>
+
             {/* Title */}
             <h2 className="font-playfair font-normal text-3xl md:text-4xl leading-tight text-center mb-5">
               {t(content.offer.title, lang)}
@@ -147,7 +182,7 @@ export default function TheOffer() {
                 href={content.offer.cta2Link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#1fbd5a] transition-all duration-200"
+                className="flex items-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
               >
                 <WhatsAppIcon />
                 {t(content.offer.cta2, lang)}

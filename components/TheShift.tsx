@@ -32,16 +32,40 @@ export default function TheShift() {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="order-2 lg:order-1 flex justify-center lg:justify-start"
           >
-            <div className="relative w-full max-w-[340px]" style={{ aspectRatio: "3/4" }}>
-              <Image
-                src="/phone-mockup.png"
-                alt="Smart assistant on mobile"
-                fill
-                className="object-contain"
-                sizes="(max-width: 1024px) 340px, 42vw"
+            {/* Ambient glow behind phone */}
+            <div className="relative w-full max-w-[360px]">
+              <div
+                className="absolute inset-0 -z-10 rounded-full blur-3xl"
+                style={{
+                  background: "radial-gradient(ellipse, rgba(212,255,43,0.07) 0%, transparent 70%)",
+                  transform: "scale(1.2)",
+                }}
               />
+              <div
+                style={{
+                  animation: "phoneFloat 5s ease-in-out infinite",
+                  aspectRatio: "3/4",
+                  position: "relative",
+                  width: "100%",
+                }}
+              >
+                <Image
+                  src="/phone-mockup.png"
+                  alt="Smart assistant on mobile"
+                  fill
+                  className="object-contain drop-shadow-2xl"
+                  sizes="(max-width: 1024px) 360px, 42vw"
+                />
+              </div>
             </div>
           </motion.div>
+
+          <style jsx>{`
+            @keyframes phoneFloat {
+              0%, 100% { transform: translateY(0px) rotate(-1deg); }
+              50% { transform: translateY(-14px) rotate(1deg); }
+            }
+          `}</style>
 
           {/* Right: Text */}
           <div className="order-1 lg:order-2">

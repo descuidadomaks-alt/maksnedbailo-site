@@ -88,7 +88,7 @@ export default function Hero() {
                 href={content.hero.cta2Link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg text-sm font-semibold hover:bg-[#1fbd5a] transition-all duration-200"
+                className="flex items-center justify-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
               >
                 <WhatsAppIcon />
                 {t(content.hero.cta2, lang)}
