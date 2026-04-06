@@ -29,11 +29,14 @@ export default function Nav() {
         }`}
       >
         {/* Logo */}
-        <Link
-          href="/"
-          className="font-playfair text-xl font-normal text-fg tracking-wide"
-        >
-          MN
+        <Link href="/" className="flex items-center">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo.svg"
+            alt="Careless AI"
+            className="w-auto"
+            style={{ height: "30px" }}
+          />
         </Link>
 
         {/* Right side */}
