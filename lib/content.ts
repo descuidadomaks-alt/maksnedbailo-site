@@ -2,7 +2,7 @@ export type Lang = "en" | "es";
 
 const WA_NUMBER = "34641935207";
 export const WA_LINK = `https://wa.me/${WA_NUMBER}`;
-export const BOOKING_LINK = "https://zcal.co/carelessmaks/15min";
+export const BOOKING_LINK = "https://zcal.co/carelessmaks/free-audit";
 
 export const content = {
   nav: {
