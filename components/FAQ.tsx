@@ -87,8 +87,25 @@ export default function FAQ() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: content.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.q.en,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a.en,
+      },
+    })),
+  };
+
   return (
     <section ref={ref} className="section-divider py-24 md:py-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="max-w-6xl mx-auto px-6">
         <div className="max-w-[700px] mx-auto">
           <motion.h2

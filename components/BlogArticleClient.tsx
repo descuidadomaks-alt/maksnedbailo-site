@@ -27,7 +27,7 @@ export default function BlogArticleClient({
 
   return (
     <div className="max-w-3xl mx-auto px-6">
-      {/* Title + excerpt inside header area */}
+      {/* Title + excerpt */}
       <div className="pb-8 border-b border-white/[0.04] mb-10">
         <h1
           className="font-playfair font-normal leading-tight mb-4"
