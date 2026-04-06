@@ -60,9 +60,12 @@ export function getAllPosts(): PostMeta[] {
     } as PostMeta;
   });
 
-  return posts.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
+  return posts
+    .filter((p) => !p.date || new Date(p.date) <= today)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -84,6 +87,13 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     mdToHtml(enRaw),
     mdToHtml(esRaw),
   ]);
+
+  const postDate = data.date ? new Date(data.date) : null;
+  if (postDate) {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999);
+    if (postDate > today) return null;
+  }
 
   return {
     slug,
