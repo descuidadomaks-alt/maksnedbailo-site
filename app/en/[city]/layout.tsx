@@ -9,23 +9,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const city = getCity(params.city);
   if (!city) return {};
 
+  const meta = city.metaEn ?? city.meta;
+
   return {
-    title: city.meta.title,
-    description: city.meta.description,
+    title: meta.title,
+    description: meta.description,
     alternates: {
-      canonical: `https://maksnedbailo.site/es/${city.slug}`,
+      canonical: `https://maksnedbailo.site/en/${city.slug}`,
       languages: {
         en: `https://maksnedbailo.site/en/${city.slug}`,
         es: `https://maksnedbailo.site/es/${city.slug}`,
-        "x-default": `https://maksnedbailo.site/es/${city.slug}`,
+        "x-default": `https://maksnedbailo.site/en/${city.slug}`,
       },
     },
     openGraph: {
-      title: city.meta.title,
-      description: city.meta.description,
-      url: `https://maksnedbailo.site/es/${city.slug}`,
+      title: meta.title,
+      description: meta.description,
+      url: `https://maksnedbailo.site/en/${city.slug}`,
       siteName: "Maks Nedbailo",
-      locale: "es_ES",
+      locale: "en_US",
       type: "website",
     },
     robots: { index: true, follow: true },
@@ -36,7 +38,7 @@ export function generateStaticParams() {
   return getAllCities().map((c) => ({ city: c.slug }));
 }
 
-export default function CityLayout({ params, children }: Props) {
+export default function CityEnLayout({ params, children }: Props) {
   const city = getCity(params.city);
   if (!city) notFound();
 

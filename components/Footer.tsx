@@ -1,17 +1,43 @@
 "use client";
 
+import Link from "next/link";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t, WA_LINK } from "@/lib/content";
+
+const CITIES = [
+  { name: "Santander", slug: "santander" },
+  { name: "Madrid", slug: "madrid" },
+  { name: "Barcelona", slug: "barcelona" },
+  { name: "Valencia", slug: "valencia" },
+];
 
 export default function Footer() {
   const { lang } = useLang();
 
   return (
     <footer className="section-divider py-12">
-      <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-5 text-center">
+      <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
         <p className="font-playfair text-[16px] italic text-fg/18 leading-relaxed max-w-[480px]">
           {t(content.footer.tagline, lang)}
         </p>
+
+        {/* Domestic locations */}
+        <div className="flex flex-col items-center gap-2">
+          <p className="font-sora text-[9px] uppercase tracking-[2.5px] text-fg/20">
+            {lang === "es" ? "Ciudades" : "Locations"}
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+            {CITIES.map((city) => (
+              <Link
+                key={city.slug}
+                href={`/${lang === "es" ? "es" : "en"}/${city.slug}`}
+                className="font-sora text-[11px] text-fg/25 hover:text-fg/55 transition-colors"
+              >
+                {city.name}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Quick question WA link */}
         <a
@@ -28,7 +54,7 @@ export default function Footer() {
         </a>
 
         <p className="font-sora text-[11px] text-fg/10">
-          {content.footer.copy}
+          {content.footer.copy} · Care less by Careless
         </p>
       </div>
     </footer>

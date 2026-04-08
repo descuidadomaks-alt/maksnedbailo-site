@@ -44,7 +44,7 @@ export default function Nav() {
           {/* Blog link */}
           <Link
             href="/blog"
-            className="font-sora text-sm text-fg/45 hover:text-fg/80 transition-colors hidden sm:block"
+            className="font-sora text-sm text-fg/45 hover:text-fg/80 transition-colors sm:text-sm text-[11px]"
           >
             {t(content.nav.blog, lang)}
           </Link>
