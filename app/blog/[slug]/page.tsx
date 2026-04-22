@@ -6,6 +6,8 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import BlogArticleClient from "@/components/BlogArticleClient";
 import { BOOKING_LINK } from "@/lib/content";
 
+const BASE = "https://maksnedbailo.site";
+
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }
@@ -17,9 +19,35 @@ export async function generateMetadata({
 }) {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
+
+  const canonical = `${BASE}/blog/${post.slug}`;
+  const ogImage = post.coverImage ?? `${BASE}/og-default.jpg`;
+
   return {
     title: `${post.title} | Maks Nedbailo`,
     description: post.excerpt,
+    keywords: post.keywords?.join(", "),
+    alternates: { canonical },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: ["Maks Nedbailo"],
+      url: canonical,
+      siteName: "Maks Nedbailo",
+      locale: "en_US",
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
+      creator: "@maksnedbailo",
+    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -41,6 +69,36 @@ export default async function ArticlePage({
     );
   }
 
+  const canonical = `${BASE}/blog/${post.slug}`;
+  const ogImage = post.coverImage ?? `${BASE}/og-default.jpg`;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    image: ogImage,
+    datePublished: post.date,
+    dateModified: post.date,
+    inLanguage: "en",
+    url: canonical,
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+    author: {
+      "@type": "Person",
+      name: "Maks Nedbailo",
+      url: BASE,
+      jobTitle: "AI Automation Consultant",
+      worksFor: { "@type": "Organization", name: "Careless AI" },
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Careless AI",
+      url: BASE,
+      logo: { "@type": "ImageObject", url: `${BASE}/logo.svg` },
+    },
+    ...(post.keywords ? { keywords: post.keywords.join(", ") } : {}),
+  };
+
   const formattedDate = new Date(post.date).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "long",
@@ -49,6 +107,10 @@ export default async function ArticlePage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <main className="min-h-screen" style={{ paddingTop: "100px" }}>
         {/* Header */}
         <section className="py-14 md:py-20 border-b border-white/[0.04]">
@@ -64,6 +126,8 @@ export default async function ArticlePage({
               <span className="font-sora text-[11px] text-fg/30">{formattedDate}</span>
               <span className="w-1 h-1 rounded-full bg-fg/20" />
               <span className="font-sora text-[11px] text-fg/30">{post.readingTime}</span>
+              <span className="w-1 h-1 rounded-full bg-fg/20" />
+              <span className="font-sora text-[11px] text-fg/30">Maks Nedbailo</span>
             </div>
           </div>
         </section>
@@ -77,6 +141,7 @@ export default async function ArticlePage({
                 alt={post.title}
                 fill
                 className="object-cover"
+                priority
               />
             </div>
           </div>

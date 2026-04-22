@@ -15,12 +15,14 @@ export interface PostMeta {
   excerpt: string;
   excerptEs: string;
   coverImage?: string;
+  keywords?: string[];
   readingTime: string;
 }
 
 export interface Post extends PostMeta {
   contentHtml: string;
   contentHtmlEs: string;
+  keywords?: string[];
 }
 
 function calcReadingTime(text: string): string {
@@ -56,6 +58,7 @@ export function getAllPosts(): PostMeta[] {
       excerpt: data.excerpt ?? "",
       excerptEs: data.excerptEs ?? data.excerpt ?? "",
       coverImage: data.coverImage ?? undefined,
+      keywords: data.keywords ?? undefined,
       readingTime: calcReadingTime(enContent),
     } as PostMeta;
   });
@@ -103,6 +106,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     excerpt: data.excerpt ?? "",
     excerptEs: data.excerptEs ?? data.excerpt ?? "",
     coverImage: data.coverImage ?? undefined,
+    keywords: data.keywords ?? undefined,
     readingTime: calcReadingTime(enRaw),
     contentHtml,
     contentHtmlEs,
