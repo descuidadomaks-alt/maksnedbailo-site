@@ -36,26 +36,23 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
     // renders its DOM — before the user sees any flash of white.
     const STYLE_ID = "connecto-widget-overrides";
     const css = `
-      /* ── Connecto widget dark input overrides ─────────────────────── */
-      /* Broad selectors: cover class names we can't know ahead of time  */
+      /* ── Connecto widget — fix invisible text in inputs ────────────── */
+      /* Keep the widget's own white background; only force the text dark  */
       [class*="connecto"] input,
       [id*="connecto"] input,
       [class*="Connecto"] input,
       [data-widget-key] input,
-      /* placeholder-based (most reliable cross-version) */
       input[placeholder*="message" i],
       input[placeholder*="name" i],
       input[placeholder*="your" i] {
-        background-color: #100f09 !important;
-        color: #f0e8d0 !important;
-        border-color: rgba(212, 255, 45, 0.12) !important;
-        caret-color: #d4ff2d !important;
+        color: #1a1805 !important;
+        caret-color: #1a1805 !important;
       }
       [class*="connecto"] input::placeholder,
       [id*="connecto"] input::placeholder,
       input[placeholder*="message" i]::placeholder,
       input[placeholder*="name" i]::placeholder {
-        color: rgba(240, 232, 208, 0.35) !important;
+        color: rgba(26, 24, 5, 0.38) !important;
       }
     `;
 
