@@ -1,43 +1,22 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Script from "next/script";
 import type { ProspectData } from "../data";
 
 export default function ConnectoWidget({ data }: { data: ProspectData }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Inject the external widget script via DOM — dangerouslySetInnerHTML on
-  // Next.js <Script> only works for *inline* JS; external src= scripts must
-  // be created imperatively so the browser fetches and executes them.
+  // Fix invisible typed text — Connecto's default input text colour is too
+  // light on its white background. Inject once; MutationObserver catches
+  // lazy-rendered markup.
   useEffect(() => {
-    if (!data.connectoWidgetScript) return;
-
-    const SCRIPT_ID = "connecto-widget-script";
-    if (document.getElementById(SCRIPT_ID)) return; // already injected
-
-    // Parse the stored HTML to extract src + data-* attributes
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data.connectoWidgetScript, "text/html");
-    const template = doc.querySelector("script");
-    if (!template) return;
-
-    const el = document.createElement("script");
-    el.id = SCRIPT_ID;
-
-    // Copy src and every attribute (data-widget-key, data-title, etc.)
-    Array.from(template.attributes).forEach((attr) => {
-      el.setAttribute(attr.name, attr.value);
-    });
-
-    document.body.appendChild(el);
-
-    // Inject dark-theme overrides for widget inputs.
-    // We use a MutationObserver so the styles apply the moment Connecto
-    // renders its DOM — before the user sees any flash of white.
     const STYLE_ID = "connecto-widget-overrides";
-    const css = `
-      /* ── Connecto widget — fix invisible text in inputs ────────────── */
-      /* Keep the widget's own white background; only force the text dark  */
+    if (document.getElementById(STYLE_ID)) return;
+
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+    style.textContent = `
       [class*="connecto"] input,
       [id*="connecto"] input,
       [class*="Connecto"] input,
@@ -55,30 +34,20 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
         color: rgba(26, 24, 5, 0.38) !important;
       }
     `;
+    document.head.appendChild(style);
 
-    const applyStyles = () => {
-      if (document.getElementById(STYLE_ID)) return;
-      const style = document.createElement("style");
-      style.id = STYLE_ID;
-      style.textContent = css;
-      document.head.appendChild(style);
-    };
-
-    // Apply immediately in case widget already rendered
-    applyStyles();
-
-    // Also watch for lazy-rendered widget markup
-    const styleObserver = new MutationObserver(applyStyles);
-    styleObserver.observe(document.body, { childList: true, subtree: true });
+    const obs = new MutationObserver(() => {
+      if (document.getElementById(STYLE_ID)) obs.disconnect();
+    });
+    obs.observe(document.head, { childList: true });
 
     return () => {
-      styleObserver.disconnect();
-      document.getElementById(SCRIPT_ID)?.remove();
+      obs.disconnect();
       document.getElementById(STYLE_ID)?.remove();
     };
-  }, [data.connectoWidgetScript]);
+  }, []);
 
-  // Fire widget_visible event when the container scrolls into view
+  // Fire widget_visible Plausible event when the anchor scrolls into view
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -97,17 +66,37 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
 
   if (data.slotExpired) return null;
 
+  const w = data.connectoWidget;
+
   return (
-    <div
-      ref={containerRef}
-      id="connecto-widget-container"
-      className="section-divider py-8 flex items-center justify-center min-h-[80px]"
-    >
-      {!data.connectoWidgetScript && (
-        <p className="font-sora text-[12px] text-fg/20 tracking-wide">
-          Widget loading…
-        </p>
+    <>
+      {/* Scroll anchor + "loading" placeholder while script hasn't arrived */}
+      <div
+        ref={containerRef}
+        id="connecto-widget-container"
+        className="section-divider py-8 flex items-center justify-center min-h-[80px]"
+      >
+        {!w && (
+          <p className="font-sora text-[12px] text-fg/20 tracking-wide">
+            Widget loading…
+          </p>
+        )}
+      </div>
+
+      {/* Next.js Script with strategy="afterInteractive" ≡ before </body> */}
+      {w && (
+        <Script
+          src={w.src}
+          data-widget-key={w.widgetKey}
+          data-api-url={w.apiUrl}
+          data-title={w.title}
+          data-subtitle={w.subtitle}
+          data-colour={w.colour}
+          data-position={w.position}
+          data-language={w.language}
+          strategy="afterInteractive"
+        />
       )}
-    </div>
+    </>
   );
 }

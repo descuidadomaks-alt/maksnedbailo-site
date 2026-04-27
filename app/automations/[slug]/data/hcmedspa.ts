@@ -37,7 +37,16 @@ const hcmedspa: ProspectData = {
   slotExpired: false,
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",
-  connectoWidgetScript: `<script src="https://app.theconnecto.ai/widget.js" data-widget-key="0cc996d7d767b1b6178dc0e6fbc0ae76" data-api-url="https://api.theconnecto.ai/api/v1" data-title="Amira — HC MedSpa" data-subtitle="Trained on your clinic. Replies in 9s." data-colour="#392f1c" data-position="right" data-language="en"></script>`,
+  connectoWidget: {
+    src: "https://app.theconnecto.ai/widget.js",
+    widgetKey: "0cc996d7d767b1b6178dc0e6fbc0ae76",
+    apiUrl: "https://api.theconnecto.ai/api/v1",
+    title: "Amira — HC MedSpa",
+    subtitle: "Trained on your clinic. Replies in 9s.",
+    colour: "#392f1c",
+    position: "right",
+    language: "en",
+  },
   offerAuditBody:
     "I map exactly where leads disappear across your 4 clinics — before you spend a pound.",
 };

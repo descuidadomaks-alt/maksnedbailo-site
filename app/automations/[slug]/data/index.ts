@@ -19,7 +19,16 @@ export type ProspectData = {
   slotExpired: boolean;
   ctaCalendarUrl: string;
   ctaWhatsappUrl: string;
-  connectoWidgetScript: string | null;
+  connectoWidget: {
+    src: string;
+    widgetKey: string;
+    apiUrl: string;
+    title: string;
+    subtitle: string;
+    colour: string;
+    position: "left" | "right";
+    language: string;
+  } | null;
   offerAuditBody: string;
 };
 
