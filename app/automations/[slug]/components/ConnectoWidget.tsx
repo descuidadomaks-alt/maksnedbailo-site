@@ -7,46 +7,6 @@ import type { ProspectData } from "../data";
 export default function ConnectoWidget({ data }: { data: ProspectData }) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fix invisible typed text — Connecto's default input text colour is too
-  // light on its white background. Inject once; MutationObserver catches
-  // lazy-rendered markup.
-  useEffect(() => {
-    const STYLE_ID = "connecto-widget-overrides";
-    if (document.getElementById(STYLE_ID)) return;
-
-    const style = document.createElement("style");
-    style.id = STYLE_ID;
-    style.textContent = `
-      [class*="connecto"] input,
-      [id*="connecto"] input,
-      [class*="Connecto"] input,
-      [data-widget-key] input,
-      input[placeholder*="message" i],
-      input[placeholder*="name" i],
-      input[placeholder*="your" i] {
-        color: #1a1805 !important;
-        caret-color: #1a1805 !important;
-      }
-      [class*="connecto"] input::placeholder,
-      [id*="connecto"] input::placeholder,
-      input[placeholder*="message" i]::placeholder,
-      input[placeholder*="name" i]::placeholder {
-        color: rgba(26, 24, 5, 0.38) !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    const obs = new MutationObserver(() => {
-      if (document.getElementById(STYLE_ID)) obs.disconnect();
-    });
-    obs.observe(document.head, { childList: true });
-
-    return () => {
-      obs.disconnect();
-      document.getElementById(STYLE_ID)?.remove();
-    };
-  }, []);
-
   // Fire widget_visible Plausible event when the anchor scrolls into view
   useEffect(() => {
     const el = containerRef.current;
@@ -70,7 +30,6 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
 
   return (
     <>
-      {/* Scroll anchor + "loading" placeholder while script hasn't arrived */}
       <div
         ref={containerRef}
         id="connecto-widget-container"
@@ -83,7 +42,6 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
         )}
       </div>
 
-      {/* Next.js Script with strategy="afterInteractive" ≡ before </body> */}
       {w && (
         <Script
           src={w.src}
