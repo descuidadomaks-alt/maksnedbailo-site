@@ -33,7 +33,7 @@ export default function Nav() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.svg"
-            alt="Careless AI"
+            alt="careless"
             className="w-auto"
             style={{ height: "30px" }}
           />

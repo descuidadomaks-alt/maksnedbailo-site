@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Sora } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -22,11 +23,11 @@ const sora = Sora({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
-  title: "Maks Nedbailo | AI Automation Consultant",
+  title: "careless — your customers are reaching out right now",
   description:
-    "Smart assistants that respond to every customer in under 60 seconds — on WhatsApp, your website, or both. 400+ projects across 37 countries. You only pay when it works.",
+    "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
   keywords: [
-    "AI automation consultant",
+    "AI automation",
     "WhatsApp automation",
     "customer response automation",
     "AI assistant for small business",
@@ -40,19 +41,19 @@ export const metadata: Metadata = {
     canonical: "https://maksnedbailo.site",
   },
   openGraph: {
-    title: "Maks Nedbailo | AI Automation Consultant",
+    title: "careless — your customers are reaching out right now",
     description:
-      "Smart assistants that respond to every customer in under 60 seconds. 400+ projects. You only pay when it works.",
+      "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
     type: "website",
     url: "https://maksnedbailo.site",
-    siteName: "Maks Nedbailo",
+    siteName: "careless",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Maks Nedbailo | AI Automation Consultant",
+    title: "careless — your customers are reaching out right now",
     description:
-      "Smart assistants that respond to every customer in under 60 seconds. You only pay when it works.",
+      "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
   },
   robots: {
     index: true,
@@ -68,11 +69,10 @@ const jsonLd = {
       "@type": "Person",
       "@id": "https://maksnedbailo.site/#person",
       name: "Maks Nedbailo",
-      jobTitle: "AI Automation Consultant",
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
-        "AI automation consultant helping business owners respond to every customer in under 60 seconds. 400+ projects delivered across 37 countries.",
+        "Helping business owners respond to every customer in seconds. 500+ businesses across 34 countries, 16 years of experience.",
       knowsLanguage: ["en", "es", "ru"],
       knowsAbout: [
         "AI automation",
@@ -93,11 +93,11 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": "https://maksnedbailo.site/#business",
-      name: "Maks Nedbailo AI Automation",
+      name: "careless",
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
-        "Custom AI assistants for WhatsApp and websites that respond to customers in under 60 seconds. Free audit. 30-day money-back guarantee.",
+        "Custom AI assistants for WhatsApp and websites that respond to customers in seconds. Free audit. 30-day money-back guarantee.",
       priceRange: "$$",
       currenciesAccepted: "EUR, GBP, USD",
       areaServed: [
@@ -124,7 +124,7 @@ const jsonLd = {
               "@type": "Service",
               name: "AI Customer Assistant",
               description:
-                "Custom AI assistant for WhatsApp and website that responds to every customer in under 60 seconds, 24/7.",
+                "Custom AI assistant for WhatsApp and website that responds to every customer in seconds, 24/7.",
             },
           },
         ],
@@ -153,6 +153,22 @@ export default function RootLayout({
           <Nav />
           {children}
         </LanguageProvider>
+
+        {/* Cloudflare Web Analytics */}
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "aacf89e5673746c586d5703c252bca88"}'
+          strategy="afterInteractive"
+        />
+
+        {/* Microsoft Clarity */}
+        <Script
+          id="ms-clarity"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","wley84eoj3");`,
+          }}
+        />
       </body>
     </html>
   );

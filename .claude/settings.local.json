@@ -21,7 +21,14 @@
       "Bash(powershell -Command \"Remove-Item -Force ''.git\\\\index.lock'' -ErrorAction SilentlyContinue\")",
       "Bash(powershell.exe -Command \"Remove-Item -Force ''.git\\\\index.lock'' -ErrorAction SilentlyContinue; Write-Output cleared\")",
       "Bash(powershell.exe -Command \"Remove-Item -Recurse -Force ''.git''; Write-Output done\")",
-      "Bash(cmd //c \"taskkill /F /IM git.exe\")"
+      "Bash(cmd //c \"taskkill /F /IM git.exe\")",
+      "Bash(gh auth:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(mkdir -p \"/d/Claude Code/maksnedbailo-site/app/automations/[slug]/data\")",
+      "Bash(mkdir -p \"/d/Claude Code/maksnedbailo-site/app/automations/[slug]/components\")",
+      "Bash(node -e ' *)",
+      "Bash(git checkout *)",
+      "Bash(git push *)"
     ]
   }
 }

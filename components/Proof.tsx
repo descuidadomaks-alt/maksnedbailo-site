@@ -76,6 +76,34 @@ export default function Proof() {
       }}
     >
       <div className="max-w-6xl mx-auto px-6">
+        {/* Experience intro — 16 years, 500+ businesses */}
+        <div className="max-w-[700px] mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="font-playfair font-normal text-3xl md:text-4xl leading-tight mb-6"
+          >
+            16 years. 500+ businesses. 34+ countries. One philosophy that didn&apos;t change.
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-sora font-light text-[15px] text-fg/50 leading-relaxed mb-4"
+          >
+            For 16 years I solved business problems with design. I sat with founders across 34 countries and asked one question every time: what&apos;s the business outcome?
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="font-sora font-light text-[15px] text-fg/50 leading-relaxed"
+          >
+            The deliverables changed. The mindset didn&apos;t. Today the work is AI conversations instead of brand identities — but the question is the same: what business problem are we actually solving?
+          </motion.p>
+        </div>
+
         {/* Title */}
         <motion.h2
           custom={0}
@@ -194,6 +222,30 @@ export default function Proof() {
         >
           {t(content.proof.bridgeLine, lang)}
         </motion.p>
+
+        {/* Quote placeholders — to be filled with real client quotes */}
+        <div className="mt-16 flex flex-col gap-5 max-w-[600px]">
+          {[1, 2, 3].map((n) => (
+            <figure key={n} className="border-l-2 border-accent/20 pl-5 py-1">
+              <blockquote className="font-sora font-light text-[15px] text-fg/35 italic leading-relaxed mb-2">
+                &ldquo;Quote text TBD — Ralph is selecting&rdquo;
+              </blockquote>
+              <figcaption className="font-sora text-[12px] text-fg/20">
+                — Client name TBD, Role TBD, Country TBD
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        {/* Anchor scroll to Bot in Action */}
+        <div className="mt-10">
+          <a
+            href="#bot-in-action"
+            className="font-sora text-sm text-accent/60 hover:text-accent transition-colors underline-offset-4 hover:underline"
+          >
+            See how I work today →
+          </a>
+        </div>
       </div>
     </section>
   );

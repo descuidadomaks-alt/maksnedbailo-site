@@ -25,7 +25,7 @@ export default function SectionHero({ data }: { data: ProspectData }) {
           try {
             iframe.contentWindow?.postMessage({ type: "connecto:open" }, "*");
           } catch {
-            console.log("[Careless AI] Widget auto-open: postMessage blocked");
+            console.log("[careless] Widget auto-open: postMessage blocked");
           }
         });
       }

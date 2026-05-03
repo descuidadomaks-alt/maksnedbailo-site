@@ -1,8 +1,10 @@
 import Hero from "@/components/Hero";
+import GotAProblem from "@/components/GotAProblem";
 import TheShift from "@/components/TheShift";
 import TheProblem from "@/components/TheProblem";
 import TheSolution from "@/components/TheSolution";
 import Proof from "@/components/Proof";
+import BotInAction from "@/components/BotInAction";
 import TheOffer from "@/components/TheOffer";
 import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
@@ -14,10 +16,12 @@ export default function HomePage() {
     <>
       <main>
         <Hero />
+        <GotAProblem />
         <TheShift />
         <TheProblem />
         <TheSolution />
         <Proof />
+        <BotInAction />
         <TheOffer />
         <FAQ />
         <CTASection />
