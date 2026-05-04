@@ -140,8 +140,8 @@ export const content = {
 
   proof: {
     title: {
-      en: "What Clients Say About Working With Us",
-      es: "Lo Que Dicen los Clientes Sobre Trabajar Con Nosotros",
+      en: "What Clients Say",
+      es: "Lo Que Dicen los Clientes",
     },
     bridgeLine: {
       en: "500+ five-star projects across 34+ countries — from Fortune 500s to local clinics, restaurants, and salons.",

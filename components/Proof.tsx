@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
@@ -50,7 +50,7 @@ function StarRow() {
   return (
     <div className="flex gap-0.5 mb-3">
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} width="13" height="13" viewBox="0 0 24 24" fill="#D4FF2B">
+        <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#D4FF2B">
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
       ))}
@@ -58,38 +58,145 @@ function StarRow() {
   );
 }
 
-// ── Corinna Cope hero testimonial ──────────────────────────────────────────
-const HERO_TESTIMONIAL = {
-  quote: "Maks doesn't just hand you a tool and disappear. He mapped every single touchpoint in our customer journey, built the assistant around how we actually talk, and was available to refine it until it felt genuinely ours. We went from a 4-hour average response time to under 60 seconds — overnight.",
-  author: "Corinna Cope",
-  role: "Founder, Cope & Co · UK",
-};
-
-// ── Row 1: written card beside the two videos ──────────────────────────────
-const ROW1_WRITTEN = {
-  quote: "I honestly didn't think it would sound like us. But the first customer who interacted with it told us it was the best service experience she'd had in years — and had no idea it was automated. That was the moment I knew this was different.",
-  author: "James T.",
-  role: "Hospitality Owner · Ireland",
-};
-
-// ── Row 2: compact cards ───────────────────────────────────────────────────
-const ROW2 = [
+// ── Five written testimonial cards ────────────────────────────────────────
+const CARDS = [
   {
-    quote: "Setup was invisible. Two days and it was live. My clients now get answers at 11pm that would have waited until morning. Three bookings in the first week alone.",
+    accent: true,
+    quote:
+      "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!",
+    author: "Corinna Cope",
+    role: "Edible Health · UK",
+  },
+  {
+    accent: false,
+    quote: "Maksym was a pleasure to work with and very very talented.",
+    author: "James T.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.",
     author: "Sophie M.",
-    role: "Beauty Clinic · London",
+    role: "Verified client review · 5★",
   },
   {
-    quote: "The ROI conversation became very simple: I was missing 5–6 serious enquiries every week. Now I capture almost all of them. The system paid for itself in about nine days.",
+    accent: false,
+    quote:
+      "Excellent communication and very quick to understand what I was looking for. Delivered high-quality work with great attention to detail.",
     author: "Daniel R.",
-    role: "Renovation Business · Madrid",
+    role: "Verified client review · 5★",
   },
   {
-    quote: "What sold me was the 30-day guarantee. Zero risk. But I didn't need it — results showed up before the end of week one.",
+    accent: false,
+    quote:
+      "Maksym understood the brief quickly and delivered exactly what was needed. Communication was excellent throughout.",
     author: "Eleanor K.",
-    role: "Wellness Studio · Barcelona",
+    role: "Verified client review · 5★",
   },
 ];
+
+function TestimonialCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanPrev(el.scrollLeft > 4);
+    setCanNext(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
+  }, []);
+
+  const scrollBy = (dir: "prev" | "next") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    // One card = 1/3 of container on desktop, full width on mobile
+    const amount = el.clientWidth <= 640 ? el.clientWidth + 16 : el.clientWidth / 3 + 5.3;
+    el.scrollBy({ left: dir === "next" ? amount : -amount, behavior: "smooth" });
+  };
+
+  return (
+    <div className="relative">
+      {/* Scrollable strip */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex gap-4 overflow-x-auto pb-1"
+        style={{ scrollbarWidth: "none", scrollSnapType: "x mandatory" }}
+      >
+        {CARDS.map((card, i) => (
+          <div
+            key={i}
+            className="flex-none flex flex-col justify-between rounded-xl p-5"
+            style={{
+              width: "calc(33.333% - 10.667px)",
+              minWidth: "260px",
+              scrollSnapAlign: "start",
+              background: card.accent
+                ? "rgba(212,255,43,0.05)"
+                : "rgba(255,255,255,0.022)",
+              border: card.accent
+                ? "1px solid rgba(212,255,43,0.18)"
+                : "1px solid rgba(255,255,255,0.05)",
+            }}
+          >
+            <div>
+              {card.accent ? (
+                <p
+                  className="font-playfair text-[48px] leading-none mb-1 select-none"
+                  style={{ color: "rgba(212,255,43,0.35)" }}
+                  aria-hidden
+                >
+                  &ldquo;
+                </p>
+              ) : (
+                <StarRow />
+              )}
+              <blockquote className="font-sora font-light text-[13px] text-fg/65 leading-relaxed mb-4">
+                {card.quote}
+              </blockquote>
+            </div>
+            <div>
+              <p className="font-sora text-[12px] font-semibold text-fg/75">
+                {card.author}
+              </p>
+              <p className="font-sora text-[10px] text-fg/35 mt-0.5">
+                {card.role}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Arrow controls */}
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={() => scrollBy("prev")}
+          disabled={!canPrev}
+          aria-label="Previous testimonials"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
+          style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button
+          onClick={() => scrollBy("next")}
+          disabled={!canNext}
+          aria-label="Next testimonials"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
+          style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
+        >
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function Proof() {
   const { lang } = useLang();
@@ -107,46 +214,19 @@ export default function Proof() {
     >
       <div className="max-w-6xl mx-auto px-6">
 
-        {/* ── Experience intro — From the founder ── */}
-        <div className="max-w-[700px] mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="font-sora text-[11px] font-semibold tracking-widest text-accent/60 uppercase mb-4"
-          >
-            From the founder
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="font-playfair font-normal text-3xl md:text-4xl leading-tight mb-6"
-          >
-            16 years. 500+ businesses. 34+ countries. One philosophy that
-            didn&apos;t change.
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-sora font-light text-[15px] text-fg/50 leading-relaxed mb-4"
-          >
-            For 16 years I solved business problems with design. I sat with
-            founders across 34 countries and asked one question every time:
-            what&apos;s the business outcome?
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-sora font-light text-[15px] text-fg/50 leading-relaxed"
-          >
-            The deliverables changed. The mindset didn&apos;t. Today the work is
-            AI conversations instead of brand identities — but the question is
-            the same: what business problem are we actually solving?
-          </motion.p>
-        </div>
+        {/* ── Quiet founder bridge paragraph ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-[680px] mx-auto text-center mb-16"
+        >
+          <p className="font-sora font-light text-[13px] text-fg/40 leading-relaxed">
+            For 16 years I solved business problems with design — sitting with founders across
+            500+ projects in 34+ countries, asking the same question every time: what&apos;s the
+            business outcome? The deliverables changed. The mindset didn&apos;t.
+          </p>
+        </motion.div>
 
         {/* ── Section heading ── */}
         <motion.h2
@@ -154,116 +234,40 @@ export default function Proof() {
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="font-playfair font-normal text-3xl md:text-4xl leading-tight text-center mb-14"
+          className="font-playfair font-normal text-3xl md:text-4xl leading-tight text-center mb-12"
         >
           {t(content.proof.title, lang)}
         </motion.h2>
 
-        {/* ── Corinna Cope hero card ── */}
+        {/* ── Row 1: Two portrait videos, equal size ── */}
         <motion.div
           custom={1}
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
-          className="rounded-2xl p-8 md:p-10 mb-10"
-          style={{
-            background: "rgba(212,255,43,0.04)",
-            border: "1px solid rgba(212,255,43,0.12)",
-          }}
+          className="grid grid-cols-2 gap-4 sm:gap-6 mb-8 max-w-[640px] mx-auto"
         >
-          <StarRow />
-          <blockquote className="font-playfair font-normal text-xl md:text-2xl text-fg/80 leading-relaxed mb-6">
-            &ldquo;{HERO_TESTIMONIAL.quote}&rdquo;
-          </blockquote>
-          <div>
-            <p className="font-sora text-[14px] font-semibold text-fg/90">
-              {HERO_TESTIMONIAL.author}
-            </p>
-            <p className="font-sora text-[12px] text-fg/40 mt-0.5">
-              {HERO_TESTIMONIAL.role}
-            </p>
-          </div>
+          {content.proof.videos.map((video, i) => (
+            <VideoEmbed
+              key={i}
+              youtubeId={video.youtubeId}
+              name={video.name}
+              company={video.company}
+            />
+          ))}
         </motion.div>
 
-        {/* ── Row 1: two portrait videos + one written card ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {content.proof.videos.map((video, i) => (
-            <motion.div
-              key={i}
-              custom={i + 2}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-            >
-              <VideoEmbed
-                youtubeId={video.youtubeId}
-                name={video.name}
-                company={video.company}
-              />
-            </motion.div>
-          ))}
+        {/* ── Row 2: Five-card carousel ── */}
+        <motion.div
+          custom={2}
+          variants={fadeUp}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
+          <TestimonialCarousel />
+        </motion.div>
 
-          {/* Written card — James T. */}
-          <motion.div
-            custom={4}
-            variants={fadeUp}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="rounded-xl p-6 flex flex-col justify-between"
-            style={{
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <div>
-              <StarRow />
-              <blockquote className="font-sora font-light text-[15px] text-fg/70 leading-relaxed mb-6">
-                &ldquo;{ROW1_WRITTEN.quote}&rdquo;
-              </blockquote>
-            </div>
-            <div>
-              <p className="font-sora text-[13px] font-semibold text-fg/80">
-                {ROW1_WRITTEN.author}
-              </p>
-              <p className="font-sora text-[11px] text-fg/35 mt-0.5">
-                {ROW1_WRITTEN.role}
-              </p>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ── Row 2: three compact cards ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {ROW2.map((card, i) => (
-            <motion.div
-              key={i}
-              custom={i + 5}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              className="rounded-xl p-5"
-              style={{
-                background: "rgba(255,255,255,0.018)",
-                border: "1px solid rgba(255,255,255,0.04)",
-              }}
-            >
-              <StarRow />
-              <blockquote className="font-sora font-light text-[13px] text-fg/60 leading-relaxed mb-4">
-                &ldquo;{card.quote}&rdquo;
-              </blockquote>
-              <div>
-                <p className="font-sora text-[12px] font-semibold text-fg/70">
-                  {card.author}
-                </p>
-                <p className="font-sora text-[10px] text-fg/30 mt-0.5">
-                  {card.role}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Anchor scroll to Bot in Action */}
+        {/* Anchor to Bot in Action */}
         <div className="mt-12">
           <a
             href="#bot-in-action"

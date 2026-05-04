@@ -5,14 +5,24 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { BOOKING_LINK } from "@/lib/content";
 
-const REAL_SLOTS = [
+// Hero slot — client to provide final image; using placeholder for now
+const HERO = {
+  src: null as string | null, // set to "/screenshots/bot-in-action/hero.png" when ready
+  caption: "Full conversation demo · coming soon",
+};
+
+const SUPPORTING = [
   {
     src: "/screenshots/bot-in-action/slot-1.png",
-    caption: "Stoke Ski Shop — complex pricing question, EN",
+    caption: "Ski gear advice · EN · product knowledge + recommendation",
   },
   {
     src: "/screenshots/bot-in-action/slot-2.png",
-    caption: "Sintra Plumbing — after-hours booking, PT",
+    caption: "Emergency plumbing · PT · triage + pricing + dispatch",
+  },
+  {
+    src: null,
+    caption: "More demos coming",
   },
 ];
 
@@ -25,15 +35,95 @@ const fadeUp = {
   }),
 };
 
+function PhoneTile({
+  src,
+  caption,
+  placeholder,
+}: {
+  src: string | null;
+  caption: string;
+  placeholder?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <div
+        className="relative w-full rounded-2xl overflow-hidden"
+        style={{ aspectRatio: "9/19" }}
+      >
+        {src ? (
+          <Image
+            src={src}
+            alt={caption}
+            fill
+            className="object-contain"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 30vw"
+          />
+        ) : (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="opacity-20"
+            >
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="3"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
+              <path
+                d="M21 15l-5-5L5 21"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <p className="font-sora text-[11px] text-fg/20 tracking-wide text-center px-6">
+              {placeholder ? "More demos coming" : "Demo coming soon"}
+            </p>
+          </div>
+        )}
+      </div>
+      <p className="font-sora text-[11px] text-fg/35 leading-snug text-center px-1">
+        {caption}
+      </p>
+    </div>
+  );
+}
+
 export default function BotInAction() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="bot-in-action" ref={ref} className="section-divider py-20 md:py-28">
+    <section
+      id="bot-in-action"
+      ref={ref}
+      className="relative py-20 md:py-28"
+      style={{
+        background:
+          "radial-gradient(ellipse 120% 60% at 50% 0%, rgba(212,255,43,0.045) 0%, transparent 65%), rgba(0,0,0,0)",
+        borderTop: "1px solid rgba(255,255,255,0.04)",
+        borderBottom: "1px solid rgba(255,255,255,0.04)",
+      }}
+    >
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
-        <div className="max-w-[680px] mb-12">
+
+        {/* Header — centered */}
+        <div className="text-center max-w-[640px] mx-auto mb-14">
           <motion.h2
             custom={0}
             variants={fadeUp}
@@ -50,90 +140,54 @@ export default function BotInAction() {
             animate={inView ? "visible" : "hidden"}
             className="font-sora font-light text-[15px] text-fg/50 leading-relaxed"
           >
-            Trained in your brand voice. Handles the questions you&apos;re tired of answering. Hands off when it should.
+            Trained in your brand voice. Handles the questions you&apos;re tired of
+            answering. Hands off when it should.
           </motion.p>
         </div>
 
-        {/* Screenshot grid — 1 col mobile / 2 col tablet / 3 col desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-          {/* Real screenshot slots */}
-          {REAL_SLOTS.map((slot, i) => (
-            <motion.div
-              key={i}
-              custom={i + 2}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              className="flex flex-col gap-2"
-            >
-              <div
-                className="relative w-full rounded-xl overflow-hidden"
-                style={{ aspectRatio: "4/5" }}
-              >
-                <Image
-                  src={slot.src}
-                  alt={slot.caption}
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
-              <p className="font-sora text-[11px] text-fg/35 text-center leading-relaxed px-1">
-                {slot.caption}
-              </p>
-            </motion.div>
-          ))}
+        {/* Layout: hero left + 3 supporting right */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-12">
 
-          {/* "More demos coming" skeleton slots */}
-          {[3, 4, 5].map((n, i) => (
-            <motion.div
-              key={`skeleton-${n}`}
-              custom={i + 4}
-              variants={fadeUp}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-              className="flex flex-col gap-2"
-            >
-              <div
-                className="relative w-full rounded-xl overflow-hidden"
-                style={{ aspectRatio: "4/5" }}
+          {/* Hero tile — centered in its column, larger */}
+          <motion.div
+            custom={2}
+            variants={fadeUp}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            className="flex flex-col items-center"
+          >
+            <div className="w-full max-w-[260px] mx-auto">
+              <PhoneTile src={HERO.src} caption={HERO.caption} />
+            </div>
+          </motion.div>
+
+          {/* 3 supporting tiles stacked */}
+          <div className="grid grid-cols-3 gap-3">
+            {SUPPORTING.map((slot, i) => (
+              <motion.div
+                key={i}
+                custom={i + 3}
+                variants={fadeUp}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
               >
-                <div
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-xl"
-                  style={{
-                    background: "rgba(255,255,255,0.02)",
-                    border: "1px solid rgba(255,255,255,0.05)",
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="opacity-20"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="1.5" />
-                    <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" />
-                    <path d="M21 15l-5-5L5 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <p className="font-sora text-[11px] text-fg/20 tracking-wide text-center px-6">
-                    More demos coming
-                  </p>
-                </div>
-              </div>
-              <p className="font-sora text-[11px] text-fg/[0.12] text-center leading-relaxed px-1">
-                &nbsp;
-              </p>
-            </motion.div>
-          ))}
+                <PhoneTile
+                  src={slot.src}
+                  caption={slot.caption}
+                  placeholder={!slot.src}
+                />
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* CTA */}
         <motion.div
-          custom={8}
+          custom={7}
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
+          className="text-center"
         >
           <a
             href={BOOKING_LINK}
