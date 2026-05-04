@@ -25,8 +25,8 @@ export const content = {
       es: "Ahora Mismo. ¿Alguien Responde?",
     },
     sub: {
-      en: "I set up smart assistants that respond to every customer in under 60 seconds — while you're with a client, at dinner, or finally sleeping. If it doesn't work, you don't pay.",
-      es: "Configuro asistentes inteligentes que responden a cada cliente en menos de 60 segundos — mientras estás con un paciente, cenando, o por fin durmiendo. Si no funciona, no pagas.",
+      en: "We set up smart assistants that respond to every customer in under 60 seconds — while you're with a client, at dinner, or finally sleeping. If it doesn't work, you don't pay.",
+      es: "Configuramos asistentes inteligentes que responden a cada cliente en menos de 60 segundos — mientras estás con un paciente, cenando, o por fin durmiendo. Si no funciona, no pagas.",
     },
     cta1: { en: "Get Your Free Audit →", es: "Auditoría Gratuita →" },
     cta1Link: BOOKING_LINK,
@@ -104,21 +104,21 @@ export const content = {
       es: "La Solución Tarda 48 Horas. Tú No Tocas Nada.",
     },
     trust: {
-      en: "From someone who's delivered 400+ projects across 37 countries — for Fortune 500s to local clinics, restaurants, and salons.",
-      es: "De alguien que ha entregado +400 proyectos en 37 países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
+      en: "From a team that has delivered 500+ projects across 34+ countries — for Fortune 500s to local clinics, restaurants, and salons.",
+      es: "De un equipo que ha entregado +500 proyectos en 34+ países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
     },
     cards: [
       {
         num: "01",
         title: { en: "Free Audit", es: "Auditoría Gratuita" },
         desc: {
-          en: "I test how fast your business responds to customers and show you exactly where leads disappear. Takes me 48 hours. Costs you nothing.",
-          es: "Analizo qué tan rápido responde tu negocio y te muestro exactamente dónde desaparecen los leads. Me toma 48 horas. No te cuesta nada.",
+          en: "We test how fast your business responds to customers and show you exactly where leads disappear. Takes us 48 hours. Costs you nothing.",
+          es: "Analizamos qué tan rápido responde tu negocio y te mostramos exactamente dónde desaparecen los leads. Nos toma 48 horas. No te cuesta nada.",
         },
       },
       {
         num: "02",
-        title: { en: "I Build Your Assistant", es: "Construyo Tu Asistente" },
+        title: { en: "We Build Your Assistant", es: "Construimos Tu Asistente" },
         desc: {
           en: "A smart assistant on your website and WhatsApp that answers questions, books appointments, and captures leads. In any language. 24/7. You change nothing about how you work.",
           es: "Un asistente inteligente en tu web y WhatsApp que responde preguntas, reserva citas y captura leads. En cualquier idioma. 24/7. No cambias nada de cómo trabajas.",
@@ -131,8 +131,8 @@ export const content = {
           es: "Pagas Solo Cuando Funciona",
         },
         desc: {
-          en: "30 days. If it doesn't deliver, you owe nothing. First 30 days — completely on me. You invest nothing. No contracts. Cancel anytime.",
-          es: "30 días. Si no rinde, no debes nada. Los primeros 30 días — completamente por mi cuenta. No inviertes nada. Sin contratos. Cancela cuando quieras.",
+          en: "30 days. If it doesn't deliver, you owe nothing. First 30 days — completely on us. You invest nothing. No contracts. Cancel anytime.",
+          es: "30 días. Si no rinde, no debes nada. Los primeros 30 días — completamente por nuestra cuenta. No inviertes nada. Sin contratos. Cancela cuando quieras.",
         },
       },
     ],
@@ -140,22 +140,22 @@ export const content = {
 
   proof: {
     title: {
-      en: "What Clients Say About Working With Me",
-      es: "Lo Que Dicen los Clientes Sobre Trabajar Conmigo",
+      en: "What Clients Say About Working With Us",
+      es: "Lo Que Dicen los Clientes Sobre Trabajar Con Nosotros",
     },
     bridgeLine: {
-      en: "400+ five-star projects across 37 countries — from Fortune 500s to local clinics, restaurants, and salons.",
-      es: "Más de 400 proyectos con cinco estrellas en 37 países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
+      en: "500+ five-star projects across 34+ countries — from Fortune 500s to local clinics, restaurants, and salons.",
+      es: "Más de 500 proyectos con cinco estrellas en 34+ países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
     },
     videos: [
       {
         name: "Garrett Williams",
-        company: "Econocraft Materials, USA",
+        company: "Econocraft Materials · USA",
         youtubeId: "3Gzbg1rI5Tg",
       },
       {
         name: "AJ",
-        company: "Hospitality Group, UK",
+        company: "Folkrm · US",
         youtubeId: "pVgC-3GciSw",
       },
     ],
@@ -201,7 +201,7 @@ export const content = {
         "Works on WhatsApp, your website, or both",
         "Books appointments and answers questions in any language",
         "30-day guarantee — works or you don't pay",
-        "First 30 days — completely on me. You invest nothing.",
+        "First 30 days — completely on us. You invest nothing.",
       ],
       es: [
         "Auditoría completa de tu flujo de respuesta",
@@ -210,7 +210,7 @@ export const content = {
         "Funciona en WhatsApp, tu web, o ambos",
         "Reserva citas y responde preguntas en cualquier idioma",
         "Garantía 30 días — funciona o no pagas",
-        "Primeros 30 días — completamente por mi cuenta. No inviertes nada.",
+        "Primeros 30 días — completamente por nuestra cuenta. No inviertes nada.",
       ],
     },
     priceAnchor: {
@@ -218,12 +218,12 @@ export const content = {
       es: "La mayoría de clientes invierte menos que el coste de un empleado a media jornada — y funciona 24/7 sin pedir baja.",
     },
     guarantee: {
-      en: "If it doesn't work in 30 days, you pay nothing. Not the setup. Not the monthly. Nothing. I take the risk so you don't have to.",
-      es: "Si no funciona en 30 días, no pagas nada. Ni el setup. Ni la mensualidad. Nada. Yo asumo el riesgo para que tú no tengas que hacerlo.",
+      en: "If it doesn't work in 30 days, you pay nothing. Not the setup. Not the monthly. Nothing. We take the risk so you don't have to.",
+      es: "Si no funciona en 30 días, no pagas nada. Ni el setup. Ni la mensualidad. Nada. Nosotros asumimos el riesgo para que tú no tengas que hacerlo.",
     },
     scarcity: {
-      en: "I work with a limited number of businesses each month to ensure quality.",
-      es: "Trabajo con un número limitado de negocios al mes para garantizar calidad.",
+      en: "We work with a limited number of businesses each month to ensure quality.",
+      es: "Trabajamos con un número limitado de negocios al mes para garantizar calidad.",
     },
     cta1: { en: "Get Your Free Audit →", es: "Auditoría Gratuita →" },
     cta1Link: BOOKING_LINK,
@@ -270,8 +270,8 @@ export const content = {
           es: "¿Funcionará con las herramientas que ya uso?",
         },
         a: {
-          en: "Yes. It integrates with WhatsApp, your website, Google Calendar, and most booking systems. I map your existing tools before building anything — the goal is to plug into what you already have, not force you to switch.",
-          es: "Sí. Se integra con WhatsApp, tu web, Google Calendar y la mayoría de sistemas de reservas. Mapeo tus herramientas actuales antes de construir nada — el objetivo es conectar con lo que ya tienes, no obligarte a cambiar.",
+          en: "Yes. It integrates with WhatsApp, your website, Google Calendar, and most booking systems. We map your existing tools before building anything — the goal is to plug into what you already have, not force you to switch.",
+          es: "Sí. Se integra con WhatsApp, tu web, Google Calendar y la mayoría de sistemas de reservas. Mapeamos tus herramientas actuales antes de construir nada — el objetivo es conectar con lo que ya tienes, no obligarte a cambiar.",
         },
       },
       {
@@ -290,8 +290,8 @@ export const content = {
           es: "¿Es otra herramienta cara que tendré que gestionar yo?",
         },
         a: {
-          en: "No. You don't manage anything. I build it, monitor it, and maintain it. Your only job is to keep doing what you do — I handle the rest. And the monthly cost is less than a part-time employee's weekly wage.",
-          es: "No. No gestionas nada. Yo lo construyo, lo monitoreo y lo mantengo. Tu único trabajo es seguir haciendo lo que haces — yo me encargo del resto. Y el coste mensual es menos que el salario semanal de un empleado a media jornada.",
+          en: "No. You don't manage anything. We build it, monitor it, and maintain it. Your only job is to keep doing what you do — we handle the rest. And the monthly cost is less than a part-time employee's weekly wage.",
+          es: "No. No gestionas nada. Nosotros lo construimos, lo monitoreamos y lo mantenemos. Tu único trabajo es seguir haciendo lo que haces — nosotros nos encargamos del resto. Y el coste mensual es menos que el salario semanal de un empleado a media jornada.",
         },
       },
       {
@@ -320,8 +320,8 @@ export const content = {
           es: "¿Qué tan seguro están mis datos de negocio?",
         },
         a: {
-          en: "Your business data stays within systems you control. I don't store customer conversations on external servers. Everything is built with privacy-first principles, and I'm happy to walk you through the technical setup before we start.",
-          es: "Los datos de tu negocio permanecen en sistemas que tú controlas. No almaceno conversaciones de clientes en servidores externos. Todo se construye con principios de privacidad primero, y puedo explicarte la configuración técnica antes de empezar.",
+          en: "Your business data stays within systems you control. We don't store customer conversations on external servers. Everything is built with privacy-first principles, and we're happy to walk you through the technical setup before we start.",
+          es: "Los datos de tu negocio permanecen en sistemas que tú controlas. No almacenamos conversaciones de clientes en servidores externos. Todo se construye con principios de privacidad primero, y estamos encantados de explicarte la configuración técnica antes de empezar.",
         },
       },
       {
@@ -330,8 +330,8 @@ export const content = {
           es: "¿Cómo es el soporte continuo después de la configuración?",
         },
         a: {
-          en: "I'm available via WhatsApp for any issues that come up. Most clients need very little support after setup — but if something breaks or needs updating, I handle it fast. No ticket systems, no waiting in queues.",
-          es: "Estoy disponible por WhatsApp para cualquier problema. La mayoría de clientes necesitan muy poco soporte después de la configuración — pero si algo falla o necesita actualización, lo gestiono rápido. Sin sistemas de tickets, sin colas de espera.",
+          en: "We're available via WhatsApp for any issues that come up. Most clients need very little support after setup — but if something breaks or needs updating, we handle it fast. No ticket systems, no waiting in queues.",
+          es: "Estamos disponibles por WhatsApp para cualquier problema. La mayoría de clientes necesitan muy poco soporte después de la configuración — pero si algo falla o necesita actualización, lo gestionamos rápido. Sin sistemas de tickets, sin colas de espera.",
         },
       },
       {
@@ -340,18 +340,18 @@ export const content = {
           es: "No soy tecnológico. ¿Será complicado para mí?",
         },
         a: {
-          en: "You won't touch any technology. I set it up, configure it, and test it. You just keep doing what you're already doing.",
-          es: "No tocarás ninguna tecnología. Yo lo configuro, lo ajusto y lo pruebo. Tú solo sigue haciendo lo que ya haces.",
+          en: "You won't touch any technology. We set it up, configure it, and test it. You just keep doing what you're already doing.",
+          es: "No tocarás ninguna tecnología. Nosotros lo configuramos, lo ajustamos y lo probamos. Tú solo sigue haciendo lo que ya haces.",
         },
       },
       {
         q: {
           en: "What's the difference between cheap off-the-shelf AI tools and what you build?",
-          es: "¿Qué diferencia hay entre una herramienta de IA genérica y lo que tú construyes?",
+          es: "¿Qué diferencia hay entre una herramienta de IA genérica y lo que construís?",
         },
         a: {
-          en: "Off-the-shelf tools are built for everyone, which means they work perfectly for no one. What I build is trained specifically on your business: your services, your tone, your most common questions. The result is an assistant that sounds like you — not a generic chatbot that frustrates customers.",
-          es: "Las herramientas genéricas están diseñadas para todos, lo que significa que no funcionan perfectamente para nadie. Lo que construyo está entrenado específicamente en tu negocio: tus servicios, tu tono, tus preguntas más frecuentes. El resultado es un asistente que suena como tú — no un chatbot genérico que frustra clientes.",
+          en: "Off-the-shelf tools are built for everyone, which means they work perfectly for no one. What we build is trained specifically on your business: your services, your tone, your most common questions. The result is an assistant that sounds like you — not a generic chatbot that frustrates customers.",
+          es: "Las herramientas genéricas están diseñadas para todos, lo que significa que no funcionan perfectamente para nadie. Lo que construimos está entrenado específicamente en tu negocio: tus servicios, tu tono, tus preguntas más frecuentes. El resultado es un asistente que suena como tú — no un chatbot genérico que frustra clientes.",
         },
       },
       {
@@ -373,8 +373,8 @@ export const content = {
       es: "¿Todavía dudando? Hablemos 15 minutos.",
     },
     sub: {
-      en: "No pitch. No pressure. I'll look at your business, tell you exactly where you're losing customers, and give you a clear picture of what fixing it would actually cost — and earn you.",
-      es: "Sin ventas. Sin presión. Miro tu negocio, te digo exactamente dónde estás perdiendo clientes, y te doy una imagen clara de lo que costaría arreglarlo — y lo que te ganaría.",
+      en: "No pitch. No pressure. We'll look at your business, tell you exactly where you're losing customers, and give you a clear picture of what fixing it would actually cost — and earn you.",
+      es: "Sin ventas. Sin presión. Miramos tu negocio, te decimos exactamente dónde estás perdiendo clientes, y te damos una imagen clara de lo que costaría arreglarlo — y lo que te ganaría.",
     },
     cta1: { en: "Book Your Free 15-Min Call →", es: "Reserva Tu Llamada Gratuita →" },
     cta1Link: BOOKING_LINK,

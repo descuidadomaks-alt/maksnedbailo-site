@@ -16,7 +16,6 @@ export default function HomePage() {
     <>
       <main>
         <Hero />
-        <GotAProblem />
         <TheShift />
         <TheProblem />
         <TheSolution />
@@ -24,6 +23,7 @@ export default function HomePage() {
         <BotInAction />
         <TheOffer />
         <FAQ />
+        <GotAProblem />
         <CTASection />
       </main>
       <Footer />

@@ -63,13 +63,13 @@ const CITIES: Record<string, CityData> = {
       tag: "Para salones, spas y clínicas de Cantabria que pierden citas por no poder atender el móvil",
       h1: "Estás con una Clienta. Te Entra un Mensaje.",
       h1accent: "¿Quién Agenda la Siguiente Cita?",
-      sub: "Configuro asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos — gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos — gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Auditoría gratuita. 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For beauty salons, spas & clinics in Cantabria missing bookings while serving clients",
       h1: "You're With a Client. Someone Messages.",
       h1accent: "Who Books the Next Appointment?",
-      sub: "I set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds — handling bookings, treatment questions and waiting lists on WhatsApp or your website. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds — handling bookings, treatment questions and waiting lists on WhatsApp or your website. Free audit. 30 days risk-free.",
     },
     meta: {
       title: "Automatización IA para Salones y Spas en Santander | Maks Nedbailo",
@@ -103,7 +103,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "¿Cuánto tiempo tarda en estar activo para mi negocio?",
-        a: "48 horas desde que me das la información de tu negocio. No tocas ninguna tecnología — yo lo configuro, lo pruebo y lo pongo en marcha. Tú sigues con tus clientes.",
+        a: "48 horas desde que nos das la información de tu negocio. No tocas ninguna tecnología — lo configuramos, lo probamos y lo ponemos en marcha. Tú sigues con tus clientes.",
       },
       {
         q: "¿Funciona con el WhatsApp Business que ya tengo?",
@@ -129,7 +129,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "How long does it take to go live for my business?",
-        a: "48 hours from when you give me your business information. You don't touch any technology — I configure it, test it and launch it. You carry on with your clients.",
+        a: "48 hours from when you give us your business information. You don't touch any technology — we configure it, test it and launch it. You carry on with your clients.",
       },
       {
         q: "Does it work with my existing WhatsApp Business number?",
@@ -169,13 +169,13 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Madrid que pierden clientes por no responder primero",
       h1: "En Madrid, el Primero que Responde",
       h1accent: "se Queda con el Cliente.",
-      sub: "Configuro asistentes de IA para negocios madrileños que responden en menos de 60 segundos — mientras estás con otro cliente, en reunión, o desconectado. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios madrileños que responden en menos de 60 segundos — mientras estás con otro cliente, en reunión, o desconectado. Auditoría gratuita. 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Madrid businesses losing clients to whoever responds first",
       h1: "In Madrid, the First to Reply",
       h1accent: "Keeps the Client.",
-      sub: "I set up AI assistants for Madrid businesses that reply in under 60 seconds — while you're with another client, in a meeting, or off. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Madrid businesses that reply in under 60 seconds — while you're with another client, in a meeting, or off. Free audit. 30 days risk-free.",
     },
     meta: {
       title: "Automatización de IA en Madrid | Consultor IA para Pymes | Maks Nedbailo",
@@ -276,13 +276,13 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Barcelona que no pueden permitirse perder clientes internacionales",
       h1: "Barcelona No Espera.",
       h1accent: "Tus Clientes Tampoco.",
-      sub: "Configuro asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos — en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos — en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Auditoría gratuita. 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Barcelona businesses that can't afford to miss international clients",
       h1: "Barcelona Doesn't Wait.",
       h1accent: "Neither Do Your Clients.",
-      sub: "I set up AI assistants for Barcelona businesses that reply in under 60 seconds — in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Barcelona businesses that reply in under 60 seconds — in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Free audit. 30 days risk-free.",
     },
     meta: {
       title: "Automatización de IA en Barcelona | Asistente para Pymes | Maks Nedbailo",
@@ -316,7 +316,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "¿Cuánto tiempo tarda en estar activo?",
-        a: "48 horas desde que me das la información de tu negocio. Yo lo configuro todo, tú no tocas nada. El primer mes es gratis.",
+        a: "48 horas desde que nos das la información de tu negocio. Lo configuramos todo, tú no tocas nada. El primer mes es gratis.",
       },
       {
         q: "¿Funciona con WhatsApp Business?",
@@ -342,7 +342,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "How long does it take to go live?",
-        a: "48 hours from when you give me your business information. I configure everything, you don't touch anything. The first month is free.",
+        a: "48 hours from when you give us your business information. We configure everything, you don't touch anything. The first month is free.",
       },
       {
         q: "Does it work with WhatsApp Business?",
@@ -383,13 +383,13 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Valencia que responden tarde y pierden clientes al momento",
       h1: "En Valencia, Cada Minuto sin Responder",
       h1accent: "es un Cliente que se Va.",
-      sub: "Configuro asistentes de IA para negocios en Valencia que responden en menos de 60 segundos — en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Valencia que responden en menos de 60 segundos — en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Auditoría gratuita. 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Valencia businesses losing clients to slow response times",
       h1: "In Valencia, Every Minute Without a Reply",
       h1accent: "Is a Client Gone.",
-      sub: "I set up AI assistants for Valencia businesses that reply in under 60 seconds — on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Valencia businesses that reply in under 60 seconds — on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Free audit. 30 days risk-free.",
     },
     meta: {
       title: "Automatización de IA en Valencia | Asistente para Pymes | Maks Nedbailo",
@@ -419,7 +419,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "¿Cuánto tiempo tarda en estar operativo?",
-        a: "48 horas desde que me facilitas la información de tu negocio. Yo configuro todo, tú no tocas ninguna tecnología. Tu negocio sigue funcionando mientras yo lo preparo.",
+        a: "48 horas desde que nos facilitas la información de tu negocio. Configuramos todo, tú no tocas ninguna tecnología. Tu negocio sigue funcionando mientras lo preparamos.",
       },
       {
         q: "¿Funciona con WhatsApp Business?",
@@ -445,7 +445,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "How quickly can it go live?",
-        a: "48 hours from when you provide your business information. I configure everything, you don't touch any technology. Your business keeps running while I set it up.",
+        a: "48 hours from when you provide your business information. We configure everything, you don't touch any technology. Your business keeps running while we set it up.",
       },
       {
         q: "Does it work with WhatsApp Business?",

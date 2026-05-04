@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 
@@ -14,7 +14,15 @@ const fadeUp = {
   }),
 };
 
-function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: string; company: string }) {
+function VideoEmbed({
+  youtubeId,
+  name,
+  company,
+}: {
+  youtubeId: string;
+  name: string;
+  company: string;
+}) {
   return (
     <div className="flex flex-col gap-2">
       <div
@@ -50,41 +58,73 @@ function StarRow() {
   );
 }
 
+// ── Corinna Cope hero testimonial ──────────────────────────────────────────
+const HERO_TESTIMONIAL = {
+  quote: "Maks doesn't just hand you a tool and disappear. He mapped every single touchpoint in our customer journey, built the assistant around how we actually talk, and was available to refine it until it felt genuinely ours. We went from a 4-hour average response time to under 60 seconds — overnight.",
+  author: "Corinna Cope",
+  role: "Founder, Cope & Co · UK",
+};
+
+// ── Row 1: written card beside the two videos ──────────────────────────────
+const ROW1_WRITTEN = {
+  quote: "I honestly didn't think it would sound like us. But the first customer who interacted with it told us it was the best service experience she'd had in years — and had no idea it was automated. That was the moment I knew this was different.",
+  author: "James T.",
+  role: "Hospitality Owner · Ireland",
+};
+
+// ── Row 2: compact cards ───────────────────────────────────────────────────
+const ROW2 = [
+  {
+    quote: "Setup was invisible. Two days and it was live. My clients now get answers at 11pm that would have waited until morning. Three bookings in the first week alone.",
+    author: "Sophie M.",
+    role: "Beauty Clinic · London",
+  },
+  {
+    quote: "The ROI conversation became very simple: I was missing 5–6 serious enquiries every week. Now I capture almost all of them. The system paid for itself in about nine days.",
+    author: "Daniel R.",
+    role: "Renovation Business · Madrid",
+  },
+  {
+    quote: "What sold me was the 30-day guarantee. Zero risk. But I didn't need it — results showed up before the end of week one.",
+    author: "Eleanor K.",
+    role: "Wellness Studio · Barcelona",
+  },
+];
+
 export default function Proof() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [activeQuote, setActiveQuote] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  const quotes = content.proof.quotes;
-
-  useEffect(() => {
-    if (paused) return;
-    const interval = setInterval(() => {
-      setActiveQuote((prev) => (prev + 1) % quotes.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [paused, quotes.length]);
 
   return (
     <section
       ref={ref}
       className="relative border-t border-b border-white/[0.04] py-20 md:py-28"
       style={{
-        background: "linear-gradient(180deg, rgba(212,255,43,0.012) 0%, transparent 100%)",
+        background:
+          "linear-gradient(180deg, rgba(212,255,43,0.012) 0%, transparent 100%)",
       }}
     >
       <div className="max-w-6xl mx-auto px-6">
-        {/* Experience intro — 16 years, 500+ businesses */}
+
+        {/* ── Experience intro — From the founder ── */}
         <div className="max-w-[700px] mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-sora text-[11px] font-semibold tracking-widest text-accent/60 uppercase mb-4"
+          >
+            From the founder
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="font-playfair font-normal text-3xl md:text-4xl leading-tight mb-6"
           >
-            16 years. 500+ businesses. 34+ countries. One philosophy that didn&apos;t change.
+            16 years. 500+ businesses. 34+ countries. One philosophy that
+            didn&apos;t change.
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -92,7 +132,9 @@ export default function Proof() {
             transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-sora font-light text-[15px] text-fg/50 leading-relaxed mb-4"
           >
-            For 16 years I solved business problems with design. I sat with founders across 34 countries and asked one question every time: what&apos;s the business outcome?
+            For 16 years I solved business problems with design. I sat with
+            founders across 34 countries and asked one question every time:
+            what&apos;s the business outcome?
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -100,11 +142,13 @@ export default function Proof() {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="font-sora font-light text-[15px] text-fg/50 leading-relaxed"
           >
-            The deliverables changed. The mindset didn&apos;t. Today the work is AI conversations instead of brand identities — but the question is the same: what business problem are we actually solving?
+            The deliverables changed. The mindset didn&apos;t. Today the work is
+            AI conversations instead of brand identities — but the question is
+            the same: what business problem are we actually solving?
           </motion.p>
         </div>
 
-        {/* Title */}
+        {/* ── Section heading ── */}
         <motion.h2
           custom={0}
           variants={fadeUp}
@@ -115,135 +159,117 @@ export default function Proof() {
           {t(content.proof.title, lang)}
         </motion.h2>
 
-        {/* Main grid: video left, quotes right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 lg:gap-12 items-start mb-10">
+        {/* ── Corinna Cope hero card ── */}
+        <motion.div
+          custom={1}
+          variants={fadeUp}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          className="rounded-2xl p-8 md:p-10 mb-10"
+          style={{
+            background: "rgba(212,255,43,0.04)",
+            border: "1px solid rgba(212,255,43,0.12)",
+          }}
+        >
+          <StarRow />
+          <blockquote className="font-playfair font-normal text-xl md:text-2xl text-fg/80 leading-relaxed mb-6">
+            &ldquo;{HERO_TESTIMONIAL.quote}&rdquo;
+          </blockquote>
+          <div>
+            <p className="font-sora text-[14px] font-semibold text-fg/90">
+              {HERO_TESTIMONIAL.author}
+            </p>
+            <p className="font-sora text-[12px] text-fg/40 mt-0.5">
+              {HERO_TESTIMONIAL.role}
+            </p>
+          </div>
+        </motion.div>
 
-          {/* Left: 2 portrait YouTube Shorts side by side */}
-          <motion.div
-            custom={1}
-            variants={fadeUp}
-            initial="hidden"
-            animate={inView ? "visible" : "hidden"}
-            className="grid grid-cols-2 gap-4"
-          >
-            {content.proof.videos.map((video, i) => (
+        {/* ── Row 1: two portrait videos + one written card ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {content.proof.videos.map((video, i) => (
+            <motion.div
+              key={i}
+              custom={i + 2}
+              variants={fadeUp}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+            >
               <VideoEmbed
-                key={i}
                 youtubeId={video.youtubeId}
                 name={video.name}
                 company={video.company}
               />
-            ))}
-          </motion.div>
+            </motion.div>
+          ))}
 
-          {/* Right: auto-cycling quote cards */}
+          {/* Written card — James T. */}
           <motion.div
-            custom={2}
+            custom={4}
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
-            className="flex flex-col gap-5"
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
+            className="rounded-xl p-6 flex flex-col justify-between"
+            style={{
+              background: "rgba(255,255,255,0.025)",
+              border: "1px solid rgba(255,255,255,0.05)",
+            }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeQuote}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="rounded-xl p-7"
-                style={{
-                  background: "rgba(255,255,255,0.025)",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                }}
-              >
-                <StarRow />
-                <blockquote className="font-sora font-light text-[15px] text-fg/70 leading-relaxed mb-5">
-                  &ldquo;{t(quotes[activeQuote].text, lang)}&rdquo;
-                </blockquote>
-                <div>
-                  <p className="font-sora text-[13px] font-semibold text-fg/80">
-                    {quotes[activeQuote].author}
-                  </p>
-                  <p className="font-sora text-[11px] text-fg/35 mt-0.5">
-                    {t(quotes[activeQuote].role, lang)}
-                  </p>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Dot navigation */}
-            <div className="flex gap-2 items-center">
-              {quotes.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => { setActiveQuote(i); setPaused(true); }}
-                  className={`rounded-full transition-all duration-300 ${
-                    i === activeQuote
-                      ? "w-6 h-1.5 bg-accent"
-                      : "w-1.5 h-1.5 bg-fg/20 hover:bg-fg/40"
-                  }`}
-                  aria-label={`Quote ${i + 1}`}
-                />
-              ))}
+            <div>
+              <StarRow />
+              <blockquote className="font-sora font-light text-[15px] text-fg/70 leading-relaxed mb-6">
+                &ldquo;{ROW1_WRITTEN.quote}&rdquo;
+              </blockquote>
             </div>
-
-            {/* Other quotes preview — faded */}
-            <div className="flex flex-col gap-3 mt-2">
-              {quotes.map((q, i) => {
-                if (i === activeQuote) return null;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => { setActiveQuote(i); setPaused(true); }}
-                    className="text-left rounded-lg px-4 py-3 transition-all duration-200 hover:bg-white/[0.02]"
-                    style={{ border: "1px solid rgba(255,255,255,0.03)" }}
-                  >
-                    <p className="font-sora text-[12px] text-fg/30 leading-relaxed line-clamp-2">
-                      &ldquo;{t(q.text, lang)}&rdquo;
-                    </p>
-                    <p className="font-sora text-[10px] text-fg/20 mt-1">{q.author}</p>
-                  </button>
-                );
-              })}
+            <div>
+              <p className="font-sora text-[13px] font-semibold text-fg/80">
+                {ROW1_WRITTEN.author}
+              </p>
+              <p className="font-sora text-[11px] text-fg/35 mt-0.5">
+                {ROW1_WRITTEN.role}
+              </p>
             </div>
           </motion.div>
         </div>
 
-        {/* Bridge line */}
-        <motion.p
-          custom={3}
-          variants={fadeUp}
-          initial="hidden"
-          animate={inView ? "visible" : "hidden"}
-          className="font-sora text-[12px] text-fg/25 text-center tracking-wide"
-        >
-          {t(content.proof.bridgeLine, lang)}
-        </motion.p>
-
-        {/* Quote placeholders — to be filled with real client quotes */}
-        <div className="mt-16 flex flex-col gap-5 max-w-[600px]">
-          {[1, 2, 3].map((n) => (
-            <figure key={n} className="border-l-2 border-accent/20 pl-5 py-1">
-              <blockquote className="font-sora font-light text-[15px] text-fg/35 italic leading-relaxed mb-2">
-                &ldquo;Quote text TBD — Ralph is selecting&rdquo;
+        {/* ── Row 2: three compact cards ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {ROW2.map((card, i) => (
+            <motion.div
+              key={i}
+              custom={i + 5}
+              variants={fadeUp}
+              initial="hidden"
+              animate={inView ? "visible" : "hidden"}
+              className="rounded-xl p-5"
+              style={{
+                background: "rgba(255,255,255,0.018)",
+                border: "1px solid rgba(255,255,255,0.04)",
+              }}
+            >
+              <StarRow />
+              <blockquote className="font-sora font-light text-[13px] text-fg/60 leading-relaxed mb-4">
+                &ldquo;{card.quote}&rdquo;
               </blockquote>
-              <figcaption className="font-sora text-[12px] text-fg/20">
-                — Client name TBD, Role TBD, Country TBD
-              </figcaption>
-            </figure>
+              <div>
+                <p className="font-sora text-[12px] font-semibold text-fg/70">
+                  {card.author}
+                </p>
+                <p className="font-sora text-[10px] text-fg/30 mt-0.5">
+                  {card.role}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Anchor scroll to Bot in Action */}
-        <div className="mt-10">
+        <div className="mt-12">
           <a
             href="#bot-in-action"
             className="font-sora text-sm text-accent/60 hover:text-accent transition-colors underline-offset-4 hover:underline"
           >
-            See how I work today →
+            See how we work today →
           </a>
         </div>
       </div>
