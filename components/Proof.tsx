@@ -82,6 +82,63 @@ const CARDS = [
   },
   {
     accent: false,
+    quote:
+      "Great communication, very responsive, and delivered the work on time with high quality. Would definitely work with him again.",
+    author: "Rachel T.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Very easy to work with, excellent communication, and always available for feedback and revisions.",
+    author: "Chris B.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Maksym delivered exactly what we needed. He was proactive with suggestions and very responsive throughout the project.",
+    author: "Laura P.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "You are so great to work with! Thank you so much for all your hard work and for being so patient with all of my changes.",
+    author: "Michelle K.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Maksym was a fantastic partner on this project. His attention to detail and willingness to iterate until we got it just right made all the difference.",
+    author: "David W.",
+    role: "Verified client review · 5★",
+  },
+  // ── Design-service-explicit — last in carousel ──
+  {
+    accent: false,
+    quote:
+      "Maksym is a great designer who listens carefully to what you need and delivers great results. Very responsive and professional.",
+    author: "Anna G.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Maksym is very professional, responsive, and attentive to details. He really took the time to understand our brand and vision.",
+    author: "Tom H.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote:
+      "Professional, creative, and great at understanding the business needs behind the design request. Communication was top-notch.",
+    author: "Sarah L.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
     quote: "Maksym was a pleasure to work with and very very talented.",
     author: "James T.",
     role: "Verified client review · 5★",
