@@ -1,15 +1,14 @@
 "use client";
 
-import { useRef, useEffect } from "react";
-import { motion, useInView, useReducedMotion, useAnimation } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { BOOKING_LINK } from "@/lib/content";
 import { fadeUpVariants } from "@/lib/animations";
 
-// Hero slot — client to provide final image; using placeholder for now
 const HERO = {
-  src: null as string | null, // set to "/screenshots/bot-in-action/hero.png" when ready
-  caption: "Full conversation demo · coming soon",
+  src: "/proof/chat-1.jpg",
+  caption: "Restaurant · Allergy booking handled automatically · ES",
 };
 
 const SUPPORTING = [
@@ -22,8 +21,12 @@ const SUPPORTING = [
     caption: "Emergency plumbing · PT · triage + pricing + dispatch",
   },
   {
-    src: null,
-    caption: "More demos coming",
+    src: "/proof/chat-2.jpg",
+    caption: "Pilates studio · Medical enquiry + consult booking · EN",
+  },
+  {
+    src: "/proof/chat-3.png",
+    caption: "Solicitors · Personal injury · lead captured in 10 min · EN",
   },
 ];
 
@@ -96,56 +99,20 @@ function PhoneTile({
   );
 }
 
-/** Animated hero phone tile — entry rotate+y, then continuous gentle float */
+/** Hero phone tile — entry animation only */
 function HeroPhoneTile({ inView, shouldReduce }: { inView: boolean; shouldReduce: boolean }) {
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (!inView) return;
-    if (shouldReduce) {
-      controls.start({ opacity: 1, rotate: 0, y: 0 });
-      return;
-    }
-    controls
-      .start({
-        opacity: 1,
-        rotate: 0,
-        y: 0,
-        transition: { duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] },
-      })
-      .then(() => {
-        controls.start({
-          y: [0, -9],
-          transition: { duration: 3.2, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
-        });
-      });
-  }, [inView, shouldReduce, controls]);
-
   return (
-    <div className="relative">
-      {/* Accent glow pulse behind the hero tile */}
-      {!shouldReduce && (
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none -z-10"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 60%, rgba(212,255,43,0.18) 0%, transparent 70%)",
-          }}
-          animate={{ opacity: [0.4, 0.65, 0.4] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
-        />
-      )}
-      <motion.div
-        animate={controls}
-        initial={shouldReduce ? { opacity: 0 } : { opacity: 0, rotate: -2, y: 40 }}
-      >
-        <PhoneTile src={HERO.src} caption={HERO.caption} />
-      </motion.div>
-    </div>
+    <motion.div
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, rotate: -2, y: 40 }}
+      animate={inView ? { opacity: 1, rotate: 0, y: 0 } : {}}
+      transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <PhoneTile src={HERO.src} caption={HERO.caption} />
+    </motion.div>
   );
 }
 
-/** Supporting phone tile — staggered entry, then float offset by phase */
+/** Supporting phone tile — staggered entry only */
 function SupportingTile({
   src,
   caption,
@@ -159,45 +126,11 @@ function SupportingTile({
   inView: boolean;
   shouldReduce: boolean;
 }) {
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (!inView) return;
-    if (shouldReduce) {
-      controls.start({ opacity: 1, rotate: 0, y: 0 });
-      return;
-    }
-    controls
-      .start({
-        opacity: 1,
-        rotate: 0,
-        y: 0,
-        transition: {
-          duration: 0.85,
-          delay: 0.4 + index * 0.1,
-          ease: [0.22, 1, 0.36, 1],
-        },
-      })
-      .then(() => {
-        // Phase-offset float so tiles don't all move in sync
-        // Different durations keep tiles permanently out of phase with each other
-        const durations = [2.8, 3.8, 2.5];
-        controls.start({
-          y: [0, -7],
-          transition: {
-            duration: durations[index] ?? 3.2,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-          },
-        });
-      });
-  }, [inView, shouldReduce, index, controls]);
-
   return (
     <motion.div
-      animate={controls}
       initial={shouldReduce ? { opacity: 0 } : { opacity: 0, rotate: -2, y: 40 }}
+      animate={inView ? { opacity: 1, rotate: 0, y: 0 } : {}}
+      transition={{ duration: 0.85, delay: 0.4 + index * 0.1, ease: [0.22, 1, 0.36, 1] }}
     >
       <PhoneTile src={src} caption={caption} placeholder={!src} />
     </motion.div>
@@ -308,8 +241,8 @@ export default function BotInAction() {
             </div>
           </motion.div>
 
-          {/* 3 supporting tiles */}
-          <div className="grid grid-cols-3 gap-3">
+          {/* 4 supporting tiles — 2×2 grid */}
+          <div className="grid grid-cols-2 gap-3">
             {SUPPORTING.map((slot, i) => (
               <SupportingTile
                 key={i}
