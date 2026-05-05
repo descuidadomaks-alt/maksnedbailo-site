@@ -150,12 +150,12 @@ export default function Hero() {
           priority
           sizes="100vw"
         />
-        {/* Top fade — dark under nav, fades out before the face */}
+        {/* Top fade — wider gradient, transparent point reached sooner */}
         <div
           className="absolute inset-x-0 top-0 pointer-events-none"
           style={{
-            height: "22%",
-            background: "linear-gradient(to bottom, #060608 0%, transparent 100%)",
+            height: "25%",
+            background: "linear-gradient(to bottom, #060608 0%, transparent 75%)",
           }}
         />
         {/* Bottom fade */}
