@@ -131,8 +131,8 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Mobile spacer: promo bar (28px) + gap (8px) + nav (44px) = 80px ── */}
-      <div className="lg:hidden" style={{ height: 80 }} />
+      {/* ── Mobile spacer: promo bar (28px) + gap (8px) + nav (44px) = 80px, -15px ── */}
+      <div className="lg:hidden" style={{ height: 65 }} />
 
       {/* ── Mobile: full-bleed square-ish image in normal flow ── */}
       <motion.div

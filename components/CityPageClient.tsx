@@ -188,7 +188,7 @@ export default function CityPageClient({
       <section
         ref={heroRef}
         className="relative flex items-center min-h-[90svh]"
-        style={{ paddingTop: `${TOP_OFFSET + BAR_H}px` }}
+        style={{ paddingTop: `${TOP_OFFSET + BAR_H - 15}px` }}
       >
         {/* Ambient glow */}
         <div
