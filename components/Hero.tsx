@@ -147,7 +147,15 @@ export default function Hero() {
           priority
           sizes="100vw"
         />
-        {/* Bottom-only dissolve — no top gradient, image's own dark bg handles it */}
+        {/* Top fade — dark under nav, fades out before the face */}
+        <div
+          className="absolute inset-x-0 top-0 pointer-events-none"
+          style={{
+            height: "22%",
+            background: "linear-gradient(to bottom, #060608 0%, transparent 100%)",
+          }}
+        />
+        {/* Bottom fade */}
         <div
           className="absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
