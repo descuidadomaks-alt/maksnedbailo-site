@@ -53,7 +53,7 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex items-end lg:items-center overflow-hidden"
+      className="relative overflow-hidden lg:flex lg:items-center"
       style={{ minHeight: "100svh" }}
     >
       {/* ── Animated mesh gradient background ── */}
@@ -131,41 +131,35 @@ export default function Hero() {
         }}
       />
 
-      {/* ────────────────────────────────────────────────────────────────
-          Mobile hero image — full-bleed, no container, starts at top:0.
-          Hidden on lg+; the desktop image is inside the grid below.
-      ──────────────────────────────────────────────────────────────── */}
+      {/* ── Mobile: full-bleed image in normal flow (not absolute) ── */}
       <motion.div
-        className="lg:hidden absolute inset-x-0 top-0 pointer-events-none"
-        style={{ height: "72vh", zIndex: 1 }}
+        className="lg:hidden relative w-full overflow-hidden"
+        style={{ height: "62vh" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       >
         <Image
           src="/hero-image.png"
           alt="Maks Nedbailo"
           fill
-          className="object-contain object-top"
+          className="object-cover object-top"
           priority
           sizes="100vw"
         />
-        {/* Bottom dissolve into site bg */}
+        {/* Bottom dissolve — confined inside the image block */}
         <div
           className="absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
-            height: "55%",
-            background:
-              "linear-gradient(to top, #060608 15%, rgba(6,6,8,0.92) 40%, rgba(6,6,8,0.6) 65%, transparent 100%)",
+            height: "40%",
+            background: "linear-gradient(to top, #060608 0%, transparent 100%)",
           }}
         />
       </motion.div>
 
       {/* ── Content ── */}
-      <div
-        className="relative z-10 max-w-6xl mx-auto px-6 w-full pb-12 lg:pb-8 lg:pt-16"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 lg:gap-6 items-center">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 pt-6 pb-12 lg:pt-16 lg:pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-6 lg:gap-6 items-center">
 
           {/* Left: Text */}
           <motion.div
@@ -232,7 +226,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: 20, filter: "blur(8px)" }}
             animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="hidden lg:flex relative order-2 justify-center"
+            className="hidden lg:flex relative justify-center"
           >
             <div className="relative w-full max-w-[500px]" style={{ aspectRatio: "3/4" }}>
               {/* Parallax wrapper */}
