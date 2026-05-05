@@ -34,7 +34,7 @@ function AnimatedCheck({
   inView: boolean;
   shouldReduce: boolean;
 }) {
-  const delay = index * 0.1;
+  const delay = index * 0.2;
 
   return (
     <motion.li
@@ -43,22 +43,22 @@ function AnimatedCheck({
       className="flex items-start gap-3"
       initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
       animate={inView ? { opacity: 1, y: 0 } : shouldReduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
-      transition={shouldReduce ? { duration: 0.2 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={shouldReduce ? { duration: 0.2 } : { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Checkmark container — spring scale 0 → 1.2 → 1 */}
+      {/* Checkmark container — spring scale 0 → 1.15 → 1 */}
       <motion.span
         className="mt-0.5 shrink-0 flex items-center justify-center"
         initial={shouldReduce ? {} : { scale: 0 }}
-        animate={inView ? { scale: [0, 1.2, 1] } : shouldReduce ? {} : { scale: 0 }}
+        animate={inView ? { scale: [0, 1.15, 1] } : shouldReduce ? {} : { scale: 0 }}
         transition={
           shouldReduce
             ? {}
-            : { type: "spring", stiffness: 260, damping: 14, delay: delay + 0.05 }
+            : { type: "spring", stiffness: 160, damping: 16, delay: delay + 0.08 }
         }
         style={{ width: 18, height: 18 }}
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-          {/* Background circle — accent flash color */}
+          {/* Background circle */}
           <motion.circle
             cx="12"
             cy="12"
@@ -68,9 +68,9 @@ function AnimatedCheck({
             strokeWidth="1"
             initial={shouldReduce ? { opacity: 0 } : { opacity: 0 }}
             animate={inView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.01, delay: delay + 0.05 }}
+            transition={{ duration: 0.01, delay: delay + 0.08 }}
           />
-          {/* Stroke-draw checkmark */}
+          {/* Stroke-draw checkmark — tween for predictable, visible draw */}
           <motion.path
             d="M7 12.5l3.5 3.5 6.5-7"
             stroke="#D4FF2B"
@@ -86,15 +86,14 @@ function AnimatedCheck({
             }
             transition={
               shouldReduce
-                ? { duration: 0.15, delay }
+                ? { duration: 0.2, delay }
                 : {
                     pathLength: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 20,
-                      delay: delay + 0.12,
+                      duration: 0.55,
+                      delay: delay + 0.18,
+                      ease: "easeOut",
                     },
-                    opacity: { duration: 0.01, delay: delay + 0.12 },
+                    opacity: { duration: 0.01, delay: delay + 0.18 },
                   }
             }
           />
