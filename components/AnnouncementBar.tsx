@@ -27,14 +27,14 @@ export default function AnnouncementBar() {
 
   return (
     <div
-      className="w-full overflow-hidden flex items-center"
+      className="relative w-full overflow-hidden flex items-center"
       style={{
         height: "28px",
         background: "rgba(212,255,43,0.045)",
         borderBottom: "1px solid rgba(212,255,43,0.07)",
       }}
     >
-      <div className="ticker-track whitespace-nowrap flex">
+      <div className="ticker-track whitespace-nowrap flex absolute top-0 left-0 h-full items-center">
         {doubled.map((msg, i) => (
           <span
             key={i}

@@ -187,21 +187,21 @@ export default function CityPageClient({
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative"
+        className="relative overflow-hidden"
         style={{ paddingTop: `${TOP_OFFSET + BAR_H - 15}px` }}
       >
         {/* Ambient glow */}
         <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none"
+          className="absolute top-1/3 left-0 right-0 h-[400px] pointer-events-none"
           style={{
             background:
               "radial-gradient(ellipse, rgba(212,255,43,0.06) 0%, transparent 70%)",
           }}
         />
 
-        <div className="max-w-4xl mx-auto px-6 pt-6 pb-14 w-full text-center">
+        <div className="max-w-4xl mx-auto px-6 pt-2 md:pt-6 pb-3 md:pb-14 w-full text-center">
           {/* Breadcrumb */}
-          <div className="flex items-center justify-center gap-2 mb-5 flex-wrap">
+          <div className="flex items-center justify-center gap-2 mb-2 md:mb-5 flex-wrap">
             <Link href="/" className="font-sora text-[11px] text-fg/30 hover:text-fg/60 transition-colors">
               {lang === "es" ? "Inicio" : "Home"}
             </Link>
@@ -213,7 +213,7 @@ export default function CityPageClient({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-[10px] uppercase tracking-[3.5px] text-accent/60 font-sora mb-5"
+            className="text-[10px] uppercase tracking-[3.5px] text-accent/60 font-sora mb-2 md:mb-5"
           >
             {hero.tag}
           </motion.p>
@@ -222,8 +222,8 @@ export default function CityPageClient({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, delay: 0.15 }}
-            className="font-playfair font-normal leading-tight mb-6"
-            style={{ fontSize: "clamp(30px, 4vw, 52px)" }}
+            className="font-playfair font-normal leading-tight mb-3 md:mb-6"
+            style={{ fontSize: "clamp(28px, 4vw, 52px)" }}
           >
             {hero.h1}
             <br />
@@ -234,7 +234,7 @@ export default function CityPageClient({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="font-sora font-light text-[15px] text-fg/50 max-w-[560px] mx-auto leading-relaxed mb-7"
+            className="font-sora font-light text-[13px] md:text-[15px] text-fg/50 max-w-[560px] mx-auto leading-relaxed mb-4 md:mb-7"
           >
             {hero.sub}
           </motion.p>
@@ -243,13 +243,13 @@ export default function CityPageClient({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.38 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3"
+            className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3"
           >
             <a
               href={BOOKING_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-accent text-bg font-semibold px-7 py-3.5 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
+              className="bg-accent text-bg font-semibold px-7 py-3 md:py-3.5 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
             >
               {lang === "es"
                 ? `Auditoría Gratuita para ${city.name} →`
@@ -259,7 +259,7 @@ export default function CityPageClient({
               href={WA_LINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 border border-green-500/30 text-green-400 px-6 py-3.5 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200 w-full sm:w-auto"
+              className="flex items-center justify-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 md:py-3.5 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200 w-full sm:w-auto"
             >
               <WhatsAppIcon />
               {lang === "es" ? "Hablar por WhatsApp" : "Message on WhatsApp"}
@@ -271,7 +271,7 @@ export default function CityPageClient({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.55 }}
-            className="flex flex-wrap items-center justify-center gap-2 mt-8"
+            className="flex flex-wrap items-center justify-center gap-2 mt-3 md:mt-8"
           >
             {city.industries.map((ind) => (
               <span
@@ -286,7 +286,7 @@ export default function CityPageClient({
       </section>
 
       {/* ── STATS ─────────────────────────────────────────────────────────── */}
-      <section ref={statsRef} className="section-divider py-16 md:py-20">
+      <section ref={statsRef} className="section-divider py-8 md:py-20">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             {[
