@@ -533,18 +533,6 @@ export default function CityPageClient({
         </div>
       </section>
 
-      {/* ── STICKY WHATSAPP (mobile) ───────────────────────────────────────── */}
-      <div className="fixed bottom-6 left-0 right-0 px-5 z-40 sm:hidden">
-        <a
-          href={WA_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 w-full bg-[#25D366] text-white font-sora font-semibold text-[14px] py-4 rounded-xl shadow-lg"
-        >
-          <WhatsAppIcon size={20} />
-          {lang === "es" ? "Hablar por WhatsApp ahora" : "Message on WhatsApp now"}
-        </a>
-      </div>
     </>
   );
 }
