@@ -81,11 +81,10 @@ export default function Nav() {
     >
       <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
 
-        {/* ── Logo island ── */}
+        {/* ── Logo — standalone circle, no pill ── */}
         <Link
           href="/"
-          className="pointer-events-auto flex items-center gap-2 px-3 xs:px-4 py-2.5"
-          style={GLASS}
+          className="pointer-events-auto flex items-center"
           aria-label="careless home"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -93,12 +92,8 @@ export default function Nav() {
             src="/logo.svg"
             alt="careless"
             className="w-auto shrink-0"
-            style={{ height: "28px" }}
+            style={{ height: "36px" }}
           />
-          {/* Logotype — visible at xs (400px) and above only */}
-          <span className="hidden xs:inline font-sora font-semibold text-[13px] text-fg/80 tracking-tight">
-            careless
-          </span>
         </Link>
 
         {/* ── Right islands ── */}
