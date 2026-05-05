@@ -181,8 +181,6 @@ export default function CityPageClient({
   const hero = lang === "en" && city.heroEn ? city.heroEn : city.hero;
   const faqItems = lang === "en" && city.faqItemsEn ? city.faqItemsEn : city.faqItems;
 
-  const esUrl = `/es/${city.slug}`;
-  const enUrl = `/en/${city.slug}`;
 
   return (
     <>
@@ -201,38 +199,14 @@ export default function CityPageClient({
           }}
         />
 
-        <div className="max-w-4xl mx-auto px-6 py-16 w-full text-center">
-          {/* Breadcrumb + language switcher */}
-          <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
+        <div className="max-w-4xl mx-auto px-6 pt-4 pb-12 w-full text-center">
+          {/* Breadcrumb */}
+          <div className="flex items-center justify-center gap-2 mb-5 flex-wrap">
             <Link href="/" className="font-sora text-[11px] text-fg/30 hover:text-fg/60 transition-colors">
               {lang === "es" ? "Inicio" : "Home"}
             </Link>
             <span className="text-fg/20 text-[11px]">/</span>
             <span className="font-sora text-[11px] text-fg/40">{city.name}</span>
-
-            {/* Language toggle */}
-            <div className="flex items-center gap-1 rounded-full border border-white/10 p-0.5 ml-2">
-              <Link
-                href={esUrl}
-                className={`px-2.5 py-0.5 rounded-full text-[10px] font-sora transition-all duration-200 ${
-                  lang === "es"
-                    ? "bg-accent text-bg font-semibold"
-                    : "text-fg/40 hover:text-fg/70"
-                }`}
-              >
-                ES
-              </Link>
-              <Link
-                href={enUrl}
-                className={`px-2.5 py-0.5 rounded-full text-[10px] font-sora transition-all duration-200 ${
-                  lang === "en"
-                    ? "bg-accent text-bg font-semibold"
-                    : "text-fg/40 hover:text-fg/70"
-                }`}
-              >
-                EN
-              </Link>
-            </div>
           </div>
 
           <motion.p
@@ -260,7 +234,7 @@ export default function CityPageClient({
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="font-sora font-light text-[15px] text-fg/50 max-w-[560px] mx-auto leading-relaxed mb-10"
+            className="font-sora font-light text-[15px] text-fg/50 max-w-[560px] mx-auto leading-relaxed mb-7"
           >
             {hero.sub}
           </motion.p>
