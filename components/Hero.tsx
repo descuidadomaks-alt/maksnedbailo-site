@@ -1,27 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
+import { EASING } from "@/lib/animations";
 
 const TOP_OFFSET = 64;
 
-const fadeUp = (delay: number) => ({
-  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] },
-  },
-});
-
 export default function Hero() {
   const { lang } = useLang();
-  const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
+  const shouldReduce = useReducedMotion();
+
+  // Parallax via useScroll — no scroll listeners, motion values only
+  const { scrollY } = useScroll();
+  const parallaxY = useTransform(scrollY, [0, 600], [0, shouldReduce ? 0 : -60]);
 
   // Mouse-following glow
   const rawX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 400);
@@ -30,12 +25,7 @@ export default function Hero() {
   const smoothY = useSpring(rawY, { stiffness: 55, damping: 22, mass: 0.5 });
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
+    if (shouldReduce) return;
     const handleMouseMove = (e: MouseEvent) => {
       const section = heroRef.current;
       if (!section) return;
@@ -45,9 +35,19 @@ export default function Hero() {
     };
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [rawX, rawY]);
+  }, [rawX, rawY, shouldReduce]);
 
-  const parallaxY = scrollY * 0.1;
+  const fadeUp = (delay: number) => ({
+    hidden: shouldReduce
+      ? { opacity: 0 }
+      : { opacity: 0, y: 28, filter: "blur(6px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: shouldReduce ? 0.2 : 0.85, delay: shouldReduce ? 0 : delay, ease: EASING },
+    },
+  });
 
   return (
     <section
@@ -165,13 +165,10 @@ export default function Hero() {
             className="relative order-1 lg:order-2 flex justify-center"
           >
             <div className="relative w-full max-w-[500px]" style={{ aspectRatio: "3/4" }}>
-              {/* Parallax wrapper */}
-              <div
+              {/* Parallax wrapper — motion value driven, no re-renders */}
+              <motion.div
                 className="absolute inset-0"
-                style={{
-                  transform: `translateY(${-parallaxY}px)`,
-                  transition: "transform 0.08s linear",
-                }}
+                style={{ y: parallaxY }}
               >
                 <Image
                   src="/hero-image.png"
@@ -180,7 +177,7 @@ export default function Hero() {
                   className="object-contain object-bottom"
                   priority
                 />
-              </div>
+              </motion.div>
 
               {/* Bottom fade so image bleeds into bg */}
               <div

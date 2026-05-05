@@ -2,10 +2,27 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 
 const BAR_HEIGHT = 28;
+
+const GLASS: React.CSSProperties = {
+  background: "rgba(12, 12, 14, 0.72)",
+  backdropFilter: "blur(24px) saturate(180%)",
+  WebkitBackdropFilter: "blur(24px) saturate(180%)",
+  border: "1px solid rgba(255, 255, 255, 0.08)",
+  borderRadius: "999px",
+  boxShadow:
+    "0 4px 24px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05)",
+};
+
+const CTA_PILL: React.CSSProperties = {
+  background: "#D4FF2B",
+  borderRadius: "999px",
+  boxShadow: "0 4px 16px rgba(212,255,43,0.22)",
+};
 
 export default function Nav() {
   const { lang, setLang } = useLang();
@@ -18,72 +35,86 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const topOffset = scrolled ? 8 : BAR_HEIGHT + 8;
+
   return (
-    <nav
-      className="fixed left-0 right-0 z-50 backdrop-blur-xl bg-[#060608]/80 border-b border-white/5 transition-all duration-300"
-      style={{ top: scrolled ? "0px" : `${BAR_HEIGHT}px` }}
+    <motion.header
+      className="fixed left-0 right-0 z-50 pointer-events-none"
+      animate={{ top: topOffset }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      style={{ top: topOffset }}
     >
-      <div
-        className={`max-w-6xl mx-auto px-6 flex items-center justify-between transition-all duration-300 ${
-          scrolled ? "h-14" : "h-16"
-        }`}
-      >
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
+
+        {/* ── Logo island ── */}
+        <Link
+          href="/"
+          className="pointer-events-auto flex items-center px-4 py-2.5"
+          style={GLASS}
+          aria-label="careless home"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.svg"
             alt="careless"
             className="w-auto"
-            style={{ height: "30px" }}
+            style={{ height: "22px" }}
           />
         </Link>
 
-        {/* Right side */}
-        <div className="flex items-center gap-5">
-          {/* Blog link */}
+        {/* ── Right islands ── */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+
+          {/* Blog island — hidden on very small screens */}
           <Link
             href="/blog"
-            className="font-sora text-sm text-fg/45 hover:text-fg/80 transition-colors sm:text-sm text-[11px]"
+            className="hidden xs:flex items-center px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200"
+            style={GLASS}
           >
             {t(content.nav.blog, lang)}
           </Link>
 
-          {/* Language toggle */}
-          <div className="flex items-center gap-1 rounded-full border border-white/10 p-1">
+          {/* Language switcher island */}
+          <div
+            className="flex items-center gap-1 p-1"
+            style={GLASS}
+          >
             <button
               onClick={() => setLang("en")}
-              className={`px-3 py-1 rounded-full text-xs font-sora transition-all duration-200 ${
+              className={`min-w-[40px] min-h-[34px] px-3 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
                 lang === "en"
-                  ? "bg-accent text-bg font-semibold"
-                  : "text-fg/50 hover:text-fg/80"
+                  ? "bg-accent text-bg"
+                  : "text-fg/45 hover:text-fg/75"
               }`}
+              aria-label="Switch to English"
             >
               EN
             </button>
             <button
               onClick={() => setLang("es")}
-              className={`px-3 py-1 rounded-full text-xs font-sora transition-all duration-200 ${
+              className={`min-w-[40px] min-h-[34px] px-3 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
                 lang === "es"
-                  ? "bg-accent text-bg font-semibold"
-                  : "text-fg/50 hover:text-fg/80"
+                  ? "bg-accent text-bg"
+                  : "text-fg/45 hover:text-fg/75"
               }`}
+              aria-label="Cambiar a Español"
             >
               ES
             </button>
           </div>
 
-          {/* CTA */}
+          {/* Free Audit CTA island */}
           <a
             href={content.nav.ctaLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-accent text-bg text-sm font-semibold px-4 py-2 rounded-lg hover:bg-accent/90 transition-colors duration-200"
+            className="flex items-center px-4 sm:px-5 py-2.5 font-sora text-[13px] font-semibold text-bg hover:opacity-90 transition-opacity duration-200 whitespace-nowrap min-h-[44px]"
+            style={CTA_PILL}
           >
             {t(content.nav.cta, lang)}
           </a>
         </div>
       </div>
-    </nav>
+    </motion.header>
   );
 }

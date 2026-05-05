@@ -1,17 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { BOOKING_LINK } from "@/lib/content";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
+import { fadeUpVariants } from "@/lib/animations";
 
 const SERVICES = [
   "WhatsApp Automation",
@@ -45,6 +37,8 @@ const SERVICES = [
 export default function GotAProblem() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const shouldReduce = useReducedMotion();
+  const fadeUp = fadeUpVariants(shouldReduce ?? false);
 
   const doubled = [...SERVICES, ...SERVICES];
 

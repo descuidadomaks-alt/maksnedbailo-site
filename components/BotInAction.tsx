@@ -1,9 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { BOOKING_LINK } from "@/lib/content";
+import { fadeUpVariants } from "@/lib/animations";
 
 // Hero slot — client to provide final image; using placeholder for now
 const HERO = {
@@ -25,15 +26,6 @@ const SUPPORTING = [
     caption: "More demos coming",
   },
 ];
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
 
 function PhoneTile({
   src,
@@ -105,6 +97,8 @@ function PhoneTile({
 }
 
 export default function BotInAction() {
+  const shouldReduce = useReducedMotion();
+  const fadeUp = fadeUpVariants(shouldReduce ?? false);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 

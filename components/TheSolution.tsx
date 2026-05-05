@@ -1,18 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
+import { fadeUpVariants } from "@/lib/animations";
 
 function IconAudit() {
   return (
@@ -50,6 +42,8 @@ export default function TheSolution() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const shouldReduce = useReducedMotion();
+  const fadeUp = fadeUpVariants(shouldReduce ?? false);
 
   return (
     <section ref={ref} className="section-divider py-24 md:py-32">

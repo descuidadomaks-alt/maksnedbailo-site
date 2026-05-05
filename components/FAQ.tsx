@@ -1,29 +1,18 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
+import { fadeUpVariants } from "@/lib/animations";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
-function FAQItem({
-  q,
-  a,
-  index,
-  inView,
-}: {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function FAQItem({ q, a, index, inView, fadeUp }: {
   q: string;
   a: string;
   index: number;
   inView: boolean;
+  fadeUp: any;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -86,6 +75,8 @@ export default function FAQ() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const shouldReduce = useReducedMotion();
+  const fadeUp = fadeUpVariants(shouldReduce ?? false);
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -126,6 +117,7 @@ export default function FAQ() {
                 a={t(item.a, lang)}
                 index={i}
                 inView={inView}
+                fadeUp={fadeUp}
               />
             ))}
           </div>

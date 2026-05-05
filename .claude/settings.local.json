@@ -28,7 +28,11 @@
       "Bash(mkdir -p \"/d/Claude Code/maksnedbailo-site/app/automations/[slug]/components\")",
       "Bash(node -e ' *)",
       "Bash(git checkout *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "PowerShell(Get-ChildItem $env:TEMP | Sort-Object LastWriteTime -Descending | Where-Object { $_.Extension -match \"\\\\.\\(png|jpg|jpeg|webp\\)\" } | Select-Object -First 20 | Format-Table Name, LastWriteTime, Length)",
+      "Bash(git commit *)"
     ]
   }
 }

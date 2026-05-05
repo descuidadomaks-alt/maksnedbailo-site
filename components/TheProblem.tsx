@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t, WA_LINK } from "@/lib/content";
+import { fadeUpVariants } from "@/lib/animations";
 
 function useCountUp(target: number, duration: number, active: boolean) {
   const [value, setValue] = useState(0);
@@ -49,19 +50,12 @@ function StatCard({
   );
 }
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
-
 export default function TheProblem() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const shouldReduce = useReducedMotion();
+  const fadeUp = fadeUpVariants(shouldReduce ?? false);
 
   const card1Value = useCountUp(73, 1400, inView);
   const card2Value = useCountUp(19, 1400, inView);
