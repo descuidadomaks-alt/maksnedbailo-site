@@ -23,27 +23,35 @@ const sora = Sora({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
-  title: "careless — your customers are reaching out right now",
+  title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
   description:
-    "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
+    "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
   keywords: [
-    "AI automation",
+    "AI chatbot for small business",
     "WhatsApp automation",
-    "customer response automation",
-    "AI assistant for small business",
-    "automatización IA",
-    "asistente WhatsApp automático",
-    "consultor IA España",
+    "AI customer service automation",
+    "WhatsApp business chatbot",
+    "automated customer response",
+    "AI assistant for business",
+    "chatbot for restaurants",
+    "AI booking automation",
+    "voice AI agent",
+    "customer service AI 2026",
+    "automatización WhatsApp negocio",
+    "chatbot IA para pymes",
+    "asistente IA WhatsApp",
+    "automatización atención cliente España",
     "Maks Nedbailo",
+    "careless AI",
   ],
   authors: [{ name: "Maks Nedbailo", url: "https://maksnedbailo.site" }],
   alternates: {
     canonical: "https://maksnedbailo.site",
   },
   openGraph: {
-    title: "careless — your customers are reaching out right now",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
     description:
-      "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
+      "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
     type: "website",
     url: "https://maksnedbailo.site",
     siteName: "careless",
@@ -51,9 +59,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "careless — your customers are reaching out right now",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
     description:
-      "careless builds AI conversations that respond to your customers in seconds, not hours. 500+ businesses, 34+ countries, 16 years.",
+      "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
   },
   robots: {
     index: true,

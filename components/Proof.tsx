@@ -64,14 +64,8 @@ const CARDS = [
     accent: true,
     quote:
       "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!",
-    author: "Corinna Cope",
-    role: "Edible Health · UK",
-  },
-  {
-    accent: false,
-    quote: "Maksym was a pleasure to work with and very very talented.",
-    author: "James T.",
-    role: "Verified client review · 5★",
+    author: "Corinna C.",
+    role: "Verified client · Edible Health · UK",
   },
   {
     accent: false,
@@ -92,6 +86,12 @@ const CARDS = [
     quote:
       "Maksym understood the brief quickly and delivered exactly what was needed. Communication was excellent throughout.",
     author: "Eleanor K.",
+    role: "Verified client review · 5★",
+  },
+  {
+    accent: false,
+    quote: "Maksym was a pleasure to work with and very very talented.",
+    author: "James T.",
     role: "Verified client review · 5★",
   },
 ];

@@ -17,7 +17,7 @@ export default function Footer() {
   return (
     <footer className="section-divider py-12">
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
-        <p className="font-playfair text-[16px] italic text-fg/18 leading-relaxed max-w-[480px]">
+        <p className="font-sora font-light text-[13px] text-fg/30 leading-relaxed max-w-[480px] tracking-wide">
           {t(content.footer.tagline, lang)}
         </p>
 

@@ -2,19 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 
-// Bar is now in normal flow (28px); nav is fixed at 64px → only nav height needed
 const TOP_OFFSET = 64;
 
 const fadeUp = (delay: number) => ({
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, delay, ease: [0.22, 1, 0.36, 1] },
+    filter: "blur(0px)",
+    transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] },
   },
 });
 
@@ -23,21 +23,82 @@ export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
 
+  // Mouse-following glow
+  const rawX = useMotionValue(typeof window !== "undefined" ? window.innerWidth / 2 : 400);
+  const rawY = useMotionValue(300);
+  const smoothX = useSpring(rawX, { stiffness: 55, damping: 22, mass: 0.5 });
+  const smoothY = useSpring(rawY, { stiffness: 55, damping: 22, mass: 0.5 });
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const section = heroRef.current;
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      rawX.set(e.clientX - rect.left);
+      rawY.set(e.clientY - rect.top);
+    };
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [rawX, rawY]);
+
   const parallaxY = scrollY * 0.1;
 
   return (
     <section
       ref={heroRef}
-      className="relative flex items-center"
+      className="relative flex items-center overflow-hidden"
       style={{ paddingTop: `${TOP_OFFSET}px`, minHeight: "100svh" }}
     >
-      <div className="max-w-6xl mx-auto px-6 py-8 w-full">
+      {/* ── Ambient background orbs ── */}
+      <div
+        className="hero-orb pointer-events-none absolute rounded-full"
+        style={{
+          width: 640,
+          height: 640,
+          top: "5%",
+          right: "-10%",
+          background:
+            "radial-gradient(circle, rgba(212,255,43,0.055) 0%, transparent 68%)",
+          zIndex: 0,
+        }}
+      />
+      <div
+        className="hero-orb-2 pointer-events-none absolute rounded-full"
+        style={{
+          width: 480,
+          height: 480,
+          bottom: "0%",
+          left: "-8%",
+          background:
+            "radial-gradient(circle, rgba(212,255,43,0.032) 0%, transparent 68%)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* ── Mouse-following glow ── */}
+      <motion.div
+        className="pointer-events-none absolute rounded-full"
+        style={{
+          left: smoothX,
+          top: smoothY,
+          width: 720,
+          height: 720,
+          x: "-50%",
+          y: "-50%",
+          background:
+            "radial-gradient(circle, rgba(212,255,43,0.042) 0%, transparent 62%)",
+          zIndex: 0,
+        }}
+      />
+
+      {/* ── Content ── */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-8 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 lg:gap-6 items-center">
 
           {/* Left: Text */}
@@ -55,7 +116,7 @@ export default function Hero() {
 
             <motion.h1
               variants={fadeUp(0.18)}
-              className="font-playfair font-normal leading-tight"
+              className="font-playfair leading-tight"
               style={{ fontSize: "clamp(32px, 4.5vw, 52px)" }}
             >
               {t(content.hero.h1line1, lang)}
@@ -98,9 +159,9 @@ export default function Hero() {
 
           {/* Right: Hero image with parallax */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, x: 20, filter: "blur(8px)" }}
+            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="relative order-1 lg:order-2 flex justify-center"
           >
             <div className="relative w-full max-w-[500px]" style={{ aspectRatio: "3/4" }}>
@@ -125,7 +186,8 @@ export default function Hero() {
               <div
                 className="absolute bottom-0 left-0 right-0 h-24 z-10 pointer-events-none"
                 style={{
-                  background: "linear-gradient(to top, #060608 0%, transparent 100%)",
+                  background:
+                    "linear-gradient(to top, #060608 0%, transparent 100%)",
                 }}
               />
             </div>
