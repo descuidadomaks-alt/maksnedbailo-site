@@ -56,9 +56,9 @@ export default function Hero() {
       className="relative overflow-hidden lg:flex lg:items-center"
       style={{ minHeight: "100svh" }}
     >
-      {/* ── Animated mesh gradient background ── */}
+      {/* ── Animated mesh gradient background — desktop only ── */}
       {!shouldReduce && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0, opacity: 0.042 }}>
+        <div className="hidden lg:block absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0, opacity: 0.042 }}>
           <div
             className="mesh-orb-1 absolute rounded-full"
             style={{
@@ -92,9 +92,9 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── Ambient background orbs ── */}
+      {/* ── Ambient background orbs — desktop only ── */}
       <div
-        className="hero-orb pointer-events-none absolute rounded-full"
+        className="hero-orb hidden lg:block pointer-events-none absolute rounded-full"
         style={{
           width: 640,
           height: 640,
@@ -105,7 +105,7 @@ export default function Hero() {
         }}
       />
       <div
-        className="hero-orb-2 pointer-events-none absolute rounded-full"
+        className="hero-orb-2 hidden lg:block pointer-events-none absolute rounded-full"
         style={{
           width: 480,
           height: 480,
@@ -116,9 +116,9 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Mouse-following glow ── */}
+      {/* ── Mouse-following glow — desktop only ── */}
       <motion.div
-        className="pointer-events-none absolute rounded-full"
+        className="hidden lg:block pointer-events-none absolute rounded-full"
         style={{
           left: smoothX,
           top: smoothY,
@@ -131,10 +131,10 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Mobile: full-bleed image in normal flow (not absolute) ── */}
+      {/* ── Mobile: full-bleed square-ish image in normal flow ── */}
       <motion.div
         className="lg:hidden relative w-full overflow-hidden"
-        style={{ height: "62vh" }}
+        style={{ aspectRatio: "9 / 10" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
@@ -143,15 +143,15 @@ export default function Hero() {
           src="/hero-image.png"
           alt="Maks Nedbailo"
           fill
-          className="object-cover object-top"
+          className="object-cover object-center"
           priority
           sizes="100vw"
         />
-        {/* Bottom dissolve — confined inside the image block */}
+        {/* Bottom-only dissolve — no top gradient, image's own dark bg handles it */}
         <div
           className="absolute inset-x-0 bottom-0 pointer-events-none"
           style={{
-            height: "40%",
+            height: "30%",
             background: "linear-gradient(to top, #060608 0%, transparent 100%)",
           }}
         />
