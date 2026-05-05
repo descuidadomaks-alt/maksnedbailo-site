@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useRef, useEffect } from "react";
+import { motion, useInView, useReducedMotion, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { BOOKING_LINK } from "@/lib/content";
 import { fadeUpVariants } from "@/lib/animations";
@@ -96,9 +96,159 @@ function PhoneTile({
   );
 }
 
+/** Animated hero phone tile — entry rotate+y, then continuous gentle float */
+function HeroPhoneTile({ inView, shouldReduce }: { inView: boolean; shouldReduce: boolean }) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (!inView) return;
+    if (shouldReduce) {
+      controls.start({ opacity: 1, rotate: 0, y: 0 });
+      return;
+    }
+    controls
+      .start({
+        opacity: 1,
+        rotate: 0,
+        y: 0,
+        transition: { duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] },
+      })
+      .then(() => {
+        controls.start({
+          y: [0, -4, 0, 4, 0],
+          transition: { duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "loop" },
+        });
+      });
+  }, [inView, shouldReduce, controls]);
+
+  return (
+    <div className="relative">
+      {/* Accent glow pulse behind the hero tile */}
+      {!shouldReduce && (
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none -z-10"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 60%, rgba(212,255,43,0.18) 0%, transparent 70%)",
+          }}
+          animate={{ opacity: [0.4, 0.65, 0.4] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", repeatType: "mirror" }}
+        />
+      )}
+      <motion.div
+        animate={controls}
+        initial={shouldReduce ? { opacity: 0 } : { opacity: 0, rotate: -2, y: 40 }}
+      >
+        <PhoneTile src={HERO.src} caption={HERO.caption} />
+      </motion.div>
+    </div>
+  );
+}
+
+/** Supporting phone tile — staggered entry, then float offset by phase */
+function SupportingTile({
+  src,
+  caption,
+  index,
+  inView,
+  shouldReduce,
+}: {
+  src: string | null;
+  caption: string;
+  index: number;
+  inView: boolean;
+  shouldReduce: boolean;
+}) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (!inView) return;
+    if (shouldReduce) {
+      controls.start({ opacity: 1, rotate: 0, y: 0 });
+      return;
+    }
+    controls
+      .start({
+        opacity: 1,
+        rotate: 0,
+        y: 0,
+        transition: {
+          duration: 0.85,
+          delay: 0.4 + index * 0.1,
+          ease: [0.22, 1, 0.36, 1],
+        },
+      })
+      .then(() => {
+        // Phase-offset float so tiles don't all move in sync
+        const phase = index * 1.3;
+        controls.start({
+          y: [0, -3, 0, 3, 0],
+          transition: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatType: "loop",
+            delay: phase,
+          },
+        });
+      });
+  }, [inView, shouldReduce, index, controls]);
+
+  return (
+    <motion.div
+      animate={controls}
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, rotate: -2, y: 40 }}
+    >
+      <PhoneTile src={src} caption={caption} placeholder={!src} />
+    </motion.div>
+  );
+}
+
+/** Background SVG flowing lines — subtle accent strokes that pulse */
+function FlowingLines({ shouldReduce }: { shouldReduce: boolean }) {
+  if (shouldReduce) return null;
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      viewBox="0 0 1200 600"
+      preserveAspectRatio="xMidYMid slice"
+      fill="none"
+      aria-hidden
+    >
+      {[
+        { d: "M-100 200 C 200 150, 400 320, 700 240 S 1000 180, 1400 220", delay: 0 },
+        { d: "M-100 320 C 150 280, 350 420, 650 360 S 950 300, 1400 340", delay: 1.5 },
+        { d: "M-100 440 C 250 390, 500 500, 800 450 S 1100 400, 1400 460", delay: 3 },
+        { d: "M100 100 C 300 60, 550 200, 800 140 S 1050 80, 1300 120", delay: 0.8 },
+        { d: "M0 520 C 300 480, 600 560, 900 520 S 1200 480, 1400 540", delay: 2.2 },
+      ].map((line, i) => (
+        <motion.path
+          key={i}
+          d={line.d}
+          stroke="rgba(212,255,43,0.12)"
+          strokeWidth="1"
+          strokeLinecap="round"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{
+            pathLength: [0, 1, 1, 0],
+            opacity: [0, 0.15, 0.15, 0],
+          }}
+          transition={{
+            duration: 8,
+            delay: line.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+            repeatDelay: 4,
+          }}
+        />
+      ))}
+    </svg>
+  );
+}
+
 export default function BotInAction() {
-  const shouldReduce = useReducedMotion();
-  const fadeUp = fadeUpVariants(shouldReduce ?? false);
+  const shouldReduce = useReducedMotion() ?? false;
+  const fadeUp = fadeUpVariants(shouldReduce);
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -106,7 +256,7 @@ export default function BotInAction() {
     <section
       id="bot-in-action"
       ref={ref}
-      className="relative py-20 md:py-28"
+      className="relative py-20 md:py-28 overflow-hidden"
       style={{
         background:
           "radial-gradient(ellipse 120% 60% at 50% 0%, rgba(212,255,43,0.045) 0%, transparent 65%), rgba(0,0,0,0)",
@@ -114,7 +264,10 @@ export default function BotInAction() {
         borderBottom: "1px solid rgba(255,255,255,0.04)",
       }}
     >
-      <div className="max-w-6xl mx-auto px-6">
+      {/* Background flowing lines */}
+      <FlowingLines shouldReduce={shouldReduce} />
+
+      <div className="relative max-w-6xl mx-auto px-6">
 
         {/* Header — centered */}
         <div className="text-center max-w-[640px] mx-auto mb-14">
@@ -151,26 +304,21 @@ export default function BotInAction() {
             className="flex flex-col items-center"
           >
             <div className="w-full max-w-[260px] mx-auto">
-              <PhoneTile src={HERO.src} caption={HERO.caption} />
+              <HeroPhoneTile inView={inView} shouldReduce={shouldReduce} />
             </div>
           </motion.div>
 
-          {/* 3 supporting tiles stacked */}
+          {/* 3 supporting tiles */}
           <div className="grid grid-cols-3 gap-3">
             {SUPPORTING.map((slot, i) => (
-              <motion.div
+              <SupportingTile
                 key={i}
-                custom={i + 3}
-                variants={fadeUp}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-              >
-                <PhoneTile
-                  src={slot.src}
-                  caption={slot.caption}
-                  placeholder={!slot.src}
-                />
-              </motion.div>
+                src={slot.src}
+                caption={slot.caption}
+                index={i}
+                inView={inView}
+                shouldReduce={shouldReduce}
+              />
             ))}
           </div>
         </div>

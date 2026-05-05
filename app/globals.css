@@ -78,6 +78,31 @@ body::before {
   animation: orb-drift 16s ease-in-out infinite reverse;
 }
 
+/* Hero animated mesh gradient */
+@keyframes mesh-1 {
+  0%, 100% { transform: translate(0%, 0%) scale(1); }
+  33%       { transform: translate(12%, -8%) scale(1.12); }
+  66%       { transform: translate(-8%, 12%) scale(0.94); }
+}
+@keyframes mesh-2 {
+  0%, 100% { transform: translate(0%, 0%) scale(1); }
+  40%       { transform: translate(-14%, 6%) scale(1.08); }
+  75%       { transform: translate(10%, -10%) scale(1.04); }
+}
+@keyframes mesh-3 {
+  0%, 100% { transform: translate(0%, 0%) scale(1); }
+  50%       { transform: translate(8%, 10%) scale(1.1); }
+}
+.mesh-orb-1 { animation: mesh-1 22s ease-in-out infinite; }
+.mesh-orb-2 { animation: mesh-2 28s ease-in-out infinite; }
+.mesh-orb-3 { animation: mesh-3 18s ease-in-out infinite; }
+
+/* BotInAction phone float */
+@keyframes phone-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
+
 /* Bolder Playfair headings */
 h1.font-playfair, h2.font-playfair {
   font-weight: 500;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 import { fadeUpVariants } from "@/lib/animations";
@@ -145,7 +145,157 @@ const CARDS = [
   },
 ];
 
-function TestimonialCarousel() {
+/** Corinna accent card — shimmer sweep + animated quote glyph */
+function AccentCard({
+  card,
+  index,
+  inView,
+  shouldReduce,
+}: {
+  card: (typeof CARDS)[0];
+  index: number;
+  inView: boolean;
+  shouldReduce: boolean;
+}) {
+  return (
+    <motion.div
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 16 }}
+      animate={
+        inView
+          ? { opacity: 1, scale: 1, y: 0 }
+          : shouldReduce
+          ? { opacity: 0 }
+          : { opacity: 0, scale: 0.96, y: 16 }
+      }
+      transition={
+        shouldReduce
+          ? { duration: 0.2 }
+          : { duration: 0.75, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }
+      }
+      className="relative flex-none flex flex-col justify-between rounded-xl p-5 overflow-hidden"
+      style={{
+        width: "calc(33.333% - 10.667px)",
+        minWidth: "260px",
+        scrollSnapAlign: "start",
+        background: "rgba(212,255,43,0.05)",
+        border: "1px solid rgba(212,255,43,0.18)",
+      }}
+    >
+      {/* Shimmer sweep — fires once when card enters view */}
+      {!shouldReduce && (
+        <AnimatePresence>
+          {inView && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(105deg, transparent 30%, rgba(212,255,43,0.10) 50%, transparent 70%)",
+              }}
+              initial={{ x: "-100%" }}
+              animate={{ x: "160%" }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, delay: index * 0.07 + 0.55, ease: [0.22, 1, 0.36, 1] }}
+            />
+          )}
+        </AnimatePresence>
+      )}
+
+      <div>
+        {/* Animated opening quote glyph */}
+        <motion.p
+          className="font-playfair text-[48px] leading-none mb-1 select-none"
+          style={{ color: "rgba(212,255,43,0.35)" }}
+          aria-hidden
+          initial={shouldReduce ? {} : { scale: 0, opacity: 0 }}
+          animate={
+            inView
+              ? { scale: 1, opacity: 1 }
+              : shouldReduce
+              ? {}
+              : { scale: 0, opacity: 0 }
+          }
+          transition={
+            shouldReduce
+              ? {}
+              : {
+                  type: "spring",
+                  stiffness: 280,
+                  damping: 14,
+                  delay: index * 0.07 + 0.2,
+                }
+          }
+        >
+          &ldquo;
+        </motion.p>
+        <blockquote className="font-sora font-light text-[13px] text-fg/65 leading-relaxed mb-4">
+          {card.quote}
+        </blockquote>
+      </div>
+      <div>
+        <p className="font-sora text-[12px] font-semibold text-fg/75">{card.author}</p>
+        <p className="font-sora text-[10px] text-fg/35 mt-0.5">{card.role}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+/** Standard testimonial card — stagger entry with scale */
+function StandardCard({
+  card,
+  index,
+  inView,
+  shouldReduce,
+}: {
+  card: (typeof CARDS)[0];
+  index: number;
+  inView: boolean;
+  shouldReduce: boolean;
+}) {
+  return (
+    <motion.div
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 16 }}
+      animate={
+        inView
+          ? { opacity: 1, scale: 1, y: 0 }
+          : shouldReduce
+          ? { opacity: 0 }
+          : { opacity: 0, scale: 0.96, y: 16 }
+      }
+      transition={
+        shouldReduce
+          ? { duration: 0.2 }
+          : { duration: 0.75, delay: index * 0.07, ease: [0.16, 1, 0.3, 1] }
+      }
+      className="flex-none flex flex-col justify-between rounded-xl p-5"
+      style={{
+        width: "calc(33.333% - 10.667px)",
+        minWidth: "260px",
+        scrollSnapAlign: "start",
+        background: "rgba(255,255,255,0.022)",
+        border: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
+      <div>
+        <StarRow />
+        <blockquote className="font-sora font-light text-[13px] text-fg/65 leading-relaxed mb-4">
+          {card.quote}
+        </blockquote>
+      </div>
+      <div>
+        <p className="font-sora text-[12px] font-semibold text-fg/75">{card.author}</p>
+        <p className="font-sora text-[10px] text-fg/35 mt-0.5">{card.role}</p>
+      </div>
+    </motion.div>
+  );
+}
+
+function TestimonialCarousel({
+  inView,
+  shouldReduce,
+}: {
+  inView: boolean;
+  shouldReduce: boolean;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(true);
@@ -160,8 +310,8 @@ function TestimonialCarousel() {
   const scrollBy = (dir: "prev" | "next") => {
     const el = scrollRef.current;
     if (!el) return;
-    // One card = 1/3 of container on desktop, full width on mobile
-    const amount = el.clientWidth <= 640 ? el.clientWidth + 16 : el.clientWidth / 3 + 5.3;
+    const amount =
+      el.clientWidth <= 640 ? el.clientWidth + 16 : el.clientWidth / 3 + 5.3;
     el.scrollBy({ left: dir === "next" ? amount : -amount, behavior: "smooth" });
   };
 
@@ -174,48 +324,25 @@ function TestimonialCarousel() {
         className="flex gap-4 overflow-x-auto pb-1"
         style={{ scrollbarWidth: "none", scrollSnapType: "x mandatory" }}
       >
-        {CARDS.map((card, i) => (
-          <div
-            key={i}
-            className="flex-none flex flex-col justify-between rounded-xl p-5"
-            style={{
-              width: "calc(33.333% - 10.667px)",
-              minWidth: "260px",
-              scrollSnapAlign: "start",
-              background: card.accent
-                ? "rgba(212,255,43,0.05)"
-                : "rgba(255,255,255,0.022)",
-              border: card.accent
-                ? "1px solid rgba(212,255,43,0.18)"
-                : "1px solid rgba(255,255,255,0.05)",
-            }}
-          >
-            <div>
-              {card.accent ? (
-                <p
-                  className="font-playfair text-[48px] leading-none mb-1 select-none"
-                  style={{ color: "rgba(212,255,43,0.35)" }}
-                  aria-hidden
-                >
-                  &ldquo;
-                </p>
-              ) : (
-                <StarRow />
-              )}
-              <blockquote className="font-sora font-light text-[13px] text-fg/65 leading-relaxed mb-4">
-                {card.quote}
-              </blockquote>
-            </div>
-            <div>
-              <p className="font-sora text-[12px] font-semibold text-fg/75">
-                {card.author}
-              </p>
-              <p className="font-sora text-[10px] text-fg/35 mt-0.5">
-                {card.role}
-              </p>
-            </div>
-          </div>
-        ))}
+        {CARDS.map((card, i) =>
+          card.accent ? (
+            <AccentCard
+              key={i}
+              card={card}
+              index={i}
+              inView={inView}
+              shouldReduce={shouldReduce}
+            />
+          ) : (
+            <StandardCard
+              key={i}
+              card={card}
+              index={i}
+              inView={inView}
+              shouldReduce={shouldReduce}
+            />
+          )
+        )}
       </div>
 
       {/* Arrow controls */}
@@ -225,10 +352,19 @@ function TestimonialCarousel() {
           disabled={!canPrev}
           aria-label="Previous testimonials"
           className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
-          style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
+          style={{
+            border: "1px solid rgba(255,255,255,0.12)",
+            background: "rgba(255,255,255,0.04)",
+          }}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M10 3L5 8L10 13"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
         <button
@@ -236,10 +372,19 @@ function TestimonialCarousel() {
           disabled={!canNext}
           aria-label="Next testimonials"
           className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
-          style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
+          style={{
+            border: "1px solid rgba(255,255,255,0.12)",
+            background: "rgba(255,255,255,0.04)",
+          }}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M6 3L11 8L6 13"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
       </div>
@@ -251,8 +396,8 @@ export default function Proof() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const shouldReduce = useReducedMotion();
-  const fadeUp = fadeUpVariants(shouldReduce ?? false);
+  const shouldReduce = useReducedMotion() ?? false;
+  const fadeUp = fadeUpVariants(shouldReduce);
 
   return (
     <section
@@ -308,14 +453,14 @@ export default function Proof() {
           ))}
         </motion.div>
 
-        {/* ── Row 2: Five-card carousel ── */}
+        {/* ── Row 2: Animated testimonial carousel ── */}
         <motion.div
           custom={2}
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          <TestimonialCarousel />
+          <TestimonialCarousel inView={inView} shouldReduce={shouldReduce} />
         </motion.div>
 
         {/* Anchor to Bot in Action */}

@@ -6,6 +6,7 @@ import { motion, useMotionValue, useSpring, useScroll, useTransform, useReducedM
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 import { EASING } from "@/lib/animations";
+import MagneticButton from "@/components/MagneticButton";
 
 const TOP_OFFSET = 64;
 
@@ -55,6 +56,42 @@ export default function Hero() {
       className="relative flex items-center overflow-hidden"
       style={{ paddingTop: `${TOP_OFFSET}px`, minHeight: "100svh" }}
     >
+      {/* ── Animated mesh gradient background ── */}
+      {!shouldReduce && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0, opacity: 0.042 }}>
+          <div
+            className="mesh-orb-1 absolute rounded-full"
+            style={{
+              width: 700,
+              height: 700,
+              top: "-10%",
+              right: "-5%",
+              background: "radial-gradient(circle, rgba(212,255,43,1) 0%, transparent 65%)",
+            }}
+          />
+          <div
+            className="mesh-orb-2 absolute rounded-full"
+            style={{
+              width: 500,
+              height: 500,
+              bottom: "-5%",
+              left: "-8%",
+              background: "radial-gradient(circle, rgba(212,255,43,1) 0%, transparent 65%)",
+            }}
+          />
+          <div
+            className="mesh-orb-3 absolute rounded-full"
+            style={{
+              width: 400,
+              height: 400,
+              top: "35%",
+              left: "35%",
+              background: "radial-gradient(circle, rgba(212,255,43,1) 0%, transparent 65%)",
+            }}
+          />
+        </div>
+      )}
+
       {/* ── Ambient background orbs ── */}
       <div
         className="hero-orb pointer-events-none absolute rounded-full"
@@ -137,23 +174,27 @@ export default function Hero() {
               variants={fadeUp(0.42)}
               className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
             >
-              <a
-                href={content.hero.cta1Link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-accent text-bg font-semibold px-6 py-3 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 text-center"
-              >
-                {t(content.hero.cta1, lang)}
-              </a>
-              <a
-                href={content.hero.cta2Link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
-              >
-                <WhatsAppIcon />
-                {t(content.hero.cta2, lang)}
-              </a>
+              <MagneticButton>
+                <a
+                  href={content.hero.cta1Link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-accent text-bg font-semibold px-6 py-3 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 text-center"
+                >
+                  {t(content.hero.cta1, lang)}
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href={content.hero.cta2Link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
+                >
+                  <WhatsAppIcon />
+                  {t(content.hero.cta2, lang)}
+                </a>
+              </MagneticButton>
             </motion.div>
           </motion.div>
 

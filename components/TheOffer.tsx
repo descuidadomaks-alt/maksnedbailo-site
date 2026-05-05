@@ -5,6 +5,7 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 import { fadeUpVariants } from "@/lib/animations";
+import MagneticButton from "@/components/MagneticButton";
 
 function WhatsAppIcon() {
   return (
@@ -21,12 +22,97 @@ function WhatsAppIcon() {
   );
 }
 
+/** Animated checkmark — SVG pathLength stroke-draw with spring scale on container */
+function AnimatedCheck({
+  item,
+  index,
+  inView,
+  shouldReduce,
+}: {
+  item: string;
+  index: number;
+  inView: boolean;
+  shouldReduce: boolean;
+}) {
+  const delay = index * 0.1;
+
+  return (
+    <motion.li
+      custom={index + 1}
+      variants={undefined}
+      className="flex items-start gap-3"
+      initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+      animate={inView ? { opacity: 1, y: 0 } : shouldReduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+      transition={shouldReduce ? { duration: 0.2 } : { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Checkmark container — spring scale 0 → 1.2 → 1 */}
+      <motion.span
+        className="mt-0.5 shrink-0 flex items-center justify-center"
+        initial={shouldReduce ? {} : { scale: 0 }}
+        animate={inView ? { scale: [0, 1.2, 1] } : shouldReduce ? {} : { scale: 0 }}
+        transition={
+          shouldReduce
+            ? {}
+            : { type: "spring", stiffness: 260, damping: 14, delay: delay + 0.05 }
+        }
+        style={{ width: 18, height: 18 }}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+          {/* Background circle — accent flash color */}
+          <motion.circle
+            cx="12"
+            cy="12"
+            r="11"
+            fill="rgba(212,255,43,0.1)"
+            stroke="rgba(212,255,43,0.25)"
+            strokeWidth="1"
+            initial={shouldReduce ? { opacity: 0 } : { opacity: 0 }}
+            animate={inView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.01, delay: delay + 0.05 }}
+          />
+          {/* Stroke-draw checkmark */}
+          <motion.path
+            d="M7 12.5l3.5 3.5 6.5-7"
+            stroke="#D4FF2B"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            fill="none"
+            initial={{ pathLength: 0, opacity: 0 }}
+            animate={
+              inView
+                ? { pathLength: 1, opacity: 1 }
+                : { pathLength: 0, opacity: 0 }
+            }
+            transition={
+              shouldReduce
+                ? { duration: 0.15, delay }
+                : {
+                    pathLength: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 20,
+                      delay: delay + 0.12,
+                    },
+                    opacity: { duration: 0.01, delay: delay + 0.12 },
+                  }
+            }
+          />
+        </svg>
+      </motion.span>
+      <span className="font-sora font-light text-[15px] text-fg/80 leading-relaxed">
+        {item}
+      </span>
+    </motion.li>
+  );
+}
+
 export default function TheOffer() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
-  const shouldReduce = useReducedMotion();
-  const fadeUp = fadeUpVariants(shouldReduce ?? false);
+  const shouldReduce = useReducedMotion() ?? false;
+  const fadeUp = fadeUpVariants(shouldReduce);
   const checklist = t(content.offer.checklist, lang);
 
   return (
@@ -102,24 +188,16 @@ export default function TheOffer() {
               {t(content.offer.sub, lang)}
             </p>
 
-            {/* Checklist */}
+            {/* Checklist — animated SVG stroke-draw checkmarks */}
             <ul className="max-w-[440px] mx-auto mb-10 flex flex-col gap-3">
               {checklist.map((item, i) => (
-                <motion.li
+                <AnimatedCheck
                   key={i}
-                  custom={i + 1}
-                  variants={fadeUp}
-                  initial="hidden"
-                  animate={inView ? "visible" : "hidden"}
-                  className="flex items-start gap-3"
-                >
-                  <span className="text-accent font-sora font-semibold text-sm mt-0.5 shrink-0">
-                    ✓
-                  </span>
-                  <span className="font-sora font-light text-[15px] text-fg/80 leading-relaxed">
-                    {item}
-                  </span>
-                </motion.li>
+                  item={item}
+                  index={i}
+                  inView={inView}
+                  shouldReduce={shouldReduce}
+                />
               ))}
             </ul>
 
@@ -164,23 +242,27 @@ export default function TheOffer() {
               animate={inView ? "visible" : "hidden"}
               className="flex flex-col items-center gap-4"
             >
-              <a
-                href={content.offer.cta1Link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full max-w-[360px] bg-accent text-bg font-bold text-center px-8 py-4 rounded-lg text-base hover:bg-accent/90 transition-all duration-200"
-              >
-                {t(content.offer.cta1, lang)}
-              </a>
-              <a
-                href={content.offer.cta2Link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
-              >
-                <WhatsAppIcon />
-                {t(content.offer.cta2, lang)}
-              </a>
+              <MagneticButton>
+                <a
+                  href={content.offer.cta1Link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full max-w-[360px] bg-accent text-bg font-bold text-center px-8 py-4 rounded-lg text-base hover:bg-accent/90 transition-all duration-200"
+                >
+                  {t(content.offer.cta1, lang)}
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <a
+                  href={content.offer.cta2Link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 border border-green-500/30 text-green-400 px-6 py-3 rounded-lg text-sm hover:border-green-500/55 hover:bg-green-500/5 transition-all duration-200"
+                >
+                  <WhatsAppIcon />
+                  {t(content.offer.cta2, lang)}
+                </a>
+              </MagneticButton>
             </motion.div>
           </motion.div>
         </div>
