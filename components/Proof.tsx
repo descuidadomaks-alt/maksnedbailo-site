@@ -65,7 +65,7 @@ const CARDS = [
     quote:
       "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!",
     author: "Corinna C.",
-    role: "Verified client · Edible Health · UK",
+    role: "Verified client · UK",
   },
   {
     accent: false,
