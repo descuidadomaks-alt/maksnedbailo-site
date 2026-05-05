@@ -8,7 +8,7 @@ import { content, t } from "@/lib/content";
 import { EASING } from "@/lib/animations";
 import MagneticButton from "@/components/MagneticButton";
 
-const TOP_OFFSET = 64;
+const TOP_OFFSET = 64; // nav height
 
 export default function Hero() {
   const { lang } = useLang();
@@ -53,8 +53,8 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex items-center overflow-hidden"
-      style={{ paddingTop: `${TOP_OFFSET}px`, minHeight: "100svh" }}
+      className="relative flex items-end lg:items-center overflow-hidden"
+      style={{ minHeight: "100svh" }}
     >
       {/* ── Animated mesh gradient background ── */}
       {!shouldReduce && (
@@ -100,8 +100,7 @@ export default function Hero() {
           height: 640,
           top: "5%",
           right: "-10%",
-          background:
-            "radial-gradient(circle, rgba(212,255,43,0.055) 0%, transparent 68%)",
+          background: "radial-gradient(circle, rgba(212,255,43,0.055) 0%, transparent 68%)",
           zIndex: 0,
         }}
       />
@@ -112,8 +111,7 @@ export default function Hero() {
           height: 480,
           bottom: "0%",
           left: "-8%",
-          background:
-            "radial-gradient(circle, rgba(212,255,43,0.032) 0%, transparent 68%)",
+          background: "radial-gradient(circle, rgba(212,255,43,0.032) 0%, transparent 68%)",
           zIndex: 0,
         }}
       />
@@ -128,21 +126,52 @@ export default function Hero() {
           height: 720,
           x: "-50%",
           y: "-50%",
-          background:
-            "radial-gradient(circle, rgba(212,255,43,0.042) 0%, transparent 62%)",
+          background: "radial-gradient(circle, rgba(212,255,43,0.042) 0%, transparent 62%)",
           zIndex: 0,
         }}
       />
 
+      {/* ────────────────────────────────────────────────────────────────
+          Mobile hero image — full-bleed, no container, starts at top:0.
+          Hidden on lg+; the desktop image is inside the grid below.
+      ──────────────────────────────────────────────────────────────── */}
+      <motion.div
+        className="lg:hidden absolute inset-x-0 top-0 pointer-events-none"
+        style={{ height: "72vh", zIndex: 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Image
+          src="/hero-image.png"
+          alt="Maks Nedbailo"
+          fill
+          className="object-contain object-top"
+          priority
+          sizes="100vw"
+        />
+        {/* Bottom dissolve into site bg */}
+        <div
+          className="absolute inset-x-0 bottom-0 pointer-events-none"
+          style={{
+            height: "55%",
+            background:
+              "linear-gradient(to top, #060608 15%, rgba(6,6,8,0.92) 40%, rgba(6,6,8,0.6) 65%, transparent 100%)",
+          }}
+        />
+      </motion.div>
+
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 py-8 w-full">
+      <div
+        className="relative z-10 max-w-6xl mx-auto px-6 w-full pb-12 lg:pb-8 lg:pt-16"
+      >
         <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 lg:gap-6 items-center">
 
           {/* Left: Text */}
           <motion.div
             initial="hidden"
             animate="visible"
-            className="flex flex-col gap-5 text-center lg:text-left order-2 lg:order-1"
+            className="flex flex-col gap-5 text-center lg:text-left"
           >
             <motion.p
               variants={fadeUp(0.08)}
@@ -198,15 +227,15 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right: Hero image with parallax */}
+          {/* Right: Hero image — desktop only (lg+) with parallax */}
           <motion.div
             initial={{ opacity: 0, x: 20, filter: "blur(8px)" }}
             animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="relative order-1 lg:order-2 flex justify-center"
+            className="hidden lg:flex relative order-2 justify-center"
           >
             <div className="relative w-full max-w-[500px]" style={{ aspectRatio: "3/4" }}>
-              {/* Parallax wrapper — motion value driven, no re-renders */}
+              {/* Parallax wrapper */}
               <motion.div
                 className="absolute inset-0"
                 style={{ y: parallaxY }}
@@ -217,19 +246,20 @@ export default function Hero() {
                   fill
                   className="object-contain object-bottom"
                   priority
+                  sizes="(min-width: 1024px) 45vw, 0vw"
                 />
               </motion.div>
 
-              {/* Bottom fade so image bleeds into bg */}
+              {/* Bottom fade */}
               <div
                 className="absolute bottom-0 left-0 right-0 h-24 z-10 pointer-events-none"
                 style={{
-                  background:
-                    "linear-gradient(to top, #060608 0%, transparent 100%)",
+                  background: "linear-gradient(to top, #060608 0%, transparent 100%)",
                 }}
               />
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>
