@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, useInView, useReducedMotion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useLang } from "@/lib/LanguageContext";
 import { content, t } from "@/lib/content";
 import { fadeUpVariants } from "@/lib/animations";
@@ -453,9 +454,53 @@ export default function Proof() {
           ))}
         </motion.div>
 
-        {/* ── Row 2: Animated testimonial carousel ── */}
+        {/* ── Row 2: Live chat screenshots ── */}
         <motion.div
           custom={2}
+          variants={fadeUp}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          className="mb-8"
+        >
+          <p className="font-sora text-[10px] uppercase tracking-[3px] text-fg/25 text-center mb-6">
+            {lang === "es" ? "Conversaciones reales del asistente" : "Real assistant conversations"}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { src: "/proof/chat-1.jpg", label: lang === "es" ? "Restaurante · Reserva con alergia grave · ES" : "Restaurant · Booking with severe allergy · ES" },
+              { src: "/proof/chat-2.jpg", label: lang === "es" ? "Estudio Pilates · Consulta médica · EN" : "Pilates studio · Medical enquiry · EN" },
+              { src: "/proof/chat-3.png", label: lang === "es" ? "Abogados · Lesiones personales · EN" : "Solicitors · Personal injury · EN" },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.65, delay: i * 0.1 + 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col gap-2"
+              >
+                <div
+                  className="relative w-full rounded-xl overflow-hidden border border-white/[0.06]"
+                  style={{ aspectRatio: "9/18" }}
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.label}
+                    fill
+                    className="object-cover object-top"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                </div>
+                <p className="font-sora text-[11px] text-fg/30 text-center leading-snug px-1">
+                  {item.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* ── Row 3: Animated testimonial carousel ── */}
+        <motion.div
+          custom={3}
           variants={fadeUp}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}

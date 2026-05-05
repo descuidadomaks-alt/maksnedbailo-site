@@ -115,8 +115,8 @@ function HeroPhoneTile({ inView, shouldReduce }: { inView: boolean; shouldReduce
       })
       .then(() => {
         controls.start({
-          y: [0, -4, 0, 4, 0],
-          transition: { duration: 4, repeat: Infinity, ease: "easeInOut", repeatType: "loop" },
+          y: [0, -9],
+          transition: { duration: 3.2, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" },
         });
       });
   }, [inView, shouldReduce, controls]);
@@ -180,15 +180,15 @@ function SupportingTile({
       })
       .then(() => {
         // Phase-offset float so tiles don't all move in sync
-        const phase = index * 1.3;
+        // Different durations keep tiles permanently out of phase with each other
+        const durations = [2.8, 3.8, 2.5];
         controls.start({
-          y: [0, -3, 0, 3, 0],
+          y: [0, -7],
           transition: {
-            duration: 4,
+            duration: durations[index] ?? 3.2,
             repeat: Infinity,
+            repeatType: "mirror",
             ease: "easeInOut",
-            repeatType: "loop",
-            delay: phase,
           },
         });
       });
