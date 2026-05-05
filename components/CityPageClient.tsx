@@ -187,7 +187,7 @@ export default function CityPageClient({
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative flex items-center min-h-[90svh]"
+        className="relative"
         style={{ paddingTop: `${TOP_OFFSET + BAR_H - 15}px` }}
       >
         {/* Ambient glow */}
@@ -199,7 +199,7 @@ export default function CityPageClient({
           }}
         />
 
-        <div className="max-w-4xl mx-auto px-6 pt-4 pb-12 w-full text-center">
+        <div className="max-w-4xl mx-auto px-6 pt-6 pb-14 w-full text-center">
           {/* Breadcrumb */}
           <div className="flex items-center justify-center gap-2 mb-5 flex-wrap">
             <Link href="/" className="font-sora text-[11px] text-fg/30 hover:text-fg/60 transition-colors">
