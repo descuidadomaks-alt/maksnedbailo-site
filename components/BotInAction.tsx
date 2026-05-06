@@ -35,8 +35,13 @@ const SLIDES = [
 ];
 
 const INTERVAL_MS = 4800;
+// Large tile width in px at each breakpoint
+const LG_W = 240;
+const SM_W = 180;
+// Queue tile width ≈ 38% of large
+const LG_Q = 92;
+const SM_Q = 68;
 
-/** Spotlight carousel — one large featured tile, queue of smaller tiles beside it */
 function SpotlightCarousel({
   inView,
   shouldReduce,
@@ -48,15 +53,11 @@ function SpotlightCarousel({
   const [progressKey, setProgressKey] = useState(0);
   const n = SLIDES.length;
 
-  const advance = useCallback(
-    (next: number) => {
-      setActive(next);
-      setProgressKey((k) => k + 1);
-    },
-    []
-  );
+  const advance = useCallback((next: number) => {
+    setActive(next);
+    setProgressKey((k) => k + 1);
+  }, []);
 
-  // Auto-advance
   useEffect(() => {
     if (!inView) return;
     const timer = setInterval(() => {
@@ -70,93 +71,90 @@ function SpotlightCarousel({
   }, [inView, n]);
 
   const getIdx = (offset: number) => (active + offset + n * 10) % n;
-
-  // Queue: 3 tiles shown after the active one
-  const QUEUE_OPACITIES = [0.72, 0.45, 0.22];
+  const OPACITIES = [0.75, 0.48, 0.24];
 
   return (
-    <div className="flex flex-col lg:flex-row items-start gap-6 lg:gap-10">
+    // Centered row on all sizes — no stretching, no gap
+    <div className="flex items-start justify-center gap-3 md:gap-5">
 
-      {/* ── Large featured tile ── */}
-      <div className="w-full flex flex-col items-center lg:items-start">
-        <div className="relative w-full max-w-[260px] mx-auto lg:mx-0">
-
-          {/* Ambient glow behind featured tile */}
+      {/* ── LARGE featured tile ── */}
+      <div
+        className="flex-none flex flex-col items-center"
+        style={{ width: `${SM_W}px` }}
+      >
+        {/* Phone frame */}
+        <div
+          className="relative w-full rounded-2xl overflow-hidden"
+          style={{
+            aspectRatio: "9/19",
+            border: "1px solid rgba(255,255,255,0.10)",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.3)",
+          }}
+        >
+          {/* Subtle lime glow behind */}
           <div
-            className="absolute -inset-4 -z-10 rounded-3xl opacity-60 blur-2xl"
+            className="absolute -inset-2 -z-10 blur-2xl opacity-40"
             style={{
               background:
-                "radial-gradient(ellipse at 50% 65%, rgba(212,255,43,0.14) 0%, transparent 70%)",
+                "radial-gradient(ellipse at 50% 70%, rgba(212,255,43,0.18) 0%, transparent 70%)",
             }}
           />
-
-          {/* Image frame */}
-          <div
-            className="relative w-full rounded-2xl overflow-hidden"
-            style={{
-              aspectRatio: "9/19",
-              border: "1px solid rgba(255,255,255,0.10)",
-              boxShadow: "0 24px 64px rgba(0,0,0,0.55)",
-            }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35, ease: "easeInOut" }}
-              >
-                <Image
-                  src={SLIDES[active].src}
-                  alt={SLIDES[active].caption}
-                  fill
-                  className="object-cover object-top"
-                  sizes="260px"
-                  priority
-                />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Progress bar */}
-          {!shouldReduce && (
-            <div className="mt-4 h-[2px] w-full rounded-full overflow-hidden bg-white/[0.06]">
-              <motion.div
-                key={progressKey}
-                className="h-full rounded-full"
-                style={{ background: "rgba(212,255,43,0.5)" }}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: INTERVAL_MS / 1000, ease: "linear" }}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Caption — crossfades with slide */}
-        <div className="w-full max-w-[260px] mx-auto lg:mx-0 mt-4 min-h-[60px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
-              initial={{ opacity: 0, y: 5 }}
+              className="absolute inset-0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <Image
+                src={SLIDES[active].src}
+                alt={SLIDES[active].caption}
+                fill
+                className="object-cover object-top"
+                sizes={`${SM_W}px`}
+                priority
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Progress bar */}
+        {!shouldReduce && (
+          <div className="w-full mt-3 h-[2px] rounded-full overflow-hidden bg-white/[0.07]">
+            <motion.div
+              key={progressKey}
+              className="h-full rounded-full"
+              style={{ background: "rgba(212,255,43,0.55)" }}
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{ duration: INTERVAL_MS / 1000, ease: "linear" }}
+            />
+          </div>
+        )}
+
+        {/* Caption */}
+        <div className="w-full mt-3 min-h-[56px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.28 }}
-              className="text-center lg:text-left"
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.25 }}
             >
               <span
-                className="inline-block font-sora text-[9px] uppercase tracking-[2px] px-2.5 py-1 rounded-full mb-2"
+                className="inline-block font-sora text-[8px] uppercase tracking-[2px] px-2 py-0.5 rounded-full mb-1.5"
                 style={{
-                  color: "rgba(212,255,43,0.6)",
+                  color: "rgba(212,255,43,0.65)",
                   border: "1px solid rgba(212,255,43,0.18)",
                   background: "rgba(212,255,43,0.04)",
                 }}
               >
                 {SLIDES[active].industry}
               </span>
-              <p className="font-sora text-[11px] text-fg/40 leading-relaxed">
+              <p className="font-sora text-[10px] text-fg/38 leading-relaxed">
                 {SLIDES[active].caption}
               </p>
             </motion.div>
@@ -164,53 +162,55 @@ function SpotlightCarousel({
         </div>
 
         {/* Dot indicators */}
-        <div className="flex gap-1.5 mt-4 mx-auto lg:mx-0 w-full max-w-[260px] lg:justify-start justify-center">
+        <div className="flex gap-1.5 mt-3 items-center">
           {SLIDES.map((_, i) => (
             <button
               key={i}
               onClick={() => advance(i)}
               aria-label={`Go to slide ${i + 1}`}
-              className="transition-all duration-300 rounded-full"
+              className="rounded-full transition-all duration-300"
               style={{
-                height: "4px",
-                width: i === active ? "20px" : "4px",
-                background: i === active ? "rgba(212,255,43,0.7)" : "rgba(255,255,255,0.15)",
+                height: "3px",
+                width: i === active ? "16px" : "3px",
+                background:
+                  i === active
+                    ? "rgba(212,255,43,0.7)"
+                    : "rgba(255,255,255,0.18)",
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* ── Queue — 3 smaller tiles ── */}
-      <div className="flex lg:flex-col gap-3 w-full lg:w-auto overflow-x-auto lg:overflow-visible pb-1 lg:pb-0 lg:pt-0">
+      {/* ── QUEUE — small tiles stacked vertically ── */}
+      <div
+        className="flex-none flex flex-col gap-2"
+        style={{ width: `${SM_Q}px` }}
+      >
         {[1, 2, 3].map((offset) => {
           const idx = getIdx(offset);
           return (
             <motion.button
-              key={`${active}-${offset}`}
+              key={offset}
               onClick={() => advance(idx)}
-              className="flex-none relative rounded-xl overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              aria-label={`Switch to: ${SLIDES[idx].industry}`}
+              className="w-full relative rounded-xl overflow-hidden focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent/50"
               style={{
-                aspectRatio: "9/19",
-                width: "120px",
+                aspectRatio: "9/14",           // slightly cropped — shows top of chat
+                border: "1px solid rgba(255,255,255,0.07)",
                 flexShrink: 0,
-                border: "1px solid rgba(255,255,255,0.06)",
               }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: QUEUE_OPACITIES[offset - 1] }}
-              whileHover={{ opacity: 0.92, scale: 1.03 }}
-              transition={{ duration: 0.2 }}
+              animate={{ opacity: OPACITIES[offset - 1] }}
+              whileHover={{ opacity: 1, scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.18 }}
             >
               <Image
                 src={SLIDES[idx].src}
                 alt={SLIDES[idx].caption}
                 fill
                 className="object-cover object-top"
-                sizes="120px"
-              />
-              {/* Hover shine */}
-              <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-200"
-                style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%)" }}
+                sizes={`${SM_Q}px`}
               />
             </motion.button>
           );
@@ -304,7 +304,7 @@ export default function BotInAction() {
           </motion.p>
         </div>
 
-        {/* Spotlight carousel */}
+        {/* Carousel */}
         <motion.div
           custom={2}
           variants={fadeUp}
