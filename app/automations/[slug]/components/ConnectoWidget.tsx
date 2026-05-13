@@ -3,12 +3,18 @@
 import { useEffect, useRef } from "react";
 import type { ProspectData } from "../data";
 
+/**
+ * Invisible anchor div that:
+ * 1. Provides a section divider between SectionHero and SectionObservation
+ * 2. Fires a `widget_visible` Plausible event when scrolled into view
+ *
+ * The actual Connecto chat script is loaded via <Script> in page.tsx.
+ */
 export default function ConnectoWidget({ data }: { data: ProspectData }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Fire widget_visible Plausible event when the anchor scrolls into view
   useEffect(() => {
-    const el = containerRef.current;
+    const el = ref.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -25,11 +31,5 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
 
   if (data.slotExpired) return null;
 
-  return (
-    <div
-      ref={containerRef}
-      id="connecto-widget-container"
-      className="section-divider py-4"
-    />
-  );
+  return <div ref={ref} className="section-divider" />;
 }
