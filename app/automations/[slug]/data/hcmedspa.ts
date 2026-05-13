@@ -40,7 +40,7 @@ const hcmedspa: ProspectData = {
   connectoWidget: {
     src: "https://app.theconnecto.ai/widget.js",
     widgetKey: "0cc996d7d767b1b6178dc0e6fbc0ae76",
-    apiUrl: "https://api.theconnecto.ai/api/v1",
+    apiUrl: "https://www.maksnedbailo.site/api/connecto",
     title: "Amira — HC MedSpa",
     subtitle: "Trained on your clinic. Replies in 9s.",
     colour: "#392f1c",
