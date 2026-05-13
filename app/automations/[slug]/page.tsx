@@ -59,7 +59,20 @@ export default function DemoPage({ params }: Props) {
         strategy="afterInteractive"
       />
 
-      {/* Connecto chat widget — loaded from server component, same pattern as main page */}
+      {/* WebSocket URL patcher — inline so it runs before widget.js.
+          Vercel rewrites proxy HTTP but not WebSocket upgrades (1006 close).
+          Direct wss://api.theconnecto.ai accepts our Origin, so we redirect
+          proxy WS URLs back to the real server while HTTP stays proxied. */}
+      {w && !data.slotExpired && (
+        // eslint-disable-next-line @next/next/no-sync-scripts
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var W=window.WebSocket;window.WebSocket=function(u,p){u=String(u).replace('wss://www.maksnedbailo.site/api/connecto','wss://api.theconnecto.ai/api/v1');return p?new W(u,p):new W(u);};window.WebSocket.prototype=W.prototype;window.WebSocket.CONNECTING=0;window.WebSocket.OPEN=1;window.WebSocket.CLOSING=2;window.WebSocket.CLOSED=3;})();`,
+          }}
+        />
+      )}
+
+      {/* Connecto chat widget */}
       {w && !data.slotExpired && (
         <Script
           src={w.src}
