@@ -48,6 +48,8 @@ export default function DemoPage({ params }: Props) {
   const data = getProspect(params.slug);
   if (!data) notFound();
 
+  const w = data.connectoWidget;
+
   return (
     <>
       {/* Plausible — tagged events variant */}
@@ -56,6 +58,23 @@ export default function DemoPage({ params }: Props) {
         data-domain="maksnedbailo.site"
         strategy="afterInteractive"
       />
+
+      {/* Connecto chat widget — loaded from server component, same pattern as main page */}
+      {w && !data.slotExpired && (
+        <Script
+          src={w.src}
+          strategy="afterInteractive"
+          data-widget-key={w.widgetKey}
+          data-api-url={w.apiUrl}
+          data-title={w.title}
+          data-subtitle={w.subtitle}
+          data-colour={w.colour}
+          data-position={w.position}
+          data-language={w.language}
+          data-auto-open="true"
+        />
+      )}
+
       <DemoTracker slug={data.slug} />
       <main className="min-h-screen">
         <SectionHero data={data} />
