@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Script from "next/script";
 import type { ProspectData } from "../data";
 
 export default function ConnectoWidget({ data }: { data: ProspectData }) {
@@ -24,37 +23,42 @@ export default function ConnectoWidget({ data }: { data: ProspectData }) {
     return () => observer.disconnect();
   }, [data.slug]);
 
+  // Inject Connecto script via DOM so all data-* attributes are reliably set
+  useEffect(() => {
+    const w = data.connectoWidget;
+    if (!w) return;
+
+    const script = document.createElement("script");
+    script.src = w.src;
+    script.async = true;
+    script.setAttribute("data-widget-key", w.widgetKey);
+    script.setAttribute("data-api-url", w.apiUrl);
+    script.setAttribute("data-title", w.title);
+    script.setAttribute("data-subtitle", w.subtitle);
+    script.setAttribute("data-colour", w.colour);
+    script.setAttribute("data-position", w.position);
+    script.setAttribute("data-language", w.language);
+    script.setAttribute("data-auto-open", "true");
+
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [data.connectoWidget]);
+
   if (data.slotExpired) return null;
 
-  const w = data.connectoWidget;
-
   return (
-    <>
-      <div
-        ref={containerRef}
-        id="connecto-widget-container"
-        className="section-divider py-8 flex items-center justify-center min-h-[80px]"
-      >
-        {!w && (
-          <p className="font-sora text-[12px] text-fg/20 tracking-wide">
-            Widget loading…
-          </p>
-        )}
-      </div>
-
-      {w && (
-        <Script
-          src={w.src}
-          data-widget-key={w.widgetKey}
-          data-api-url={w.apiUrl}
-          data-title={w.title}
-          data-subtitle={w.subtitle}
-          data-colour={w.colour}
-          data-position={w.position}
-          data-language={w.language}
-          strategy="afterInteractive"
-        />
+    <div
+      ref={containerRef}
+      id="connecto-widget-container"
+      className="section-divider py-8 flex items-center justify-center min-h-[80px]"
+    >
+      {!data.connectoWidget && (
+        <p className="font-sora text-[12px] text-fg/20 tracking-wide">
+          Widget loading…
+        </p>
       )}
-    </>
+    </div>
   );
 }
