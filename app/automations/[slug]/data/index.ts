@@ -74,14 +74,33 @@ export type ProspectData = {
   /** POST endpoint for the bottom-of-page enquiry form (n8n / make.com / etc.) */
   formWebhookUrl: string;
 
+  // ── Per-prospect overrides ────────────────────────────────────────────────
+  /**
+   * Override the auto-computed expiry date (createdAt + 14 days).
+   * ISO date string: "2026-05-28"
+   */
+  slotExpiryISO?: string;
+
+  /** Pre-fill known values in the enquiry form for this prospect. */
+  formPrefill?: {
+    name?: string;
+    business?: string;
+    website?: string;
+    locations?: string;
+  };
+
+  /** Pre-filled WhatsApp message body (URL-encoded by the component). */
+  ctaWhatsappMessage?: string;
+
   // ── Connecto widget ───────────────────────────────────────────────────────
   connectoWidget: ConnectoWidgetConfig | null;
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Returns the demo expiry Date (createdAt + 14 calendar days) */
+/** Returns the demo expiry Date — slotExpiryISO override, else createdAt + 14 days */
 export function getExpiryDate(data: ProspectData): Date {
+  if (data.slotExpiryISO) return new Date(data.slotExpiryISO);
   const d = new Date(data.createdAt);
   d.setDate(d.getDate() + 14);
   return d;

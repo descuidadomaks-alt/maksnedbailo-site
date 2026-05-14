@@ -146,6 +146,27 @@ h1.font-playfair, h2.font-playfair {
   animation: hero-arrow-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Scroll-reveal — initial state */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+
+/* Scroll-reveal — visible state (added by IntersectionObserver) */
+[data-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delay variants */
+[data-reveal="d0"] { --reveal-delay: 0ms; }
+[data-reveal="d1"] { --reveal-delay: 80ms; }
+[data-reveal="d2"] { --reveal-delay: 160ms; }
+[data-reveal="d3"] { --reveal-delay: 240ms; }
+
 /* ─── Blog article prose ────────────────────────────────────────────────────── */
 /* Blog article prose */
 .prose-blog h1,

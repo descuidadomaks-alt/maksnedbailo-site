@@ -11,6 +11,7 @@ export default function SectionProof({ data }: { data: ProspectData }) {
 
         {/* Section title — H2 at ~80% of hero H1 size/weight */}
         <h2
+          data-reveal
           className="font-playfair font-normal text-center text-fg mb-14"
           style={{
             fontSize: "clamp(24px, 3.4vw, 48px)",
@@ -25,7 +26,7 @@ export default function SectionProof({ data }: { data: ProspectData }) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {data.proofScreenshots.map((shot, i) => (
-            <figure key={i} className="flex flex-col gap-4">
+            <figure key={i} data-reveal={`d${i}`} className="flex flex-col gap-4">
               {/* Chat screenshot — 375×600 aspect (mobile chat) */}
               <div
                 className="relative w-full rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.018] shadow-[0_8px_48px_rgba(0,0,0,0.45)] hover:border-white/[0.1] hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-all duration-400"

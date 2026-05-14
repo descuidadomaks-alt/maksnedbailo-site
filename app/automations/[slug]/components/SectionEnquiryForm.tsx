@@ -12,35 +12,28 @@ declare global {
 const CHANNELS = ["WhatsApp", "Website", "Instagram", "Phone"] as const;
 type Channel = (typeof CHANNELS)[number];
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+const inputClass =
+  "bg-white/[0.05] border border-white/[0.09] rounded-xl px-4 font-sora text-fg placeholder:text-fg/22 focus:outline-none focus:border-accent/40 focus:bg-white/[0.08] transition-all duration-200";
+
+function FieldLabel({ children }: { children: string }) {
   return (
-    <label className="flex flex-col gap-2">
-      <span
-        className="font-sora text-fg/30"
-        style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
-      >
-        {label}
-      </span>
+    <span
+      className="font-sora text-fg/40"
+      style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
+    >
       {children}
-    </label>
+    </span>
   );
 }
 
-const inputClass =
-  "bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 font-sora text-fg placeholder:text-fg/20 focus:outline-none focus:border-accent/35 focus:bg-white/[0.06] transition-all duration-200";
-
 export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
+  const p = data.formPrefill ?? {};
+
   const [form, setForm] = useState({
-    name: "",
-    business: "",
-    website: "",
-    locations: "",
+    name: p.name ?? "",
+    business: p.business ?? "",
+    website: p.website ?? "",
+    locations: p.locations ?? "",
     responseTime: "",
     channel: "" as Channel | "",
     monthlyLeakGuess: "",
@@ -56,7 +49,6 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-
     try {
       if (data.formWebhookUrl) {
         await fetch(data.formWebhookUrl, {
@@ -66,7 +58,6 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
         });
       }
       window.plausible?.("form_submitted", { props: { slug: data.slug } });
-      // Redirect to calendar booking
       window.location.href = data.ctaCalendarUrl;
     } catch {
       setError("Something went wrong — please book directly below.");
@@ -78,7 +69,6 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     <section className="section-divider py-20 md:py-28" id="get-audit">
       <div className="max-w-2xl mx-auto px-6">
 
-        {/* Label */}
         <p
           className="font-sora text-fg/30 mb-5"
           style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
@@ -86,8 +76,8 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           Free Audit
         </p>
 
-        {/* H2 */}
         <h2
+          data-reveal
           className="font-playfair font-normal text-fg mb-3"
           style={{
             fontSize: "clamp(24px, 3.4vw, 48px)",
@@ -98,17 +88,19 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           See Your Numbers
         </h2>
         <p
-          className="font-sora font-light text-fg/40 leading-relaxed mb-12"
-          style={{ fontSize: "14px" }}
+          data-reveal
+          className="font-sora font-light text-fg/45 leading-relaxed mb-12"
+          style={{ fontSize: "15px" }}
         >
-          15 minutes. I map exactly where leads disappear — before you spend a pound.
+          30 minutes. I map exactly where leads disappear — before you spend a pound.
         </p>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <form data-reveal="d1" onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-          {/* Row 1: Name + Business */}
+          {/* Name + Business */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="Name *">
+            <label className="flex flex-col gap-2">
+              <FieldLabel>Name *</FieldLabel>
               <input
                 required
                 value={form.name}
@@ -117,8 +109,9 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 className={inputClass}
                 style={{ height: "52px", fontSize: "14px" }}
               />
-            </Field>
-            <Field label="Business *">
+            </label>
+            <label className="flex flex-col gap-2">
+              <FieldLabel>Business *</FieldLabel>
               <input
                 required
                 value={form.business}
@@ -127,12 +120,13 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 className={inputClass}
                 style={{ height: "52px", fontSize: "14px" }}
               />
-            </Field>
+            </label>
           </div>
 
-          {/* Row 2: Website + Locations */}
+          {/* Website + Locations */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="Website">
+            <label className="flex flex-col gap-2">
+              <FieldLabel>Website</FieldLabel>
               <input
                 value={form.website}
                 onChange={(e) => set("website", e.target.value)}
@@ -140,8 +134,9 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 className={inputClass}
                 style={{ height: "52px", fontSize: "14px" }}
               />
-            </Field>
-            <Field label="Number of locations">
+            </label>
+            <label className="flex flex-col gap-2">
+              <FieldLabel>Number of locations</FieldLabel>
               <input
                 value={form.locations}
                 onChange={(e) => set("locations", e.target.value)}
@@ -149,11 +144,12 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 className={inputClass}
                 style={{ height: "52px", fontSize: "14px" }}
               />
-            </Field>
+            </label>
           </div>
 
           {/* Response time */}
-          <Field label="Current response time (rough)">
+          <label className="flex flex-col gap-2">
+            <FieldLabel>Current response time (rough)</FieldLabel>
             <input
               value={form.responseTime}
               onChange={(e) => set("responseTime", e.target.value)}
@@ -161,34 +157,29 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
               className={inputClass}
               style={{ height: "52px", fontSize: "14px" }}
             />
-          </Field>
+          </label>
 
-          {/* Channel — pill toggles */}
+          {/* Channel pills */}
           <div className="flex flex-col gap-3">
-            <span
-              className="font-sora text-fg/30"
-              style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
-            >
-              Biggest enquiry channel
-            </span>
+            <FieldLabel>Biggest enquiry channel</FieldLabel>
             <div className="flex flex-wrap gap-2">
               {CHANNELS.map((ch) => (
                 <button
                   key={ch}
                   type="button"
-                  onClick={() => set("channel", ch)}
-                  className="font-sora rounded-xl border transition-all duration-200"
+                  onClick={() => set("channel", form.channel === ch ? "" : ch)}
+                  className="font-sora rounded-xl transition-all duration-200"
                   style={{
                     fontSize: "13px",
-                    padding: "10px 18px",
+                    padding: "10px 20px",
                     border: form.channel === ch
-                      ? "1px solid rgba(212,255,43,0.45)"
-                      : "1px solid rgba(255,255,255,0.08)",
+                      ? "1px solid rgba(212,255,43,0.5)"
+                      : "1px solid rgba(255,255,255,0.09)",
                     background: form.channel === ch
-                      ? "rgba(212,255,43,0.09)"
+                      ? "rgba(212,255,43,0.1)"
                       : "rgba(255,255,255,0.03)",
                     color: form.channel === ch
-                      ? "rgba(212,255,43,0.9)"
+                      ? "rgba(212,255,43,0.95)"
                       : "rgba(240,236,230,0.45)",
                   }}
                 >
@@ -198,8 +189,9 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             </div>
           </div>
 
-          {/* Revenue guess */}
-          <Field label="Your guess on monthly leaked revenue">
+          {/* Monthly leak guess */}
+          <label className="flex flex-col gap-2">
+            <FieldLabel>Your guess on monthly leaked revenue</FieldLabel>
             <input
               value={form.monthlyLeakGuess}
               onChange={(e) => set("monthlyLeakGuess", e.target.value)}
@@ -207,9 +199,8 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
               className={inputClass}
               style={{ height: "52px", fontSize: "14px" }}
             />
-          </Field>
+          </label>
 
-          {/* Error */}
           {error && (
             <p className="font-sora text-red-400/75" style={{ fontSize: "13px" }}>
               {error}
@@ -220,14 +211,14 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_48px_rgba(212,255,43,0.2)] disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ fontSize: "15px", padding: "20px", minHeight: "62px", marginTop: "4px" }}
+            className="w-full bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.015] hover:shadow-[0_0_56px_rgba(212,255,43,0.25)] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ fontSize: "15px", padding: "20px", minHeight: "62px", marginTop: "4px", letterSpacing: "-0.01em" }}
           >
-            {submitting ? "Sending…" : "Get My Free Audit →"}
+            {submitting ? "Sending…" : "Get My Free 30-Min Audit →"}
           </button>
 
-          <p className="font-sora text-fg/20 text-center" style={{ fontSize: "11px" }}>
-            You&apos;ll be redirected to book a 15-min call immediately after.
+          <p className="font-sora text-fg/22 text-center" style={{ fontSize: "11px" }}>
+            You&apos;ll be redirected to book your call immediately after.
           </p>
         </form>
       </div>

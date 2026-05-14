@@ -43,7 +43,18 @@ const hcmedspa: ProspectData = {
 
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",
+  ctaWhatsappMessage:
+    "Hi Maks, I saw the personalized Amira demo for HC MedSpa and I'm interested in the free audit.",
   formWebhookUrl: "", // TODO: paste n8n / make.com webhook URL here
+
+  slotExpiryISO: "2026-05-28",
+
+  formPrefill: {
+    name: "Saad",
+    business: "HC MedSpa",
+    website: "hcmedspa.com",
+    locations: "4",
+  },
 
   connectoWidget: {
     src: "https://app.theconnecto.ai/widget.js",

@@ -9,74 +9,98 @@ export default function SectionMath({ data }: { data: ProspectData }) {
       <div className="max-w-2xl mx-auto px-6">
 
         {/* Lead metric — large number */}
-        <div className="mb-10">
-          <div className="flex items-baseline gap-3 mb-1">
+        <div className="mb-12" data-reveal>
+          <div className="flex items-end gap-4 mb-3 flex-wrap">
             <span
               className="font-playfair text-accent"
               style={{
-                fontSize: "clamp(52px, 8vw, 96px)",
-                lineHeight: 1,
-                letterSpacing: "-0.035em",
+                fontSize: "clamp(56px, 9vw, 100px)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.04em",
               }}
             >
               {m.monthlyLeak}
             </span>
-            <span className="font-sora font-light text-fg/35" style={{ fontSize: "14px" }}>
-              /month
+            <div className="flex flex-col pb-1">
+              <span
+                className="font-sora font-normal text-fg/70"
+                style={{ fontSize: "clamp(16px, 1.6vw, 20px)", lineHeight: 1.2 }}
+              >
+                per month
+              </span>
+              <span
+                className="font-sora font-light text-fg/45"
+                style={{ fontSize: "clamp(12px, 1.1vw, 14px)", letterSpacing: "0.01em" }}
+              >
+                estimated lost in first bookings alone
+              </span>
+            </div>
+          </div>
+
+          {/* Year figure */}
+          <div
+            className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 mt-2"
+            style={{
+              background: "rgba(212,255,43,0.07)",
+              border: "1px solid rgba(212,255,43,0.15)",
+            }}
+          >
+            <span
+              className="font-playfair text-accent"
+              style={{ fontSize: "clamp(18px, 2vw, 22px)", letterSpacing: "-0.025em" }}
+            >
+              {m.yearlyLeak}
+            </span>
+            <span className="font-sora font-light text-fg/55" style={{ fontSize: "13px" }}>
+              per year when you factor in lifetime value
             </span>
           </div>
-          <p className="font-sora font-light text-fg/25" style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
-            estimated lead leak
-          </p>
         </div>
 
         {/* Explanation paragraph */}
         <p
-          className="font-sora font-light text-fg/60 leading-[1.8] mb-6"
-          style={{ fontSize: "clamp(14px, 1.4vw, 16px)" }}
+          className="font-sora font-light text-fg/75 leading-[1.8] mb-6"
+          style={{ fontSize: "clamp(14px, 1.5vw, 16px)" }}
+          data-reveal
         >
           Across your{" "}
-          <strong className="text-fg/85 font-medium">{m.locationCount}</strong>{" "}
+          <strong className="text-fg font-medium">{m.locationCount}</strong>{" "}
           clinic{plural ? "s" : ""}, at an average treatment value of{" "}
-          <strong className="text-fg/85 font-medium">{m.avgTreatmentValue}</strong>{" "}
+          <strong className="text-fg font-medium">{m.avgTreatmentValue}</strong>{" "}
           and a conservative{" "}
-          <strong className="text-fg/85 font-medium">{m.afterHoursGap}</strong>{" "}
-          after-hours response gap,{" "}
-          <strong className="text-fg/85 font-medium">{data.businessName}</strong>{" "}
-          is losing an estimated{" "}
-          <strong className="font-medium" style={{ color: "#D4FF2B" }}>{m.monthlyLeak}/month</strong>{" "}
-          in first bookings alone. Factor in the lifetime value of a laser or
-          injectable client and the figure crosses{" "}
-          <strong className="font-medium" style={{ color: "#D4FF2B" }}>{m.yearlyLeak}/year</strong>.
+          <strong className="text-fg font-medium">{m.afterHoursGap}</strong>{" "}
+          after-hours response gap, {data.businessName} is handing first-mover
+          advantage to whoever answers first.
         </p>
 
         {/* ROI callout */}
         <p
-          className="font-sora text-fg/50 border-l-2 pl-5 mb-7 leading-relaxed"
+          className="font-sora font-normal text-fg/70 border-l-2 pl-5 mb-10 leading-relaxed"
           style={{
-            fontSize: "13px",
-            borderColor: "rgba(212,255,43,0.35)",
+            fontSize: "clamp(13px, 1.2vw, 15px)",
+            borderColor: "rgba(212,255,43,0.45)",
           }}
+          data-reveal
         >
           Even capturing 40% of the gap pays for the service in 2–3 months.
         </p>
 
-        {/* Benchmark footnote */}
-        <p className="font-sora text-fg/22 leading-relaxed" style={{ fontSize: "11px" }}>
-          * Estimates based on{" "}
-          {m.benchmarkUrl ? (
+        {/* Benchmark footnote — intentionally subtle */}
+        <p
+          className="font-sora font-light text-fg/30 leading-relaxed"
+          style={{ fontSize: "11px", letterSpacing: "0.01em" }}
+        >
+          Estimates based on {m.benchmarkUrl ? (
             <a
               href={m.benchmarkUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline underline-offset-2 decoration-white/15 hover:text-fg/40 transition-colors"
+              className="underline underline-offset-2 decoration-white/15 hover:text-fg/45 transition-colors"
             >
               {m.benchmarkSource}
             </a>
-          ) : (
-            m.benchmarkSource
-          )}
-          . Exact figures confirmed during the complimentary audit.
+          ) : m.benchmarkSource}
+          . Your actual numbers will be confirmed during the free audit.
         </p>
       </div>
     </section>

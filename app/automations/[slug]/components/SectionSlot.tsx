@@ -20,17 +20,11 @@ export default function SectionSlot({ data }: { data: ProspectData }) {
             </a>
           </p>
         ) : (
-          <>
-            <p className="font-sora font-light text-fg/28 leading-relaxed mb-2" style={{ fontSize: "13px" }}>
-              Demo page live until{" "}
-              <span className="text-fg/50">{expiry}</span>.{" "}
-              After that, the slot rotates to the next clinic — this page stays
-              up as a public case study.
-            </p>
-            <p className="font-sora font-light text-fg/18 leading-relaxed" style={{ fontSize: "12px" }}>
-              I run 10 live demos at a time. Spots refresh as clients close.
-            </p>
-          </>
+          <p className="font-sora font-light text-fg/35 leading-[1.8]" style={{ fontSize: "13px" }}>
+            This personalised demo page stays live until{" "}
+            <span className="text-fg/60 font-normal">{expiry}</span>.{" "}
+            After that it will rotate to the next prospect.
+          </p>
         )}
       </div>
     </section>

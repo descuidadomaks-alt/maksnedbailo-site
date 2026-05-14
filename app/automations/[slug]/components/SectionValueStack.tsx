@@ -36,6 +36,7 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
 
         {/* Stack table */}
         <div
+          data-reveal
           className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015] mb-6"
           style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.3)" }}
         >
@@ -97,6 +98,7 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
 
         {/* Guarantee box */}
         <div
+          data-reveal="d1"
           className="rounded-2xl border border-white/[0.06] bg-white/[0.015] p-7"
           style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.2)" }}
         >

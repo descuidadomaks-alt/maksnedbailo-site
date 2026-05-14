@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import ScrollReveal from "./components/ScrollReveal";
 
 /**
  * Minimal layout for all /automations/[slug] demo pages.
@@ -44,6 +45,7 @@ export default function AutomationsLayout({ children }: { children: ReactNode })
       <div data-demo-layout hidden aria-hidden="true" />
 
       {children}
+      <ScrollReveal />
     </>
   );
 }
