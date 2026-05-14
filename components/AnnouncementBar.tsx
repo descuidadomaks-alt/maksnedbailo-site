@@ -27,6 +27,7 @@ export default function AnnouncementBar() {
 
   return (
     <div
+      data-site-element="announcement"
       className="relative w-full overflow-hidden flex items-center"
       style={{
         height: "28px",

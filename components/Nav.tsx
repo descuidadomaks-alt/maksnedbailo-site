@@ -74,6 +74,7 @@ export default function Nav() {
 
   return (
     <motion.header
+      data-site-element="nav"
       className="fixed left-0 right-0 z-50 pointer-events-none"
       animate={{ top: topOffset }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}

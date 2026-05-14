@@ -4,12 +4,13 @@ import Script from "next/script";
 import { getProspect, getAllSlugs } from "./data";
 import SectionHero from "./components/SectionHero";
 import ConnectoWidget from "./components/ConnectoWidget";
-import SectionObservation from "./components/SectionObservation";
 import SectionMath from "./components/SectionMath";
 import SectionProof from "./components/SectionProof";
-import SectionHowBuilt from "./components/SectionHowBuilt";
-import SectionOffer from "./components/SectionOffer";
+import SectionHowItWorks from "./components/SectionHowItWorks";
+import SectionValueStack from "./components/SectionValueStack";
+import SectionTrust from "./components/SectionTrust";
 import SectionSlot from "./components/SectionSlot";
+import SectionEnquiryForm from "./components/SectionEnquiryForm";
 import SectionCTA from "./components/SectionCTA";
 import DemoTracker from "./components/DemoTracker";
 
@@ -25,12 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const og = `/automations/${d.slug}/og.png`;
   return {
     title: `A live AI agent built for ${d.businessName} — careless`,
-    description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in 9 seconds.`,
+    description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
     alternates: { canonical: `https://maksnedbailo.site/automations/${d.slug}` },
     robots: { index: false, follow: false },
     openGraph: {
       title: `A live AI agent built for ${d.businessName} — careless`,
-      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in 9 seconds.`,
+      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
       url: `https://maksnedbailo.site/automations/${d.slug}`,
       type: "website",
       images: [{ url: og, width: 1200, height: 630, alt: `${d.agentName} for ${d.businessName}` }],
@@ -38,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: `A live AI agent built for ${d.businessName} — careless`,
-      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in 9 seconds.`,
+      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
       images: [og],
     },
   };
@@ -52,17 +53,20 @@ export default function DemoPage({ params }: Props) {
 
   return (
     <>
-      {/* Plausible — tagged events variant */}
+      {/* Plausible — tagged events */}
       <Script
         src="https://plausible.io/js/script.tagged-events.js"
         data-domain="maksnedbailo.site"
         strategy="afterInteractive"
       />
 
-      {/* WebSocket URL patcher — inline so it runs before widget.js.
-          Vercel rewrites proxy HTTP but not WebSocket upgrades (1006 close).
-          Direct wss://api.theconnecto.ai accepts our Origin, so we redirect
-          proxy WS URLs back to the real server while HTTP stays proxied. */}
+      {/*
+       * WebSocket URL patcher — runs inline (before widget.js loads).
+       * Vercel rewrites proxy HTTP but silently drop WebSocket upgrade requests
+       * (1006 close). api.theconnecto.ai accepts WS from our origin without CORS
+       * preflight, so we rewrite wss://[proxy] → wss://api.theconnecto.ai/api/v1
+       * while keeping HTTP calls through the Vercel proxy.
+       */}
       {w && !data.slotExpired && (
         // eslint-disable-next-line @next/next/no-sync-scripts
         <script
@@ -89,15 +93,36 @@ export default function DemoPage({ params }: Props) {
       )}
 
       <DemoTracker slug={data.slug} />
+
       <main className="min-h-screen">
+        {/* 1. Hero — H1 + single CTA + animated arrow */}
         <SectionHero data={data} />
+
+        {/* 2. Live widget anchor (analytics + section divider) */}
         <ConnectoWidget data={data} />
-        <SectionObservation data={data} />
+
+        {/* 3. Leak calculation */}
         <SectionMath data={data} />
+
+        {/* 4. Conversation proof — 3 screenshot slots */}
         <SectionProof data={data} />
-        <SectionHowBuilt data={data} />
-        <SectionOffer data={data} />
+
+        {/* 5. Process — 3 steps */}
+        <SectionHowItWorks data={data} />
+
+        {/* 6. Value stack — Hormozi table + guarantee */}
+        <SectionValueStack data={data} />
+
+        {/* 7. Trust block — infrastructure / clinical safety */}
+        <SectionTrust data={data} />
+
+        {/* 8. Scarcity — dynamic expiry from createdAt */}
         <SectionSlot data={data} />
+
+        {/* 9. Enquiry form → webhook + calendar redirect */}
+        <SectionEnquiryForm data={data} />
+
+        {/* 10. Final CTA */}
         <SectionCTA data={data} />
       </main>
     </>

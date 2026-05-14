@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type { ProspectData } from "../data";
+import HeroArrow from "./HeroArrow";
 
 declare global {
   interface Window {
@@ -10,86 +11,125 @@ declare global {
   }
 }
 
-const TOP = 92; // 28px bar + 64px nav
-
 export default function SectionHero({ data }: { data: ProspectData }) {
-  // Auto-open widget
+  const m = data.metrics;
+
+  // Auto-open widget after delay
   useEffect(() => {
     const mobile = window.matchMedia("(max-width: 768px)").matches;
-    const delay = mobile ? 8000 : 4000;
     const t = setTimeout(() => {
-      if (typeof window.__connectoOpenWidget === "function") {
-        window.__connectoOpenWidget();
-      } else {
-        document.querySelectorAll("iframe").forEach((iframe) => {
-          try {
-            iframe.contentWindow?.postMessage({ type: "connecto:open" }, "*");
-          } catch {
-            console.log("[careless] Widget auto-open: postMessage blocked");
-          }
-        });
-      }
-    }, delay);
+      window.__connectoOpenWidget?.();
+    }, mobile ? 8000 : 4000);
     return () => clearTimeout(t);
   }, []);
 
-  const expired = data.slotExpired;
-
   return (
     <section
-      className="relative flex items-center min-h-[88svh]"
-      style={{ paddingTop: `${TOP}px` }}
+      data-hero
+      className="relative flex items-center min-h-[92svh] overflow-hidden"
+      style={{ paddingTop: "56px" }}
     >
-      {/* Ambient glow */}
+      {/* Ambient radial glow */}
       <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[560px] h-[320px] pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(212,255,43,0.07) 0%, transparent 70%)" }}
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse 900px 520px at 50% 42%, rgba(212,255,43,0.05) 0%, transparent 68%)",
+        }}
       />
-      <div className="max-w-3xl mx-auto px-6 py-16 w-full text-center">
-        {expired && (
-          <p className="inline-block font-sora text-[9px] uppercase tracking-[3px] text-accent/50 border border-accent/20 rounded-full px-3 py-1 mb-6">
-            Live Demo · Case Study
-          </p>
-        )}
 
-        <h1
-          className="font-playfair font-normal leading-tight mb-5"
-          style={{ fontSize: "clamp(28px, 3.8vw, 48px)" }}
+      <div className="relative max-w-[820px] mx-auto px-6 py-24 w-full text-center">
+
+        {/* Eyebrow pill */}
+        <div
+          className="inline-flex items-center gap-2.5 mb-10"
+          style={{
+            fontFamily: "var(--font-sora)",
+            fontSize: "10px",
+            letterSpacing: "3px",
+            textTransform: "uppercase",
+            color: "rgba(212,255,43,0.6)",
+            border: "1px solid rgba(212,255,43,0.18)",
+            borderRadius: "999px",
+            padding: "6px 16px",
+          }}
         >
-          {data.heroH1}
+          <span
+            className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"
+            style={{ opacity: 0.7 }}
+          />
+          Live Demo · {data.businessName}
+        </div>
+
+        {/* H1 */}
+        <h1
+          className="font-playfair font-normal text-fg"
+          style={{
+            fontSize: "clamp(30px, 4.8vw, 64px)",
+            lineHeight: 1.08,
+            letterSpacing: "-0.025em",
+            marginBottom: "clamp(20px, 2.5vw, 28px)",
+          }}
+        >
+          {data.ownerFirstName}, We Reply to{" "}
+          <em className="not-italic text-accent">{data.businessName}</em>{" "}
+          Leads in {m.responseTimeUs}.{" "}
+          <br className="hidden md:block" />
+          Your Competitors Take {m.responseTimeThem}.
         </h1>
 
-        <p className="font-sora font-light text-[15px] text-fg/50 max-w-[520px] mx-auto leading-relaxed mb-10">
-          {data.heroSub}
+        {/* Subhead */}
+        <p
+          className="font-sora font-light text-fg/50 max-w-[580px] mx-auto"
+          style={{
+            fontSize: "clamp(15px, 1.4vw, 17px)",
+            lineHeight: 1.75,
+            marginBottom: "clamp(36px, 5vw, 52px)",
+          }}
+        >
+          73% of customers buy from the first responder.{" "}
+          <span className="text-fg/80 font-normal">{data.agentName}</span> replies
+          on WhatsApp + your website 24/7, in your voice. Try{" "}
+          {data.agentName} live{" "}
+          <span className="hidden md:inline">to the right</span>
+          <span className="md:hidden">below</span>.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          {expired ? (
-            <span className="font-sora text-[13px] text-fg/35 border border-white/10 rounded-lg px-6 py-3.5">
-              This live demo ran Apr 23 – May 7, 2026 (case study below)
-            </span>
-          ) : (
-            <a
-              href="#connecto-widget-container"
-              className="bg-accent text-bg font-semibold px-7 py-3.5 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
-              onClick={() => window.plausible?.("cta_widget", { props: { slug: data.slug } })}
-            >
-              Keep chatting with {data.agentName} ↓
-            </a>
-          )}
+        {/* Single CTA */}
+        {data.slotExpired ? (
+          <span
+            className="font-sora text-fg/30 border border-white/10 rounded-xl px-8 py-4 inline-block"
+            style={{ fontSize: "13px" }}
+          >
+            This live demo ended — viewing as case study
+          </span>
+        ) : (
           <a
             href={data.ctaCalendarUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-white/15 text-fg/70 hover:border-white/30 hover:text-fg px-7 py-3.5 rounded-lg text-sm transition-all duration-200 w-full sm:w-auto text-center"
+            className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
+            style={{
+              fontSize: "15px",
+              padding: "18px 40px",
+              minHeight: "60px",
+              letterSpacing: "-0.01em",
+            }}
             onClick={() =>
               window.plausible?.("cta_booked", { props: { slug: data.slug, location: "hero" } })
             }
           >
-            Book a 15-min call →
+            Book Free 15-Min Audit
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">
+              →
+            </span>
           </a>
-        </div>
+        )}
       </div>
+
+      {/* Animated pointer → widget */}
+      {!data.slotExpired && <HeroArrow />}
     </section>
   );
 }
