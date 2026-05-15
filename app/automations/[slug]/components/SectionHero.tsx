@@ -72,9 +72,8 @@ export default function SectionHero({ data }: { data: ProspectData }) {
             marginBottom: "clamp(20px, 2.5vw, 28px)",
           }}
         >
-          {data.ownerFirstName}, We Reply to{" "}
-          <em className="not-italic text-accent">{data.businessName}</em>{" "}
-          Leads in {m.responseTimeUs}.{" "}
+          <em className="not-italic text-accent">{data.businessName}</em>
+          , We Reply to Your Leads in {m.responseTimeUs}.{" "}
           <br className="hidden md:block" />
           Your Competitors Take {m.responseTimeThem}.
         </h1>
