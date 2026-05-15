@@ -60,36 +60,36 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
             </div>
           ))}
 
-          {/* Total row */}
+          {/* Total row — muted + strikethrough */}
           <div className="flex items-center justify-between px-7 py-5 bg-white/[0.03] border-t border-white/[0.08]">
             <span
-              className="font-sora text-fg/40"
+              className="font-sora text-fg/25"
               style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}
             >
               Total Year-1 Value
             </span>
             <span
-              className="font-playfair text-fg"
+              className="font-playfair text-fg/30 line-through"
               style={{ fontSize: "clamp(18px, 2.2vw, 24px)", letterSpacing: "-0.02em" }}
             >
               ~£12,000+
             </span>
           </div>
 
-          {/* Price row */}
+          {/* Price row — high visual weight */}
           <div
-            className="flex items-center justify-between px-7 py-5 border-t"
-            style={{ background: "rgba(212,255,43,0.055)", borderColor: "rgba(212,255,43,0.14)" }}
+            className="flex items-center justify-between px-7 py-6 border-t"
+            style={{ background: "rgba(212,255,43,0.09)", borderColor: "rgba(212,255,43,0.22)" }}
           >
             <span
-              className="font-sora font-semibold text-accent/80"
+              className="font-sora font-semibold text-accent"
               style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}
             >
               Your Price
             </span>
             <span
-              className="font-playfair text-accent"
-              style={{ fontSize: "clamp(18px, 2.2vw, 24px)", letterSpacing: "-0.02em" }}
+              className="font-playfair font-bold text-accent"
+              style={{ fontSize: "clamp(20px, 2.5vw, 28px)", letterSpacing: "-0.02em" }}
             >
               {data.offerSetupPrice} + {data.offerMonthlyPrice}
             </span>
@@ -128,8 +128,9 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
                 30-Day Guarantee
               </p>
               <p className="font-sora font-light text-fg/55 leading-[1.7]" style={{ fontSize: "14px" }}>
-                20+ qualified enquiries handled in 30 days, or full refund. You keep
-                everything {data.agentName} generated — the transcripts, the contacts, all of it.
+                {data.agentName} books at least 10 qualified consultations in your
+                first 30 days — or full refund. You keep everything she generated:
+                transcripts, contacts, the lot.
               </p>
             </div>
           </div>

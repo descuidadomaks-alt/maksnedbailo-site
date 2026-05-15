@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ProspectData } from "../data";
 
 declare global {
@@ -8,6 +8,10 @@ declare global {
     plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
   }
 }
+
+// Placeholder — Maks: generate free key at web3forms.com (2 min)
+const WEB3FORMS_ACCESS_KEY =
+  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "REPLACE_WITH_WEB3FORMS_ACCESS_KEY";
 
 const CHANNELS = ["WhatsApp", "Website", "Instagram", "Phone"] as const;
 type Channel = (typeof CHANNELS)[number];
@@ -26,6 +30,15 @@ function FieldLabel({ children }: { children: string }) {
   );
 }
 
+function Spinner() {
+  return (
+    <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+    </svg>
+  );
+}
+
 export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
   const p = data.formPrefill ?? {};
 
@@ -34,12 +47,20 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     business: p.business ?? "",
     website: p.website ?? "",
     locations: p.locations ?? "",
+    email: "",
     responseTime: "",
     channel: "" as Channel | "",
     monthlyLeakGuess: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  // Pre-fill email from ?email= URL param
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const emailParam = params.get("email");
+    if (emailParam) setForm((f) => ({ ...f, email: emailParam }));
+  }, []);
 
   function set(field: keyof typeof form, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -49,18 +70,35 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     e.preventDefault();
     setSubmitting(true);
     setError("");
+
     try {
-      if (data.formWebhookUrl) {
-        await fetch(data.formWebhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, slug: data.slug, source: "demo-page" }),
-        });
-      }
+      const payload = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: `New setup call request: ${form.business || data.businessName}`,
+        prospect_slug: data.slug,
+        page_url: window.location.href,
+        ...form,
+      };
+
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message ?? "web3forms error");
+
       window.plausible?.("form_submitted", { props: { slug: data.slug } });
-      window.location.href = data.ctaCalendarUrl;
+
+      // Redirect to booking with pre-filled context
+      const redirectParams = new URLSearchParams({
+        name: form.name,
+        email: form.email,
+        a1: form.business,
+      });
+      window.location.href = `${data.ctaCalendarUrl}?${redirectParams.toString()}`;
     } catch {
-      setError("Something went wrong — please book directly below.");
+      setError("Something went wrong. Email maks@careless.ai directly.");
       setSubmitting(false);
     }
   }
@@ -147,6 +185,20 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             </label>
           </div>
 
+          {/* Email — new, after locations, pre-filled from ?email= param */}
+          <label className="flex flex-col gap-2">
+            <FieldLabel>Email *</FieldLabel>
+            <input
+              required
+              type="email"
+              value={form.email}
+              onChange={(e) => set("email", e.target.value)}
+              placeholder="you@yourclinic.com"
+              className={inputClass}
+              style={{ height: "52px", fontSize: "14px" }}
+            />
+          </label>
+
           {/* Response time */}
           <label className="flex flex-col gap-2">
             <FieldLabel>Current response time (rough)</FieldLabel>
@@ -211,10 +263,17 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.015] hover:shadow-[0_0_56px_rgba(212,255,43,0.25)] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.015] hover:shadow-[0_0_56px_rgba(212,255,43,0.25)] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2.5"
             style={{ fontSize: "15px", padding: "20px", minHeight: "62px", marginTop: "4px", letterSpacing: "-0.01em" }}
           >
-            {submitting ? "Sending…" : "Get My Free 30-Min Audit →"}
+            {submitting ? (
+              <>
+                <Spinner />
+                Sending…
+              </>
+            ) : (
+              "Get My Free 30-Min Setup Call →"
+            )}
           </button>
 
           <p className="font-sora text-fg/22 text-center" style={{ fontSize: "11px" }}>

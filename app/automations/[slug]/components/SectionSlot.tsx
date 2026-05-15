@@ -1,8 +1,18 @@
 import type { ProspectData } from "../data";
 import { getExpiryDate, formatExpiry } from "../data";
+import SlotCountdown from "./SlotCountdown";
 
 export default function SectionSlot({ data }: { data: ProspectData }) {
-  const expiry = formatExpiry(getExpiryDate(data));
+  const expiryDate = getExpiryDate(data);
+  const expiry = formatExpiry(expiryDate);
+
+  // Target: 23:59 BST on the expiry day (= 22:59 UTC, since BST = UTC+1 in summer)
+  const targetMs = Date.UTC(
+    expiryDate.getUTCFullYear(),
+    expiryDate.getUTCMonth(),
+    expiryDate.getUTCDate(),
+    22, 59, 0,
+  );
 
   return (
     <section className="section-divider py-14 md:py-18">
@@ -20,11 +30,14 @@ export default function SectionSlot({ data }: { data: ProspectData }) {
             </a>
           </p>
         ) : (
-          <p className="font-sora font-light text-fg/35 leading-[1.8]" style={{ fontSize: "13px" }}>
-            This personalised demo page stays live until{" "}
-            <span className="text-fg/60 font-normal">{expiry}</span>.{" "}
-            After that it will rotate to the next prospect.
-          </p>
+          <>
+            <p className="font-sora font-light text-fg/35 leading-[1.8]" style={{ fontSize: "13px" }}>
+              This personalised demo page stays live until{" "}
+              <span className="text-fg/60 font-normal">{expiry}</span>.{" "}
+              After that it will rotate to the next prospect.
+            </p>
+            <SlotCountdown targetMs={targetMs} />
+          </>
         )}
       </div>
     </section>

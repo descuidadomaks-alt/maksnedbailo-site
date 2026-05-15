@@ -38,7 +38,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
             letterSpacing: "-0.022em",
           }}
         >
-          Ready to see the numbers?
+          Want to see {data.agentName} live?
         </h2>
 
         <p
@@ -46,7 +46,8 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
           className="font-sora font-light text-fg/40 leading-relaxed mb-12"
           style={{ fontSize: "15px" }}
         >
-          30 minutes. Free. No sales pressure — just your data.
+          30 minutes. Live walkthrough on real {data.businessName} enquiries.
+          You tell us what&apos;s missing.
         </p>
 
         <div data-reveal="d1" className="flex flex-col items-center gap-4 mb-8">
@@ -59,7 +60,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
             style={{ fontSize: "16px", padding: "20px 44px", minHeight: "64px", letterSpacing: "-0.01em" }}
             onClick={() => track("cta_booked", "final")}
           >
-            Book Free 30-Min Audit
+            Book Free 30-Min Setup Call
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">→</span>
           </a>
 
@@ -105,7 +106,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
             className="font-sora text-fg/22 hover:text-fg/50 transition-colors underline underline-offset-4 decoration-white/10"
             style={{ fontSize: "12px" }}
           >
-            Or fill in the quick audit form above ↑
+            Or fill in the quick form above to give us context first ↑
           </a>
         )}
       </div>

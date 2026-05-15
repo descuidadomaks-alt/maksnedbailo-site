@@ -27,25 +27,28 @@ export default function SectionProof({ data }: { data: ProspectData }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {data.proofScreenshots.map((shot, i) => (
             <figure key={i} data-reveal={`d${i}`} className="flex flex-col gap-4">
-              {/* Chat screenshot — 375×600 aspect (mobile chat) */}
+              {/* Chat screenshot — natural dimensions, no cropping */}
               <div
-                className="relative w-full rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.018] shadow-[0_8px_48px_rgba(0,0,0,0.45)] hover:border-white/[0.1] hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-all duration-400"
-                style={{ aspectRatio: "375 / 600" }}
+                className="w-full rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.018] shadow-[0_8px_48px_rgba(0,0,0,0.45)] hover:border-white/[0.1] hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-all duration-400"
               >
                 {shot.src ? (
                   <Image
                     src={shot.src}
                     alt={shot.caption}
-                    fill
-                    className="object-cover"
+                    width={380}
+                    height={520}
+                    className="w-full h-auto block"
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL={BLUR}
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
                 ) : (
-                  /* Placeholder div until real screenshots are supplied */
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white/[0.015]">
+                  /* Placeholder until real screenshots are supplied */
+                  <div
+                    className="flex flex-col items-center justify-center gap-4 bg-white/[0.015]"
+                    style={{ aspectRatio: "380 / 520" }}
+                  >
                     <div
                       className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center"
                       style={{ background: "rgba(212,255,43,0.03)" }}
@@ -69,9 +72,6 @@ export default function SectionProof({ data }: { data: ProspectData }) {
                         style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}
                       >
                         Screenshot #{i + 1}
-                      </p>
-                      <p className="font-sora text-fg/12" style={{ fontSize: "9px" }}>
-                        375 × 600 px
                       </p>
                     </div>
                   </div>

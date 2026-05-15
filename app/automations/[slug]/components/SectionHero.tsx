@@ -89,9 +89,9 @@ export default function SectionHero({ data }: { data: ProspectData }) {
           }}
         >
           73% of customers buy from the first responder.{" "}
-          <span className="text-fg/80 font-normal">{data.agentName}</span> replies
-          on WhatsApp + your website 24/7, in your voice. Try{" "}
-          {data.agentName} live{" "}
+          <span className="text-fg/80 font-normal">{data.agentName}</span> goes
+          live on your website in 48 hours — WhatsApp + Instagram added once
+          Meta approves. Try her live{" "}
           <span className="hidden md:inline">to the right</span>
           <span className="md:hidden">below</span>.
         </p>
@@ -120,7 +120,7 @@ export default function SectionHero({ data }: { data: ProspectData }) {
               window.plausible?.("cta_booked", { props: { slug: data.slug, location: "hero" } })
             }
           >
-            Book Free 30-Min Audit
+            Book Free 30-Min Setup Call
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">
               →
             </span>

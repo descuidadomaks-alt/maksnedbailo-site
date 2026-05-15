@@ -51,9 +51,9 @@ export default function SectionHowItWorks({ data }: { data: ProspectData }) {
               className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-8 flex flex-col gap-5 hover:border-accent/20 hover:bg-white/[0.032] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300 group"
             >
               <span
-                className="font-playfair text-accent/22 group-hover:text-accent/38 transition-colors duration-300"
+                className="font-playfair font-bold text-accent transition-colors duration-300"
                 style={{
-                  fontSize: "clamp(44px, 5vw, 60px)",
+                  fontSize: "clamp(56px, 6.5vw, 80px)",
                   lineHeight: 1,
                   letterSpacing: "-0.04em",
                 }}

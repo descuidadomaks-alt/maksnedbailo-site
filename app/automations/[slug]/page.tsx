@@ -12,6 +12,7 @@ import SectionTrust from "./components/SectionTrust";
 import SectionSlot from "./components/SectionSlot";
 import SectionEnquiryForm from "./components/SectionEnquiryForm";
 import SectionCTA from "./components/SectionCTA";
+import SectionReality from "./components/SectionReality";
 import DemoTracker from "./components/DemoTracker";
 
 type Props = { params: { slug: string } };
@@ -116,13 +117,16 @@ export default function DemoPage({ params }: Props) {
         {/* 7. Trust block — infrastructure / clinical safety */}
         <SectionTrust data={data} />
 
-        {/* 8. Scarcity — dynamic expiry from createdAt */}
+        {/* 8. Reality check — why clinics quit AI too early */}
+        <SectionReality data={data} />
+
+        {/* 9. Scarcity — dynamic expiry from createdAt */}
         <SectionSlot data={data} />
 
-        {/* 9. Enquiry form → webhook + calendar redirect */}
+        {/* 10. Enquiry form → Web3Forms + calendar redirect */}
         <SectionEnquiryForm data={data} />
 
-        {/* 10. Final CTA */}
+        {/* 11. Final CTA */}
         <SectionCTA data={data} />
       </main>
     </>

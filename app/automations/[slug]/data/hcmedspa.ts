@@ -47,7 +47,7 @@ const hcmedspa: ProspectData = {
     "Hi Maks, I saw the personalized Amira demo for HC MedSpa and I'm interested in the free audit.",
   formWebhookUrl: "", // TODO: paste n8n / make.com webhook URL here
 
-  slotExpiryISO: "2026-05-28",
+  slotExpiryISO: "2026-05-29",
 
   formPrefill: {
     name: "Saad",

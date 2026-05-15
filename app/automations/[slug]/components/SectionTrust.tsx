@@ -18,12 +18,13 @@ function ClockIcon() {
   );
 }
 
-function RocketIcon() {
+function PlugIcon() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M12 2C12 2 7 6 7 12v3l-2 2v2h10v-2l-2-2v-3c0-6-3-10-3-10z" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinejoin="round" />
-      <path d="M9 19c0 1.66 1.34 3 3 3s3-1.34 3-3" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" />
-      <path d="M5 12H4M20 12h-1M12 4V3" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M7 7H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h3" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17 7h3a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-3" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="7" y="3" width="10" height="18" rx="2" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" />
+      <path d="M10 8v2M14 8v2" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -41,9 +42,9 @@ export default function SectionTrust({ data }: { data: ProspectData }) {
       body: "Instant replies on WhatsApp and your website — after hours, weekends, bank holidays. No missed enquiry, ever.",
     },
     {
-      icon: <RocketIcon />,
-      title: "Lightning Fast Setup",
-      body: `Fully customised and live in 48 hours. No complex integrations. One line of code on ${data.businessDomain}.`,
+      icon: <PlugIcon />,
+      title: "Plugs Into Your Stack",
+      body: `Bookings forward to your existing system. No Phorest rebuild, no IT project. Live on ${data.businessDomain} in 48 hours.`,
     },
   ];
 
@@ -68,7 +69,7 @@ export default function SectionTrust({ data }: { data: ProspectData }) {
             letterSpacing: "-0.022em",
           }}
         >
-          Why Clinics Choose Amira
+          Built Specifically for {data.businessName}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">

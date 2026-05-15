@@ -55,7 +55,19 @@
       "mcp__Claude_in_Chrome__computer",
       "Bash(find /mnt/d -name \"SectionHero.tsx\" 2>/dev/null | head -5)",
       "Bash(cd /d \"D:\\\\Claude Code\\\\maksnedbailo-site\")",
-      "Bash(dir /b /s app\\\\automations)"
+      "Bash(dir /b /s app\\\\automations)",
+      "Bash(node -e \"require\\('playwright'\\)\")",
+      "Bash(npx playwright *)",
+      "Bash(python -c \"from PIL import Image; print\\('Pillow OK'\\)\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('Pillow OK'\\)\")",
+      "PowerShell($dl = \"$env:USERPROFILE\\\\Downloads\"; Get-ChildItem $dl | Sort-Object LastWriteTime -Descending | Select-Object -First 10 | Format-Table Name, LastWriteTime)",
+      "Bash(curl -s -X POST http://127.0.0.1:7788/test.txt -H \"Content-Type: text/plain\" -d \"hello\")",
+      "Bash(curl -s http://127.0.0.1:7788/ping -X POST -d \"test\")",
+      "Read(//tmp/**)",
+      "Bash(npm init *)",
+      "Bash(node shot.mjs)",
+      "Bash(sed -i \"s|querySelector\\('.connecto-input input, .connecto-input textarea, .connecto-footer input, .connecto-footer textarea'\\)|querySelector\\('.connecto-input'\\)|g\" shot.mjs)",
+      "Bash(sed -i \"s|querySelector\\('.connecto-send-btn,.connecto-send,button\\\\[class\\\\*=\\\\\"send\\\\\"\\\\]'\\)|querySelector\\('.connecto-send'\\)|g\" shot.mjs)"
     ]
   }
 }
