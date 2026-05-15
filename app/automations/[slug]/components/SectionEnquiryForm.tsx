@@ -9,9 +9,7 @@ declare global {
   }
 }
 
-// Placeholder — Maks: generate free key at web3forms.com (2 min)
-const WEB3FORMS_ACCESS_KEY =
-  process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? "REPLACE_WITH_WEB3FORMS_ACCESS_KEY";
+const WEB3FORMS_ACCESS_KEY = "88b99ec9-8882-4a4b-937c-a474d6cb7af2";
 
 const CHANNELS = ["WhatsApp", "Website", "Instagram", "Phone"] as const;
 type Channel = (typeof CHANNELS)[number];
