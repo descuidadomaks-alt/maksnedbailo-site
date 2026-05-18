@@ -83,8 +83,19 @@ const drpaul: ProspectData = {
     locations: "4",
   },
 
-  // TODO: set widgetKey once Aoife agent is created in Connecto dashboard
-  connectoWidget: null,
+  connectoWidget: {
+    src: "https://app.theconnecto.ai/widget.js",
+    widgetKey: "a95e6cbd87c56d36c9b6554c5c2d439e",
+    // HTTP calls go through the Vercel proxy (avoids CORS); the inline WS patcher
+    // in page.tsx rewrites wss://[proxy] → wss://api.theconnecto.ai/api/v1 so
+    // WebSocket connections bypass the proxy (Vercel drops WS upgrade requests).
+    apiUrl: "https://www.maksnedbailo.site/api/connecto",
+    title: "Aoife | Dr. Paul Aesthetics",
+    subtitle: "Trained on your clinic. Replies in 9s.",
+    colour: "#022540",
+    position: "right",
+    language: "en",  // "ua" in Connecto dashboard default → corrected to English
+  },
 };
 
 export default drpaul;
