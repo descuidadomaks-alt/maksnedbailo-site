@@ -91,7 +91,7 @@ const drpaul: ProspectData = {
     // WebSocket connections bypass the proxy (Vercel drops WS upgrade requests).
     apiUrl: "https://www.maksnedbailo.site/api/connecto",
     title: "Aoife | Dr. Paul Aesthetics",
-    subtitle: "Trained on your clinic. Replies in 9s.",
+    subtitle: "Aesthetic guidance & booking",
     colour: "#022540",
     position: "right",
     language: "en",  // "ua" in Connecto dashboard default → corrected to English
