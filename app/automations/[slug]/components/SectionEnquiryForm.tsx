@@ -39,6 +39,8 @@ function Spinner() {
 
 export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
   const p = data.formPrefill ?? {};
+  // Derive currency symbol from the setup price (e.g. "€1,747" → "€", "£1,497" → "£")
+  const currencySymbol = data.offerSetupPrice?.[0] ?? "£";
 
   const [form, setForm] = useState({
     name: p.name ?? "",
@@ -245,7 +247,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             <input
               value={form.monthlyLeakGuess}
               onChange={(e) => set("monthlyLeakGuess", e.target.value)}
-              placeholder="e.g. £500–£2,000"
+              placeholder={`e.g. ${currencySymbol}500–${currencySymbol}2,000`}
               className={inputClass}
               style={{ height: "52px", fontSize: "14px" }}
             />

@@ -1,24 +1,24 @@
 import type { ProspectData } from "../data";
 
-const STEPS = [
-  {
-    num: "01",
-    title: "Deep Research",
-    body: "We analyse your public website, treatments, pricing, tone of voice, and competitor responses.",
-  },
-  {
-    num: "02",
-    title: "Custom Training",
-    body: "Amira learns your exact tone and style while following strict clinical safety guardrails — she hands off all medical questions to your team.",
-  },
-  {
-    num: "03",
-    title: "Deploy & Optimise",
-    body: "Fully live on WhatsApp + website within 48 hours, with ongoing weekly optimisation based on real conversation data.",
-  },
-] as const;
-
 export default function SectionHowItWorks({ data }: { data: ProspectData }) {
+  const STEPS = [
+    {
+      num: "01",
+      title: "Deep Research",
+      body: "We analyse your public website, treatments, pricing, tone of voice, and competitor responses.",
+    },
+    {
+      num: "02",
+      title: "Custom Training",
+      body: `${data.agentName} learns your exact tone and style while following strict clinical safety guardrails — she hands off all medical questions to your team.`,
+    },
+    {
+      num: "03",
+      title: "Deploy & Optimise",
+      body: "Fully live on WhatsApp + website within 48 hours, with ongoing weekly optimisation based on real conversation data.",
+    },
+  ];
+
   return (
     <section className="section-divider py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6">
