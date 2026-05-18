@@ -29,24 +29,37 @@ function PlugIcon() {
   );
 }
 
+function MapIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" strokeLinejoin="round" />
+      <circle cx="12" cy="9" r="2.5" stroke="rgba(212,255,43,0.6)" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+const ICONS = [<SafetyIcon key="safety" />, <ClockIcon key="clock" />, <PlugIcon key="plug" />];
+const ICONS_CUSTOM = [<SafetyIcon key="safety" />, <ClockIcon key="clock" />, <MapIcon key="map" />];
+
 export default function SectionTrust({ data }: { data: ProspectData }) {
-  const POINTS = [
+  const defaultPoints = [
     {
-      icon: <SafetyIcon />,
       title: "Clinical Safety First",
       body: `${data.agentName} never gives medical advice and always hands off to your team on clinical topics. Hard guardrails. No exceptions.`,
     },
     {
-      icon: <ClockIcon />,
       title: "24/7 Availability",
       body: "Instant replies on WhatsApp and your website — after hours, weekends, bank holidays. No missed enquiry, ever.",
     },
     {
-      icon: <PlugIcon />,
       title: "Plugs Into Your Stack",
       body: `Bookings forward to your existing system. No Phorest rebuild, no IT project. Live on ${data.businessDomain} in 48 hours.`,
     },
   ];
+
+  const rawPoints = data.trustPoints ?? defaultPoints;
+  const icons = data.trustPoints ? ICONS_CUSTOM : ICONS;
+  const POINTS = rawPoints.map((pt, i) => ({ icon: icons[i], ...pt }));
 
   return (
     <section className="section-divider py-20 md:py-28">

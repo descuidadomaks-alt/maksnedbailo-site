@@ -1,4 +1,5 @@
 import hcmedspa from "./hcmedspa";
+import drpaul from "./drpaul";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -40,6 +41,16 @@ export type ProspectMetrics = {
   benchmarkUrl?: string;
 };
 
+export type TrustPoint = {
+  title: string;
+  body: string;
+};
+
+export type ValueStackItem = {
+  label: string;
+  value: string;
+};
+
 export type ProspectData = {
   slug: string;
   /**
@@ -54,6 +65,12 @@ export type ProspectData = {
   ownerFirstName: string;
   businessName: string;
   businessDomain: string;
+  /**
+   * Optional short display name for the hero H1 greeting.
+   * Defaults to businessName when omitted.
+   * e.g. "Dr. Paul" when businessName is "Dr. Paul Coughlan"
+   */
+  heroDisplayName?: string;
 
   // ── Agent ─────────────────────────────────────────────────────────────────
   agentName: string;
@@ -92,6 +109,21 @@ export type ProspectData = {
   /** Pre-filled WhatsApp message body (URL-encoded by the component). */
   ctaWhatsappMessage?: string;
 
+  /**
+   * Override the 3 trust-card points.
+   * Defaults to Clinical Safety / 24/7 Availability / Plugs Into Your Stack.
+   */
+  trustPoints?: [TrustPoint, TrustPoint, TrustPoint];
+
+  /**
+   * Override the value-stack line items and total label.
+   * Defaults to the GBP hcmedspa values.
+   */
+  valueStack?: {
+    items: ValueStackItem[];
+    totalLabel: string;
+  };
+
   // ── Connecto widget ───────────────────────────────────────────────────────
   connectoWidget: ConnectoWidgetConfig | null;
 };
@@ -119,6 +151,7 @@ export function formatExpiry(date: Date): string {
 
 const REGISTRY: Record<string, ProspectData> = {
   hcmedspa,
+  drpaul,
 };
 
 export function getProspect(slug: string): ProspectData | null {

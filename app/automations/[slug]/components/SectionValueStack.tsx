@@ -1,15 +1,19 @@
 import type { ProspectData } from "../data";
 
-const STACK = [
+const DEFAULT_STACK = [
   { label: "Lead Leak Audit",                value: "£497"   },
   { label: "Done-For-You Setup (48hr)",       value: "£1,497" },
   { label: "Monthly Optimisation × 12",       value: "£4,764" },
   { label: "Competitor Response Comparison",  value: "£197"   },
   { label: "Medical Safety Guardrails",       value: "£297"   },
   { label: "Staff Handover Script",           value: "£97"    },
-] as const;
+];
+
+const DEFAULT_TOTAL = "~£12,000+";
 
 export default function SectionValueStack({ data }: { data: ProspectData }) {
+  const stack = data.valueStack?.items ?? DEFAULT_STACK;
+  const totalLabel = data.valueStack?.totalLabel ?? DEFAULT_TOTAL;
   return (
     <section className="section-divider py-20 md:py-28">
       <div className="max-w-3xl mx-auto px-6">
@@ -40,7 +44,7 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
           className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015] mb-6"
           style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.3)" }}
         >
-          {STACK.map((item, i) => (
+          {stack.map((item, i) => (
             <div
               key={i}
               className="flex items-center justify-between px-7 py-4 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.025] transition-colors duration-200"
@@ -72,7 +76,7 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
               className="font-playfair text-fg/30 line-through"
               style={{ fontSize: "clamp(18px, 2.2vw, 24px)", letterSpacing: "-0.02em" }}
             >
-              ~£12,000+
+              {totalLabel}
             </span>
           </div>
 
