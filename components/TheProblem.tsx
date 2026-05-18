@@ -9,22 +9,33 @@ import { fadeUpVariants } from "@/lib/animations";
 function useCountUp(target: number, duration: number, active: boolean) {
   const [value, setValue] = useState(0);
 
+  // Fallback: if IntersectionObserver never fires (Google Translate rewrites DOM,
+  // element already in viewport on mount, reduced-motion, etc.) show the final
+  // value after duration + a small buffer so the page never shows "0".
+  useEffect(() => {
+    const fallback = setTimeout(() => setValue(target), duration + 400);
+    return () => clearTimeout(fallback);
+  }, [target, duration]);
+
   useEffect(() => {
     if (!active) return;
-    const startTime = performance.now();
 
     function easeOutCubic(t: number) {
       return 1 - Math.pow(1 - t, 3);
     }
 
+    const startTime = performance.now();
+    let rafId: number;
+
     function tick(now: number) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
       setValue(Math.round(easeOutCubic(progress) * target));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) rafId = requestAnimationFrame(tick);
     }
 
-    requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
   }, [active, target, duration]);
 
   return value;
@@ -53,7 +64,7 @@ function StatCard({
 export default function TheProblem() {
   const { lang } = useLang();
   const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-20px" });
   const shouldReduce = useReducedMotion();
   const fadeUp = fadeUpVariants(shouldReduce ?? false);
 
