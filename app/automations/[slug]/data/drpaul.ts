@@ -65,8 +65,8 @@ const drpaul: ProspectData = {
     },
   ],
 
-  offerSetupPrice: "€1,747",
-  offerMonthlyPrice: "€457/mo",
+  offerSetupPrice: "€497",
+  offerMonthlyPrice: "€197/mo",
 
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",

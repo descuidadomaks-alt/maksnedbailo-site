@@ -130,7 +130,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           className="font-sora font-light text-fg/45 leading-relaxed mb-12"
           style={{ fontSize: "15px" }}
         >
-          30 minutes. I map exactly where leads disappear — before you spend a pound.
+          30 minutes. I map exactly where leads disappear — before you spend {currencySymbol === "€" ? "a cent" : "a pound"}.
         </p>
 
         <form data-reveal="d1" onSubmit={handleSubmit} className="flex flex-col gap-5">

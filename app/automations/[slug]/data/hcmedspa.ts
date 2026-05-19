@@ -38,8 +38,8 @@ const hcmedspa: ProspectData = {
     },
   ],
 
-  offerSetupPrice: "£1,497",
-  offerMonthlyPrice: "£397/mo",
+  offerSetupPrice: "£497",
+  offerMonthlyPrice: "£197/mo",
 
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",
