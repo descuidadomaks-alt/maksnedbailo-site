@@ -14,10 +14,10 @@ const hcmedspa: ProspectData = {
   metrics: {
     responseTimeUs: "9 seconds",
     responseTimeThem: "19+ hours",
-    monthlyLeak: "£2,700",
-    yearlyLeak: "£100,000",
+    monthlyLeak: "€2,700",
+    yearlyLeak: "€100,000",
     locationCount: 4,
-    avgTreatmentValue: "£150",
+    avgTreatmentValue: "€150",
     afterHoursGap: "30%",
     benchmarkSource: "UK MedSpa industry benchmarks",
     // benchmarkUrl: "https://...",  // add source URL when verified
@@ -38,8 +38,8 @@ const hcmedspa: ProspectData = {
     },
   ],
 
-  offerSetupPrice: "£497",
-  offerMonthlyPrice: "£197/mo",
+  offerSetupPrice: "€497",
+  offerMonthlyPrice: "€197/mo",
 
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",

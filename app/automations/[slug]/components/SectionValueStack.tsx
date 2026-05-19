@@ -1,11 +1,19 @@
 import type { ProspectData } from "../data";
 
-const DEFAULT_TOTAL = "~£12,000+";
+const DEFAULT_STACK = [
+  { label: "Lead Leak Audit",               value: "€547"   },
+  { label: "Done-For-You Setup (48hr)",      value: "€1,747" },
+  { label: "Monthly Optimisation × 12",      value: "€5,484" },
+  { label: "Competitor Response Comparison", value: "€227"   },
+  { label: "Medical Safety Guardrails",      value: "€347"   },
+  { label: "Staff Handover Script",          value: "€107"   },
+];
+
+const DEFAULT_TOTAL = "~€14,000+";
 
 export default function SectionValueStack({ data }: { data: ProspectData }) {
+  const stack = data.valueStack?.items ?? DEFAULT_STACK;
   const totalLabel = data.valueStack?.totalLabel ?? DEFAULT_TOTAL;
-  // Strip leading "~" for the anchor line: "~£12,000+" → "£12,000+/yr"
-  const anchorPrice = totalLabel.replace(/^~/, "");
 
   return (
     <section className="section-divider py-20 md:py-28">
@@ -21,98 +29,122 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
 
         {/* H2 */}
         <h2
-          data-reveal
-          className="font-playfair font-normal text-fg mb-4"
+          className="font-playfair font-normal text-fg mb-12"
           style={{
             fontSize: "clamp(24px, 3.4vw, 48px)",
             lineHeight: 1.1,
             letterSpacing: "-0.022em",
           }}
         >
-          Founding Clinic Offer
+          What You Get
         </h2>
 
-        {/* Subheading */}
-        <p
-          data-reveal
-          className="font-sora font-light text-fg/45 leading-relaxed mb-10"
-          style={{ fontSize: "15px" }}
-        >
-          5 spots — in exchange for a testimonial once you see results.
-        </p>
-
-        {/* Pricing card */}
+        {/* Value stack table */}
         <div
           data-reveal
-          className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015] mb-6"
+          className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015] mb-3"
           style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.3)" }}
         >
-          {/* Anchor / strikethrough */}
-          <div className="flex items-center justify-between px-7 py-5 border-b border-white/[0.06]">
+          {stack.map((item, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between px-7 py-4 border-b border-white/[0.04] last:border-0 hover:bg-white/[0.025] transition-colors duration-200"
+            >
+              <span
+                className="font-sora font-light text-fg/60"
+                style={{ fontSize: "14px" }}
+              >
+                {item.label}
+              </span>
+              <span
+                className="font-sora text-fg/35 tabular-nums"
+                style={{ fontSize: "14px" }}
+              >
+                {item.value}
+              </span>
+            </div>
+          ))}
+
+          {/* Total row — muted + strikethrough */}
+          <div className="flex items-center justify-between px-7 py-5 bg-white/[0.03] border-t border-white/[0.08]">
             <span
-              className="font-sora text-fg/30"
+              className="font-sora text-fg/25"
               style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}
             >
-              Normally
+              Total Year-1 Value
             </span>
             <span
               className="font-playfair text-fg/30 line-through"
               style={{ fontSize: "clamp(18px, 2.2vw, 24px)", letterSpacing: "-0.02em" }}
             >
-              {anchorPrice}/yr
+              {totalLabel}/yr
             </span>
           </div>
+        </div>
 
-          {/* Activation price */}
-          <div className="flex items-center justify-between px-7 py-5 border-b border-white/[0.06]">
+        {/* Founding Clinic Offer — visually connected directly below the stack */}
+        <div
+          data-reveal="d1"
+          className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015] mb-6"
+          style={{ boxShadow: "0 8px 48px rgba(0,0,0,0.3)" }}
+        >
+          {/* Offer label + subheading */}
+          <div className="px-7 pt-6 pb-5 border-b border-white/[0.06]">
+            <p
+              className="font-sora text-fg/30 mb-2"
+              style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
+            >
+              Founding Clinic Offer
+            </p>
+            <p className="font-sora font-light text-fg/45" style={{ fontSize: "14px" }}>
+              5 spots — in exchange for a testimonial once you see results.
+            </p>
+          </div>
+
+          {/* Activation row */}
+          <div className="flex items-center justify-between px-7 py-5 border-b border-white/[0.04]">
             <div>
-              <p
-                className="font-sora text-fg/40 mb-1"
-                style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}
-              >
+              <p className="font-sora text-fg/55 mb-0.5" style={{ fontSize: "13px" }}>
                 Activation
               </p>
-              <p className="font-sora font-light text-fg/35" style={{ fontSize: "12px" }}>
+              <p className="font-sora font-light text-fg/30" style={{ fontSize: "11px" }}>
                 Done-for-you setup, 48 hrs
               </p>
             </div>
             <span
               className="font-playfair font-bold text-fg"
-              style={{ fontSize: "clamp(22px, 2.5vw, 30px)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 2.4vw, 28px)", letterSpacing: "-0.02em" }}
             >
               {data.offerSetupPrice}
             </span>
           </div>
 
-          {/* Monthly price — accent row */}
+          {/* Monthly row — accent highlight */}
           <div
             className="flex items-center justify-between px-7 py-6"
             style={{ background: "rgba(212,255,43,0.09)", borderTop: "1px solid rgba(212,255,43,0.22)" }}
           >
             <div>
-              <p
-                className="font-sora font-semibold text-accent"
-                style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}
-              >
+              <p className="font-sora font-semibold text-accent mb-0.5" style={{ fontSize: "13px" }}>
                 Monthly
               </p>
-              <p className="font-sora font-light text-fg/40" style={{ fontSize: "12px" }}>
+              <p className="font-sora font-light text-fg/40" style={{ fontSize: "11px" }}>
                 Ongoing optimisation &amp; training
               </p>
             </div>
             <span
               className="font-playfair font-bold text-accent"
-              style={{ fontSize: "clamp(22px, 2.5vw, 30px)", letterSpacing: "-0.02em" }}
+              style={{ fontSize: "clamp(20px, 2.4vw, 28px)", letterSpacing: "-0.02em" }}
             >
               {data.offerMonthlyPrice}
             </span>
           </div>
         </div>
 
-        {/* Guarantee box — more prominent with accent border + tint */}
+        {/* Guarantee block — prominent with accent border + tint */}
         <div
-          data-reveal="d1"
-          className="rounded-2xl border p-7 mb-6"
+          data-reveal="d2"
+          className="rounded-2xl border p-7 mb-5"
           style={{
             borderColor: "rgba(212,255,43,0.30)",
             background: "rgba(212,255,43,0.06)",
@@ -155,25 +187,12 @@ export default function SectionValueStack({ data }: { data: ProspectData }) {
 
         {/* Small note */}
         <p
-          data-reveal="d2"
-          className="font-sora font-light text-fg/30 text-center mb-8 leading-relaxed"
+          data-reveal="d3"
+          className="font-sora font-light text-fg/30 text-center leading-relaxed"
           style={{ fontSize: "12px" }}
         >
-          Just like a new hire — we take the performance risk, not you.
+          Just like a new hire, {data.agentName} gets sharper every week. The difference: she works 24/7 from day one.
         </p>
-
-        {/* CTA button */}
-        <div data-reveal="d3">
-          <a
-            href={data.ctaCalendarUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full bg-accent text-bg font-semibold rounded-xl text-center transition-all duration-300 hover:scale-[1.015] hover:shadow-[0_0_56px_rgba(212,255,43,0.25)] active:scale-[0.99]"
-            style={{ fontSize: "15px", padding: "20px", letterSpacing: "-0.01em" }}
-          >
-            Book Free 30-Min Setup Call →
-          </a>
-        </div>
 
       </div>
     </section>
