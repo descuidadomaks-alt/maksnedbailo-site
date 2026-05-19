@@ -6,7 +6,7 @@ export const BOOKING_LINK = "https://zcal.co/carelessmaks/free-audit";
 
 export const content = {
   nav: {
-    cta: { en: "Free Audit", es: "Auditoría Gratis" },
+    cta: { en: "Book a Call", es: "Auditoría Gratis" },
     ctaLink: BOOKING_LINK,
     blog: { en: "Blog", es: "Blog" },
   },

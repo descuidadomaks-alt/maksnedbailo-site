@@ -116,6 +116,12 @@ export type ProspectData = {
   trustPoints?: [TrustPoint, TrustPoint, TrustPoint];
 
   /**
+   * Custom subtext shown under "She's good. But only you can make her perfect."
+   * in the enquiry-form section. Defaults to a generic fallback using agentName.
+   */
+  enquirySubtext?: string;
+
+  /**
    * Override the value-stack line items and total label.
    * Defaults to the GBP hcmedspa values.
    */

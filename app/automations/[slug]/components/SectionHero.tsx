@@ -119,7 +119,7 @@ export default function SectionHero({ data }: { data: ProspectData }) {
               window.plausible?.("cta_booked", { props: { slug: data.slug, location: "hero" } })
             }
           >
-            Book Free 30-Min Setup Call
+            Book 15-Min Setup Call
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">
               →
             </span>

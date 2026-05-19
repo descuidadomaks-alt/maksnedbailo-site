@@ -76,6 +76,9 @@ const drpaul: ProspectData = {
 
   slotExpiryISO: "2026-06-01",
 
+  enquirySubtext:
+    "I built Aoife in 48 hours using only public info. She already knows your treatments, clinics, and schedule — but she's not you yet. Tell me what she got wrong.",
+
   formPrefill: {
     name: "Paul",
     business: "Dr. Paul Coughlan",

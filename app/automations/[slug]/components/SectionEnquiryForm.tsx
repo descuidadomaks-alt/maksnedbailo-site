@@ -17,6 +17,9 @@ type Channel = (typeof CHANNELS)[number];
 const inputClass =
   "bg-white/[0.05] border border-white/[0.09] rounded-xl px-4 font-sora text-fg placeholder:text-fg/22 focus:outline-none focus:border-accent/40 focus:bg-white/[0.08] transition-all duration-200";
 
+const textareaClass =
+  "bg-white/[0.05] border border-white/[0.09] rounded-xl px-4 py-3.5 font-sora text-fg placeholder:text-fg/22 focus:outline-none focus:border-accent/40 focus:bg-white/[0.08] transition-all duration-200 resize-none leading-relaxed";
+
 function FieldLabel({ children }: { children: string }) {
   return (
     <span
@@ -39,7 +42,7 @@ function Spinner() {
 
 export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
   const p = data.formPrefill ?? {};
-  // Derive currency symbol from the setup price (e.g. "€1,747" → "€", "£1,497" → "£")
+  // Derive currency symbol from the setup price (e.g. "€497" → "€", "£497" → "£")
   const currencySymbol = data.offerSetupPrice?.[0] ?? "£";
 
   const [form, setForm] = useState({
@@ -48,7 +51,8 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     website: p.website ?? "",
     locations: p.locations ?? "",
     email: "",
-    responseTime: "",
+    gotWrong: "",
+    wouldStump: "",
     channel: "" as Channel | "",
     monthlyLeakGuess: "",
   });
@@ -103,6 +107,10 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
     }
   }
 
+  const subtext =
+    data.enquirySubtext ??
+    `I built ${data.agentName} in 48 hours using only public info. She already knows your key details — but she's not you yet. Tell me what she got wrong.`;
+
   return (
     <section className="section-divider py-20 md:py-28" id="get-audit">
       <div className="max-w-2xl mx-auto px-6">
@@ -111,7 +119,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
           className="font-sora text-fg/30 mb-5"
           style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
         >
-          Free Audit
+          Your Turn
         </p>
 
         <h2
@@ -123,14 +131,14 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             letterSpacing: "-0.022em",
           }}
         >
-          See Your Numbers
+          She&apos;s good. But only you can make her perfect.
         </h2>
         <p
           data-reveal
           className="font-sora font-light text-fg/45 leading-relaxed mb-12"
           style={{ fontSize: "15px" }}
         >
-          30 minutes. I map exactly where leads disappear — before you spend {currencySymbol === "€" ? "a cent" : "a pound"}.
+          {subtext}
         </p>
 
         <form data-reveal="d1" onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -185,7 +193,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             </label>
           </div>
 
-          {/* Email — new, after locations, pre-filled from ?email= param */}
+          {/* Email */}
           <label className="flex flex-col gap-2">
             <FieldLabel>Email *</FieldLabel>
             <input
@@ -199,15 +207,29 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             />
           </label>
 
-          {/* Response time */}
+          {/* What did she get wrong */}
           <label className="flex flex-col gap-2">
-            <FieldLabel>Current response time (rough)</FieldLabel>
-            <input
-              value={form.responseTime}
-              onChange={(e) => set("responseTime", e.target.value)}
-              placeholder="e.g. within a few hours, next day, we miss some..."
-              className={inputClass}
-              style={{ height: "52px", fontSize: "14px" }}
+            <FieldLabel>What did she get wrong?</FieldLabel>
+            <textarea
+              rows={3}
+              value={form.gotWrong}
+              onChange={(e) => set("gotWrong", e.target.value)}
+              placeholder="Wrong price, missing treatment, outdated hours — anything you spotted"
+              className={textareaClass}
+              style={{ fontSize: "14px" }}
+            />
+          </label>
+
+          {/* What question would stump her */}
+          <label className="flex flex-col gap-2">
+            <FieldLabel>What question would stump her?</FieldLabel>
+            <textarea
+              rows={3}
+              value={form.wouldStump}
+              onChange={(e) => set("wouldStump", e.target.value)}
+              placeholder="The one thing only your team would know"
+              className={textareaClass}
+              style={{ fontSize: "14px" }}
             />
           </label>
 
@@ -272,12 +294,12 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 Sending…
               </>
             ) : (
-              "Get My Free 30-Min Setup Call →"
+              "Send & Book 15-Min Call →"
             )}
           </button>
 
           <p className="font-sora text-fg/22 text-center" style={{ fontSize: "11px" }}>
-            You&apos;ll be redirected to book your call immediately after.
+            I&apos;ll fix what you flagged before our call. You&apos;ll see the updated version live.
           </p>
         </form>
       </div>

@@ -49,6 +49,9 @@ const hcmedspa: ProspectData = {
 
   slotExpiryISO: "2026-05-29",
 
+  enquirySubtext:
+    "I built Amira in 48 hours using only public info. She already knows your treatments, locations, and safety protocols — but she's not you yet. Tell me what she got wrong.",
+
   formPrefill: {
     name: "Saad/Rabbia",
     business: "HC MedSpa",
