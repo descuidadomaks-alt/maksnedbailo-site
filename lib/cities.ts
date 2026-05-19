@@ -183,7 +183,7 @@ const CITIES: Record<string, CityData> = {
         "Asistente de IA para pymes de Madrid. Responde a cada cliente en menos de 60 segundos en WhatsApp y tu web. Auditoría gratuita. Sin contratos. 30 días de garantía.",
     },
     metaEn: {
-      title: "AI conversations for Madrid businesses | Maks Nedbailo | careless",
+      title: "AI conversations for Madrid businesses | Maks Nedbailo | care less AI automation",
       description:
         "AI assistant for Madrid businesses. Replies to every client in under 60 seconds on WhatsApp and your website. Free audit. No contracts. 30-day guarantee.",
     },

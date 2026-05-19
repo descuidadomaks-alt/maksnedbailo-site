@@ -23,7 +23,7 @@ const sora = Sora({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
-  title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
+  title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
   description:
     "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
   keywords: [
@@ -42,24 +42,24 @@ export const metadata: Metadata = {
     "asistente IA WhatsApp",
     "automatización atención cliente España",
     "Maks Nedbailo",
-    "careless AI",
+    "care less AI automation",
   ],
   authors: [{ name: "Maks Nedbailo", url: "https://maksnedbailo.site" }],
   alternates: {
     canonical: "https://maksnedbailo.site",
   },
   openGraph: {
-    title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
     description:
       "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
     type: "website",
     url: "https://maksnedbailo.site",
-    siteName: "careless",
+    siteName: "care less AI automation",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Chatbot & WhatsApp Automation for Small Business | careless",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
     description:
       "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
   },
@@ -101,7 +101,7 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": "https://maksnedbailo.site/#business",
-      name: "careless",
+      name: "care less AI automation",
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:

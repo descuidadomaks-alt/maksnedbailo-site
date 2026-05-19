@@ -87,11 +87,11 @@ export default async function ArticlePage({
       "@type": "Person",
       name: "Maks Nedbailo",
       url: BASE,
-      worksFor: { "@type": "Organization", name: "careless" },
+      worksFor: { "@type": "Organization", name: "care less AI automation" },
     },
     publisher: {
       "@type": "Organization",
-      name: "careless",
+      name: "care less AI automation",
       url: BASE,
       logo: { "@type": "ImageObject", url: `${BASE}/logo.svg` },
     },

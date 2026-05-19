@@ -86,12 +86,12 @@ export default function Nav() {
         <Link
           href="/"
           className="pointer-events-auto flex items-center"
-          aria-label="careless home"
+          aria-label="care less AI automation home"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/logo.svg"
-            alt="careless"
+            alt="care less AI automation"
             className="w-auto shrink-0"
             style={{ height: "36px" }}
           />
