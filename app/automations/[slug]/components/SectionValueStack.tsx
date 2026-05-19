@@ -9,7 +9,7 @@ const DEFAULT_STACK = [
   { label: "Staff Handover Script",          value: "€107"   },
 ];
 
-const DEFAULT_TOTAL = "~€14,000+";
+const DEFAULT_TOTAL = "~€8,000+";
 
 export default function SectionValueStack({ data }: { data: ProspectData }) {
   const stack = data.valueStack?.items ?? DEFAULT_STACK;

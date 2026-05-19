@@ -47,7 +47,7 @@ const drpaul: ProspectData = {
       { label: "Medical Safety Guardrails",      value: "€347"   },
       { label: "Staff Handover Script",          value: "€107"   },
     ],
-    totalLabel: "~€14,000+",
+    totalLabel: "~€8,000+",
   },
 
   trustPoints: [
