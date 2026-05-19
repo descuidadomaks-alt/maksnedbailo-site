@@ -102,7 +102,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
       });
       window.location.href = `${data.ctaCalendarUrl}?${redirectParams.toString()}`;
     } catch {
-      setError("Something went wrong. Email maks@careless.ai directly.");
+      setError("Something went wrong. Please try again or reach out on WhatsApp.");
       setSubmitting(false);
     }
   }
