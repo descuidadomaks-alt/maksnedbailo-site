@@ -25,15 +25,15 @@ const drpaul: ProspectData = {
 
   proofScreenshots: [
     {
-      src: null,  // TODO: capture Aoife conversation screenshot → /public/automations/drpaul/proof-1.png
+      src: "/automations/drpaul/proof-1.png",
       caption: "The breastfeeding question — clinical safety, not guesswork.",
     },
     {
-      src: null,  // TODO: capture Aoife conversation screenshot → /public/automations/drpaul/proof-2.png
+      src: "/automations/drpaul/proof-2.png",
       caption: "Tuesday in Waterford — schedule awareness, honest handoff.",
     },
     {
-      src: null,  // TODO: capture Aoife conversation screenshot → /public/automations/drpaul/proof-3.png
+      src: "/automations/drpaul/proof-3.png",
       caption: "Profhilo vs polynucleotides — treatment depth, natural vocabulary.",
     },
   ],
