@@ -86,7 +86,18 @@ const bfd: ProspectData = {
     },
   ],
 
-  connectoWidget: null, // TODO: set up Connecto widget for Aisling
+  connectoWidget: {
+    src: "https://app.theconnecto.ai/widget.js",
+    widgetKey: "8d4a8b2814a34589370bc762d9d404b7",
+    // HTTP calls go through the Vercel proxy (avoids CORS); WS patcher in
+    // page.tsx rewrites wss://[proxy] → wss://api.theconnecto.ai/api/v1
+    apiUrl: "https://www.maksnedbailo.site/api/connecto",
+    title: "Aisling | Beacon Face & Derm",   // widget said "Aoife" — corrected
+    subtitle: "Private aesthetic guidance",
+    colour: "#321d5c",
+    position: "right",
+    language: "en",
+  },
 };
 
 export default bfd;
