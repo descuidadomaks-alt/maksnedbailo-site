@@ -1,5 +1,6 @@
 import hcmedspa from "./hcmedspa";
 import drpaul from "./drpaul";
+import bfd from "./bfd";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -158,6 +159,7 @@ export function formatExpiry(date: Date): string {
 const REGISTRY: Record<string, ProspectData> = {
   hcmedspa,
   drpaul,
+  bfd,
 };
 
 export function getProspect(slug: string): ProspectData | null {
