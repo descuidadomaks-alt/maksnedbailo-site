@@ -25,15 +25,15 @@ const cosmeticsuite: ProspectData = {
 
   proofScreenshots: [
     {
-      src: null,
+      src: "/automations/cosmeticsuite/proof-1.png",
       caption: "The breastfeeding question — clinical safety with continuity, not a dead-end handoff.",
     },
     {
-      src: null,
+      src: "/automations/cosmeticsuite/proof-2.png",
       caption: "Profhilo vs polynucleotides — answers like a senior nurse, not a sales bot.",
     },
     {
-      src: null,
+      src: "/automations/cosmeticsuite/proof-3.png",
       caption: "Surgical enquiry — knows when to confidently route to Dr. Paul.",
     },
   ],
