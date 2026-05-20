@@ -25,15 +25,15 @@ const bfd: ProspectData = {
 
   proofScreenshots: [
     {
-      src: null,
+      src: "/automations/bfd/proof-1.png",
       caption: "The rhinoplasty enquiry — routes to Mr. Golchin without trying to be a surgeon.",
     },
     {
-      src: null,
+      src: "/automations/bfd/proof-2.png",
       caption: "AviClear vs Accutane — handles acne nuance like Dr. McVerry would.",
     },
     {
-      src: null,
+      src: "/automations/bfd/proof-3.png",
       caption: "\"Pregnant — can I get Profhilo?\" — safety first, every time.",
     },
   ],
