@@ -1,6 +1,7 @@
 import hcmedspa from "./hcmedspa";
 import drpaul from "./drpaul";
 import bfd from "./bfd";
+import cosmeticsuite from "./cosmeticsuite";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -123,6 +124,16 @@ export type ProspectData = {
   enquirySubtext?: string;
 
   /**
+   * Override the 3 How It Works steps.
+   * Defaults to the generic Deep Research / Custom Training / Deploy & Optimise copy.
+   */
+  howItWorksSteps?: [
+    { num: string; title: string; body: string },
+    { num: string; title: string; body: string },
+    { num: string; title: string; body: string },
+  ];
+
+  /**
    * Override the value-stack line items and total label.
    * Defaults to the GBP hcmedspa values.
    */
@@ -160,6 +171,7 @@ const REGISTRY: Record<string, ProspectData> = {
   hcmedspa,
   drpaul,
   bfd,
+  cosmeticsuite,
 };
 
 export function getProspect(slug: string): ProspectData | null {

@@ -1,7 +1,7 @@
 import type { ProspectData } from "../data";
 
 export default function SectionHowItWorks({ data }: { data: ProspectData }) {
-  const STEPS = [
+  const STEPS = data.howItWorksSteps ?? [
     {
       num: "01",
       title: "Deep Research",
