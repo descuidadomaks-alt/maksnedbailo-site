@@ -10,7 +10,7 @@ const cosmeticsuite: ProspectData = {
   heroDisplayName: "Paul",
   businessDomain: "thecosmeticsuite.ie",
 
-  agentName: "Saoirse",
+  agentName: "Ciara",
 
   metrics: {
     responseTimeUs: "9 seconds",
@@ -53,15 +53,15 @@ const cosmeticsuite: ProspectData = {
   trustPoints: [
     {
       title: "Smart Team Routing",
-      body: "Saoirse routes by treatment type: anti-wrinkle and fillers to your doctors (legally required), advanced skin to Emma and the nursing team, surgical questions directly to Dr. Paul. No misrouted enquiries.",
+      body: "Ciara routes by treatment type: anti-wrinkle and fillers to your doctors (legally required), advanced skin to Emma and the nursing team, surgical questions directly to Dr. Paul. No misrouted enquiries.",
     },
     {
       title: "Handles 80% Without Bailing",
-      body: "Most chatbots dump everything on your team. Saoirse handles pricing, comparisons, schedules, suitability questions, and aftercare basics confidently. Only escalates for safety, medication, surgical, or specific medical questions.",
+      body: "Most chatbots dump everything on your team. Ciara handles pricing, comparisons, schedules, suitability questions, and aftercare basics confidently. Only escalates for safety, medication, surgical, or specific medical questions.",
     },
     {
       title: "Three-Clinic Awareness",
-      body: "Saoirse knows Malahide (Dublin flagship), Tramore (Waterford), and Limerick — books patients at the right clinic with Phorest integration.",
+      body: "Ciara knows Malahide (Dublin flagship), Tramore (Waterford), and Limerick — books patients at the right clinic with Phorest integration.",
     },
   ],
 
@@ -74,7 +74,7 @@ const cosmeticsuite: ProspectData = {
     {
       num: "02",
       title: "Custom Training",
-      body: "Saoirse learns your exact tone, routes by treatment type (anti-wrinkle to doctors, advanced skin to the nurse team, surgical to Dr. Paul), and handles 80%+ of enquiries without bailing to your team.",
+      body: "Ciara learns your exact tone, routes by treatment type (anti-wrinkle to doctors, advanced skin to the nurse team, surgical to Dr. Paul), and handles 80%+ of enquiries without bailing to your team.",
     },
     {
       num: "03",
@@ -89,7 +89,7 @@ const cosmeticsuite: ProspectData = {
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",
   ctaWhatsappMessage:
-    "Hi Maks, I saw the personalised Saoirse demo for The Cosmetic Suite and I'm interested.",
+    "Hi Maks, I saw the personalised Ciara demo for The Cosmetic Suite and I'm interested.",
   formWebhookUrl: "", // TODO: paste n8n / make.com webhook URL here
 
   slotExpiryISO: "2026-06-04",
@@ -102,9 +102,20 @@ const cosmeticsuite: ProspectData = {
   },
 
   enquirySubtext:
-    "I built Saoirse in 48 hours using only public info. She already knows your treatments, three clinics, your team — but she's not your team yet. Tell me what she got wrong.",
+    "I built Ciara in 48 hours using only public info. She already knows your treatments, three clinics, your team — but she's not your team yet. Tell me what she got wrong.",
 
-  connectoWidget: null, // to be configured once widget key is available
+  connectoWidget: {
+    src: "https://app.theconnecto.ai/widget.js",
+    widgetKey: "a7a0f6615376c91ca5a91e224d5043df",
+    // HTTP calls go through the Vercel proxy (avoids CORS); WS patcher in
+    // page.tsx rewrites wss://[proxy] → wss://api.theconnecto.ai/api/v1
+    apiUrl: "https://www.maksnedbailo.site/api/connecto",
+    title: "Ciara | The Cosmetic Suite",
+    subtitle: "Private aesthetic guidance",
+    colour: "#8b644b",
+    position: "right",
+    language: "en",  // "ua" in Connecto dashboard default → corrected to English
+  },
 };
 
 export default cosmeticsuite;
