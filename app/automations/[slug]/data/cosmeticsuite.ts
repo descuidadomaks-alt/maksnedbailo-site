@@ -7,7 +7,7 @@ const cosmeticsuite: ProspectData = {
 
   ownerFirstName: "Paul",
   businessName: "The Cosmetic Suite",
-  heroDisplayName: "Paul",
+  heroDisplayName: "Dr. Paul",
   businessDomain: "thecosmeticsuite.ie",
 
   agentName: "Saoirse",

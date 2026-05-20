@@ -167,6 +167,16 @@ h1.font-playfair, h2.font-playfair {
 [data-reveal="d2"] { --reveal-delay: 160ms; }
 [data-reveal="d3"] { --reveal-delay: 240ms; }
 
+/* ─── Connecto widget — input text colour fix ───────────────────────────────── */
+/* Our body inherits near-white (#F0ECE6) which is invisible on the widget's   */
+/* white background. Override both the name-capture input and the chat textarea. */
+/* Matches the "Welcome! 👋" heading colour (rgb(31,41,55) = Tailwind gray-800).*/
+/* Applied globally — covers all current and future automation pages.           */
+.connecto-welcome-input,
+.connecto-input {
+  color: rgb(31, 41, 55) !important;
+}
+
 /* ─── Blog article prose ────────────────────────────────────────────────────── */
 /* Blog article prose */
 .prose-blog h1,
