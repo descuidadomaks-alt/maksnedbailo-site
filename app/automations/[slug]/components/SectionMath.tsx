@@ -57,20 +57,24 @@ export default function SectionMath({ data }: { data: ProspectData }) {
           </div>
         </div>
 
-        {/* Explanation paragraph */}
+        {/* Explanation paragraph — use override for non-clinic businesses */}
         <p
           className="font-sora font-light text-fg/75 leading-[1.8] mb-6"
           style={{ fontSize: "clamp(14px, 1.5vw, 16px)" }}
           data-reveal
         >
-          Across your{" "}
-          <strong className="text-fg font-medium">{m.locationCount}</strong>{" "}
-          clinic{plural ? "s" : ""}, at an average treatment value of{" "}
-          <strong className="text-fg font-medium">{m.avgTreatmentValue}</strong>{" "}
-          and a conservative{" "}
-          <strong className="text-fg font-medium">{m.afterHoursGap}</strong>{" "}
-          after-hours response gap, {data.businessName} is handing first-mover
-          advantage to whoever answers first.
+          {data.mathParagraphOverride ?? (
+            <>
+              Across your{" "}
+              <strong className="text-fg font-medium">{m.locationCount}</strong>{" "}
+              clinic{plural ? "s" : ""}, at an average treatment value of{" "}
+              <strong className="text-fg font-medium">{m.avgTreatmentValue}</strong>{" "}
+              and a conservative{" "}
+              <strong className="text-fg font-medium">{m.afterHoursGap}</strong>{" "}
+              after-hours response gap, {data.businessName} is handing first-mover
+              advantage to whoever answers first.
+            </>
+          )}
         </p>
 
         {/* ROI callout */}

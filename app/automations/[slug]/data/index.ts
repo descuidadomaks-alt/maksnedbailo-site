@@ -2,6 +2,7 @@ import hcmedspa from "./hcmedspa";
 import drpaul from "./drpaul";
 import bfd from "./bfd";
 import cosmeticsuite from "./cosmeticsuite";
+import ediblehealth from "./ediblehealth";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -142,6 +143,13 @@ export type ProspectData = {
     totalLabel: string;
   };
 
+  /**
+   * Override the auto-generated math explanation paragraph.
+   * Useful for non-clinic businesses (e.g. e-commerce) where "clinic" and
+   * "treatment value" language doesn't fit. Plain string — no JSX.
+   */
+  mathParagraphOverride?: string;
+
   // ── Connecto widget ───────────────────────────────────────────────────────
   connectoWidget: ConnectoWidgetConfig | null;
 };
@@ -172,6 +180,7 @@ const REGISTRY: Record<string, ProspectData> = {
   drpaul,
   bfd,
   cosmeticsuite,
+  ediblehealth,
 };
 
 export function getProspect(slug: string): ProspectData | null {
