@@ -2,7 +2,6 @@ import hcmedspa from "./hcmedspa";
 import drpaul from "./drpaul";
 import bfd from "./bfd";
 import cosmeticsuite from "./cosmeticsuite";
-import ediblehealth from "./ediblehealth";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -180,7 +179,6 @@ const REGISTRY: Record<string, ProspectData> = {
   drpaul,
   bfd,
   cosmeticsuite,
-  ediblehealth,
 };
 
 export function getProspect(slug: string): ProspectData | null {
