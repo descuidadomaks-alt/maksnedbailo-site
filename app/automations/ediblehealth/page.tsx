@@ -8,11 +8,8 @@ export const metadata: Metadata = {
 };
 
 // ─── Config ───────────────────────────────────────────────────────────────────
-// TODO: paste Connecto widget key once the Edible Health agent is live.
-// Checklist: verify data-title matches agent name, language "en",
-// apiUrl through Vercel proxy. See reusable prompt for full checklist.
-const WIDGET_KEY   = "";
-const WIDGET_COLOR = "#7A9E8A";
+const WIDGET_KEY   = "462ee3c2e525aa231104a73336884bf8";
+const WIDGET_COLOR = "#7485b3";
 
 // WhatsApp deep link — Maks's UK number for Edible Health
 const WA =
@@ -45,8 +42,8 @@ export default function EdibleHealthPage() {
           strategy="afterInteractive"
           data-widget-key={WIDGET_KEY}
           data-api-url="https://www.maksnedbailo.site/api/connecto"
-          data-title="Ask Ellie — Edible Health AI"
-          data-subtitle="Built by Maks"
+          data-title="Ellie | Edible Health"
+          data-subtitle="No Nonsense Guide"
           data-colour={WIDGET_COLOR}
           data-position="right"
           data-language="en"
@@ -109,7 +106,7 @@ export default function EdibleHealthPage() {
                 >
                   <span className="text-accent not-italic" style={{ opacity: 0.4 }}>&ldquo;</span>
                   Wow Maks — this is fucking awesome!! &hellip;{" "}
-                  You&apos;re a genius!! Thank you!! 🙏😘
+                  You&apos;re a genius!! Thank you!!
                   <span className="text-accent not-italic" style={{ opacity: 0.4 }}>&rdquo;</span>
                 </blockquote>
 
@@ -140,7 +137,7 @@ export default function EdibleHealthPage() {
                     <br /><br />
                     78% of customers buy from the first business that responds.{" "}
                     <strong className="text-fg font-medium">Ellie</strong> goes live on your website
-                    in 48 hours — Facebook + Instagram added once Meta approves.
+                    + Facebook Messenger + Instagram DMs in 48 hours — once approved.
                     <br /><br />
                     <strong className="text-fg font-medium">
                       Try her live. Widget bottom-right →
@@ -163,7 +160,7 @@ export default function EdibleHealthPage() {
                   style={{
                     background: "#fff",
                     borderRadius: "3px",
-                    padding: "10px 10px 44px",
+                    padding: "10px 10px 20px",
                     boxShadow: "0 8px 48px rgba(0,0,0,0.5), 0 2px 10px rgba(0,0,0,0.3)",
                     position: "relative",
                   }}
@@ -229,7 +226,7 @@ export default function EdibleHealthPage() {
               className="font-sora font-light text-fg/65 mb-12"
               style={{ fontSize: "15px", lineHeight: 1.75, maxWidth: "500px" }}
             >
-              Three quick examples. When you try her live, ask her the same things.
+              When you try her live, ask anything, be brutal, then let me know what she got wrong.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -604,25 +601,47 @@ export default function EdibleHealthPage() {
             </p>
             <h2
               data-reveal
-              className="font-playfair font-normal text-fg mb-4"
+              className="font-playfair font-normal text-fg mb-8"
               style={{ fontSize: "clamp(22px, 3.2vw, 44px)", lineHeight: 1.12, letterSpacing: "-0.022em" }}
             >
               Got a different problem?
+              <br />
+              <em className="text-fg/55">Probably know someone who&apos;s solved one like it.</em>
             </h2>
-            <p
+
+            <div
               data-reveal="d1"
-              className="font-sora font-light text-fg/65 mb-10"
-              style={{ fontSize: "15px", lineHeight: 1.75 }}
+              className="rounded-2xl p-7 md:p-9 mb-10"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                borderLeft: "2px solid rgba(212,255,43,0.45)",
+              }}
             >
-              Ellie is one thing I can build. Here&apos;s a short list of what else I&apos;m doing
-              for brands right now:
+              <p
+                className="font-sora font-light text-fg/75 leading-[1.9]"
+                style={{ fontSize: "clamp(14px, 1.35vw, 16px)" }}
+              >
+                Ellie handles the conversation. For the deeper stuff — I&apos;ve spent the last 2
+                years inside a Ukrainian digital community of operators across marketing, SEO, Amazon,
+                and content. If something here lands and you want to go deeper, we can. If not, no
+                pressure.
+              </p>
+            </div>
+
+            <p
+              data-reveal="d2"
+              className="font-sora font-light text-fg/45 mb-5"
+              style={{ fontSize: "12px", letterSpacing: "0.01em" }}
+            >
+              Things we could talk about, when it makes sense:
             </p>
 
-            <ul data-reveal="d2" className="flex flex-col gap-3">
+            <ul data-reveal="d3" className="flex flex-col gap-3">
               {[
-                "Email sequences that convert — welcome, post-purchase, re-engagement. Written and automated.",
-                "SEO + GEO — getting you found on search and inside AI answers (ChatGPT, Perplexity, etc.).",
-                "Amazon listing optimisation — titles, bullets, A+ content.",
+                "Email sequences — welcome flows from guide downloads, 30-day reorder nudges.",
+                "SEO + GEO — being findable in Google and in ChatGPT, Perplexity, Gemini. GEO (Generative Engine Optimisation) is the new layer: writing content AI engines actually quote back.",
+                "Amazon listing optimisation — for the friction we talked about last time.",
                 "Customer story automation — gather reviews, before-afters, and testimonials without chasing people.",
                 "New customer onboarding — a sequence that turns a first-time buyer into a repeat one.",
               ].map((item, i) => (
