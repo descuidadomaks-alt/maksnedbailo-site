@@ -236,24 +236,21 @@ export default function EdibleHealthPage() {
                   label: "Bovine vs marine",
                   scenario:
                     "Visitor asks where to start. Ellie recommends bovine for skin, hair, and nails — and explains when marine makes more sense.",
-                  placeholder:
-                    "Screenshot coming — ask Ellie: \"where do I start with collagen?\"",
+                  src: "/automations/ediblehealth/proof-1.png",
                 },
                 {
                   num: "02",
                   label: "Menopause",
                   scenario:
-                    "52-year-old asks where to look. Ellie suggests the marine powder and offers the free Menopause guide.",
-                  placeholder:
-                    "Screenshot coming — ask Ellie: \"I'm 52, what should I take?\"",
+                    "52-year-old asks where to look. Ellie suggests marine powder and surfaces the free Menopause guide.",
+                  src: "/automations/ediblehealth/proof-2.png",
                 },
                 {
                   num: "03",
                   label: "The sceptic",
                   scenario:
-                    "Visitor pushes back: \"isn't collagen just a trend?\". Ellie answers honestly with the enzymatic hydrolysis point. Doesn't oversell.",
-                  placeholder:
-                    "Screenshot coming — ask Ellie: \"isn't collagen just a trend?\"",
+                    "Visitor pushes back: \"isn't collagen just a trend?\". Ellie answers with evidence, no oversell.",
+                  src: "/automations/ediblehealth/proof-3.png",
                 },
               ].map((item, i) => (
                 <div
@@ -278,24 +275,27 @@ export default function EdibleHealthPage() {
                     </span>
                   </div>
 
-                  {/* Placeholder area */}
-                  <div
-                    className="flex-1 flex flex-col justify-center items-center px-6 py-10 text-center gap-3"
-                    style={{ minHeight: "220px" }}
-                  >
-                    <span
-                      className="font-playfair font-bold text-accent"
-                      style={{ fontSize: "40px", lineHeight: 1, letterSpacing: "-0.04em", opacity: 0.4 }}
+                  {/* Screenshot or placeholder */}
+                  {item.src ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.src}
+                      alt={item.label}
+                      style={{ display: "block", width: "100%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <div
+                      className="flex-1 flex flex-col justify-center items-center px-6 py-10 text-center gap-3"
+                      style={{ minHeight: "220px" }}
                     >
-                      {item.num}
-                    </span>
-                    <p
-                      className="font-sora italic text-fg/35"
-                      style={{ fontSize: "12px", lineHeight: 1.6 }}
-                    >
-                      {item.placeholder}
-                    </p>
-                  </div>
+                      <span
+                        className="font-playfair font-bold text-accent"
+                        style={{ fontSize: "40px", lineHeight: 1, letterSpacing: "-0.04em", opacity: 0.4 }}
+                      >
+                        {item.num}
+                      </span>
+                    </div>
+                  )}
 
                   {/* Footer */}
                   <div className="px-5 py-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
