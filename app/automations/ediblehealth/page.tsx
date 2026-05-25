@@ -205,111 +205,62 @@ export default function EdibleHealthPage() {
         <section className="section-divider py-14 md:py-20">
           <div className="max-w-5xl mx-auto px-6">
 
-            <p
-              data-reveal
-              className="font-sora uppercase text-fg/40 mb-4"
-              style={{ fontSize: "10px", letterSpacing: "3px" }}
-            >
-              Proof of work
-            </p>
             <h2
               data-reveal
-              className="font-playfair font-normal text-fg mb-3"
-              style={{ fontSize: "clamp(22px, 3.2vw, 44px)", lineHeight: 1.12, letterSpacing: "-0.022em" }}
+              className="font-playfair font-normal text-center text-fg mb-14"
+              style={{ fontSize: "clamp(24px, 3.4vw, 48px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}
             >
-              Not a generic chatbot.
-              <br />
-              <em className="text-fg/55">Here she is talking like Edible Health.</em>
+              Three conversations that show{" "}
+              <em className="not-italic text-accent">Ellie</em>{" "}
+              isn&apos;t a generic chatbot.
             </h2>
-            <p
-              data-reveal="d1"
-              className="font-sora font-light text-fg/65 mb-12"
-              style={{ fontSize: "15px", lineHeight: 1.75, maxWidth: "500px" }}
-            >
-              When you try her live, ask anything, be brutal, then let me know what she got wrong.
-            </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {[
                 {
-                  num: "01",
-                  label: "Bovine vs marine",
-                  scenario:
-                    "Visitor asks where to start. Ellie recommends bovine for skin, hair, and nails — and explains when marine makes more sense.",
                   src: "/automations/ediblehealth/proof-1.png",
+                  caption: "Bovine vs marine — explains the science without reading from a textbook.",
                 },
                 {
-                  num: "02",
-                  label: "Menopause",
-                  scenario:
-                    "52-year-old asks where to look. Ellie suggests marine powder and surfaces the free Menopause guide.",
                   src: "/automations/ediblehealth/proof-2.png",
+                  caption: "\"I'm 52, where do I start?\" — confident, personalised, sounds like the team.",
                 },
                 {
-                  num: "03",
-                  label: "The sceptic",
-                  scenario:
-                    "Visitor pushes back: \"isn't collagen just a trend?\". Ellie answers with evidence, no oversell.",
                   src: "/automations/ediblehealth/proof-3.png",
+                  caption: "The sceptic — fair question, no hard sell, evidence first.",
                 },
-              ].map((item, i) => (
-                <div
-                  key={item.num}
-                  data-reveal={`d${i}`}
-                  className="rounded-2xl overflow-hidden flex flex-col hover:-translate-y-0.5 transition-all duration-300"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-                >
-                  {/* Dark phone/browser bar */}
-                  <div
-                    className="flex items-center gap-1.5 px-4 py-3"
-                    style={{
-                      borderBottom: "1px solid rgba(255,255,255,0.06)",
-                      background: "rgba(255,255,255,0.025)",
-                    }}
-                  >
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
-                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "rgba(255,255,255,0.15)" }} />
-                    <span className="font-sora ml-2 text-fg/40" style={{ fontSize: "11px" }}>
-                      Ask Ellie — Edible Health
-                    </span>
-                  </div>
-
-                  {/* Screenshot or placeholder */}
-                  {item.src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={item.src}
-                      alt={item.label}
-                      style={{ display: "block", width: "100%", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <div
-                      className="flex-1 flex flex-col justify-center items-center px-6 py-10 text-center gap-3"
-                      style={{ minHeight: "220px" }}
-                    >
-                      <span
-                        className="font-playfair font-bold text-accent"
-                        style={{ fontSize: "40px", lineHeight: 1, letterSpacing: "-0.04em", opacity: 0.4 }}
+              ].map((shot, i) => (
+                <figure key={i} data-reveal={`d${i}`} className="flex flex-col gap-4">
+                  <div className="w-full rounded-2xl overflow-hidden border border-white/[0.06] bg-white/[0.018] shadow-[0_8px_48px_rgba(0,0,0,0.45)] hover:border-white/[0.1] hover:shadow-[0_12px_60px_rgba(0,0,0,0.5)] transition-all duration-400">
+                    {shot.src ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={shot.src}
+                        alt={shot.caption}
+                        width={380}
+                        height={520}
+                        style={{ display: "block", width: "100%", height: "auto" }}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className="flex flex-col items-center justify-center gap-4 bg-white/[0.015]"
+                        style={{ aspectRatio: "380 / 520" }}
                       >
-                        {item.num}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Footer */}
-                  <div className="px-5 py-4" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-                    <p className="font-playfair font-normal text-fg mb-1" style={{ fontSize: "15px" }}>
-                      {item.label}
-                    </p>
-                    <p
-                      className="font-sora font-light text-fg/60"
-                      style={{ fontSize: "12px", lineHeight: 1.65 }}
-                    >
-                      {item.scenario}
-                    </p>
+                        <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center" style={{ background: "rgba(212,255,43,0.03)" }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(240,236,230,0.18)" strokeWidth="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="3" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <path d="M21 15l-5-5L5 21" />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </div>
+                  <figcaption className="font-sora text-center text-fg/40 leading-snug px-2" style={{ fontSize: "12px" }}>
+                    {shot.caption}
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </div>
