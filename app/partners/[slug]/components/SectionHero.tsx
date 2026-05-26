@@ -86,11 +86,26 @@ export default function SectionHero({ data }: { data: PartnerData }) {
           style={{
             fontSize: "clamp(14px, 1.3vw, 16px)",
             lineHeight: 1.8,
-            marginBottom: "clamp(36px, 5vw, 52px)",
+            marginBottom: data.hero.scarcity ? "clamp(16px, 2vw, 24px)" : "clamp(36px, 5vw, 52px)",
           }}
         >
           {data.hero.subtext}
         </p>
+
+        {/* Scarcity line */}
+        {data.hero.scarcity && (
+          <p
+            className="font-sora font-light text-fg/35 max-w-[480px] mx-auto"
+            style={{
+              fontSize: "13px",
+              fontStyle: "italic",
+              lineHeight: 1.6,
+              marginBottom: "clamp(28px, 4vw, 44px)",
+            }}
+          >
+            {data.hero.scarcity}
+          </p>
+        )}
 
         {/* Primary CTA */}
         <a

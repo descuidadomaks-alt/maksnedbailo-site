@@ -22,6 +22,8 @@ export type PartnerData = {
     headline: string;
     subheadline: string;
     subtext: string;
+    /** Optional one-liner shown between subtext and CTA — quiet scarcity signal */
+    scarcity?: string;
     cta: string;
   };
 

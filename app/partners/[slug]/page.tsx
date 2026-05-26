@@ -5,16 +5,21 @@ import type { PartnerData } from "@/content/partners/index";
 import PartnerMarquee from "./components/PartnerMarquee";
 import SectionHero from "./components/SectionHero";
 import SectionValueStack from "./components/SectionValueStack";
+import AiMapMockup from "./components/AiMapMockup";
 import SectionPillars from "./components/SectionPillars";
+import SectionIndustryExamples from "./components/SectionIndustryExamples";
 import InlineCTA from "./components/InlineCTA";
 import SectionCost from "./components/SectionCost";
 import SectionFit from "./components/SectionFit";
+import SectionComparison from "./components/SectionComparison";
 import SectionGuarantee from "./components/SectionGuarantee";
 import SectionProcess from "./components/SectionProcess";
 import SectionAbout from "./components/SectionAbout";
 import SectionBorrowedProof from "./components/SectionBorrowedProof";
 import SectionFAQ from "./components/SectionFAQ";
 import SectionFinalCTA from "./components/SectionFinalCTA";
+import SectionLeadMagnet from "./components/SectionLeadMagnet";
+import PartnerAnalytics from "./components/PartnerAnalytics";
 
 // ─── Registry — add new partners here ─────────────────────────────────────────
 const PARTNERS: Record<string, PartnerData> = {
@@ -59,51 +64,68 @@ export default function PartnerPage({ params }: Props) {
   if (!data) notFound();
 
   return (
-    <main className="min-h-screen">
-      {/* 1. Stats marquee (custom per partner) */}
-      <PartnerMarquee data={data} />
+    <>
+      {/* Analytics — scroll depth + time on page (client only) */}
+      <PartnerAnalytics slug={data.slug} />
 
-      {/* 2. Hero */}
-      <SectionHero data={data} />
+      <main className="min-h-screen">
+        {/* 1. Stats marquee */}
+        <PartnerMarquee data={data} />
 
-      {/* 3. The Gift — value stack */}
-      <SectionValueStack data={data} />
+        {/* 2. Hero */}
+        <SectionHero data={data} />
 
-      {/* Inline CTA repeat #1 */}
-      <InlineCTA data={data} location="after_value_stack" />
+        {/* 3. The Gift — value stack */}
+        <SectionValueStack data={data} />
 
-      {/* 4. Three pillars */}
-      <SectionPillars />
+        {/* 3b. AI Map deliverable mockup */}
+        <AiMapMockup />
 
-      {/* 5. Cost of staying put */}
-      <SectionCost />
+        {/* Inline CTA #1 */}
+        <InlineCTA data={data} location="after_value_stack" />
 
-      {/* 6. Who it's for */}
-      <SectionFit />
+        {/* 4. Three pillars */}
+        <SectionPillars />
 
-      {/* Inline CTA repeat #2 */}
-      <InlineCTA data={data} location="after_fit" />
+        {/* 4b. Industry examples — see yourself on the page */}
+        <SectionIndustryExamples />
 
-      {/* 7. Guarantee */}
-      <SectionGuarantee />
+        {/* 5. Cost of staying put */}
+        <SectionCost />
 
-      {/* 8. Process */}
-      <SectionProcess data={data} />
+        {/* 6. Who it's for */}
+        <SectionFit />
 
-      {/* 9. About Maks */}
-      <SectionAbout data={data} />
+        {/* 6b. What you're NOT getting */}
+        <SectionComparison />
 
-      {/* 10. Borrowed proof */}
-      <SectionBorrowedProof />
+        {/* Inline CTA #2 */}
+        <InlineCTA data={data} location="after_fit" />
 
-      {/* Inline CTA repeat #3 */}
-      <InlineCTA data={data} location="after_proof" />
+        {/* 7. Guarantee */}
+        <SectionGuarantee />
 
-      {/* 11. FAQ */}
-      <SectionFAQ data={data} />
+        {/* 8. Process */}
+        <SectionProcess data={data} />
 
-      {/* 12. Final CTA */}
-      <SectionFinalCTA data={data} />
-    </main>
+        {/* 9. About Maks */}
+        <SectionAbout data={data} />
+
+        {/* 10. Borrowed proof */}
+        <SectionBorrowedProof />
+
+        {/* Inline CTA #3 */}
+        <InlineCTA data={data} location="after_proof" />
+
+        {/* 11. FAQ */}
+        <SectionFAQ data={data} />
+
+        {/* 12. Final CTA */}
+        <SectionFinalCTA data={data} />
+
+        {/* 13. Lead magnet fallback */}
+        <SectionLeadMagnet data={data} />
+      </main>
+    </>
   );
 }

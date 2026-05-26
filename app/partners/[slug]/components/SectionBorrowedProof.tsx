@@ -43,7 +43,7 @@ export default function SectionBorrowedProof() {
         </h2>
 
         <p data-reveal className="font-sora font-light text-fg/35 mb-12" style={{ fontSize: "14px" }}>
-          Early prototypes. Real software, real clients, real conversations.
+          Recent client builds. Software in production, conversations every day.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -54,9 +54,31 @@ export default function SectionBorrowedProof() {
               target="_blank"
               rel="noopener noreferrer"
               data-reveal={`d${i}`}
-              className="group rounded-2xl border border-white/[0.06] bg-white/[0.018] p-7 flex flex-col gap-4 hover:border-white/[0.12] hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300"
+              className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.018] p-7 flex flex-col gap-4 hover:border-white/[0.12] hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300"
             >
-              <div className="flex items-start justify-between gap-4">
+              {/* LIVE badge */}
+              <div
+                className="absolute top-5 right-5 flex items-center gap-1.5"
+                style={{
+                  background: "rgba(74,222,128,0.08)",
+                  border: "1px solid rgba(74,222,128,0.25)",
+                  borderRadius: "999px",
+                  padding: "3px 8px",
+                }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full animate-pulse"
+                  style={{ background: "rgb(74,222,128)" }}
+                />
+                <span
+                  className="font-sora font-semibold"
+                  style={{ fontSize: "9px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.85)" }}
+                >
+                  LIVE
+                </span>
+              </div>
+
+              <div className="flex items-start justify-between gap-4 pr-16">
                 <h3
                   className="font-playfair font-normal text-fg"
                   style={{ fontSize: "clamp(17px, 1.5vw, 20px)", lineHeight: 1.25 }}

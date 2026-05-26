@@ -47,7 +47,20 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 export default function SectionFAQ({ data }: { data: PartnerData }) {
   const faqs = getFAQs(data);
-  const [open, setOpen] = useState<number | null>(null);
+  // First 3 open by default — users can collapse any of them
+  const [openSet, setOpenSet] = useState<Set<number>>(new Set([0, 1, 2]));
+
+  const toggle = (i: number) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) {
+        next.delete(i);
+      } else {
+        next.add(i);
+      }
+      return next;
+    });
+  };
 
   return (
     <section className="section-divider py-20 md:py-28">
@@ -66,35 +79,38 @@ export default function SectionFAQ({ data }: { data: PartnerData }) {
         </h2>
 
         <div className="flex flex-col gap-3">
-          {faqs.map((faq, i) => (
-            <div
-              key={i}
-              data-reveal={`d${Math.min(i, 3)}`}
-              className="rounded-2xl border border-white/[0.06] overflow-hidden"
-              style={{ background: open === i ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.018)" }}
-            >
-              <button
-                className="w-full flex items-center justify-between px-7 py-5 text-left hover:bg-white/[0.015] transition-colors duration-200 gap-4"
-                onClick={() => setOpen(open === i ? null : i)}
-                aria-expanded={open === i}
+          {faqs.map((faq, i) => {
+            const isOpen = openSet.has(i);
+            return (
+              <div
+                key={i}
+                data-reveal={`d${Math.min(i, 3)}`}
+                className="rounded-2xl border border-white/[0.06] overflow-hidden transition-colors duration-200"
+                style={{ background: isOpen ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.018)" }}
               >
-                <span className="font-sora text-fg/75" style={{ fontSize: "15px", lineHeight: 1.5 }}>
-                  {faq.q}
-                </span>
-                <span className="shrink-0 text-fg/30">
-                  <ChevronIcon open={open === i} />
-                </span>
-              </button>
+                <button
+                  className="w-full flex items-center justify-between px-7 py-5 text-left hover:bg-white/[0.015] transition-colors duration-200 gap-4"
+                  onClick={() => toggle(i)}
+                  aria-expanded={isOpen}
+                >
+                  <span className="font-sora text-fg/75" style={{ fontSize: "15px", lineHeight: 1.5 }}>
+                    {faq.q}
+                  </span>
+                  <span className="shrink-0 text-fg/30">
+                    <ChevronIcon open={isOpen} />
+                  </span>
+                </button>
 
-              {open === i && (
-                <div className="px-7 pb-6 border-t border-white/[0.04]">
-                  <p className="font-sora font-light text-fg/50 leading-[1.8] pt-5" style={{ fontSize: "14px" }}>
-                    {faq.a}
-                  </p>
-                </div>
-              )}
-            </div>
-          ))}
+                {isOpen && (
+                  <div className="px-7 pb-6 border-t border-white/[0.04]">
+                    <p className="font-sora font-light text-fg/50 leading-[1.8] pt-5" style={{ fontSize: "14px" }}>
+                      {faq.a}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
       </div>

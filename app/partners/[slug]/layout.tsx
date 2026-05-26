@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Script from "next/script";
 import ScrollReveal from "./components/ScrollReveal";
 
 /**
  * Minimal layout for /partners/[slug] — hides global nav/announcement bar,
  * shows a single-logo header with a "Personal Invitation" badge.
+ * Adds Plausible tagged-events tracking for all partner pages.
  */
 export default function PartnersLayout({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +17,13 @@ export default function PartnersLayout({ children }: { children: ReactNode }) {
           display: none !important;
         }
       `}</style>
+
+      {/* Plausible analytics — tagged events */}
+      <Script
+        src="https://plausible.io/js/script.tagged-events.js"
+        data-domain="maksnedbailo.site"
+        strategy="afterInteractive"
+      />
 
       <header
         className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 sm:px-8"

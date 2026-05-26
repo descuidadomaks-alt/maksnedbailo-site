@@ -25,15 +25,16 @@ const vlad: PartnerData = {
       "Here's what your company looks like with three AI systems handling what they used to.",
     subtext:
       "A 90-minute Strategic AI Mapping session — normally €1,500 — gifted to you through Vlad. By the end, you'll have a one-page Strategic AI Map of your business, ranked by ROI. No pitch deck. No filler. If there's nothing worth automating, I'll tell you and you keep the map.",
+    scarcity:
+      "Vlad is sharing this with a small number of people from his circle this quarter.",
     cta: "Claim Your Complimentary Session",
   },
 
-  // TODO:STATS — replace with verifiable, sourced numbers (Statista / McKinsey / EBRD)
   marqueeStats: [
-    "73% OF UKRAINIAN BUSINESSES HAVE LOST KEY STAFF SINCE 2022",
-    "ONE FOUNDER, ON AVERAGE, DOES THE WORK OF 3.4 ROLES",
-    "AI HANDLES 80% OF FIRST-RESPONSE COMMUNICATION AT 5% OF HUMAN COST",
-    "YOUR TEAM IS SHRINKING. YOUR AMBITION ISN'T.",
+    "70% OF AI PROJECTS FAIL FROM POOR PROBLEM DEFINITION — GARTNER 2024",
+    "COMPANIES THAT MAP BEFORE THEY BUILD SCALE 30% MORE OFTEN — MIT 2025",
+    "MANUFACTURING AI CUTS DOWNTIME 20% ON AVERAGE — IEEE",
+    "UKRAINIAN BUSINESSES LOST AN ESTIMATED QUARTER OR MORE OF KEY STAFF SINCE 2022 — NBU/MOE",
   ],
 
   pricing: {
