@@ -2,15 +2,11 @@
 
 /**
  * Stylised HTML mockup of the Strategic AI Map deliverable.
- * Desktop: shows full table.
- * Mobile: shows a summary card + "View as image" button → lightbox.
- *
- * TODO: drop PNG at /public/partners/vlad/assets/ai-map-sample.png
- *       Run: npx puppeteer-screenshot or export manually from Figma.
+ * Desktop + mobile: horizontally-scrollable table with snap columns.
+ * "← swipe →" hint dismisses on first scroll (localStorage).
  */
 
-import { useState } from "react";
-import Lightbox from "./Lightbox";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -18,7 +14,7 @@ declare global {
   }
 }
 
-const AI_MAP_IMAGE = "/partners/vlad/assets/ai-map-sample.png";
+const SCROLL_HINT_KEY = "ai_map_scroll_hinted";
 
 const PILLARS = [
   {
@@ -63,12 +59,26 @@ function FeasibilityDots({ score }: { score: number }) {
 }
 
 export default function AiMapMockup() {
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showHint, setShowHint] = useState(false);
 
-  const openLightbox = () => {
-    setLightboxOpen(true);
-    window.plausible?.("lightbox_open", { props: { which_table: "ai_map" } });
-  };
+  useEffect(() => {
+    if (typeof localStorage !== "undefined" && !localStorage.getItem(SCROLL_HINT_KEY)) {
+      setShowHint(true);
+    }
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (el.scrollLeft > 10) {
+        setShowHint(false);
+        localStorage.setItem(SCROLL_HINT_KEY, "1");
+        window.plausible?.("mobile_table_scroll", { props: { table: "ai_map" } });
+        el.removeEventListener("scroll", onScroll);
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="py-12 md:py-16">
@@ -82,176 +92,112 @@ export default function AiMapMockup() {
           Sample output. Yours will be specific to your business.
         </p>
 
-        {/* ── Desktop — full table ────────────────────────────────────────────── */}
+        {/* Scroll hint — mobile only */}
+        {showHint && (
+          <p className="md:hidden font-sora text-fg/25 text-center mb-3" style={{ fontSize: "11px" }}>
+            ← swipe to see all columns →
+          </p>
+        )}
+
+        {/* Horizontally scrollable wrapper */}
         <div
           data-reveal
-          className="hidden md:block rounded-2xl border border-white/[0.08] overflow-hidden"
+          className="relative rounded-2xl border border-white/[0.08] overflow-hidden"
           style={{
             background: "rgba(255,255,255,0.018)",
             boxShadow: "0 20px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(212,255,43,0.06)",
           }}
         >
-          {/* Document header */}
+          {/* Right-edge fade for horizontal scroll hint */}
           <div
-            className="px-6 py-5 border-b border-white/[0.06]"
-            style={{ background: "rgba(212,255,43,0.06)" }}
-          >
-            <div className="flex items-center justify-between flex-wrap gap-3">
-              <div>
-                <p className="font-sora text-accent/70" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
-                  Strategic AI Map
-                </p>
-                <p className="font-playfair text-fg mt-0.5" style={{ fontSize: "18px", letterSpacing: "-0.02em" }}>
-                  [Client Business Name]
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="font-sora text-fg/25" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>90-MIN SESSION OUTPUT</p>
-                <p className="font-sora text-fg/40" style={{ fontSize: "10px" }}>care less AI automation</p>
-              </div>
-            </div>
-          </div>
+            className="md:hidden pointer-events-none absolute top-0 right-0 bottom-0 z-10"
+            style={{ width: "48px", background: "linear-gradient(to right, transparent, rgba(6,6,8,0.9))" }}
+            aria-hidden
+          />
 
-          {/* Column header */}
           <div
-            className="grid px-6 py-2 border-b border-white/[0.04]"
-            style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px" }}
+            ref={scrollRef}
+            className="overflow-x-auto"
+            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
           >
-            {["Pain / bottleneck", "Current cost", "AI feasibility", "Est. ROI", "Rank"].map((h) => (
-              <span key={h} className="font-sora text-fg/20" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
-                {h}
-              </span>
-            ))}
-          </div>
+            <div style={{ minWidth: "560px" }}>
 
-          {/* Pillar sections */}
-          {PILLARS.map((pillar, pi) => (
-            <div key={pi} className={pi < PILLARS.length - 1 ? "border-b border-white/[0.06]" : ""}>
-              {/* Pillar label */}
-              <div className="px-6 py-3" style={{ background: "rgba(255,255,255,0.012)" }}>
-                <span
-                  className="font-sora font-semibold text-accent/60"
-                  style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}
-                >
-                  Pillar {pi + 1} — {pillar.label}
-                </span>
-              </div>
-
-              {/* Rows */}
-              {pillar.items.map((item, ii) => (
-                <div
-                  key={ii}
-                  className="px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.018] transition-colors duration-150"
-                >
-                  <div
-                    className="grid items-center gap-2"
-                    style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px" }}
-                  >
-                    <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>{item.pain}</p>
-                    <p className="font-sora text-fg/35" style={{ fontSize: "12px" }}>{item.cost}</p>
-                    <FeasibilityDots score={item.feasibility} />
-                    <p className="font-sora text-accent/70" style={{ fontSize: "12px" }}>{item.roi}</p>
-                    <p
-                      className="font-sora font-bold text-fg/40 text-center"
-                      style={{ fontSize: "13px" }}
-                    >
-                      #{item.rank}
+              {/* Document header */}
+              <div
+                className="px-6 py-5 border-b border-white/[0.06]"
+                style={{ background: "rgba(212,255,43,0.06)" }}
+              >
+                <div className="flex items-center justify-between flex-wrap gap-3">
+                  <div>
+                    <p className="font-sora text-accent/70" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
+                      Strategic AI Map
+                    </p>
+                    <p className="font-playfair text-fg mt-0.5" style={{ fontSize: "18px", letterSpacing: "-0.02em" }}>
+                      [Client Business Name]
                     </p>
                   </div>
+                  <div className="text-right">
+                    <p className="font-sora text-fg/25" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>90-MIN SESSION OUTPUT</p>
+                    <p className="font-sora text-fg/40" style={{ fontSize: "10px" }}>care less AI automation</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column header */}
+              <div
+                className="grid px-6 py-2 border-b border-white/[0.04]"
+                style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px", scrollSnapAlign: "start" }}
+              >
+                {["Pain / bottleneck", "Current cost", "AI feasibility", "Est. ROI", "Rank"].map((h) => (
+                  <span key={h} className="font-sora text-fg/20" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                    {h}
+                  </span>
+                ))}
+              </div>
+
+              {/* Pillar sections */}
+              {PILLARS.map((pillar, pi) => (
+                <div key={pi} className={pi < PILLARS.length - 1 ? "border-b border-white/[0.06]" : ""}>
+                  <div className="px-6 py-3" style={{ background: "rgba(255,255,255,0.012)" }}>
+                    <span className="font-sora font-semibold text-accent/60" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                      Pillar {pi + 1} — {pillar.label}
+                    </span>
+                  </div>
+                  {pillar.items.map((item, ii) => (
+                    <div key={ii} className="px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.018] transition-colors duration-150">
+                      <div className="grid items-center gap-2" style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px" }}>
+                        <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>{item.pain}</p>
+                        <p className="font-sora text-fg/35" style={{ fontSize: "12px" }}>{item.cost}</p>
+                        <FeasibilityDots score={item.feasibility} />
+                        <p className="font-sora text-accent/70" style={{ fontSize: "12px" }}>{item.roi}</p>
+                        <p className="font-sora font-bold text-fg/40 text-center" style={{ fontSize: "13px" }}>#{item.rank}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
-            </div>
-          ))}
 
-          {/* Phase 1 recommended build footer */}
-          <div
-            className="px-6 py-5"
-            style={{
-              background: "rgba(212,255,43,0.07)",
-              borderTop: "1px solid rgba(212,255,43,0.18)",
-            }}
-          >
-            <p className="font-sora text-accent/70 mb-2" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
-              Phase 1 Recommended Build
-            </p>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>
-                #1 — AI Lead Response System · WhatsApp + website · 24/7 coverage
-              </p>
-              <div className="flex items-center gap-4 shrink-0">
-                <span className="font-sora text-fg/35" style={{ fontSize: "11px" }}>Timeline: 2–3 weeks</span>
-                <span
-                  className="font-playfair text-accent"
-                  style={{ fontSize: "16px", letterSpacing: "-0.02em" }}
-                >
-                  €4,500
-                </span>
+              {/* Phase 1 footer */}
+              <div className="px-6 py-5" style={{ background: "rgba(212,255,43,0.07)", borderTop: "1px solid rgba(212,255,43,0.18)" }}>
+                <p className="font-sora text-accent/70 mb-2" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
+                  Phase 1 Recommended Build
+                </p>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>
+                    #1 — AI Lead Response System · WhatsApp + website · 24/7 coverage
+                  </p>
+                  <div className="flex items-center gap-4 shrink-0">
+                    <span className="font-sora text-fg/35" style={{ fontSize: "11px" }}>Timeline: 2–3 weeks</span>
+                    <span className="font-playfair text-accent" style={{ fontSize: "16px", letterSpacing: "-0.02em" }}>€4,500</span>
+                  </div>
+                </div>
               </div>
+
             </div>
           </div>
-        </div>
-
-        {/* ── Mobile — summary card + view as image ──────────────────────────── */}
-        <div
-          data-reveal
-          className="md:hidden rounded-2xl border border-white/[0.08] overflow-hidden"
-          style={{
-            background: "rgba(255,255,255,0.018)",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
-          }}
-        >
-          {/* Header */}
-          <div
-            className="px-5 py-4 border-b border-white/[0.06]"
-            style={{ background: "rgba(212,255,43,0.06)" }}
-          >
-            <p className="font-sora text-accent/70" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
-              Strategic AI Map — Sample
-            </p>
-            <p className="font-playfair text-fg mt-0.5" style={{ fontSize: "16px", letterSpacing: "-0.02em" }}>
-              [Client Business Name]
-            </p>
-          </div>
-
-          {/* Summary stats */}
-          <div className="grid grid-cols-3 border-b border-white/[0.06]">
-            {[
-              { label: "Pillars scored", value: "3" },
-              { label: "Use cases ranked", value: "6" },
-              { label: "Phase 1 quoted", value: "€4,500" },
-            ].map((s) => (
-              <div key={s.label} className="px-4 py-4 border-r border-white/[0.04] last:border-0 text-center">
-                <p className="font-playfair text-accent" style={{ fontSize: "18px", letterSpacing: "-0.02em" }}>{s.value}</p>
-                <p className="font-sora text-fg/30 mt-0.5" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{s.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* View as image button */}
-          <button
-            onClick={openLightbox}
-            className="w-full flex items-center justify-center gap-2 py-4 font-sora text-fg/40 hover:text-fg/70 transition-colors duration-200"
-            style={{ fontSize: "13px", letterSpacing: "0.5px" }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
-            View full AI Map as image
-          </button>
         </div>
 
       </div>
-
-      {/* Lightbox */}
-      {lightboxOpen && (
-        <Lightbox
-          src={AI_MAP_IMAGE}
-          alt="Strategic AI Map sample output"
-          onClose={() => setLightboxOpen(false)}
-        />
-      )}
     </div>
   );
 }

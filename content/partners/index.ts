@@ -1,5 +1,7 @@
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+export type MessengerChannel = "telegram" | "whatsapp";
+
 export type PartnerData = {
   slug: string;
 
@@ -7,7 +9,7 @@ export type PartnerData = {
     name: string;
     role: string;
     photo: string | null;    // TODO:VLAD_PHOTO — path from /public
-    quote: string;           // TODO:VLAD_QUOTE_FINAL
+    quote: string;
     introCircle: string;
   };
 
@@ -38,7 +40,16 @@ export type PartnerData = {
 
   booking: {
     schedulerUrl: string;
-    whatsapp: string;
+    /**
+     * Which messenger to show as the secondary CTA.
+     * Swap per-partner without changing any component code.
+     * @default "telegram"
+     */
+    messengerChannel: MessengerChannel;
+    /** Telegram deep-link — required when messengerChannel = "telegram" */
+    telegram?: string;
+    /** WhatsApp deep-link — required when messengerChannel = "whatsapp" */
+    whatsapp?: string;
   };
 
   meta: {

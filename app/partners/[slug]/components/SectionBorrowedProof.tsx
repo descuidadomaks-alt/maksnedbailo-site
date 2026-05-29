@@ -1,18 +1,28 @@
 import Link from "next/link";
 
 // TODO:CASES — replace with real partner-funnel case studies after client 3
+// TODO:METRICS — add actuals for Amira + Cosmetic Suite when available (do NOT invent)
 const CASES = [
   {
     name: "Amira for HC MedSpa",
     description: "Live AI agent for a UK MedSpa. Responds to leads in 9 seconds across WhatsApp and website.",
     href: "/automations/hcmedspa",
     tag: "UK MedSpa · Lead response",
+    status: "live" as const,
   },
   {
     name: "Cosmetic Suite",
     description: "WhatsApp + Instagram lead capture for an aesthetic clinic. Qualification and booking, automated.",
     href: "/automations/cosmeticsuite",
     tag: "Aesthetic clinic · Lead capture",
+    status: "live" as const,
+  },
+  {
+    name: "Cross-vertical discovery sprint",
+    description: "Live across 4 verticals through Aug 2026. First niche-locked blueprint shipping August 2026.",
+    href: "#",
+    tag: "Multi-vertical · Blueprint",
+    status: "in-progress" as const,
   },
 ];
 
@@ -46,60 +56,80 @@ export default function SectionBorrowedProof() {
           Recent client builds. Software in production, conversations every day.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {CASES.map((c, i) => (
-            <Link
-              key={i}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-reveal={`d${i}`}
-              className="group relative rounded-2xl border border-white/[0.06] bg-white/[0.018] p-7 flex flex-col gap-4 hover:border-white/[0.12] hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300"
-            >
-              {/* LIVE badge */}
-              <div
-                className="live-badge-pulse absolute top-5 right-5 flex items-center gap-1.5"
-                style={{
-                  background: "rgba(74,222,128,0.08)",
-                  border: "1px solid rgba(74,222,128,0.25)",
-                  borderRadius: "999px",
-                  padding: "3px 8px",
-                }}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full animate-pulse"
-                  style={{ background: "rgb(74,222,128)" }}
-                />
-                <span
-                  className="font-sora font-semibold"
-                  style={{ fontSize: "9px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.85)" }}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {CASES.map((c, i) => {
+            const isInProgress = c.status === "in-progress";
+            const cardClass = `group relative rounded-2xl border border-white/[0.06] bg-white/[0.018] p-7 flex flex-col gap-4 transition-all duration-300 ${
+              isInProgress
+                ? "opacity-70"
+                : "hover:border-white/[0.12] hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+            }`;
+            return isInProgress ? (
+              <div key={i} data-reveal={`d${i}`} className={cardClass}>
+                {/* IN PROGRESS badge */}
+                <div
+                  className="absolute top-5 right-5 flex items-center gap-1.5"
+                  style={{
+                    background: "rgba(250,204,21,0.08)",
+                    border: "1px solid rgba(250,204,21,0.25)",
+                    borderRadius: "999px",
+                    padding: "3px 8px",
+                  }}
                 >
-                  LIVE
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ background: "rgb(250,204,21)" }} />
+                  <span className="font-sora font-semibold" style={{ fontSize: "9px", letterSpacing: "1.5px", color: "rgba(250,204,21,0.85)" }}>
+                    IN PROGRESS
+                  </span>
+                </div>
+                <div className="flex items-start gap-4 pr-16">
+                  <h3 className="font-playfair font-normal text-fg" style={{ fontSize: "clamp(17px, 1.5vw, 20px)", lineHeight: 1.25 }}>
+                    {c.name}
+                  </h3>
+                </div>
+                <p className="font-sora font-light text-fg/50 leading-[1.7]" style={{ fontSize: "14px" }}>{c.description}</p>
+                <span className="font-sora text-fg/25" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  {c.tag}
                 </span>
               </div>
-
-              <div className="flex items-start justify-between gap-4 pr-16">
-                <h3
-                  className="font-playfair font-normal text-fg"
-                  style={{ fontSize: "clamp(17px, 1.5vw, 20px)", lineHeight: 1.25 }}
-                >
-                  {c.name}
-                </h3>
-                <span className="shrink-0 text-fg/25 group-hover:text-fg/50 transition-colors duration-200 mt-0.5">
-                  <ArrowIcon />
-                </span>
-              </div>
-              <p className="font-sora font-light text-fg/50 leading-[1.7]" style={{ fontSize: "14px" }}>
-                {c.description}
-              </p>
-              <span
-                className="font-sora text-fg/25"
-                style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
+            ) : (
+              <Link
+                key={i}
+                href={c.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-reveal={`d${i}`}
+                className={cardClass}
               >
-                {c.tag}
-              </span>
-            </Link>
-          ))}
+                {/* Status badge */}
+                <div
+                  className="live-badge-pulse absolute top-5 right-5 flex items-center gap-1.5"
+                  style={{
+                    background: "rgba(74,222,128,0.08)",
+                    border: "1px solid rgba(74,222,128,0.25)",
+                    borderRadius: "999px",
+                    padding: "3px 8px",
+                  }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "rgb(74,222,128)" }} />
+                  <span className="font-sora font-semibold" style={{ fontSize: "9px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.85)" }}>
+                    LIVE
+                  </span>
+                </div>
+                <div className="flex items-start justify-between gap-4 pr-16">
+                  <h3 className="font-playfair font-normal text-fg" style={{ fontSize: "clamp(17px, 1.5vw, 20px)", lineHeight: 1.25 }}>
+                    {c.name}
+                  </h3>
+                  <span className="shrink-0 text-fg/25 group-hover:text-fg/50 transition-colors duration-200 mt-0.5">
+                    <ArrowIcon />
+                  </span>
+                </div>
+                <p className="font-sora font-light text-fg/50 leading-[1.7]" style={{ fontSize: "14px" }}>{c.description}</p>
+                <span className="font-sora text-fg/25" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  {c.tag}
+                </span>
+              </Link>
+            );
+          })}
         </div>
 
       </div>

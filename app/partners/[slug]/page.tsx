@@ -82,7 +82,18 @@ export default function PartnerPage({ params }: Props) {
         {/* 3. The Gift — value stack */}
         <SectionValueStack data={data} />
 
-        {/* 3b. AI Map deliverable mockup */}
+        {/* 3b. AI Map separator + deliverable mockup */}
+        <div className="max-w-3xl mx-auto px-6 pt-16 pb-2">
+          <p className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            Deliverable
+          </p>
+          <h2
+            className="font-playfair font-normal text-fg mt-3"
+            style={{ fontSize: "clamp(24px, 3.4vw, 48px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}
+          >
+            What the Map Looks Like
+          </h2>
+        </div>
         <AiMapMockup />
 
         {/* Inline CTA #1 */}

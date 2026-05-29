@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Lightbox from "./Lightbox";
+import { useState, useRef, useEffect } from "react";
 
 declare global {
   interface Window {
@@ -9,59 +8,122 @@ declare global {
   }
 }
 
+const SCROLL_HINT_KEY = "industry_table_scroll_hinted";
+
 const INDUSTRIES = [
   {
     id: "manufacturing",
     label: "Manufacturing",
     pain: "Equipment goes down, nobody knows until orders are late.",
-    useCase: "Predictive maintenance + supplier comms automation",
     roi: "20% downtime reduction",
     source: "IEEE",
-    // TODO: drop PNG at /public/partners/vlad/assets/industry-manufacturing.png
-    imagePath: "/partners/vlad/assets/industry-manufacturing.png",
+    useCases: [
+      {
+        title: "Quote-to-invoice acceleration",
+        desc: "RFQ intake → spec parsing → quote draft in under 2 hours. Sales reviews and sends.",
+      },
+      {
+        title: "Production scheduling assistant",
+        desc: "Daily schedule draft from inventory + open orders + capacity. Foreman approves in 10 minutes.",
+      },
+      {
+        title: "After-sale ticket routing",
+        desc: "Warranty/repair requests parsed, routed to the right technician with parts pre-checked.",
+      },
+    ],
   },
   {
     id: "professional-services",
     label: "Professional Services",
     pain: "I'm the only person who knows where anything is.",
-    useCase: "Internal knowledge AI + meeting intelligence",
     roi: "12 hrs/week founder time recovered",
     source: "McKinsey 2024",
-    // TODO: drop PNG at /public/partners/vlad/assets/industry-professional-services.png
-    imagePath: "/partners/vlad/assets/industry-professional-services.png",
+    useCases: [
+      {
+        title: "Client intake & conflict check",
+        desc: "Intake form fills AI summary of matter, checks against client list, drafts engagement letter.",
+      },
+      {
+        title: "Billable-time capture",
+        desc: "Calendar + email + docs → AI proposes time entries → 5 min/day of approval per fee earner.",
+      },
+      {
+        title: "Document first-pass review",
+        desc: "Contracts and filings pre-flagged for standard risks before partner sees them.",
+      },
+    ],
   },
   {
     id: "ecommerce",
     label: "E-commerce",
     pain: "Customers ghost us after one slow reply.",
-    useCase: "First-response AI + personalised follow-up",
     roi: "12% sales uplift",
     source: "industry avg",
-    // TODO: drop PNG at /public/partners/vlad/assets/industry-ecommerce.png
-    imagePath: "/partners/vlad/assets/industry-ecommerce.png",
+    useCases: [
+      {
+        title: "Tier-1 support automation",
+        desc: "Chat + email handle 60–80% of order/refund/size questions; escalates the rest with full context.",
+      },
+      {
+        title: "Returns / RMA processing",
+        desc: "Photo + reason in → triage decision draft out (refund / replace / repair).",
+      },
+      {
+        title: "SKU launch copy",
+        desc: "Specs in → on-brand product descriptions in multiple languages, ready for review.",
+      },
+    ],
   },
   {
     id: "investor-operators",
     label: "Investor-Operators",
     pain: "I want oversight of 5 ventures without doing 5 jobs.",
-    useCase: "Cross-venture dashboards + AI ops summaries",
     roi: "60% less manual reporting",
     source: "client baseline",
-    // TODO: drop PNG at /public/partners/vlad/assets/industry-investor-operators.png
-    imagePath: "/partners/vlad/assets/industry-investor-operators.png",
+    useCases: [
+      {
+        title: "Portfolio dashboard digest",
+        desc: "Financial + ops KPIs from multiple companies condensed weekly, anomalies flagged.",
+      },
+      {
+        title: "Inbox + calendar triage",
+        desc: "Cross-company first-pass for chairs and founders managing 3+ ventures.",
+      },
+      {
+        title: "Diligence pre-screen",
+        desc: "Incoming pitch decks → structured summary against stated thesis, flagged for human review.",
+      },
+    ],
   },
 ];
 
 export default function SectionIndustryExamples() {
   const [activeId, setActiveId] = useState("professional-services");
-  const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [showHint, setShowHint] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const active = INDUSTRIES.find((r) => r.id === activeId) ?? INDUSTRIES[1];
 
-  const openLightbox = (src: string, id: string) => {
-    setLightboxSrc(src);
-    window.plausible?.("lightbox_open", { props: { which_table: `industry_${id}` } });
-  };
+  useEffect(() => {
+    if (typeof localStorage !== "undefined" && !localStorage.getItem(SCROLL_HINT_KEY)) {
+      setShowHint(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      if (el.scrollLeft > 10) {
+        setShowHint(false);
+        if (typeof localStorage !== "undefined") localStorage.setItem(SCROLL_HINT_KEY, "1");
+        window.plausible?.("mobile_table_scroll", { props: { table: "industry_examples" } });
+        el.removeEventListener("scroll", onScroll);
+      }
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <section className="section-divider py-20 md:py-28">
@@ -79,7 +141,7 @@ export default function SectionIndustryExamples() {
           What This Looks Like in Your Industry
         </h2>
 
-        <p data-reveal className="font-sora font-light text-fg/35 mb-10" style={{ fontSize: "14px", lineHeight: 1.7 }}>
+        <p data-reveal className="font-sora font-light text-fg/35 mb-8" style={{ fontSize: "14px", lineHeight: 1.7 }}>
           See yourself on the page. These are the exact patterns we map in the first 30 minutes.
         </p>
 
@@ -104,107 +166,85 @@ export default function SectionIndustryExamples() {
           ))}
         </div>
 
-        {/* Desktop table row — hidden on mobile */}
-        <div data-reveal className="hidden md:block">
-          <div
-            className="rounded-2xl border border-white/[0.06] bg-white/[0.018] overflow-hidden"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.2)" }}
-          >
-            {/* Column headers */}
-            <div
-              className="grid px-8 py-3 border-b border-white/[0.04]"
-              style={{ gridTemplateColumns: "1fr 1fr 1fr 140px" }}
-            >
-              {["The pain", "AI use case", "Typical ROI", "Source"].map((h) => (
-                <span key={h} className="font-sora text-fg/25" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
-                  {h}
-                </span>
-              ))}
-            </div>
+        {/* Swipe hint — mobile only */}
+        {showHint && (
+          <p className="md:hidden font-sora text-fg/25 mb-2" style={{ fontSize: "11px" }}>
+            ← swipe to see all columns →
+          </p>
+        )}
 
-            {/* Active row */}
-            <div
-              className="grid items-start px-8 py-6 gap-6"
-              style={{ gridTemplateColumns: "1fr 1fr 1fr 140px" }}
-            >
-              <div>
-                <p className="font-sora font-light text-fg/60 leading-[1.6]" style={{ fontSize: "14px", fontStyle: "italic" }}>
-                  &ldquo;{active.pain}&rdquo;
-                </p>
-              </div>
-              <div>
-                <p className="font-sora font-light text-fg/65 leading-[1.6]" style={{ fontSize: "14px" }}>
-                  {active.useCase}
-                </p>
-              </div>
-              <div>
-                <p
-                  className="font-playfair text-accent"
-                  style={{ fontSize: "clamp(15px, 1.4vw, 18px)", lineHeight: 1.2, letterSpacing: "-0.015em" }}
-                >
-                  {active.roi}
-                </p>
-              </div>
-              <div>
-                <p className="font-sora text-fg/25" style={{ fontSize: "11px" }}>
-                  {active.source}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile — show "View as image" button */}
-        <div data-reveal className="md:hidden">
+        {/* Table with horizontal scroll on mobile */}
+        <div
+          data-reveal
+          className="relative rounded-2xl border border-white/[0.06] overflow-hidden"
+          style={{ background: "rgba(255,255,255,0.015)", boxShadow: "0 4px 24px rgba(0,0,0,0.2)" }}
+        >
+          {/* Right-edge fade */}
           <div
-            className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-6"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.2)" }}
+            className="md:hidden pointer-events-none absolute top-0 right-0 bottom-0 z-10"
+            style={{ width: "48px", background: "linear-gradient(to right, transparent, rgba(6,6,8,0.9))" }}
+            aria-hidden
+          />
+
+          <div
+            ref={scrollRef}
+            className="overflow-x-auto"
+            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
           >
-            <p className="font-sora font-semibold text-accent/80 mb-3" style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase" }}>
-              {active.label}
-            </p>
-            <p className="font-sora font-light text-fg/60 leading-[1.6] mb-2" style={{ fontSize: "14px", fontStyle: "italic" }}>
-              &ldquo;{active.pain}&rdquo;
-            </p>
-            <p className="font-sora font-light text-fg/65 leading-[1.6] mb-4" style={{ fontSize: "14px" }}>
-              {active.useCase}
-            </p>
-            <div className="flex items-center justify-between">
-              <p className="font-playfair text-accent" style={{ fontSize: "16px", letterSpacing: "-0.015em" }}>
-                {active.roi}
-              </p>
-              <button
-                onClick={() => openLightbox(active.imagePath, active.id)}
-                className="font-sora text-fg/40 hover:text-fg/70 transition-colors duration-200 flex items-center gap-1.5"
-                style={{ fontSize: "12px", letterSpacing: "0.5px" }}
+            <div style={{ minWidth: "620px" }}>
+
+              {/* Column header row */}
+              <div
+                className="grid px-7 py-3 border-b border-white/[0.06]"
+                style={{ gridTemplateColumns: "1fr 1fr 1fr 120px" }}
               >
-                View as image
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21 15 16 10 5 21" />
-                </svg>
-              </button>
+                {["Use case", "What it does", "Pain it fixes", "Typical result"].map((h) => (
+                  <span key={h} className="font-sora text-fg/25" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                    {h}
+                  </span>
+                ))}
+              </div>
+
+              {/* Use case rows */}
+              {active.useCases.map((uc, i) => (
+                <div
+                  key={i}
+                  className="grid px-7 py-5 border-t border-white/[0.04] hover:bg-white/[0.018] transition-colors duration-150 items-start gap-4"
+                  style={{ gridTemplateColumns: "1fr 1fr 1fr 120px" }}
+                >
+                  <p className="font-sora font-semibold text-fg/75 leading-[1.5]" style={{ fontSize: "13px" }}>
+                    {uc.title}
+                  </p>
+                  <p className="font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "13px" }}>
+                    {uc.desc}
+                  </p>
+                  <p className="font-sora font-light text-fg/45 leading-[1.6]" style={{ fontSize: "13px", fontStyle: "italic" }}>
+                    &ldquo;{active.pain}&rdquo;
+                  </p>
+                  {i === 0 ? (
+                    <div>
+                      <p className="font-playfair text-accent" style={{ fontSize: "clamp(14px, 1.3vw, 17px)", lineHeight: 1.2, letterSpacing: "-0.015em" }}>
+                        {active.roi}
+                      </p>
+                      <p className="font-sora text-fg/20 mt-1" style={{ fontSize: "10px" }}>{active.source}</p>
+                    </div>
+                  ) : (
+                    <div />
+                  )}
+                </div>
+              ))}
+
             </div>
           </div>
         </div>
 
         {/* Source footnote */}
         <p data-reveal className="font-sora font-light text-fg/20 mt-8 text-center leading-relaxed" style={{ fontSize: "11px" }}>
-          Sources: IEEE Predictive Maintenance Report · McKinsey The State of AI 2024 · Industry conversion benchmarks · Client-reported baselines.
+          Sources: IEEE · McKinsey The State of AI 2024 · Industry conversion benchmarks · Client-reported baselines.
           ROI figures are directional averages, not guarantees.
         </p>
 
       </div>
-
-      {/* Lightbox */}
-      {lightboxSrc && (
-        <Lightbox
-          src={lightboxSrc}
-          alt={`${active.label} industry example`}
-          onClose={() => setLightboxSrc(null)}
-        />
-      )}
     </section>
   );
 }

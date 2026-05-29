@@ -26,12 +26,6 @@ export default function RomanLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <style>{`
-        /* Hide main-site chrome on /roman pages */
-        body:has([data-roman-layout]) [data-site-element="announcement"],
-        body:has([data-roman-layout]) [data-site-element="nav"] {
-          display: none !important;
-        }
-
         /* ── Design tokens ─────────────────────────────────── */
         .rs-root {
           --rs-bg:       #0E0E0F;
@@ -176,8 +170,6 @@ export default function RomanLayout({ children }: { children: ReactNode }) {
           .rs-step-img { transition: none; }
         }
       `}</style>
-
-      <div data-roman-layout hidden aria-hidden="true" />
 
       <div className={`rs-root ${cormorant.variable} ${ibmPlex.variable}`}>
         {children}

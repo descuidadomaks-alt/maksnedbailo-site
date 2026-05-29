@@ -40,11 +40,15 @@ export default function SectionComparison() {
 
         <h2
           data-reveal
-          className="font-playfair font-normal text-fg mb-12"
+          className="font-playfair font-normal text-fg mb-4"
           style={{ fontSize: "clamp(24px, 3.4vw, 48px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}
         >
-          What You&apos;re Not Getting
+          Three Roads to AI — Why This One
         </h2>
+
+        <p data-reveal className="font-sora font-light text-fg/35 mb-12" style={{ fontSize: "14px", lineHeight: 1.7 }}>
+          What you could be sold, what you&apos;d actually use, and what&apos;s on the table here.
+        </p>
 
         {/* Table — scrolls horizontally on small screens */}
         <div data-reveal className="overflow-x-auto -mx-2 px-2">

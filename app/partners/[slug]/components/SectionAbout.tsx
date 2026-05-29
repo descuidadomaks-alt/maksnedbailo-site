@@ -44,14 +44,8 @@ export default function SectionAbout({ data }: { data: PartnerData }) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="font-sora font-light text-fg/60 leading-[1.85] mb-4" style={{ fontSize: "15px" }}>
-                I&apos;m Maks. Ukrainian entrepreneur, based in Santander, Spain. I run a small AI automation studio with a Ukrainian developer network — 8 builders across Kyiv, Lviv, and Dnipro who ship the unsexy systems that let business owners stop being the bottleneck.
-              </p>
-              <p className="font-sora font-light text-fg/60 leading-[1.85] mb-4" style={{ fontSize: "15px" }}>
-                Before this, I built a 10,000-person network marketing organisation across 10 countries, and ran DCOAST as a design agency serving international clients. I built and delivered a 14-week AI training curriculum for Risk.inc&apos;s 80-person design team in 2025. I speak Ukrainian, Russian, English, and enough Spanish to get by.
-              </p>
               <p className="font-sora font-light text-fg/60 leading-[1.85]" style={{ fontSize: "15px" }}>
-                I&apos;ve known {data.partner.name} for years — long before any of this existed. He&apos;s sharing this with his circle because he trusts what I do with operators like you. Now it&apos;s your turn.
+                Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn&apos;t delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds: Amira (UK MedSpa) and Cosmetic Suite. I won&apos;t sell you something you don&apos;t need. If the math doesn&apos;t work, I&apos;ll tell you and you keep the map.
               </p>
 
               <div className="mt-6 pt-6 border-t border-white/[0.06] flex items-center gap-4 flex-wrap">

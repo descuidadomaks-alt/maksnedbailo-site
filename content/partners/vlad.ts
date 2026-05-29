@@ -45,8 +45,9 @@ const vlad: PartnerData = {
 
   booking: {
     schedulerUrl: "https://zcal.co/carelessmaks/vlad-strategic-ai-map",
-    whatsapp:
-      "https://wa.me/34641935207?text=Hi%20Maks%2C%20Vlad%20sent%20me.%20I%27d%20like%20to%20book%20the%20Strategic%20AI%20Map%20session.",
+    messengerChannel: "telegram",
+    // TODO: replace TELEGRAM_HANDLE with actual handle from Maks (e.g. "carelessmaks")
+    telegram: "https://t.me/TELEGRAM_HANDLE",
   },
 
   meta: {

@@ -16,37 +16,44 @@ function track(event: string, props: Record<string, string>) {
 }
 
 /**
- * Bottom-fixed CTA bar on mobile only (<768px).
- * Appears once the hero CTA has scrolled out of view.
- * Dismissible — fires "sticky_cta_dismissed" event on close.
+ * Bottom-fixed CTA bar — mobile only (<768px).
+ *
+ * Visibility rule: shows ONLY when NO [data-primary-cta] element is visible
+ * in the viewport (threshold 0.3). This prevents the "two neon buttons" problem.
+ *
+ * Dismissible — fires "sticky_cta_dismissed" on close.
  * Uses env(safe-area-inset-bottom) for iOS notch safety.
  */
 export default function StickyMobileCTA({ data }: { data: PartnerData }) {
-  const [visible, setVisible] = useState(false);
+  const [show, setShow] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Watch the sentinel placed at the bottom of the hero section
-    const sentinel = document.querySelector("[data-hero-sentinel]");
+    const ctas = Array.from(document.querySelectorAll<HTMLElement>("[data-primary-cta]"));
 
-    if (sentinel) {
-      const obs = new IntersectionObserver(
-        ([entry]) => setVisible(!entry.isIntersecting),
-        { threshold: 0 }
-      );
-      obs.observe(sentinel);
-      return () => obs.disconnect();
-    } else {
-      // Fallback: appear after 400px scroll
-      const onScroll = () => {
-        if (window.scrollY > 400) setVisible(true);
-      };
+    if (ctas.length === 0) {
+      // Fallback: scroll-position based
+      const onScroll = () => setShow(window.scrollY > 400);
       window.addEventListener("scroll", onScroll, { passive: true });
       return () => window.removeEventListener("scroll", onScroll);
     }
+
+    const visibleSet = new Set<Element>();
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) =>
+          e.isIntersecting ? visibleSet.add(e.target) : visibleSet.delete(e.target)
+        );
+        setShow(visibleSet.size === 0);
+      },
+      { threshold: 0.3 }
+    );
+
+    ctas.forEach((c) => obs.observe(c));
+    return () => obs.disconnect();
   }, []);
 
-  if (!visible || dismissed) return null;
+  if (!show || dismissed) return null;
 
   return (
     <div
@@ -60,9 +67,10 @@ export default function StickyMobileCTA({ data }: { data: PartnerData }) {
           border: "1px solid rgba(212,255,43,0.22)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          boxShadow: "0 -8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(212,255,43,0.05)",
+          boxShadow: "0 -8px 40px rgba(0,0,0,0.55)",
         }}
       >
+        {/* Tier 1 button — neon fill */}
         <a
           href={data.booking.schedulerUrl}
           target="_blank"
@@ -88,14 +96,8 @@ export default function StickyMobileCTA({ data }: { data: PartnerData }) {
           aria-label="Dismiss"
         >
           <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            width="13" height="13" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
             aria-hidden
           >
             <line x1="18" y1="6" x2="6" y2="18" />

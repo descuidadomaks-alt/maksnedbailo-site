@@ -44,6 +44,81 @@ const COSTS = [
   },
 ];
 
+function ResponseTimeChart() {
+  // Bar widths proportional: 19h avg vs <1h expected out of max ~21h
+  const MAX_H = 21;
+  const PCT_AVG = (19 / MAX_H) * 100;     // ~90.5%
+  const PCT_EXP = (1 / MAX_H) * 100;      // ~4.8%
+
+  return (
+    <div
+      data-reveal
+      className="rounded-2xl border border-white/[0.05] bg-white/[0.01] p-7 mb-10"
+      style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)" }}
+    >
+      {/* Bars */}
+      <div className="flex flex-col gap-5 mb-8">
+        {/* Bar A — average reply */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-sora text-fg/40" style={{ fontSize: "11px", letterSpacing: "1px" }}>
+              Average reply time (B2B)
+            </span>
+            <span className="font-sora font-semibold text-fg/50" style={{ fontSize: "12px" }}>19 hrs</span>
+          </div>
+          <div className="relative h-6 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div
+              className="absolute left-0 top-0 h-full rounded-full"
+              style={{
+                width: `${PCT_AVG}%`,
+                background: "rgba(240,236,230,0.12)",
+                transition: "width 1.2s cubic-bezier(0.16,1,0.3,1)",
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Bar B — buyer expectation */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-sora text-fg/40" style={{ fontSize: "11px", letterSpacing: "1px" }}>
+              What buyers expect
+            </span>
+            <span className="font-sora font-semibold text-accent/80" style={{ fontSize: "12px" }}>&lt;1 hr</span>
+          </div>
+          <div className="relative h-6 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div
+              className="absolute left-0 top-0 h-full rounded-full"
+              style={{
+                width: `${PCT_EXP}%`,
+                background: "rgba(212,255,43,0.65)",
+                transition: "width 1.2s cubic-bezier(0.16,1,0.3,1) 0.2s",
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Stat callout */}
+      <div className="flex items-baseline gap-4 flex-wrap">
+        <span
+          className="font-playfair text-accent"
+          style={{ fontSize: "clamp(48px, 6vw, 72px)", lineHeight: 1, letterSpacing: "-0.04em" }}
+        >
+          73%
+        </span>
+        <p className="font-sora font-light text-fg/50 max-w-[280px] leading-[1.6]" style={{ fontSize: "14px" }}>
+          of mid-market deals lost when the first reply takes more than 24 hours.
+        </p>
+      </div>
+
+      <p className="font-sora text-fg/20 mt-4" style={{ fontSize: "11px", fontStyle: "italic" }}>
+        Industry-typical benchmarks. Your numbers will be specific to your business.
+      </p>
+    </div>
+  );
+}
+
 export default function SectionCost() {
   return (
     <section className="section-divider py-20 md:py-28">
@@ -61,6 +136,10 @@ export default function SectionCost() {
           What This Costs You Every Month You Don&apos;t Move
         </h2>
 
+        {/* Response-time visualization */}
+        <ResponseTimeChart />
+
+        {/* Icon cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {COSTS.map((item, i) => (
             <div

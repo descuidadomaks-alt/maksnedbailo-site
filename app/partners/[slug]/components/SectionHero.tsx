@@ -149,12 +149,13 @@ export default function SectionHero({ data }: { data: PartnerData }) {
           </div>
         )}
 
-        {/* Primary CTA */}
+        {/* Primary CTA — data-primary-cta used by StickyMobileCTA to stay hidden */}
         <a
           href={data.booking.schedulerUrl}
           target="_blank"
           rel="noopener noreferrer"
           id="book"
+          data-primary-cta
           className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
           style={{ fontSize: "15px", padding: "18px 40px", minHeight: "60px", letterSpacing: "-0.01em" }}
           onClick={() =>

@@ -48,17 +48,17 @@ export default function SectionLeadMagnet({ data }: { data: PartnerData }) {
   };
 
   return (
-    <section className="section-divider py-16 md:py-20">
+    <section className="section-divider py-12 md:py-16">
       <div className="max-w-xl mx-auto px-6">
 
         <div
           data-reveal
-          className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-8 md:p-10 text-center"
-          style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.25)" }}
+          className="rounded-2xl border border-white/[0.04] p-7 md:p-9 text-center"
+          style={{ background: "rgba(255,255,255,0.01)" }}
         >
           <p
-            className="font-playfair font-normal text-fg mb-3"
-            style={{ fontSize: "clamp(18px, 2vw, 24px)", lineHeight: 1.2, letterSpacing: "-0.018em" }}
+            className="font-sora font-semibold text-fg/50 mb-3 uppercase"
+            style={{ fontSize: "11px", letterSpacing: "2px" }}
           >
             Not ready to book yet?
           </p>
@@ -101,8 +101,14 @@ export default function SectionLeadMagnet({ data }: { data: PartnerData }) {
               <button
                 type="submit"
                 disabled={state === "loading"}
-                className="shrink-0 rounded-xl px-6 py-4 font-sora font-semibold bg-accent text-bg transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(212,255,43,0.2)] disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap"
-                style={{ fontSize: "14px", letterSpacing: "-0.01em" }}
+                className="shrink-0 rounded-xl px-6 py-4 font-sora font-semibold transition-all duration-200 hover:opacity-80 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                style={{
+                  fontSize: "14px",
+                  letterSpacing: "-0.01em",
+                  border: "1px solid rgba(212,255,43,0.35)",
+                  color: "rgba(212,255,43,0.8)",
+                  background: "transparent",
+                }}
               >
                 {state === "loading" ? "Sending…" : "Send me the template →"}
               </button>

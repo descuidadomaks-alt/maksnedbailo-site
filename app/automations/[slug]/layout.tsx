@@ -13,17 +13,6 @@ import ScrollReveal from "./components/ScrollReveal";
 export default function AutomationsLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      {/*
-       * Scoped CSS: hide global nav elements only when [data-demo-layout] is
-       * in the DOM. Uses CSS :has() — supported in all modern browsers.
-       */}
-      <style>{`
-        body:has([data-demo-layout]) [data-site-element="announcement"],
-        body:has([data-demo-layout]) [data-site-element="nav"] {
-          display: none !important;
-        }
-      `}</style>
-
       {/* Minimal demo header — logo only */}
       <header
         className="fixed top-0 left-0 right-0 z-40 flex items-center px-6"
@@ -40,9 +29,6 @@ export default function AutomationsLayout({ children }: { children: ReactNode })
           />
         </Link>
       </header>
-
-      {/* Sentinel div that activates the CSS above */}
-      <div data-demo-layout hidden aria-hidden="true" />
 
       {children}
       <ScrollReveal />

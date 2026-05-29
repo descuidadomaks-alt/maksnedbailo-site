@@ -13,13 +13,6 @@ const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID;
 export default function PartnersLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <style>{`
-        body:has([data-partner-layout]) [data-site-element="announcement"],
-        body:has([data-partner-layout]) [data-site-element="nav"] {
-          display: none !important;
-        }
-      `}</style>
-
       {/* Plausible analytics — tagged events */}
       <Script
         src="https://plausible.io/js/script.tagged-events.js"
@@ -67,7 +60,6 @@ export default function PartnersLayout({ children }: { children: ReactNode }) {
         </span>
       </header>
 
-      <div data-partner-layout hidden aria-hidden="true" />
 
       {children}
       <ScrollReveal />

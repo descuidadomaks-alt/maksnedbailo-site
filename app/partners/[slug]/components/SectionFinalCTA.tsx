@@ -14,6 +14,14 @@ function track(event: string, props: Record<string, string>) {
   window.clarity?.("set", event, Object.values(props).join(" | "));
 }
 
+function TelegramIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+    </svg>
+  );
+}
+
 function WAIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -24,6 +32,13 @@ function WAIcon() {
 }
 
 export default function SectionFinalCTA({ data }: { data: PartnerData }) {
+  const isTelegram = data.booking.messengerChannel === "telegram";
+  const messengerUrl = isTelegram
+    ? (data.booking.telegram ?? "#")
+    : (data.booking.whatsapp ?? "#");
+  const messengerLabel = isTelegram ? "Message on Telegram first" : "Message on WhatsApp first";
+  const messengerEvent = isTelegram ? "telegram_click" : "whatsapp_click";
+
   return (
     <section className="section-divider py-24 md:py-40">
       <div className="max-w-xl mx-auto px-6 text-center">
@@ -57,11 +72,12 @@ export default function SectionFinalCTA({ data }: { data: PartnerData }) {
         </p>
 
         <div data-reveal="d1" className="flex flex-col items-center gap-4">
-          {/* Primary */}
+          {/* Primary CTA — Tier 1: neon fill */}
           <a
             href={data.booking.schedulerUrl}
             target="_blank"
             rel="noopener noreferrer"
+            data-primary-cta
             className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_64px_rgba(212,255,43,0.28)] active:scale-[0.99] w-full sm:w-auto"
             style={{ fontSize: "16px", padding: "20px 44px", minHeight: "64px", letterSpacing: "-0.01em" }}
             onClick={() => track("cta_book_click", { slug: data.slug, location: "final" })}
@@ -70,39 +86,21 @@ export default function SectionFinalCTA({ data }: { data: PartnerData }) {
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">→</span>
           </a>
 
-          {/* Secondary — WhatsApp */}
+          {/* Tertiary messenger — Tier 3: icon + text, no border */}
           <a
-            href={data.booking.whatsapp}
+            href={messengerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center justify-center gap-2.5 rounded-xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
+            className="inline-flex items-center gap-2 font-sora font-light transition-all duration-200 hover:opacity-80"
             style={{
-              fontSize: "15px",
-              padding: "18px 36px",
-              minHeight: "60px",
-              border: "1px solid rgba(74,222,128,0.28)",
-              color: "rgba(74,222,128,0.72)",
-              background: "rgba(74,222,128,0.03)",
+              fontSize: "14px",
+              color: isTelegram ? "rgba(34,158,217,0.75)" : "rgba(74,222,128,0.72)",
               letterSpacing: "-0.01em",
             }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = "rgba(74,222,128,0.5)";
-              el.style.color = "rgba(74,222,128,0.95)";
-              el.style.background = "rgba(74,222,128,0.06)";
-              el.style.boxShadow = "0 0 40px rgba(74,222,128,0.1)";
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget as HTMLElement;
-              el.style.borderColor = "rgba(74,222,128,0.28)";
-              el.style.color = "rgba(74,222,128,0.72)";
-              el.style.background = "rgba(74,222,128,0.03)";
-              el.style.boxShadow = "";
-            }}
-            onClick={() => track("whatsapp_click", { slug: data.slug, location: "final" })}
+            onClick={() => track(messengerEvent, { slug: data.slug, location: "final" })}
           >
-            <WAIcon />
-            Message on WhatsApp first
+            {isTelegram ? <TelegramIcon /> : <WAIcon />}
+            {messengerLabel}
           </a>
         </div>
 

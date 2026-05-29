@@ -9,13 +9,6 @@ import ScrollReveal from "../[slug]/components/ScrollReveal";
 export default function EdibleHealthLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <style>{`
-        body:has([data-demo-layout]) [data-site-element="announcement"],
-        body:has([data-demo-layout]) [data-site-element="nav"] {
-          display: none !important;
-        }
-      `}</style>
-
       <header
         className="fixed top-0 left-0 right-0 z-40 flex items-center px-6"
         style={{ height: "56px" }}
@@ -31,8 +24,6 @@ export default function EdibleHealthLayout({ children }: { children: ReactNode }
           />
         </Link>
       </header>
-
-      <div data-demo-layout hidden aria-hidden="true" />
 
       {children}
 
