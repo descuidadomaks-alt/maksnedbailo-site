@@ -468,8 +468,8 @@ export default function RomanPage() {
           .rs-faq-img-m { display: none !important; }
           /* Process desktop */
           .rs-process-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 5rem !important; align-items: start !important; }
-          /* Contact */
-          .rs-contact-grid { grid-template-columns: 55% 1fr !important; gap: 0 !important; }
+          /* Contact — equal cols below photo */
+          .rs-contact-grid { grid-template-columns: 1fr 1fr !important; gap: clamp(3rem,6vw,6rem) !important; }
         }
         /* Embla slides */
         .embla__slide { flex: 0 0 calc(100% - 3rem); }
@@ -558,15 +558,15 @@ export default function RomanPage() {
         >
           <source src="/roman/hero.mp4" type="video/mp4" />
         </video>
-        {/* Dark overlay — top band dark for nav readability, lighter mid to show video, dark bottom for text */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,14,15,.65) 0%, rgba(14,14,15,.18) 35%, rgba(14,14,15,.18) 60%, rgba(14,14,15,.92) 100%)', zIndex: 1 }} />
+        {/* Dark overlay — strong top for nav, medium mid so video reads through, solid bottom for text */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,14,15,.72) 0%, rgba(14,14,15,.38) 30%, rgba(14,14,15,.38) 58%, rgba(14,14,15,.94) 100%)', zIndex: 1 }} />
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 780, padding: '0 1.5rem', width: '100%', margin: '0 auto' }}>
           <p className="rs-a0" style={{ ...body, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '.3em', color: D.gold, marginBottom: '1.25rem', fontWeight: 300 }}>
             {T.hero.eyebrow}
           </p>
-          <h1 style={{ ...display, fontWeight: 300, fontStyle: 'italic', lineHeight: 1.06, marginBottom: '1.5rem' }}>
+          <h1 style={{ ...display, fontWeight: 300, fontStyle: 'italic', lineHeight: 1.06, marginBottom: '1.5rem', textShadow: '0 2px 16px rgba(0,0,0,0.55)' }}>
             <span className="rs-a1" style={{ display: 'block', fontSize: 'clamp(2.2rem,6.5vw,5.2rem)', color: D.cream }}>
               {T.hero.h1a}
             </span>
@@ -601,8 +601,8 @@ export default function RomanPage() {
           </div>
         </div>
 
-        {/* Scroll indicator — absolute bottom, always visible */}
-        <div className="rs-a6" style={{ position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}>
+        {/* Scroll indicator — absolutely centered, independent of content flow */}
+        <div className="rs-a6" style={{ position: 'absolute', bottom: 28, left: 0, right: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}>
           <div className="rs-scroll-line" style={{ width: 1, height: 36, background: `linear-gradient(to bottom, transparent, ${D.gold})`, transformOrigin: 'top' }} />
           <span style={{ ...body, fontSize: 9, textTransform: 'uppercase', letterSpacing: '.22em', color: D.mute }}>{T.hero.scroll}</span>
         </div>
@@ -670,8 +670,11 @@ export default function RomanPage() {
               {/* Chart */}
               <div className="rs-reveal">
                 <ThesisChart />
-                <p style={{ ...display, fontSize: '11px', fontStyle: 'italic', color: D.muteDark, marginTop: '0.5rem', maxWidth: 380, lineHeight: 1.55 }}>
+                <p style={{ ...display, fontSize: '13px', fontStyle: 'italic', color: 'rgba(26,23,20,0.72)', marginTop: '0.6rem', maxWidth: 380, lineHeight: 1.6 }}>
                   {T.thesis.chartCaption}
+                </p>
+                <p style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.14em', color: D.muteDark, marginTop: '0.4rem' }}>
+                  {lang === 'ru' ? '* Иллюстративные данные · TODO_THESIS_DATA' : '* Illustrative data · TODO_THESIS_DATA'}
                 </p>
               </div>
             </div>
@@ -806,9 +809,6 @@ export default function RomanPage() {
                 <img src="/roman/founder.jpg" alt="Roman Shiglo"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
-              <p style={{ ...body, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '.16em', color: D.mute, marginTop: '0.6rem' }}>
-                {T.founder.label1}
-              </p>
             </div>
 
             {/* Text */}
@@ -982,94 +982,124 @@ export default function RomanPage() {
         </div>
       </section>
 
-      {/* ── §07 Contact — dark — split-screen creative ───────────────────── */}
-      <section id="contact"
-        style={{ borderTop: `1px solid ${D.line}`, background: D.bg, position: 'relative', overflow: 'hidden' }}>
-        <div className="rs-contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', minHeight: '80vh' }}>
-          {/* Left: form */}
-          <div style={{ padding: `${SP} clamp(1.5rem,4vw,3.5rem)`, position: 'relative', zIndex: 2 }}>
-            <SectionHeader num={T.contact.num} eye={T.contact.eye} />
-            <h2 className="rs-reveal" style={{ ...display, fontSize: 'clamp(1.5rem,3vw,2.2rem)', fontWeight: 300, fontStyle: 'italic', color: D.cream, marginBottom: '2rem', lineHeight: 1.15, maxWidth: 420 }}>
-              {T.contact.hook}
-            </h2>
+      {/* ── §07 Contact — landscape photo banner + form below ───────────── */}
+      <section id="contact" style={{ borderTop: `1px solid ${D.line}`, background: D.bg }}>
 
-            {formSent ? (
-              <div className="rs-reveal" style={{ padding: '2rem 0' }}>
-                <div style={{ width: 44, height: 44, border: `1px solid ${D.gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={D.gold} strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <p style={{ ...display, fontSize: 'clamp(1.2rem,2vw,1.5rem)', fontStyle: 'italic', fontWeight: 300, color: D.cream, marginBottom: '.5rem' }}>
-                  {T.contact.successTitle}
-                </p>
-                <p style={{ ...body, fontSize: '13px', color: D.mute, fontWeight: 300 }}>
-                  {T.contact.successSub}
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={e => { e.preventDefault(); setFormSent(true) }}
-                style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem', maxWidth: 480 }}>
-                {/* Name */}
-                <div>
-                  <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.35rem' }}>
-                    {lang === 'ru' ? 'Имя' : 'Name'}
-                  </label>
-                  <input required value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
-                    placeholder={T.contact.namePh}
-                    style={{ width: '100%', background: 'transparent', borderBottom: `1px solid ${D.line}`, borderTop: 'none', borderLeft: 'none', borderRight: 'none', color: D.cream, padding: '.6rem 0', ...body, fontSize: '14px', fontWeight: 300, outline: 'none', boxSizing: 'border-box', transition: 'border-color .2s' }}
-                    onFocus={e => (e.target.style.borderBottomColor = D.gold)}
-                    onBlur={e => (e.target.style.borderBottomColor = D.line)} />
-                </div>
-                {/* Contact — no country preselection */}
-                <div>
-                  <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.35rem' }}>
-                    {lang === 'ru' ? 'Телефон или Telegram' : 'Phone or Telegram'}
-                  </label>
-                  <input required value={formData.contact} onChange={e => setFormData(p => ({ ...p, contact: e.target.value }))}
-                    placeholder={T.contact.contactPh}
-                    style={{ width: '100%', background: 'transparent', borderBottom: `1px solid ${D.line}`, borderTop: 'none', borderLeft: 'none', borderRight: 'none', color: D.cream, padding: '.6rem 0', ...body, fontSize: '14px', fontWeight: 300, outline: 'none', boxSizing: 'border-box', transition: 'border-color .2s' }}
-                    onFocus={e => (e.target.style.borderBottomColor = D.gold)}
-                    onBlur={e => (e.target.style.borderBottomColor = D.line)} />
-                </div>
-                {/* Toggle groups */}
-                {([
-                  { key: 'budget',  label: T.contact.budgetLabel,  opts: T.contact.budgetOpts },
-                  { key: 'goal',    label: T.contact.goalLabel,    opts: T.contact.goalOpts },
-                  { key: 'channel', label: T.contact.channelLabel, opts: T.contact.channelOpts },
-                ] as const).map(({ key, label, opts }) => (
-                  <div key={key}>
-                    <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.5rem' }}>{label}</label>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem' }}>
-                      {opts.map(opt => {
-                        const active = formData[key] === opt
-                        return (
-                          <button key={opt} type="button"
-                            onClick={() => setFormData(p => ({ ...p, [key]: opt }))}
-                            style={{ padding: '.4rem .8rem', border: `1px solid ${active ? D.gold : D.line}`, background: active ? 'rgba(201,169,97,.1)' : 'transparent', color: active ? D.gold : D.mute, ...body, fontSize: '11px', cursor: 'pointer', transition: 'all .2s' }}>
-                            {opt}
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ))}
-                <button type="submit" className="rs-btn-primary" style={{ marginTop: '.5rem', width: '100%', justifyContent: 'center', fontSize: '11px', letterSpacing: '.16em', padding: '1.05rem' }}>
-                  {T.contact.submit}
-                </button>
-              </form>
-            )}
+        {/* Full landscape photo — natural proportions, uncropped */}
+        <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/roman/founder2.jpg"
+            alt=""
+            loading="lazy"
+            style={{ width: '100%', display: 'block', maxHeight: '70vh', objectFit: 'cover', objectPosition: 'center 20%' }}
+          />
+          {/* Bottom fade into dark section background */}
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '45%', background: 'linear-gradient(to bottom, transparent, rgba(14,14,15,1))' }} />
+          {/* Top fade for visual breathing room */}
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '20%', background: 'linear-gradient(to bottom, rgba(14,14,15,0.5), transparent)' }} />
+          {/* Section label — bottom-left overlay on image */}
+          <div style={{ position: 'absolute', bottom: '1.75rem', left: '50%', transform: 'translateX(-50%)', maxWidth: 1200, width: '100%', padding: '0 1.5rem', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
+              <span style={{ ...display, fontSize: 'clamp(2.5rem,5vw,3.5rem)', fontStyle: 'italic', fontWeight: 300, color: D.gold, opacity: 0.7, lineHeight: 1 }}>
+                {T.contact.num}
+              </span>
+              <span style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.22em', color: D.mute }}>
+                {T.contact.eye}
+              </span>
+            </div>
           </div>
+        </div>
 
-          {/* Right: founder2 full-bleed — landscape photo, centered crop */}
-          <div style={{ position: 'relative', minHeight: 360, overflow: 'hidden' }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/roman/founder2.jpg"
-              alt=""
-              loading="lazy"
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
-            />
-            {/* Subtle dark tint */}
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(14,14,15,0.45) 0%, rgba(14,14,15,0.15) 100%)' }} />
+        {/* Form content — below image */}
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: `${SP} 1.5rem` }}>
+          {/* Hook heading */}
+          <h2 className="rs-reveal" style={{ ...display, fontSize: 'clamp(1.6rem,3.5vw,2.6rem)', fontWeight: 300, fontStyle: 'italic', color: D.cream, marginBottom: 'clamp(2rem,4vw,3.5rem)', lineHeight: 1.15, maxWidth: 600 }}>
+            {T.contact.hook}
+          </h2>
+
+          {/* 2-col on desktop: left = description + direct contact, right = form */}
+          <div className="rs-contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 'clamp(2.5rem,5vw,5rem)', alignItems: 'start' }}>
+
+            {/* Left col: sub-text + direct buttons */}
+            <div>
+              <p className="rs-reveal" style={{ ...body, fontSize: 'clamp(.88rem,1.4vw,.97rem)', color: D.mute, lineHeight: 1.8, fontWeight: 300, marginBottom: '2rem', maxWidth: 400 }}>
+                {T.contact.sub}
+              </p>
+              <div className="rs-reveal" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <a href={waLink} target="_blank" rel="noopener noreferrer" className="rs-btn-ghost">
+                  <IconWA size={13} /> WhatsApp
+                </a>
+                <a href="https://t.me/roman_shiglo" target="_blank" rel="noopener noreferrer" className="rs-btn-ghost">
+                  <IconTG size={13} /> Telegram
+                </a>
+              </div>
+            </div>
+
+            {/* Right col: form */}
+            <div className="rs-reveal">
+              {formSent ? (
+                <div style={{ padding: '2rem 0' }}>
+                  <div style={{ width: 44, height: 44, border: `1px solid ${D.gold}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={D.gold} strokeWidth="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <p style={{ ...display, fontSize: 'clamp(1.2rem,2vw,1.5rem)', fontStyle: 'italic', fontWeight: 300, color: D.cream, marginBottom: '.5rem' }}>
+                    {T.contact.successTitle}
+                  </p>
+                  <p style={{ ...body, fontSize: '13px', color: D.mute, fontWeight: 300 }}>
+                    {T.contact.successSub}
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={e => { e.preventDefault(); setFormSent(true) }}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                  <div>
+                    <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.35rem' }}>
+                      {lang === 'ru' ? 'Имя' : 'Name'}
+                    </label>
+                    <input required value={formData.name} onChange={e => setFormData(p => ({ ...p, name: e.target.value }))}
+                      placeholder={T.contact.namePh}
+                      style={{ width: '100%', background: 'transparent', borderBottom: `1px solid ${D.line}`, borderTop: 'none', borderLeft: 'none', borderRight: 'none', color: D.cream, padding: '.6rem 0', ...body, fontSize: '14px', fontWeight: 300, outline: 'none', boxSizing: 'border-box', transition: 'border-color .2s' }}
+                      onFocus={e => (e.target.style.borderBottomColor = D.gold)}
+                      onBlur={e => (e.target.style.borderBottomColor = D.line)} />
+                  </div>
+                  <div>
+                    <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.35rem' }}>
+                      {lang === 'ru' ? 'Телефон или Telegram' : 'Phone or Telegram'}
+                    </label>
+                    <input required value={formData.contact} onChange={e => setFormData(p => ({ ...p, contact: e.target.value }))}
+                      placeholder={T.contact.contactPh}
+                      style={{ width: '100%', background: 'transparent', borderBottom: `1px solid ${D.line}`, borderTop: 'none', borderLeft: 'none', borderRight: 'none', color: D.cream, padding: '.6rem 0', ...body, fontSize: '14px', fontWeight: 300, outline: 'none', boxSizing: 'border-box', transition: 'border-color .2s' }}
+                      onFocus={e => (e.target.style.borderBottomColor = D.gold)}
+                      onBlur={e => (e.target.style.borderBottomColor = D.line)} />
+                  </div>
+                  {([
+                    { key: 'budget',  label: T.contact.budgetLabel,  opts: T.contact.budgetOpts },
+                    { key: 'goal',    label: T.contact.goalLabel,    opts: T.contact.goalOpts },
+                    { key: 'channel', label: T.contact.channelLabel, opts: T.contact.channelOpts },
+                  ] as const).map(({ key, label, opts }) => (
+                    <div key={key}>
+                      <label style={{ ...body, fontSize: '9px', textTransform: 'uppercase', letterSpacing: '.18em', color: D.mute, display: 'block', marginBottom: '.5rem' }}>{label}</label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.4rem' }}>
+                        {opts.map(opt => {
+                          const active = formData[key] === opt
+                          return (
+                            <button key={opt} type="button"
+                              onClick={() => setFormData(p => ({ ...p, [key]: opt }))}
+                              style={{ padding: '.4rem .8rem', border: `1px solid ${active ? D.gold : D.line}`, background: active ? 'rgba(201,169,97,.1)' : 'transparent', color: active ? D.gold : D.mute, ...body, fontSize: '11px', cursor: 'pointer', transition: 'all .2s' }}>
+                              {opt}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                  <button type="submit" className="rs-btn-primary" style={{ marginTop: '.5rem', width: '100%', justifyContent: 'center', fontSize: '11px', letterSpacing: '.16em', padding: '1.05rem' }}>
+                    {T.contact.submit}
+                  </button>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </section>
