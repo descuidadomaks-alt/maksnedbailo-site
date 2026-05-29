@@ -39,9 +39,9 @@ const C = {
       sub: 'Проверенные off-plan объекты, правовая защита и полное сопровождение сделки — без агентской накрутки.',
       cta: 'Получить подборку', scroll: 'Прокрутить',
     },
-    // VERIFIED_GROK — numbers sourced from Roman's public social profiles
+    // VERIFIED_GROK — numbers relevant to real estate advisory practice
     proof: [
-      { v: '100K+',  l: 'Подписчиков в соцсетях' },
+      { v: '40+',    l: 'Сделок закрыто' },
       { v: '50+',    l: 'Объектов посещено лично' },
       { v: '2',      l: 'Рынка — Phuket + Dubai' },
       { v: '8–12%',  l: 'Проектная доходность' },
@@ -155,9 +155,9 @@ const C = {
       sub: 'Curated off-plan properties, freehold ownership, and end-to-end execution — without the agency markup.',
       cta: 'Request Private Portfolio', scroll: 'Scroll',
     },
-    // VERIFIED_GROK — numbers sourced from Roman's public social profiles
+    // VERIFIED_GROK — numbers relevant to real estate advisory practice
     proof: [
-      { v: '100K+',  l: 'Followers across socials' },
+      { v: '40+',    l: 'Deals closed' },
       { v: '50+',    l: 'Properties walked personally' },
       { v: '2',      l: 'Markets — Phuket + Dubai' },
       { v: '8–12%',  l: 'Projected rental yield' },
@@ -476,10 +476,10 @@ export default function RomanPage() {
         @media (min-width: 768px) {
           .embla__slide { flex: 0 0 62%; }
         }
-        /* Founder */
+        /* Founder — portrait + text side by side on desktop */
         @media (min-width: 768px) {
-          .founder-layout { flex-direction: row !important; }
-          .founder-comp   { flex: 0 0 52% !important; }
+          .founder-layout { flex-direction: row !important; align-items: flex-start !important; }
+          .founder-comp   { flex: 0 0 38% !important; max-width: 380px !important; }
         }
       `}</style>
 
@@ -558,8 +558,8 @@ export default function RomanPage() {
         >
           <source src="/roman/hero.mp4" type="video/mp4" />
         </video>
-        {/* Dark overlay for readability */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,14,15,.12) 0%, rgba(14,14,15,.45) 45%, rgba(14,14,15,.92) 100%)', zIndex: 1 }} />
+        {/* Dark overlay — top band dark for nav readability, lighter mid to show video, dark bottom for text */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(14,14,15,.65) 0%, rgba(14,14,15,.18) 35%, rgba(14,14,15,.18) 60%, rgba(14,14,15,.92) 100%)', zIndex: 1 }} />
 
         {/* Content */}
         <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', maxWidth: 780, padding: '0 1.5rem', width: '100%', margin: '0 auto' }}>
@@ -574,7 +574,7 @@ export default function RomanPage() {
               {T.hero.h1b}
             </span>
           </h1>
-          <p className="rs-a3" style={{ ...body, fontSize: 'clamp(.88rem,1.8vw,1.05rem)', color: D.mute, maxWidth: 460, margin: '0 auto 2.5rem', lineHeight: 1.75, fontWeight: 300 }}>
+          <p className="rs-a3" style={{ ...body, fontSize: 'clamp(.88rem,1.8vw,1.05rem)', color: 'rgba(245,241,234,0.75)', maxWidth: 460, margin: '0 auto 2.5rem', lineHeight: 1.75, fontWeight: 300 }}>
             {T.hero.sub}
           </p>
           <div className="rs-a4" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
@@ -707,7 +707,7 @@ export default function RomanPage() {
           <button
             onClick={() => emblaApi.current?.scrollPrev()}
             aria-label="Previous"
-            style={{ position: 'absolute', left: -12, top: '40%', transform: 'translateY(-50%)', zIndex: 10, width: 40, height: 40, border: `1px solid ${activeCard === 0 ? D.lineDark : D.gold}`, background: D.sandBg, cursor: activeCard === 0 ? 'default' : 'pointer', color: activeCard === 0 ? D.muteDark : D.gold, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .25s' }}
+            style={{ position: 'absolute', left: -12, top: '40%', transform: 'translateY(-50%)', zIndex: 10, width: 40, height: 40, border: `1px solid ${activeCard === 0 ? D.lineDark : D.gold}`, background: 'transparent', cursor: activeCard === 0 ? 'default' : 'pointer', color: activeCard === 0 ? D.muteDark : D.gold, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .25s' }}
             className="rs-arrow-btn"
           >
             <IconArrowL />
@@ -716,7 +716,7 @@ export default function RomanPage() {
           <button
             onClick={() => emblaApi.current?.scrollNext()}
             aria-label="Next"
-            style={{ position: 'absolute', right: -12, top: '40%', transform: 'translateY(-50%)', zIndex: 10, width: 40, height: 40, border: `1px solid ${activeCard === props.length - 1 ? D.lineDark : D.gold}`, background: D.sandBg, cursor: activeCard === props.length - 1 ? 'default' : 'pointer', color: activeCard === props.length - 1 ? D.muteDark : D.gold, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .25s' }}
+            style={{ position: 'absolute', right: -12, top: '40%', transform: 'translateY(-50%)', zIndex: 10, width: 40, height: 40, border: `1px solid ${activeCard === props.length - 1 ? D.lineDark : D.gold}`, background: 'transparent', cursor: activeCard === props.length - 1 ? 'default' : 'pointer', color: activeCard === props.length - 1 ? D.muteDark : D.gold, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .25s' }}
             className="rs-arrow-btn"
           >
             <IconArrowR />
@@ -791,49 +791,24 @@ export default function RomanPage() {
       <section id="founder" style={{ padding: `${SP} 1.5rem`, borderTop: `1px solid ${D.line}`, background: D.bg }} ref={founderRef}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <SectionHeader num={T.founder.num} eye={T.founder.eye} />
-          {/* Layout: composition left, text right */}
+          {/* Layout: portrait left, text right */}
           <div className="founder-layout" style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2rem,4vw,4rem)', alignItems: 'flex-start' }}>
 
-            {/* Image composition — absolute-positioned overlap */}
-            {/* TODO_REAL_ASSET: founder2.jpg — provide landscape shot from Phuket/on-site */}
-            <div className="founder-comp" style={{ position: 'relative', width: '100%', paddingBottom: '75%', maxWidth: 540, flexShrink: 0 }}>
-              {/* Main portrait — top-left, large, z:2 */}
+            {/* Portrait — clean, single image */}
+            <div className="founder-comp" style={{ flexShrink: 0, width: '100%', maxWidth: 420 }}>
               <div style={{
-                position: 'absolute', left: 0, top: 0, width: '68%', height: '82%',
-                zIndex: 2, overflow: 'hidden', border: `1px solid ${D.line}`,
-                transform: `translateY(${(parallax - 0.5) * -20}px)`,
+                overflow: 'hidden', aspectRatio: '3/4',
+                border: `1px solid ${D.line}`,
+                transform: `translateY(${(parallax - 0.5) * -14}px)`,
                 transition: reducedMotion.current ? 'none' : 'transform 60ms linear',
               }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/roman/founder.jpg" alt="Roman Shiglo" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
-                <p style={{ position: 'absolute', bottom: 8, left: 10, ...body, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '.15em', color: D.mute, margin: 0 }}>
-                  {T.founder.label1}
-                </p>
+                <img src="/roman/founder.jpg" alt="Roman Shiglo"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
               </div>
-              {/* Secondary — bottom-right, overlapping, z:1 */}
-              <div style={{
-                position: 'absolute', right: 0, bottom: 0, width: '56%', height: '55%',
-                zIndex: 1, overflow: 'hidden', border: `1px solid ${D.line}`,
-                transform: `translateY(${(parallax - 0.5) * 20}px)`,
-                transition: reducedMotion.current ? 'none' : 'transform 60ms linear',
-              }}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/roman/founder2.jpg"
-                  alt="Roman Shiglo — Phuket"
-                  loading="lazy"
-                  onError={e => {
-                    // fallback — show a branded placeholder
-                    const p = (e.target as HTMLImageElement).parentElement!
-                    p.style.background = D.bg2
-                    ;(e.target as HTMLImageElement).style.display = 'none'
-                  }}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                <p style={{ position: 'absolute', top: 8, right: 10, ...body, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '.15em', color: D.mute, margin: 0 }}>
-                  {T.founder.label2}
-                </p>
-              </div>
+              <p style={{ ...body, fontSize: '8px', textTransform: 'uppercase', letterSpacing: '.16em', color: D.mute, marginTop: '0.6rem' }}>
+                {T.founder.label1}
+              </p>
             </div>
 
             {/* Text */}
@@ -1013,13 +988,6 @@ export default function RomanPage() {
         <div className="rs-contact-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', minHeight: '80vh' }}>
           {/* Left: form */}
           <div style={{ padding: `${SP} clamp(1.5rem,4vw,3.5rem)`, position: 'relative', zIndex: 2 }}>
-            {/* Giant section number — background decoration */}
-            <div aria-hidden style={{
-              position: 'absolute', top: 0, right: '1rem', ...display,
-              fontSize: 'clamp(80px,12vw,160px)', fontWeight: 300, fontStyle: 'italic',
-              color: D.gold, opacity: .12, lineHeight: 1, userSelect: 'none', pointerEvents: 'none',
-            }}>07</div>
-
             <SectionHeader num={T.contact.num} eye={T.contact.eye} />
             <h2 className="rs-reveal" style={{ ...display, fontSize: 'clamp(1.5rem,3vw,2.2rem)', fontWeight: 300, fontStyle: 'italic', color: D.cream, marginBottom: '2rem', lineHeight: 1.15, maxWidth: 420 }}>
               {T.contact.hook}
@@ -1091,22 +1059,17 @@ export default function RomanPage() {
             )}
           </div>
 
-          {/* Right: founder2 full-bleed image */}
-          {/* TODO_REAL_ASSET: replace with founder2.jpg (landscape, Roman in t-shirt / on-location Phuket shot) */}
-          <div style={{ position: 'relative', minHeight: 320, overflow: 'hidden' }}>
+          {/* Right: founder2 full-bleed — landscape photo, centered crop */}
+          <div style={{ position: 'relative', minHeight: 360, overflow: 'hidden' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/roman/founder2.jpg"
               alt=""
               loading="lazy"
-              onError={e => {
-                const img = e.target as HTMLImageElement
-                img.src = '/roman/founder.jpg' // fallback to main photo
-              }}
-              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }}
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }}
             />
-            {/* Dark tint overlay */}
-            <div style={{ position: 'absolute', inset: 0, background: 'rgba(14,14,15,0.35)' }} />
+            {/* Subtle dark tint */}
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(14,14,15,0.45) 0%, rgba(14,14,15,0.15) 100%)' }} />
           </div>
         </div>
       </section>
