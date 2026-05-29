@@ -467,9 +467,15 @@ export default function RomanPage() {
           .rs-faq-img-m { display: none !important; }
           /* Process desktop */
           .rs-process-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 5rem !important; align-items: start !important; }
+          .rs-process-img-panel { display: block !important; }
+          /* Carousel arrows — desktop only */
+          .rs-arrow-btn { display: flex !important; }
           /* Contact — equal cols below photo */
           .rs-contact-grid { grid-template-columns: 1fr 1fr !important; gap: clamp(3rem,6vw,6rem) !important; }
         }
+        /* Mobile defaults — hidden on small screens */
+        .rs-arrow-btn { display: none; }
+        .rs-process-img-panel { display: none; }
         /* Embla slides */
         .embla__slide { flex: 0 0 calc(100% - 3rem); }
         @media (min-width: 768px) {
@@ -885,8 +891,8 @@ export default function RomanPage() {
                 )
               })}
             </div>
-            {/* Desktop: sticky image panel */}
-            <div style={{ position: 'sticky', top: 100, alignSelf: 'start' }}>
+            {/* Desktop only: sticky image panel — hidden on mobile via .rs-process-img-panel */}
+            <div className="rs-process-img-panel" style={{ position: 'sticky', top: 100, alignSelf: 'start' }}>
               {T.process.steps.map((step, i) => (
                 <div key={step.n}
                   className={`rs-step-img ${hoveredStep === i ? 'rs-step-visible' : ''}`}
