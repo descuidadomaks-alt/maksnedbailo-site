@@ -38,7 +38,7 @@ export default function SectionLeadMagnet({ data }: { data: PartnerData }) {
 
       if (res.ok) {
         setState("success");
-        window.plausible?.("partner_lead_magnet", { props: { slug: data.slug } });
+        window.plausible?.("template_form_submit", { props: { slug: data.slug } });
       } else {
         setState("error");
       }

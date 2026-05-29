@@ -1,7 +1,24 @@
+"use client";
+
 /**
- * Stylised SVG/HTML mockup of the Strategic AI Map deliverable.
- * Shows the prospect what they walk away with from the 90-min session.
+ * Stylised HTML mockup of the Strategic AI Map deliverable.
+ * Desktop: shows full table.
+ * Mobile: shows a summary card + "View as image" button → lightbox.
+ *
+ * TODO: drop PNG at /public/partners/vlad/assets/ai-map-sample.png
+ *       Run: npx puppeteer-screenshot or export manually from Figma.
  */
+
+import { useState } from "react";
+import Lightbox from "./Lightbox";
+
+declare global {
+  interface Window {
+    plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
+  }
+}
+
+const AI_MAP_IMAGE = "/partners/vlad/assets/ai-map-sample.png";
 
 const PILLARS = [
   {
@@ -46,6 +63,13 @@ function FeasibilityDots({ score }: { score: number }) {
 }
 
 export default function AiMapMockup() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const openLightbox = () => {
+    setLightboxOpen(true);
+    window.plausible?.("lightbox_open", { props: { which_table: "ai_map" } });
+  };
+
   return (
     <div className="py-12 md:py-16">
       <div className="max-w-3xl mx-auto px-6">
@@ -58,10 +82,10 @@ export default function AiMapMockup() {
           Sample output. Yours will be specific to your business.
         </p>
 
-        {/* Document frame */}
+        {/* ── Desktop — full table ────────────────────────────────────────────── */}
         <div
           data-reveal
-          className="rounded-2xl border border-white/[0.08] overflow-hidden"
+          className="hidden md:block rounded-2xl border border-white/[0.08] overflow-hidden"
           style={{
             background: "rgba(255,255,255,0.018)",
             boxShadow: "0 20px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(212,255,43,0.06)",
@@ -90,7 +114,7 @@ export default function AiMapMockup() {
 
           {/* Column header */}
           <div
-            className="hidden md:grid px-6 py-2 border-b border-white/[0.04]"
+            className="grid px-6 py-2 border-b border-white/[0.04]"
             style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px" }}
           >
             {["Pain / bottleneck", "Current cost", "AI feasibility", "Est. ROI", "Rank"].map((h) => (
@@ -119,25 +143,8 @@ export default function AiMapMockup() {
                   key={ii}
                   className="px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.018] transition-colors duration-150"
                 >
-                  {/* Mobile layout */}
-                  <div className="md:hidden flex flex-col gap-2">
-                    <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>{item.pain}</p>
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <span className="font-sora text-fg/35" style={{ fontSize: "11px" }}>Cost: {item.cost}</span>
-                      <FeasibilityDots score={item.feasibility} />
-                      <span className="font-sora text-accent/70" style={{ fontSize: "11px" }}>ROI: {item.roi}</span>
-                      <span
-                        className="font-sora font-semibold text-fg/50"
-                        style={{ fontSize: "10px", letterSpacing: "1px" }}
-                      >
-                        #{item.rank}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Desktop layout */}
                   <div
-                    className="hidden md:grid items-center gap-2"
+                    className="grid items-center gap-2"
                     style={{ gridTemplateColumns: "1fr 90px 90px 80px 50px" }}
                   >
                     <p className="font-sora font-light text-fg/65" style={{ fontSize: "13px" }}>{item.pain}</p>
@@ -184,7 +191,67 @@ export default function AiMapMockup() {
           </div>
         </div>
 
+        {/* ── Mobile — summary card + view as image ──────────────────────────── */}
+        <div
+          data-reveal
+          className="md:hidden rounded-2xl border border-white/[0.08] overflow-hidden"
+          style={{
+            background: "rgba(255,255,255,0.018)",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.35)",
+          }}
+        >
+          {/* Header */}
+          <div
+            className="px-5 py-4 border-b border-white/[0.06]"
+            style={{ background: "rgba(212,255,43,0.06)" }}
+          >
+            <p className="font-sora text-accent/70" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
+              Strategic AI Map — Sample
+            </p>
+            <p className="font-playfair text-fg mt-0.5" style={{ fontSize: "16px", letterSpacing: "-0.02em" }}>
+              [Client Business Name]
+            </p>
+          </div>
+
+          {/* Summary stats */}
+          <div className="grid grid-cols-3 border-b border-white/[0.06]">
+            {[
+              { label: "Pillars scored", value: "3" },
+              { label: "Use cases ranked", value: "6" },
+              { label: "Phase 1 quoted", value: "€4,500" },
+            ].map((s) => (
+              <div key={s.label} className="px-4 py-4 border-r border-white/[0.04] last:border-0 text-center">
+                <p className="font-playfair text-accent" style={{ fontSize: "18px", letterSpacing: "-0.02em" }}>{s.value}</p>
+                <p className="font-sora text-fg/30 mt-0.5" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* View as image button */}
+          <button
+            onClick={openLightbox}
+            className="w-full flex items-center justify-center gap-2 py-4 font-sora text-fg/40 hover:text-fg/70 transition-colors duration-200"
+            style={{ fontSize: "13px", letterSpacing: "0.5px" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <polyline points="21 15 16 10 5 21" />
+            </svg>
+            View full AI Map as image
+          </button>
+        </div>
+
       </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <Lightbox
+          src={AI_MAP_IMAGE}
+          alt="Strategic AI Map sample output"
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </div>
   );
 }

@@ -8,7 +8,7 @@ const vlad: PartnerData = {
     role: "shaman & advisor",
     photo: null, // TODO:VLAD_PHOTO — drop headshot at /public/partners/vlad.jpg
     quote:
-      "I work with people building real things in hard conditions. Maks built me something I now use weekly. I asked him to share it with my circle.", // TODO:VLAD_QUOTE_FINAL
+      "I've known Maks for years. When someone in my circle needs to think clearly about AI, I send them to him. He won't sell you anything you don't need.",
     introCircle: "Vlad's circle",
   },
 
@@ -20,13 +20,13 @@ const vlad: PartnerData = {
 
   hero: {
     eyebrow: "Personal invitation through Vlad's circle",
-    headline: "Your team got smaller.\nYour business didn't get easier.",
+    headline: "The bottleneck isn't your team.\nIt's the five things only you can answer.",
     subheadline:
-      "Here's what your company looks like with three AI systems handling what they used to.",
+      "Map the gaps — and hand three of them to AI — in 90 minutes.",
     subtext:
       "A 90-minute Strategic AI Mapping session — normally €1,500 — gifted to you through Vlad. By the end, you'll have a one-page Strategic AI Map of your business, ranked by ROI. No pitch deck. No filler. If there's nothing worth automating, I'll tell you and you keep the map.",
     scarcity:
-      "Vlad is sharing this with a small number of people from his circle this quarter.",
+      "This offer is open through June 30, 2026. After that, Vlad's allocation closes.",
     cta: "Claim Your Complimentary Session",
   },
 

@@ -25,7 +25,7 @@ export default function SectionValueStack({ data }: { data: PartnerData }) {
         </h2>
 
         <p data-reveal className="font-sora font-light text-fg/40 mb-12" style={{ fontSize: "15px", lineHeight: 1.7 }}>
-          What you walk away with. Whether or not we ever work together again.
+          What you receive within 48 hours of the call. Whether or not we ever work together again.
         </p>
 
         {/* Value table */}
@@ -49,7 +49,11 @@ export default function SectionValueStack({ data }: { data: PartnerData }) {
           ))}
 
           {/* Subtotal */}
-          <div className="flex items-center justify-between px-7 py-5 border-t border-white/[0.08]" style={{ background: "rgba(255,255,255,0.02)" }}>
+          <div
+            data-reveal="d1"
+            className="flex items-center justify-between px-7 py-5 border-t border-white/[0.08]"
+            style={{ background: "rgba(255,255,255,0.02)" }}
+          >
             <span className="font-sora text-fg/25" style={{ fontSize: "11px", letterSpacing: "2px", textTransform: "uppercase" }}>
               Total Value
             </span>
@@ -60,6 +64,7 @@ export default function SectionValueStack({ data }: { data: PartnerData }) {
 
           {/* Your investment — accent */}
           <div
+            data-reveal="d2"
             className="flex items-center justify-between px-7 py-6"
             style={{ background: "rgba(212,255,43,0.07)", borderTop: "1px solid rgba(212,255,43,0.2)" }}
           >

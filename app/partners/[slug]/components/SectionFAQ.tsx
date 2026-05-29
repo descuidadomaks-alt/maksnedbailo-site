@@ -23,7 +23,7 @@ function getFAQs(data: PartnerData) {
     },
     {
       q: "Why is " + data.partner.name + " giving this away?",
-      a: "Because I built him an internal system he uses weekly and he wants his people to have the same edge. He gets a small thank-you if you eventually decide to work with me. No pressure either way — he's not selling, he's sharing.",
+      a: "Because he's known me for years and trusts how I work with operators. He gets a small thank-you if you eventually decide to work with me. No pressure either way — he's not selling, he's sharing.",
     },
     {
       q: "In what language can we run the session?",

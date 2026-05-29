@@ -5,15 +5,24 @@ import { useEffect } from "react";
 declare global {
   interface Window {
     plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
+    // Microsoft Clarity custom tag API
+    clarity?: (method: string, key: string, value?: string) => void;
+  }
+}
+
+/** Fire an event to both Plausible and Clarity (if available). */
+function track(event: string, props: Record<string, string>) {
+  window.plausible?.(event, { props });
+  // Clarity: custom tags visible in session recordings & dashboards
+  if (window.clarity) {
+    window.clarity("set", event, Object.values(props).join(" | "));
   }
 }
 
 /**
- * Client-only component. Fires Plausible events for:
- *  — Scroll depth (25 / 50 / 75 / 100 %)
- *  — Time on page (on beforeunload: 30s / 60s / 120s / 180s+ buckets)
- *
- * Attach once at page level; needs no props — slug is passed in.
+ * Client-only component. Fires named analytics events for:
+ *  — Scroll depth (25 / 50 / 75 / 100 %)   → "scroll_depth"
+ *  — Time on page (on beforeunload buckets) → "partner_time_on_page"
  */
 export default function PartnerAnalytics({ slug }: { slug: string }) {
   useEffect(() => {
@@ -32,9 +41,7 @@ export default function PartnerAnalytics({ slug }: { slug: string }) {
       for (const t of THRESHOLDS) {
         if (pct >= t && !fired.has(`scroll_${t}`)) {
           fired.add(`scroll_${t}`);
-          window.plausible?.("partner_scroll_depth", {
-            props: { slug, depth: `${t}%` },
-          });
+          track("scroll_depth", { slug, depth: `${t}%` });
         }
       }
     };
@@ -52,9 +59,7 @@ export default function PartnerAnalytics({ slug }: { slug: string }) {
       else if (seconds < 180) bucket = "2–3min";
       else                    bucket = "3min+";
 
-      window.plausible?.("partner_time_on_page", {
-        props: { slug, duration: bucket },
-      });
+      track("partner_time_on_page", { slug, duration: bucket });
     };
 
     window.addEventListener("beforeunload", onLeave);

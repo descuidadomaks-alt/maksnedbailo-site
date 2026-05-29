@@ -20,6 +20,7 @@ import SectionFAQ from "./components/SectionFAQ";
 import SectionFinalCTA from "./components/SectionFinalCTA";
 import SectionLeadMagnet from "./components/SectionLeadMagnet";
 import PartnerAnalytics from "./components/PartnerAnalytics";
+import StickyMobileCTA from "./components/StickyMobileCTA";
 
 // ─── Registry — add new partners here ─────────────────────────────────────────
 const PARTNERS: Record<string, PartnerData> = {
@@ -67,6 +68,9 @@ export default function PartnerPage({ params }: Props) {
     <>
       {/* Analytics — scroll depth + time on page (client only) */}
       <PartnerAnalytics slug={data.slug} />
+
+      {/* Sticky mobile CTA — bottom-fixed, appears after hero, dismissible */}
+      <StickyMobileCTA data={data} />
 
       <main className="min-h-screen">
         {/* 1. Stats marquee */}

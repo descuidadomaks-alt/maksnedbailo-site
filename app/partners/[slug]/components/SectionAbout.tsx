@@ -51,14 +51,14 @@ export default function SectionAbout({ data }: { data: PartnerData }) {
                 Before this, I built a 10,000-person network marketing organisation across 10 countries, and ran DCOAST as a design agency serving international clients. I built and delivered a 14-week AI training curriculum for Risk.inc&apos;s 80-person design team in 2025. I speak Ukrainian, Russian, English, and enough Spanish to get by.
               </p>
               <p className="font-sora font-light text-fg/60 leading-[1.85]" style={{ fontSize: "15px" }}>
-                I&apos;ve been {data.partner.name}&apos;s friend long before I built him anything useful. He&apos;s giving you this session because the system already works on people he trusts. Now it&apos;s your turn.
+                I&apos;ve known {data.partner.name} for years — long before any of this existed. He&apos;s sharing this with his circle because he trusts what I do with operators like you. Now it&apos;s your turn.
               </p>
 
               <div className="mt-6 pt-6 border-t border-white/[0.06] flex items-center gap-4 flex-wrap">
                 <p className="font-sora text-fg/50" style={{ fontSize: "12px", letterSpacing: "1px" }}>
                   <span className="text-fg/80">Maks Nedbailo</span>
                   <span className="text-fg/25 mx-2">·</span>
-                  AI Automation Studio
+                  Care Less AI Automation
                   <span className="text-fg/25 mx-2">·</span>
                   Santander, Spain
                 </p>

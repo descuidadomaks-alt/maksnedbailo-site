@@ -1,4 +1,5 @@
 const FOR_YOU = [
+  // TODO: pending separate math sign-off
   "You run a business doing €50k–€200k+ per month",
   "You've lost team members and the replacements aren't coming",
   "You suspect AI could help but don't want hype — you want numbers",
@@ -8,6 +9,7 @@ const FOR_YOU = [
 const NOT_FOR_YOU = [
   "You're looking for free consulting with no intention of investing in your business",
   "You want me to teach you how to use ChatGPT (different conversation)",
+  // TODO: pending separate math sign-off
   "Your business is under €30k/month — the math doesn't work yet",
   "You need to convince 5 stakeholders before any decision (we'll talk again when you can decide)",
 ];

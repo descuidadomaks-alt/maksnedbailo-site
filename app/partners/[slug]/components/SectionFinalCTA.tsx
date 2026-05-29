@@ -5,7 +5,13 @@ import type { PartnerData } from "@/content/partners/index";
 declare global {
   interface Window {
     plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
+    clarity?: (method: string, key: string, value?: string) => void;
   }
+}
+
+function track(event: string, props: Record<string, string>) {
+  window.plausible?.(event, { props });
+  window.clarity?.("set", event, Object.values(props).join(" | "));
 }
 
 function WAIcon() {
@@ -18,9 +24,6 @@ function WAIcon() {
 }
 
 export default function SectionFinalCTA({ data }: { data: PartnerData }) {
-  const track = (location: string) =>
-    window.plausible?.("partner_cta", { props: { slug: data.slug, location } });
-
   return (
     <section className="section-divider py-24 md:py-40">
       <div className="max-w-xl mx-auto px-6 text-center">
@@ -61,7 +64,7 @@ export default function SectionFinalCTA({ data }: { data: PartnerData }) {
             rel="noopener noreferrer"
             className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_64px_rgba(212,255,43,0.28)] active:scale-[0.99] w-full sm:w-auto"
             style={{ fontSize: "16px", padding: "20px 44px", minHeight: "64px", letterSpacing: "-0.01em" }}
-            onClick={() => track("final")}
+            onClick={() => track("cta_book_click", { slug: data.slug, location: "final" })}
           >
             {data.hero.cta}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">→</span>
@@ -96,7 +99,7 @@ export default function SectionFinalCTA({ data }: { data: PartnerData }) {
               el.style.background = "rgba(74,222,128,0.03)";
               el.style.boxShadow = "";
             }}
-            onClick={() => track("whatsapp_final")}
+            onClick={() => track("whatsapp_click", { slug: data.slug, location: "final" })}
           >
             <WAIcon />
             Message on WhatsApp first

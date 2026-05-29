@@ -58,7 +58,7 @@ export default function SectionBorrowedProof() {
             >
               {/* LIVE badge */}
               <div
-                className="absolute top-5 right-5 flex items-center gap-1.5"
+                className="live-badge-pulse absolute top-5 right-5 flex items-center gap-1.5"
                 style={{
                   background: "rgba(74,222,128,0.08)",
                   border: "1px solid rgba(74,222,128,0.25)",

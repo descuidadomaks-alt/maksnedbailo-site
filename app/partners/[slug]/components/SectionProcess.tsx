@@ -13,8 +13,8 @@ const STEPS = [
   },
   {
     num: "03",
-    title: "Decide",
-    body: "You walk away with the Strategic AI Map. If something's worth building, I'll quote Phase 1 (typically €4,500 + Ukrainian dev capacity, 2–3 weeks). If not, you have the map regardless.",
+    title: "Receive",
+    body: "You receive the Strategic AI Map within 48 hours — a proper document, not rough notes. If something's worth building, I'll quote Phase 1 (typically €4,500 + Ukrainian dev capacity, 2–3 weeks). If not, you still have the map.",
   },
 ];
 
@@ -35,12 +35,65 @@ export default function SectionProcess({ data }: { data: PartnerData }) {
           How It Works
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {/* Desktop stepper — horizontal connector line */}
+        <div className="hidden md:block relative mb-14">
+          {/* Connector line */}
+          <div
+            className="absolute top-[28px] left-[calc(16.67%+8px)] right-[calc(16.67%+8px)]"
+            style={{ height: "1px", background: "rgba(212,255,43,0.1)" }}
+            aria-hidden
+          />
+          <div className="grid grid-cols-3 gap-5">
+            {STEPS.map((step, i) => (
+              <div
+                key={step.num}
+                data-reveal={`d${i}`}
+                className="flex flex-col items-start pt-0"
+              >
+                {/* Step indicator */}
+                <div className="flex items-center gap-3 mb-6 relative z-10">
+                  <span
+                    className="font-playfair font-bold text-accent"
+                    style={{ fontSize: "clamp(40px, 4.5vw, 60px)", lineHeight: 1, letterSpacing: "-0.04em" }}
+                  >
+                    {step.num}
+                  </span>
+                  <div
+                    className="w-2 h-2 rounded-full shrink-0"
+                    style={{ background: "rgba(212,255,43,0.45)", boxShadow: "0 0 8px rgba(212,255,43,0.3)" }}
+                    aria-hidden
+                  />
+                </div>
+                <div
+                  className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-7 flex flex-col gap-4 w-full hover:border-accent/20 hover:bg-white/[0.032] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300"
+                >
+                  <h3
+                    className="font-playfair font-normal text-fg"
+                    style={{ fontSize: "clamp(18px, 1.6vw, 22px)", lineHeight: 1.2 }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="font-sora font-light text-fg/55 leading-[1.75]" style={{ fontSize: "14px" }}>
+                    {step.body.replace("€4,500", data.pricing.phase1Anchor)}
+                  </p>
+                  {step.num === "03" && (
+                    <p className="font-sora font-light text-fg/30 mt-1" style={{ fontSize: "12px", fontStyle: "italic" }}>
+                      We do the final analysis after the call. You get a document, not rough notes.
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile — stacked cards */}
+        <div className="md:hidden flex flex-col gap-5">
           {STEPS.map((step, i) => (
             <div
               key={step.num}
               data-reveal={`d${i}`}
-              className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-8 flex flex-col gap-5 hover:border-accent/20 hover:bg-white/[0.032] hover:-translate-y-0.5 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)] transition-all duration-300"
+              className="rounded-2xl border border-white/[0.06] bg-white/[0.018] p-8 flex flex-col gap-5 hover:border-accent/20 hover:bg-white/[0.032] transition-all duration-300"
             >
               <span
                 className="font-playfair font-bold text-accent"
@@ -57,6 +110,11 @@ export default function SectionProcess({ data }: { data: PartnerData }) {
               <p className="font-sora font-light text-fg/55 leading-[1.75]" style={{ fontSize: "14px" }}>
                 {step.body.replace("€4,500", data.pricing.phase1Anchor)}
               </p>
+              {step.num === "03" && (
+                <p className="font-sora font-light text-fg/30" style={{ fontSize: "12px", fontStyle: "italic" }}>
+                  We do the final analysis after the call. You get a document, not rough notes.
+                </p>
+              )}
             </div>
           ))}
         </div>

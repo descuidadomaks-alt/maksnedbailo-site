@@ -66,7 +66,7 @@ export default function SectionComparison() {
                 style={{ background: "rgba(255,255,255,0.018)", border: "1px solid rgba(255,255,255,0.05)" }}
               >
                 <p className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.4 }}>
-                  &ldquo;Let me show you ChatGPT&rdquo;
+                  A ChatGPT walkthrough
                 </p>
               </div>
               <div

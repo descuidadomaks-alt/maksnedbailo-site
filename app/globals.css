@@ -252,6 +252,15 @@ h1.font-playfair, h2.font-playfair {
   margin: 3rem 0;
 }
 
+/* ─── Partner page — LIVE badge subtle glow pulse ───────────────────────────── */
+@keyframes live-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+  50%       { box-shadow: 0 0 10px 1px rgba(74,222,128,0.18); }
+}
+.live-badge-pulse {
+  animation: live-glow 3s ease-in-out infinite;
+}
+
 .prose-blog code {
   background: rgba(255, 255, 255, 0.05);
   padding: 0.15em 0.4em;

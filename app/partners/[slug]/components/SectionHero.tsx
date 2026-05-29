@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import type { PartnerData } from "@/content/partners/index";
+import { OFFER_DEADLINE_ISO } from "../lib/config";
 
 declare global {
   interface Window {
@@ -9,8 +11,25 @@ declare global {
   }
 }
 
+function useCountdownDays() {
+  const [days, setDays] = useState<number | null>(null);
+
+  useEffect(() => {
+    const calc = () => {
+      const deadline = new Date(OFFER_DEADLINE_ISO).getTime();
+      const now = Date.now();
+      const diff = Math.ceil((deadline - now) / (1000 * 60 * 60 * 24));
+      setDays(Math.max(0, diff));
+    };
+    calc();
+  }, []);
+
+  return days;
+}
+
 export default function SectionHero({ data }: { data: PartnerData }) {
   const lines = data.hero.headline.split("\n");
+  const daysLeft = useCountdownDays();
 
   return (
     <section
@@ -100,11 +119,34 @@ export default function SectionHero({ data }: { data: PartnerData }) {
               fontSize: "13px",
               fontStyle: "italic",
               lineHeight: 1.6,
-              marginBottom: "clamp(28px, 4vw, 44px)",
+              marginBottom: "clamp(16px, 2.5vw, 28px)",
             }}
           >
             {data.hero.scarcity}
           </p>
+        )}
+
+        {/* Countdown chip */}
+        {daysLeft !== null && daysLeft > 0 && (
+          <div className="flex justify-center mb-6">
+            <div
+              className="inline-flex items-center gap-2 font-sora"
+              style={{
+                fontSize: "11px",
+                letterSpacing: "1.5px",
+                color: "rgba(212,255,43,0.55)",
+                border: "1px solid rgba(212,255,43,0.14)",
+                borderRadius: "999px",
+                padding: "4px 12px",
+              }}
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full shrink-0"
+                style={{ background: "rgba(212,255,43,0.6)" }}
+              />
+              {daysLeft} {daysLeft === 1 ? "day" : "days"} left · offer closes June 30
+            </div>
+          </div>
         )}
 
         {/* Primary CTA */}
@@ -116,12 +158,15 @@ export default function SectionHero({ data }: { data: PartnerData }) {
           className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
           style={{ fontSize: "15px", padding: "18px 40px", minHeight: "60px", letterSpacing: "-0.01em" }}
           onClick={() =>
-            window.plausible?.("partner_cta", { props: { slug: data.slug, location: "hero" } })
+            window.plausible?.("cta_book_click", { props: { slug: data.slug, location: "hero" } })
           }
         >
           {data.hero.cta}
           <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">→</span>
         </a>
+
+        {/* Hero bottom sentinel — StickyMobileCTA watches this */}
+        <div data-hero-sentinel aria-hidden="true" />
 
         {/* Partner quote card */}
         <div
