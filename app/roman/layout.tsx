@@ -1,0 +1,157 @@
+import type { ReactNode } from 'react'
+import { Cormorant_Garamond, IBM_Plex_Sans } from 'next/font/google'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Roman Shiglo — Инвестиции в недвижимость Пхукета',
+  description: 'Независимый советник по инвестициям в недвижимость. Пхукет · Дубай. Проверенные off-plan объекты, юридическая защита, полное сопровождение.',
+}
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['300', '400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--rs-display',
+  display: 'swap',
+})
+
+const ibmPlex = IBM_Plex_Sans({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['300', '400', '500'],
+  variable: '--rs-body',
+  display: 'swap',
+})
+
+export default function RomanLayout({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <style>{`
+        /* Hide main-site chrome on /roman pages */
+        body:has([data-roman-layout]) [data-site-element="announcement"],
+        body:has([data-roman-layout]) [data-site-element="nav"] {
+          display: none !important;
+        }
+
+        /* ── Design tokens ─────────────────────────────────── */
+        .rs-root {
+          --rs-bg:    #0E0E0F;
+          --rs-bg2:   #15151A;
+          --rs-cream: #F5F1EA;
+          --rs-mute:  #9A9389;
+          --rs-gold:  #C9A961;
+          --rs-line:  #2A2722;
+          --rs-sand:  #D9CBB8;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        .rs-root ::selection { background: #C9A961; color: #0E0E0F; }
+        .rs-root ::-webkit-scrollbar { width: 3px; }
+        .rs-root ::-webkit-scrollbar-track { background: #0E0E0F; }
+        .rs-root ::-webkit-scrollbar-thumb { background: #2A2722; }
+
+        /* ── Scroll reveal ─────────────────────────────────── */
+        .rs-reveal {
+          opacity: 0;
+          transform: translateY(18px);
+          transition: opacity 650ms ease-out, transform 650ms ease-out;
+        }
+        .rs-reveal.rs-visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Hero animations ───────────────────────────────── */
+        @keyframes rsFadeUp {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rsScrollLine {
+          0%, 100% { opacity: 1; transform: scaleY(1); }
+          50%       { opacity: 0.35; transform: scaleY(0.5); }
+        }
+        .rs-a0 { animation: rsFadeUp .7s .45s ease-out both; }
+        .rs-a1 { animation: rsFadeUp .8s .7s  ease-out both; }
+        .rs-a2 { animation: rsFadeUp .8s .95s ease-out both; }
+        .rs-a3 { animation: rsFadeUp .7s 1.15s ease-out both; }
+        .rs-a4 { animation: rsFadeUp .7s 1.35s ease-out both; }
+        .rs-a5 { animation: rsFadeUp .7s 1.6s  ease-out both; }
+        .rs-scroll-line { animation: rsScrollLine 2.2s ease-in-out infinite; }
+
+        /* ── Nav ───────────────────────────────────────────── */
+        .rs-nav { transition: background 350ms, border-color 350ms; }
+        .rs-nav-solid {
+          background: rgba(14,14,15,0.93) !important;
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom-color: #2A2722 !important;
+        }
+
+        /* ── Mobile menu ───────────────────────────────────── */
+        .rs-menu {
+          position: fixed; inset: 0; z-index: 120;
+          background: #0E0E0F;
+          transform: translateX(100%);
+          transition: transform 350ms cubic-bezier(.4,0,.2,1);
+        }
+        .rs-menu.rs-open { transform: translateX(0); }
+
+        /* ── Buttons ───────────────────────────────────────── */
+        .rs-btn-primary {
+          display: inline-flex; align-items: center; justify-content: center;
+          background: #C9A961; color: #0E0E0F;
+          font-weight: 400; font-size: 11px; letter-spacing: .12em;
+          text-transform: uppercase; padding: .9rem 1.75rem;
+          text-decoration: none; white-space: nowrap;
+          transition: opacity 250ms;
+        }
+        .rs-btn-primary:hover { opacity: .82; }
+
+        .rs-btn-ghost {
+          display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+          border: 1px solid rgba(201,169,97,.35); color: #F5F1EA;
+          font-size: .8rem; letter-spacing: .05em;
+          padding: .8rem 1.4rem; text-decoration: none; white-space: nowrap;
+          transition: border-color 250ms, color 250ms;
+        }
+        .rs-btn-ghost:hover { border-color: #C9A961; color: #C9A961; }
+
+        /* ── Cards ─────────────────────────────────────────── */
+        .rs-card {
+          background: #15151A; border: 1px solid #2A2722;
+          overflow: hidden;
+          transition: border-color 300ms, transform 300ms;
+        }
+        .rs-card:hover { border-color: rgba(201,169,97,.35); transform: scale(1.012); }
+        .rs-card-img { position: relative; overflow: hidden; aspect-ratio: 4/3; }
+        .rs-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 600ms ease; }
+        .rs-card:hover .rs-card-img img { transform: scale(1.05); }
+
+        /* ── FAQ ───────────────────────────────────────────── */
+        .rs-faq-body {
+          max-height: 0; overflow: hidden;
+          transition: max-height 380ms cubic-bezier(.4,0,.2,1);
+        }
+        .rs-faq-body.rs-open { max-height: 500px; }
+        .rs-faq-icon { transition: transform 300ms ease; }
+        .rs-faq-icon.rs-rotated { transform: rotate(45deg); }
+
+        /* ── Grain overlay ─────────────────────────────────── */
+        .rs-grain::after {
+          content: '';
+          position: absolute; inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+          opacity: .035; pointer-events: none; z-index: 15;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .rs-reveal { opacity: 1; transform: none; transition: none; }
+          .rs-a0,.rs-a1,.rs-a2,.rs-a3,.rs-a4,.rs-a5 { animation: none !important; opacity: 1; }
+        }
+      `}</style>
+
+      <div data-roman-layout hidden aria-hidden="true" />
+
+      <div className={`rs-root ${cormorant.variable} ${ibmPlex.variable}`}>
+        {children}
+      </div>
+    </>
+  )
+}
