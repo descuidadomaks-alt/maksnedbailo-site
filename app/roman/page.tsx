@@ -107,10 +107,10 @@ const C = {
     process: {
       num: '05', eye: 'Как мы работаем', h: 'От первого звонка до дохода',
       steps: [
-        { n: '01', t: 'Аудит портфеля',         b: '15-минутный диагностический звонок: цели, горизонт, капитал, толерантность к риску. Определяем, подходит ли вам Пхукет вообще.',    img: '/roman/process/step-1.jpg' },
-        { n: '02', t: 'Персональная подборка',   b: 'Готовлю отбор из проверенных off-plan и внерыночных объектов под ваш профиль. Только то, что прошло мой личный анализ.',          img: '/roman/process/step-2.jpg' },
-        { n: '03', t: 'Структурирование сделки', b: 'Юридическое сопровождение, FX-переводы, оформление собственности, визовая поддержка — под ключ.',                               img: '/roman/process/step-3.jpg' },
-        { n: '04', t: 'Управление активом',       b: 'Передача проверенной управляющей компании с прозрачной отчётностью. Вы получаете доход, не занимаясь операционкой.',             img: '/roman/process/step-4.jpg' },
+        { n: 'I',   t: 'Аудит портфеля',         b: '15-минутный диагностический звонок: цели, горизонт, капитал, толерантность к риску. Определяем, подходит ли вам Пхукет вообще.',    img: '/roman/process/step-1.jpg' },
+        { n: 'II',  t: 'Персональная подборка',   b: 'Готовлю отбор из проверенных off-plan и внерыночных объектов под ваш профиль. Только то, что прошло мой личный анализ.',          img: '/roman/process/step-2.jpg' },
+        { n: 'III', t: 'Структурирование сделки', b: 'Юридическое сопровождение, FX-переводы, оформление собственности, визовая поддержка — под ключ.',                               img: '/roman/process/step-3.jpg' },
+        { n: 'IV',  t: 'Управление активом',       b: 'Передача проверенной управляющей компании с прозрачной отчётностью. Вы получаете доход, не занимаясь операционкой.',             img: '/roman/process/step-4.jpg' },
       ],
     },
     faq: {
@@ -223,10 +223,10 @@ const C = {
     process: {
       num: '05', eye: 'How We Work', h: 'From first call to rental income',
       steps: [
-        { n: '01', t: 'Portfolio Audit',         b: '15-minute diagnostic call: goals, horizon, capital, risk tolerance. We determine whether Phuket is even the right market for you.',        img: '/roman/process/step-1.jpg' },
-        { n: '02', t: 'Curated Shortlist',        b: 'I prepare a selection of vetted off-plan and off-market opportunities matched to your profile. Only what has passed my personal analysis.', img: '/roman/process/step-2.jpg' },
-        { n: '03', t: 'Structural Execution',     b: 'Legal support, FX transfers, title registration, visa assistance — full turnkey.',                                                        img: '/roman/process/step-3.jpg' },
-        { n: '04', t: 'Asset Management',          b: 'Handoff to a vetted local property manager with transparent reporting. You earn income without handling operations.',                    img: '/roman/process/step-4.jpg' },
+        { n: 'I',   t: 'Portfolio Audit',         b: '15-minute diagnostic call: goals, horizon, capital, risk tolerance. We determine whether Phuket is even the right market for you.',        img: '/roman/process/step-1.jpg' },
+        { n: 'II',  t: 'Curated Shortlist',        b: 'I prepare a selection of vetted off-plan and off-market opportunities matched to your profile. Only what has passed my personal analysis.', img: '/roman/process/step-2.jpg' },
+        { n: 'III', t: 'Structural Execution',     b: 'Legal support, FX transfers, title registration, visa assistance — full turnkey.',                                                        img: '/roman/process/step-3.jpg' },
+        { n: 'IV',  t: 'Asset Management',          b: 'Handoff to a vetted local property manager with transparent reporting. You earn income without handling operations.',                    img: '/roman/process/step-4.jpg' },
       ],
     },
     faq: {
@@ -473,9 +473,9 @@ export default function RomanPage() {
           /* Contact — equal cols below photo */
           .rs-contact-grid { grid-template-columns: 1fr 1fr !important; gap: clamp(3rem,6vw,6rem) !important; }
         }
-        /* Mobile defaults — hidden on small screens */
-        .rs-arrow-btn { display: none; }
-        .rs-process-img-panel { display: none; }
+        /* Mobile defaults — !important needed to override inline display:flex */
+        .rs-arrow-btn { display: none !important; }
+        .rs-process-img-panel { display: none !important; }
         /* Embla slides */
         .embla__slide { flex: 0 0 calc(100% - 3rem); }
         @media (min-width: 768px) {
@@ -877,7 +877,7 @@ export default function RomanPage() {
                     <span style={{
                       ...display, fontSize: 'clamp(3.8rem,7vw,5.5rem)', fontWeight: 300, fontStyle: 'italic',
                       color: D.gold, opacity: isActive ? 0.9 : 0.4, lineHeight: 1, flexShrink: 0,
-                      transition: 'opacity 250ms', userSelect: 'none', minWidth: '3.8rem',
+                      transition: 'opacity 250ms', userSelect: 'none', minWidth: '4.5rem',
                     }}>{step.n}</span>
                     <div style={{ paddingTop: '0.5rem', flex: 1 }}>
                       <h3 style={{ ...display, fontSize: 'clamp(1rem,1.7vw,1.25rem)', fontWeight: 300, fontStyle: 'italic', color: D.textDark, marginBottom: '0.4rem' }}>
