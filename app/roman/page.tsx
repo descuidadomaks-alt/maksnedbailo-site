@@ -364,7 +364,6 @@ export default function RomanPage() {
   const [openFaq, setOpenFaq]   = useState<number | null>(null)
   const [activeCard, setActiveCard] = useState(0)
   const [hoveredStep, setHoveredStep] = useState<number | null>(null)
-  const [tappedStep, setTappedStep]   = useState<number | null>(null)
   const [formData, setFormData] = useState({ name: '', contact: '', budget: '', goal: '', channel: '' })
   const [formSent, setFormSent] = useState(false)
   // Parallax
@@ -855,12 +854,11 @@ export default function RomanPage() {
             {/* Steps */}
             <div>
               {T.process.steps.map((step, i) => {
-                const isActive = hoveredStep === i || tappedStep === i
+                const isActive = hoveredStep === i
                 return (
                   <div key={step.n} className="rs-reveal"
                     onMouseEnter={() => setHoveredStep(i)}
                     onMouseLeave={() => setHoveredStep(null)}
-                    onClick={() => setTappedStep(tappedStep === i ? null : i)}
                     style={{
                       display: 'flex', gap: '1.5rem', alignItems: 'flex-start',
                       paddingBottom: i < T.process.steps.length - 1 ? '2rem' : 0,
@@ -882,15 +880,6 @@ export default function RomanPage() {
                       <p style={{ ...body, fontSize: 'clamp(.82rem,1.2vw,.92rem)', color: D.muteDark, lineHeight: 1.75, fontWeight: 300 }}>
                         {step.b}
                       </p>
-                      {/* Mobile: tap to expand image */}
-                      <div style={{ overflow: 'hidden', maxHeight: tappedStep === i ? 180 : 0, transition: 'max-height 400ms ease', marginTop: tappedStep === i ? '0.75rem' : 0 }}>
-                        <div style={{ aspectRatio: '16/9', overflow: 'hidden', background: D.lineDark }}>
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={step.img} alt={step.t} loading="lazy"
-                            onError={e => { (e.target as HTMLImageElement).style.display = 'none' }}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                        </div>
-                      </div>
                     </div>
                   </div>
                 )
