@@ -32,10 +32,7 @@ export default function SectionHero({ data }: { data: PartnerData }) {
   const daysLeft = useCountdownDays();
 
   return (
-    <section
-      className="relative flex items-center min-h-[92svh] overflow-hidden"
-      style={{ paddingTop: "56px" }}
-    >
+    <section className="relative flex items-center min-h-[85svh] overflow-hidden">
       {/* Ambient glow */}
       <div
         aria-hidden
@@ -46,7 +43,7 @@ export default function SectionHero({ data }: { data: PartnerData }) {
         }}
       />
 
-      <div className="relative max-w-[860px] mx-auto px-6 py-20 w-full text-center">
+      <div className="relative max-w-[860px] mx-auto px-6 pt-8 pb-16 md:pt-14 md:pb-20 w-full text-center">
 
         {/* Eyebrow pill */}
         <div
@@ -101,30 +98,15 @@ export default function SectionHero({ data }: { data: PartnerData }) {
 
         {/* Subtext */}
         <p
-          className="font-sora font-light text-fg/45 max-w-[600px] mx-auto"
+          className="font-sora font-light text-fg/45 max-w-[560px] mx-auto"
           style={{
             fontSize: "clamp(14px, 1.3vw, 16px)",
             lineHeight: 1.8,
-            marginBottom: data.hero.scarcity ? "clamp(16px, 2vw, 24px)" : "clamp(36px, 5vw, 52px)",
+            marginBottom: "clamp(20px, 3vw, 32px)",
           }}
         >
           {data.hero.subtext}
         </p>
-
-        {/* Scarcity line */}
-        {data.hero.scarcity && (
-          <p
-            className="font-sora font-light text-fg/35 max-w-[480px] mx-auto"
-            style={{
-              fontSize: "13px",
-              fontStyle: "italic",
-              lineHeight: 1.6,
-              marginBottom: "clamp(16px, 2.5vw, 28px)",
-            }}
-          >
-            {data.hero.scarcity}
-          </p>
-        )}
 
         {/* Countdown chip */}
         {daysLeft !== null && daysLeft > 0 && (

@@ -14,84 +14,88 @@ const INDUSTRIES = [
   {
     id: "manufacturing",
     label: "Manufacturing",
-    pain: "Equipment goes down, nobody knows until orders are late.",
-    roi: "20% downtime reduction",
     source: "IEEE",
     useCases: [
       {
         title: "Quote-to-invoice acceleration",
-        desc: "RFQ intake → spec parsing → quote draft in under 2 hours. Sales reviews and sends.",
+        pain: "Quotes take days; we lose jobs to whoever replies first.",
+        result: "Quote turnaround: 3–5 days → under 2 hours",
       },
       {
         title: "Production scheduling assistant",
-        desc: "Daily schedule draft from inventory + open orders + capacity. Foreman approves in 10 minutes.",
+        pain: "Scheduling lives in one person's head and breaks when they're out.",
+        result: "~8–10 hrs/week planning time recovered",
       },
       {
         title: "After-sale ticket routing",
-        desc: "Warranty/repair requests parsed, routed to the right technician with parts pre-checked.",
+        pain: "Service requests sit in an inbox; the wrong tech gets dispatched.",
+        result: "First-response time down ~60%",
       },
     ],
   },
   {
     id: "professional-services",
     label: "Professional Services",
-    pain: "I'm the only person who knows where anything is.",
-    roi: "12 hrs/week founder time recovered",
     source: "McKinsey 2024",
     useCases: [
       {
         title: "Client intake & conflict check",
-        desc: "Intake form fills AI summary of matter, checks against client list, drafts engagement letter.",
+        pain: "Onboarding a client eats half a day of partner time.",
+        result: "Intake → engagement letter in minutes, not days",
       },
       {
         title: "Billable-time capture",
-        desc: "Calendar + email + docs → AI proposes time entries → 5 min/day of approval per fee earner.",
+        pain: "We under-bill because nobody logs time accurately.",
+        result: "5–8% billable-hour recovery",
       },
       {
         title: "Document first-pass review",
-        desc: "Contracts and filings pre-flagged for standard risks before partner sees them.",
+        pain: "Partners read every draft from scratch.",
+        result: "First-pass review time down ~40%",
       },
     ],
   },
   {
     id: "ecommerce",
     label: "E-commerce",
-    pain: "Customers ghost us after one slow reply.",
-    roi: "12% sales uplift",
     source: "industry avg",
     useCases: [
       {
         title: "Tier-1 support automation",
-        desc: "Chat + email handle 60–80% of order/refund/size questions; escalates the rest with full context.",
+        pain: "Support drowns in 'where's my order' tickets.",
+        result: "60–80% of tier-1 tickets auto-resolved",
       },
       {
         title: "Returns / RMA processing",
-        desc: "Photo + reason in → triage decision draft out (refund / replace / repair).",
+        pain: "Returns are manual and slow; customers churn.",
+        result: "Return decisions in minutes; faster-resolution CSAT lift",
       },
       {
         title: "SKU launch copy",
-        desc: "Specs in → on-brand product descriptions in multiple languages, ready for review.",
+        pain: "Listing copy bottlenecks every product launch.",
+        result: "Launch copy in N languages in hours, not weeks",
       },
     ],
   },
   {
     id: "investor-operators",
     label: "Investor-Operators",
-    pain: "I want oversight of 5 ventures without doing 5 jobs.",
-    roi: "60% less manual reporting",
     source: "client baseline",
     useCases: [
       {
         title: "Portfolio dashboard digest",
-        desc: "Financial + ops KPIs from multiple companies condensed weekly, anomalies flagged.",
+        pain: "I can't see across my companies without chasing each one.",
+        result: "Weekly cross-portfolio digest, anomalies auto-flagged",
       },
       {
         title: "Inbox + calendar triage",
-        desc: "Cross-company first-pass for chairs and founders managing 3+ ventures.",
+        pain: "Three companies, one inbox, no signal.",
+        result: "~6–10 hrs/week triage time recovered",
       },
       {
         title: "Diligence pre-screen",
-        desc: "Incoming pitch decks → structured summary against stated thesis, flagged for human review.",
+        pain: "Pitch decks pile up; good ones get missed.",
+        result: "Every deck summarised against thesis within the hour",
       },
     ],
   },
@@ -146,7 +150,7 @@ export default function SectionIndustryExamples() {
         </p>
 
         {/* Tab chips */}
-        <div data-reveal className="flex flex-wrap gap-2 mb-8">
+        <div data-reveal className="flex flex-wrap gap-2 mb-6">
           {INDUSTRIES.map((ind) => (
             <button
               key={ind.id}
@@ -173,13 +177,13 @@ export default function SectionIndustryExamples() {
           </p>
         )}
 
-        {/* Table with horizontal scroll on mobile */}
+        {/* Table — horizontal scroll on mobile, bounded container */}
         <div
           data-reveal
-          className="relative rounded-2xl border border-white/[0.06] overflow-hidden"
+          className="relative w-full rounded-2xl border border-white/[0.06] overflow-hidden"
           style={{ background: "rgba(255,255,255,0.015)", boxShadow: "0 4px 24px rgba(0,0,0,0.2)" }}
         >
-          {/* Right-edge fade */}
+          {/* Right-edge fade — visual cue that content continues */}
           <div
             className="md:hidden pointer-events-none absolute top-0 right-0 bottom-0 z-10"
             style={{ width: "48px", background: "linear-gradient(to right, transparent, rgba(6,6,8,0.9))" }}
@@ -191,46 +195,37 @@ export default function SectionIndustryExamples() {
             className="overflow-x-auto"
             style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
           >
-            <div style={{ minWidth: "620px" }}>
+            {/* min-width keeps columns readable; scroll container handles the rest */}
+            <div style={{ minWidth: "600px" }}>
 
-              {/* Column header row */}
+              {/* Column headers */}
               <div
-                className="grid px-7 py-3 border-b border-white/[0.06]"
-                style={{ gridTemplateColumns: "1fr 1fr 1fr 120px" }}
+                className="grid px-6 py-3 border-b border-white/[0.06]"
+                style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
               >
-                {["Use case", "What it does", "Pain it fixes", "Typical result"].map((h) => (
+                {["Use case", "Pain it fixes", "Typical result"].map((h) => (
                   <span key={h} className="font-sora text-fg/25" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
                     {h}
                   </span>
                 ))}
               </div>
 
-              {/* Use case rows */}
+              {/* One row per use case — all fields populated */}
               {active.useCases.map((uc, i) => (
                 <div
                   key={i}
-                  className="grid px-7 py-5 border-t border-white/[0.04] hover:bg-white/[0.018] transition-colors duration-150 items-start gap-4"
-                  style={{ gridTemplateColumns: "1fr 1fr 1fr 120px" }}
+                  className="grid px-6 py-4 border-t border-white/[0.04] hover:bg-white/[0.018] transition-colors duration-150 items-start gap-4"
+                  style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
                 >
                   <p className="font-sora font-semibold text-fg/75 leading-[1.5]" style={{ fontSize: "13px" }}>
                     {uc.title}
                   </p>
-                  <p className="font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "13px" }}>
-                    {uc.desc}
+                  <p className="font-sora font-light text-fg/50 leading-[1.6]" style={{ fontSize: "13px", fontStyle: "italic" }}>
+                    &ldquo;{uc.pain}&rdquo;
                   </p>
-                  <p className="font-sora font-light text-fg/45 leading-[1.6]" style={{ fontSize: "13px", fontStyle: "italic" }}>
-                    &ldquo;{active.pain}&rdquo;
+                  <p className="font-sora font-light text-accent/70 leading-[1.6]" style={{ fontSize: "13px" }}>
+                    {uc.result}
                   </p>
-                  {i === 0 ? (
-                    <div>
-                      <p className="font-playfair text-accent" style={{ fontSize: "clamp(14px, 1.3vw, 17px)", lineHeight: 1.2, letterSpacing: "-0.015em" }}>
-                        {active.roi}
-                      </p>
-                      <p className="font-sora text-fg/20 mt-1" style={{ fontSize: "10px" }}>{active.source}</p>
-                    </div>
-                  ) : (
-                    <div />
-                  )}
                 </div>
               ))}
 
@@ -239,8 +234,8 @@ export default function SectionIndustryExamples() {
         </div>
 
         {/* Source footnote */}
-        <p data-reveal className="font-sora font-light text-fg/20 mt-8 text-center leading-relaxed" style={{ fontSize: "11px" }}>
-          Sources: IEEE · McKinsey The State of AI 2024 · Industry conversion benchmarks · Client-reported baselines.
+        <p data-reveal className="font-sora font-light text-fg/20 mt-6 text-center leading-relaxed" style={{ fontSize: "11px" }}>
+          Sources: IEEE · McKinsey The State of AI 2024 · industry conversion benchmarks · client-reported baselines.
           ROI figures are directional averages, not guarantees.
         </p>
 

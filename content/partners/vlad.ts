@@ -24,9 +24,7 @@ const vlad: PartnerData = {
     subheadline:
       "Map the gaps — and hand three of them to AI — in 90 minutes.",
     subtext:
-      "A 90-minute Strategic AI Mapping session — normally €1,500 — gifted to you through Vlad. By the end, you'll have a one-page Strategic AI Map of your business, ranked by ROI. No pitch deck. No filler. If there's nothing worth automating, I'll tell you and you keep the map.",
-    scarcity:
-      "This offer is open through June 30, 2026. After that, Vlad's allocation closes.",
+      "A €1,500 Strategic AI Mapping session, gifted through Vlad. You walk away with a one-page map of your business ranked by ROI. If nothing's worth automating, I'll say so — and you keep the map.",
     cta: "Claim Your Complimentary Session",
   },
 
@@ -46,8 +44,7 @@ const vlad: PartnerData = {
   booking: {
     schedulerUrl: "https://zcal.co/carelessmaks/vlad-strategic-ai-map",
     messengerChannel: "telegram",
-    // TODO: replace TELEGRAM_HANDLE with actual handle from Maks (e.g. "carelessmaks")
-    telegram: "https://t.me/TELEGRAM_HANDLE",
+    telegram: "https://t.me/maksym_nedbailo",
   },
 
   meta: {

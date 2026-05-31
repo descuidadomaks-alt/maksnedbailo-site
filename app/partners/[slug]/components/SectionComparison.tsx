@@ -4,28 +4,24 @@ const ROWS = [
     consultancy: "€8k–€30k",
     chatgpt: "Free",
     map: "Complimentary through Vlad",
-    mapHighlight: true,
   },
   {
     label: "You walk away with",
     consultancy: "A 40-slide presentation",
     chatgpt: "A demo and vague excitement",
     map: "A scored, ranked, ROI'd map of your operation",
-    mapHighlight: true,
   },
   {
     label: "Time to value",
     consultancy: "6–8 weeks",
     chatgpt: "Hours later",
     map: "90 minutes",
-    mapHighlight: true,
   },
   {
     label: "Next step is clear?",
     consultancy: "Maybe",
     chatgpt: "No",
     map: "Yes — Phase 1 quoted or you walk",
-    mapHighlight: true,
   },
 ];
 
@@ -50,19 +46,19 @@ export default function SectionComparison() {
           What you could be sold, what you&apos;d actually use, and what&apos;s on the table here.
         </p>
 
-        {/* Table — scrolls horizontally on small screens */}
-        <div data-reveal className="overflow-x-auto -mx-2 px-2">
-          <div className="min-w-[580px]">
+        {/* Horizontal scroll container — NO negative margins (root cause of page overflow was -mx-2 here) */}
+        <div data-reveal className="w-full overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
+          <div style={{ minWidth: "520px" }}>
 
-            {/* Column headers */}
-            <div className="grid grid-cols-[140px_1fr_1fr_1fr] gap-3 mb-3">
+            {/* Column headers — 3 equal content columns */}
+            <div className="grid gap-2 mb-2" style={{ gridTemplateColumns: "100px 1fr 1fr 1fr" }}>
               <div />
               <div
                 className="rounded-xl p-4 text-center"
                 style={{ background: "rgba(255,255,255,0.018)", border: "1px solid rgba(255,255,255,0.05)" }}
               >
                 <p className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.4 }}>
-                  A typical consultancy deck
+                  Consultancy deck
                 </p>
               </div>
               <div
@@ -70,18 +66,16 @@ export default function SectionComparison() {
                 style={{ background: "rgba(255,255,255,0.018)", border: "1px solid rgba(255,255,255,0.05)" }}
               >
                 <p className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.4 }}>
-                  A ChatGPT walkthrough
+                  ChatGPT walkthrough
                 </p>
               </div>
+              {/* Highlighted column — visual only, same 1fr width */}
               <div
                 className="rounded-xl p-4 text-center"
-                style={{
-                  background: "rgba(212,255,43,0.07)",
-                  border: "1px solid rgba(212,255,43,0.22)",
-                }}
+                style={{ background: "rgba(212,255,43,0.07)", border: "1px solid rgba(212,255,43,0.22)" }}
               >
                 <p className="font-sora font-semibold text-accent" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase", lineHeight: 1.4 }}>
-                  The Strategic AI Map
+                  Strategic AI Map
                 </p>
               </div>
             </div>
@@ -92,21 +86,19 @@ export default function SectionComparison() {
                 <div
                   key={i}
                   data-reveal={`d${Math.min(i, 3)}`}
-                  className="grid grid-cols-[140px_1fr_1fr_1fr] gap-3 items-stretch"
+                  className="grid gap-2 items-stretch"
+                  style={{ gridTemplateColumns: "100px 1fr 1fr 1fr" }}
                 >
                   {/* Row label */}
                   <div className="flex items-center">
-                    <span
-                      className="font-sora text-fg/35"
-                      style={{ fontSize: "11px", letterSpacing: "1.5px", textTransform: "uppercase" }}
-                    >
+                    <span className="font-sora text-fg/35" style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase" }}>
                       {row.label}
                     </span>
                   </div>
 
                   {/* Consultancy */}
                   <div
-                    className="rounded-xl px-5 py-4 flex items-center"
+                    className="rounded-xl px-4 py-4 flex items-center"
                     style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}
                   >
                     <p className="font-sora font-light text-fg/40 leading-[1.55]" style={{ fontSize: "13px" }}>
@@ -116,7 +108,7 @@ export default function SectionComparison() {
 
                   {/* ChatGPT */}
                   <div
-                    className="rounded-xl px-5 py-4 flex items-center"
+                    className="rounded-xl px-4 py-4 flex items-center"
                     style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}
                   >
                     <p className="font-sora font-light text-fg/40 leading-[1.55]" style={{ fontSize: "13px" }}>
@@ -124,13 +116,10 @@ export default function SectionComparison() {
                     </p>
                   </div>
 
-                  {/* AI Map — highlighted */}
+                  {/* AI Map — highlighted, same padding as others */}
                   <div
-                    className="rounded-xl px-5 py-4 flex items-center"
-                    style={{
-                      background: "rgba(212,255,43,0.06)",
-                      border: "1px solid rgba(212,255,43,0.18)",
-                    }}
+                    className="rounded-xl px-4 py-4 flex items-center"
+                    style={{ background: "rgba(212,255,43,0.06)", border: "1px solid rgba(212,255,43,0.18)" }}
                   >
                     <p className="font-sora font-light text-fg/80 leading-[1.55]" style={{ fontSize: "13px" }}>
                       {row.map}

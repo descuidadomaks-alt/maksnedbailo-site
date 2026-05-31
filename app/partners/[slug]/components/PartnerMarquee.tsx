@@ -12,7 +12,6 @@ export default function PartnerMarquee({ data }: { data: PartnerData }) {
         height: "28px",
         background: "rgba(212,255,43,0.045)",
         borderBottom: "1px solid rgba(212,255,43,0.07)",
-        marginTop: "56px",
       }}
     >
       <div className="ticker-track whitespace-nowrap flex absolute top-0 left-0 h-full items-center">

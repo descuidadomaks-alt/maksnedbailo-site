@@ -27,11 +27,14 @@ export default function PartnersLayout({ children }: { children: ReactNode }) {
         </Script>
       )}
 
+      {/* Static header — scrolls with page. No fixed/gradient bleed.
+          Sticky conversion is handled by StickyMobileCTA at the bottom. */}
       <header
-        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-5 sm:px-8"
+        className="flex items-center justify-between px-5 sm:px-8"
         style={{
           height: "56px",
-          background: "linear-gradient(180deg, rgba(6,6,8,0.95) 0%, transparent 100%)",
+          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          background: "rgba(6,6,8,0.98)",
         }}
       >
         <Link href="/" aria-label="care less AI automation — home">
@@ -45,7 +48,7 @@ export default function PartnersLayout({ children }: { children: ReactNode }) {
         </Link>
 
         <span
-          className="font-sora text-fg/35"
+          className="font-sora"
           style={{
             fontSize: "9px",
             letterSpacing: "2.5px",
