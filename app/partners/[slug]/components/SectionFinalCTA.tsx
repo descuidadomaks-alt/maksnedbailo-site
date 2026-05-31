@@ -40,20 +40,18 @@ export default function SectionFinalCTA({ data }: { data: PartnerData }) {
   const messengerEvent = isTelegram ? "telegram_click" : "whatsapp_click";
 
   return (
-    <section className="section-divider py-24 md:py-40">
-      <div className="max-w-xl mx-auto px-6 text-center">
-
-        {/* Ambient glow */}
-        <div
-          aria-hidden
-          className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
-          style={{
-            width: "600px",
-            height: "400px",
-            background: "radial-gradient(ellipse, rgba(212,255,43,0.06) 0%, transparent 70%)",
-            marginTop: "-120px",
-          }}
-        />
+    <section className="section-divider relative overflow-hidden py-24 md:py-40">
+      {/* Ambient glow — clipped by overflow-hidden on section */}
+      <div
+        aria-hidden
+        className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none"
+        style={{
+          width: "600px",
+          height: "400px",
+          background: "radial-gradient(ellipse, rgba(212,255,43,0.06) 0%, transparent 70%)",
+        }}
+      />
+      <div className="relative max-w-xl mx-auto px-6 text-center">
 
         <h2
           data-reveal

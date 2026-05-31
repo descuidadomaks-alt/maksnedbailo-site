@@ -99,10 +99,10 @@ export default function AiMapMockup() {
           </p>
         )}
 
-        {/* Horizontally scrollable wrapper */}
+        {/* Horizontally scrollable wrapper — overflow-hidden clips rounded corners only */}
         <div
           data-reveal
-          className="relative rounded-2xl border border-white/[0.08] overflow-hidden"
+          className="relative w-full rounded-2xl border border-white/[0.08] overflow-hidden"
           style={{
             background: "rgba(255,255,255,0.018)",
             boxShadow: "0 20px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(212,255,43,0.06)",
