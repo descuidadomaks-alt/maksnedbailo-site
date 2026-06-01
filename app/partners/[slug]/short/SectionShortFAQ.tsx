@@ -7,10 +7,14 @@ import type { ShortPageDict } from "../lib/i18n";
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
-      width="15" height="15" viewBox="0 0 24 24" fill="none"
+      width="14" height="14" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden
-      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease", flexShrink: 0 }}
+      style={{
+        transform: open ? "rotate(180deg)" : "rotate(0deg)",
+        transition: "transform 0.25s ease",
+        flexShrink: 0,
+      }}
     >
       <polyline points="6 9 12 15 18 9" />
     </svg>
@@ -43,7 +47,7 @@ export default function SectionShortFAQ({
     <section className="section-divider py-20 md:py-28">
       <div className="max-w-3xl mx-auto px-6">
 
-        <p data-reveal className="font-sora text-fg/30 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        <p data-reveal className="font-sora text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.faq.label}
         </p>
         <h2
@@ -54,41 +58,48 @@ export default function SectionShortFAQ({
           {d.faq.headline}
         </h2>
 
-        <div className="flex flex-col" data-reveal>
+        <div data-reveal className="flex flex-col">
           {d.faq.items.map((item, i) => {
             const isOpen = open.has(i);
             return (
               <div
                 key={i}
-                className="border-b transition-colors duration-200"
+                className="border-b"
                 style={{ borderColor: "rgba(255,255,255,0.05)" }}
               >
                 <button
-                  className="w-full flex items-center justify-between py-5 text-left gap-6 hover:opacity-80 transition-opacity duration-200"
+                  className="w-full flex items-center justify-between py-5 text-left gap-6 transition-opacity duration-150 hover:opacity-75"
                   onClick={() => toggle(i)}
                   aria-expanded={isOpen}
                 >
                   <span
-                    className="font-sora text-fg/70"
+                    className="font-sora text-fg/72"
                     style={{ fontSize: "15px", lineHeight: 1.5 }}
                   >
                     {item.q}
                   </span>
-                  <span className="text-fg/30">
+                  <span className="text-fg/28 flex-shrink-0">
                     <ChevronIcon open={isOpen} />
                   </span>
                 </button>
 
-                {isOpen && (
+                {/* Smooth expand via max-height transition */}
+                <div
+                  style={{
+                    maxHeight: isOpen ? "600px" : "0",
+                    overflow: "hidden",
+                    transition: "max-height 0.38s cubic-bezier(0.16,1,0.3,1)",
+                  }}
+                >
                   <div className="pb-6">
                     <p
-                      className="font-sora font-light text-fg/48 leading-[1.85]"
+                      className="font-sora font-light text-fg/48 leading-[1.88]"
                       style={{ fontSize: "14px", maxWidth: "62ch" }}
                     >
                       {item.a(vars)}
                     </p>
                   </div>
-                )}
+                </div>
               </div>
             );
           })}

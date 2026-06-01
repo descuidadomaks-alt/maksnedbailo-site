@@ -1,26 +1,23 @@
 /**
  * Short-template locale dictionary.
  *
- * EN — complete and production-ready.
- * UK — native Ukrainian translation provided by Maks.
+ * EN — complete.
+ * UK — native Ukrainian (Maks Nedbailo + Care Less studio).
  *
- * Remaining TODO_UK: FAQ answers (5) and industry rows for
- * Manufacturing, E-commerce, and Investor-Operators tabs.
- * Search TODO_UK to find them.
+ * Result strings may contain <strong> HTML for metric emphasis
+ * — render with dangerouslySetInnerHTML in the table result cell.
  */
 
 import type { Locale } from "@/content/partners/index";
 
-// ─── Industry data types ───────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-export type IndustryRow = [string, string, string]; // [useCase, pain, result]
+export type IndustryRow = [string, string, string]; // [useCase, pain, result (may contain <strong>)]
 
 export interface IndustryTab {
   label: string;
   rows: [IndustryRow, IndustryRow, IndustryRow];
 }
-
-// ─── Full dictionary shape ─────────────────────────────────────────────────────
 
 export interface ShortPageDict {
   header: {
@@ -31,19 +28,14 @@ export interface ShortPageDict {
 
   hero: {
     eyebrow: (partnerName: string) => string;
-    // ── headline in use ──────────────────────────────────────────────────────
     headline: string;
-    // alt A (swap below if Maks prefers):
-    // EN: "Everyone says 'use AI.' Almost no one tells you where it pays off in your business."
-    // alt B:
-    // EN: "Before you automate anything, find what's actually worth automating."
+    // alt A: "Everyone says 'use AI.' Almost no one tells you where it pays off in your business."
+    // alt B: "Before you automate anything, find what's actually worth automating."
     subheadline: (partnerName: string) => string;
     cta: string;
     daysLeft: (n: number) => string;
     offerCloses: string;
-    /** Locale-specific partner quote — falls back to config.partnerQuote if absent */
     partnerQuoteOverride?: string;
-    /** Locale-specific partner role/title — falls back to config.partnerTitle if absent */
     partnerRoleOverride?: string;
   };
 
@@ -58,10 +50,25 @@ export interface ShortPageDict {
     del1: string;
     del2: string;
     del3: string;
-    sampleNote: string;
-    stat1Value: string; stat1Label: string;
-    stat2Value: string; stat2Label: string;
-    stat3Label: (phase1Anchor: string) => string;
+  };
+
+  /** Labels for the inline Strategic AI Map sample */
+  sampleMap: {
+    note: string;
+    docTitle: string;
+    clientLabel: string;
+    sessionLabel: string;
+    studioName: string;
+    pillarPrefix: (n: number, label: string) => string;
+    colPain: string;
+    colCost: string;
+    colFeasibility: string;
+    colRoi: string;
+    colRank: string;
+    phase1Heading: string;
+    phase1Rec: string;
+    phase1Timeline: string;
+    pillarLabels: [string, string, string];
   };
 
   industry: {
@@ -116,7 +123,7 @@ export interface ShortPageDict {
   };
 }
 
-// ─── EN dictionary ─────────────────────────────────────────────────────────────
+// ─── EN dictionary ────────────────────────────────────────────────────────────
 
 const en: ShortPageDict = {
   header: {
@@ -127,14 +134,12 @@ const en: ShortPageDict = {
 
   hero: {
     eyebrow: (p) => `Personal invitation through ${p}'s circle`,
-    headline:
-      "See where AI actually pays off in your business — and where it doesn't.",
+    headline: "See where AI actually pays off in your business — and where it doesn't.",
     subheadline: (p) =>
       `A 90-minute Strategic AI Map, ranked by ROI. Normally €1,500 — reserved for you through ${p}.`,
     cta: "Claim Your Complimentary Session",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
     offerCloses: "offer closes June 30",
-    // EN uses config values directly — no overrides needed
   },
 
   offer: {
@@ -148,11 +153,29 @@ const en: ShortPageDict = {
     deliverableHeading: "You walk away with",
     del1: "3 pillars of your operation scored for AI readiness",
     del2: "4–6 use cases ranked by estimated ROI",
-    del3: "Phase 1 quoted (or an honest 'not yet' — no charge either way)",
-    sampleNote: "Sample output — yours will be specific to your business",
-    stat1Value: "3", stat1Label: "pillars scored",
-    stat2Value: "6", stat2Label: "use cases ranked",
-    stat3Label: (p) => `${p} quoted`,
+    del3: "Phase 1 quoted — or an honest 'not yet', no charge either way",
+  },
+
+  sampleMap: {
+    note: "Sample output — yours will be specific to your business",
+    docTitle: "Strategic AI Map",
+    clientLabel: "[Client Business Name]",
+    sessionLabel: "90-MIN SESSION OUTPUT",
+    studioName: "care less AI automation",
+    pillarPrefix: (n, label) => `Pillar ${n} — ${label}`,
+    colPain: "Pain / bottleneck",
+    colCost: "Current cost",
+    colFeasibility: "AI feasibility",
+    colRoi: "Est. ROI",
+    colRank: "Rank",
+    phase1Heading: "Phase 1 Recommended Build",
+    phase1Rec: "#1 — AI Lead Response System · WhatsApp + website · 24/7 coverage",
+    phase1Timeline: "Timeline: 2–3 weeks",
+    pillarLabels: [
+      "Customer-Facing Communication",
+      "Internal Knowledge & Ops",
+      "Repeatable Execution",
+    ],
   },
 
   industry: {
@@ -171,18 +194,18 @@ const en: ShortPageDict = {
         rows: [
           [
             "Quote/invoice acceleration",
-            "«Quotes take days; we lose jobs to whoever replies first.»",
-            "Invoice/quote prep ~15 min → ~1 min; ~3× throughput, same team",
+            "Quotes take days; we lose jobs to whoever replies first.",
+            "Prep: ~15 min → ~<strong>1 min</strong>; ~<strong>3×</strong> throughput, same team",
           ],
           [
             "Production scheduling",
-            "«Scheduling lives in one head and breaks when they’re out.»",
-            "Planning ~20 hrs/wk → ~5; on-time delivery 82% → 95%",
+            "Scheduling lives in one head and breaks when they're out.",
+            "Planning: <strong>~20 hrs/wk → ~5</strong>; on-time delivery <strong>82% → 95%</strong>",
           ],
           [
             "After-sale routing",
-            "«Requests sit in an inbox; the wrong tech gets dispatched.»",
-            "60–70% tier-1 deflection; ~50% faster resolution",
+            "Requests sit in an inbox; the wrong tech gets dispatched.",
+            "<strong>60–70%</strong> tier-1 deflection; ~<strong>50%</strong> faster resolution",
           ],
         ],
       },
@@ -191,18 +214,18 @@ const en: ShortPageDict = {
         rows: [
           [
             "Client intake & conflict check",
-            "«Onboarding eats half a day of partner time.»",
-            "Intake → engagement letter in minutes; up to ~30 hrs/wk saved on doc tasks",
+            "Onboarding eats half a day of partner time.",
+            "Intake → engagement letter in minutes; up to ~<strong>30 hrs/wk</strong> saved",
           ],
           [
             "Document & proposal drafting",
-            "«Partners draft everything from scratch.»",
-            "~25% faster task completion",
+            "Partners draft everything from scratch.",
+            "~<strong>25%</strong> faster task completion",
           ],
           [
             "Billable-time capture",
-            "«We under-bill because nobody logs time accurately.»",
-            "5–8% billable-hour recovery",
+            "We under-bill because nobody logs time accurately.",
+            "<strong>5–8%</strong> billable-hour recovery",
           ],
         ],
       },
@@ -211,18 +234,18 @@ const en: ShortPageDict = {
         rows: [
           [
             "Tier-1 support automation",
-            "«Support drowns in ‘where’s my order’ tickets.»",
-            "60–70% of tier-1 tickets auto-resolved",
+            "Support drowns in 'where's my order' tickets.",
+            "<strong>60–70%</strong> of tier-1 tickets auto-resolved",
           ],
           [
-            "Personalisation / recommendations",
-            "«Generic storefront leaves revenue on the table.»",
-            "Engaged-chat shoppers convert ~2–4× more",
+            "Personalisation & recommendations",
+            "Generic storefront leaves revenue on the table.",
+            "Engaged-chat shoppers convert ~<strong>2–4×</strong> more",
           ],
           [
             "SKU launch copy",
-            "«Listing copy bottlenecks every launch.»",
-            "Launch copy in N languages in hours, not weeks",
+            "Listing copy bottlenecks every launch.",
+            "Launch copy in <strong>N languages</strong> in hours, not weeks",
           ],
         ],
       },
@@ -231,18 +254,18 @@ const en: ShortPageDict = {
         rows: [
           [
             "Deal sourcing / underwriting",
-            "«Good deals get missed in the pile.»",
-            "~3–4× more deals screened, same team",
+            "Good deals get missed in the pile.",
+            "~<strong>3–4×</strong> more deals screened, same team",
           ],
           [
             "Portfolio digest",
-            "«Can’t see across companies without chasing each one.»",
-            "Weekly cross-portfolio digest; ~6–10 hrs/wk recovered",
+            "Can't see across companies without chasing each one.",
+            "Weekly digest; ~<strong>6–10 hrs/wk</strong> recovered",
           ],
           [
             "Asset / property ops",
-            "«Manual ops drag NOI.»",
-            "Up to ~10% NOI improvement (directional)",
+            "Manual ops drag NOI.",
+            "Up to ~<strong>10%</strong> NOI improvement (directional)",
           ],
         ],
       },
@@ -266,7 +289,7 @@ const en: ShortPageDict = {
       {
         num: "03",
         title: "Receive",
-        body: "The Strategic AI Map lands within 48 hours — a proper document, not rough notes. Phase 1 quoted if it’s worth building.",
+        body: "The Strategic AI Map lands within 48 hours — a proper document, not rough notes. Phase 1 quoted if it's worth building.",
         trust: "We do the final analysis after the call. You get a document, not rough notes.",
       },
     ],
@@ -305,29 +328,43 @@ const en: ShortPageDict = {
     headline: "Before you book",
     items: [
       {
+        q: "Is this a sales call disguised as something else?",
+        a: ({ partnerName }) =>
+          `No. The Strategic AI Map is a real deliverable — a scored, working document. If you don't want to work together after, the map is still yours. That's the whole point of the gift framing — ${partnerName} wouldn't share this with his circle if it weren't genuine.`,
+      },
+      {
+        q: "How is this different from a consultancy deck, a ChatGPT demo, or hiring a consultant?",
+        a: () =>
+          "A consultancy takes 6–8 weeks and €8–30k and gives you a presentation. A ChatGPT demo costs nothing and gives you vague excitement. Hiring a consultant means a proposal, a retainer, and months of onboarding. This is 90 minutes and gives you a scored, ROI-ranked map of your business — you decide what to do with it.",
+      },
+      {
+        q: "What if my business is too unique for AI?",
+        a: () =>
+          "Every founder thinks this. After 90 minutes you'll know specifically which parts of your business AI can touch — and which it genuinely can't. Sometimes the answer is 'almost none of it yet' — and that's a useful answer worth having.",
+      },
+      {
         q: "What does the map actually look like?",
         a: () =>
-          "It’s a one-page scored document. Three pillars of your business (customer-facing comms, internal knowledge, repeatable execution), each broken into pain points. Each gets an AI-feasibility score and an estimated ROI. You leave with 4–6 ranked use cases and a clear recommendation on Phase 1 — or an honest ‘not yet’ if none of them clear the bar.",
+          "It's a one-page scored document: three pillars of your business, each broken into pain points, each scored for AI feasibility and estimated ROI. You leave with 4–6 ranked use cases and a Phase 1 recommendation — or an honest 'not yet' if nothing clears the bar. See the sample above.",
       },
       {
-        q: "Who is this for — and who isn’t it?",
+        q: "What does Phase 1 typically look like?",
+        a: ({ phase1Anchor }) =>
+          `A working prototype of the highest-ROI use case from your map. Typically ${phase1Anchor}, 2–3 weeks, built with Ukrainian dev capacity. Real software you can use on Monday — not a strategy document.`,
+      },
+      {
+        q: "Who is this for — and who isn't it?",
         a: () =>
-          "It works if you’re running a business doing €50k–€200k+ per month, you can act inside 30 days, and you want numbers, not hype. It doesn’t work if your business is under €30k/month (the Phase 1 ROI math doesn’t support it yet), or if every decision needs six people in the room.",
+          "For you if: you're running a business doing €50k–€200k+ per month, you can decide and act inside 30 days, and you want numbers, not hype. Not for you if: your business is under €30k/month (the Phase 1 math doesn't work yet), or if every decision needs six stakeholders in the room.",
       },
       {
-        q: "How is this different from a consultancy deck or a ChatGPT demo?",
-        a: () =>
-          "A consultancy charges €8–30k and gives you a presentation. A ChatGPT demo is free and gives you vague excitement. This is 90 minutes and gives you a scored, ranked, ROI-mapped document — and a clear decision point on whether to build anything. If nothing clears the bar, you keep the map and owe nothing.",
+        q: "Why is {partnerName} giving this away?",
+        a: ({ partnerName }) =>
+          `Because he's known me for years and trusts how I work with operators. He gets a small thank-you if you eventually decide to work with me. No pressure — he's not selling, he's sharing.`.replace("{partnerName}", partnerName),
       },
       {
-        q: "What’s the catch?",
-        a: ({ partnerName, phase1Anchor }) =>
-          `There isn’t one in the way you’re thinking. The session is complimentary through ${partnerName}. If something’s worth building, I’ll quote Phase 1 — typically ${phase1Anchor}, 2–3 weeks, Ukrainian dev capacity. If not, I’ll say so. No pitch, no follow-up sequence, no proposal you didn’t ask for.`,
-      },
-      {
-        q: "Who’s Maks?",
-        a: () =>
-          "Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn’t delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds in production: Amira (UK MedSpa) and Cosmetic Suite. I won’t sell you something you don’t need.",
+        q: "In what language can we run the session?",
+        a: () => "Ukrainian, Russian, English — or Spanish if you're feeling generous.",
       },
     ],
   },
@@ -339,17 +376,8 @@ const en: ShortPageDict = {
 };
 
 // ─── UK dictionary ─────────────────────────────────────────────────────────────
-// Native Ukrainian translation by Maks Nedbailo.
-//
-// Remaining TODO_UK:
-//  - FAQ answers (5 items) — provided as questions only; answers still in EN
-//  - Industry rows: Manufacturing (3 rows), E-commerce (3 rows), Investor-Operators (3 rows)
-//
-// Notes on name grammar:
-//  - Functions receive partnerName in GENITIVE form (e.g. "Влада") for sentence contexts
-//    ("через Влада", "зарезервовано через Влада")
-//  - cta.headline receives partnerName in NOMINATIVE form ("Влад") — ShortPage handles this
-//    via config.partnerNameUk vs config.partnerNameGenitiveUk
+// Native Ukrainian. Tone: confident, plain-spoken, peer-level.
+// Preserves Hormozi specificity + Sinek anti-pitch framing.
 
 const uk: ShortPageDict = {
   header: {
@@ -360,22 +388,16 @@ const uk: ShortPageDict = {
 
   hero: {
     eyebrow: (p) => `Особисте запрошення для людей із кола ${p}`,
-    headline:
-      "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
+    headline: "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
     subheadline: (p) =>
-      `90-хвилинна Стратегічна мапа ШІ з пріоритетами за очікуваною окупністю. Зазвичай — €1,500. Для вас — зарезервовано через ${p}.`,
+      `90-хвилинна Стратегічна карта ШІ з пріоритетами за ROI. Зазвичай — €1,500. Для вас — зарезервовано через ${p}.`,
     cta: "Забронювати безкоштовну сесію",
     daysLeft: (n) => {
       const l = n % 10, ll = n % 100;
-      const form =
-        ll >= 11 && ll <= 14 ? "днів"
-        : l === 1 ? "день"
-        : l >= 2 && l <= 4 ? "дні"
-        : "днів";
+      const form = ll >= 11 && ll <= 14 ? "днів" : l === 1 ? "день" : l >= 2 && l <= 4 ? "дні" : "днів";
       return `${n} ${form} залишилось`;
     },
     offerCloses: "пропозиція закривається 30 червня",
-    // Partner-specific Ukrainian quote & role — overrides config.partnerQuote / config.partnerTitle
     partnerQuoteOverride:
       "Я знаю Макса вже багато років. Коли комусь із мого кола потрібно тверезо розібратися з ШІ, я відправляю їх до нього. Він не буде продавати вам те, що вам не потрібно.",
     partnerRoleOverride: "шаман і радник",
@@ -383,20 +405,38 @@ const uk: ShortPageDict = {
 
   offer: {
     label: "Пропозиція",
-    headline: (p) => `Сесія вартістю €1,500 — зарезервована для вас через ${p}`,
+    headline: (p) => `Сесія вартістю €1,500 — зарезервована через ${p}`,
     normallyLabel: "Зазвичай",
     normallyValue: "€1,500",
-    giftedLine: (p) => `Для вас — у подарунок через ${p}. Без жодних зобов’язань.`,
+    giftedLine: (p) => `Для вас — у подарунок через ${p}. Без жодних зобов'язань.`,
     body:
-      "Це не ознайомчий дзвінок із прихованим продажем наприкінці. Це робоча сесія. Після неї у вас буде односторінкова мапа всіх можливостей для впровадження ШІ у вашому бізнесі — з оцінкою, пріоритетами за окупністю та чіткими наступними кроками. Якщо жодна ідея не проходить планку доцільності, я прямо вам про це скажу. Мапа в будь-якому разі залишається у вас.",
+      "Це не ознайомчий дзвінок із прихованим продажем наприкінці. Це робоча сесія. Після неї у вас буде односторінкова карта всіх можливостей для ШІ у вашому бізнесі — з оцінкою, пріоритетами за ROI і чіткими кроками. Якщо жодна ідея не проходить планку — я прямо вам про це скажу. Карта залишається у вас у будь-якому разі.",
     deliverableHeading: "Що ви отримаєте після сесії",
     del1: "3 ключові напрями вашого бізнесу, оцінені на готовність до ШІ",
-    del2: "4–6 сценаріїв використання, розставлених за очікуваною окупністю",
-    del3: "Оцінку вартості першого етапу або чесне «ще не час» — без оплати в будь-якому випадку",
-    sampleNote: "Приклад результату — ваша мапа буде адаптована саме під ваш бізнес",
-    stat1Value: "3", stat1Label: "напрями оцінено",
-    stat2Value: "6", stat2Label: "сценаріїв пріоритизовано",
-    stat3Label: () => "оцінка першого етапу",
+    del2: "4–6 сценаріїв використання, розставлених за очікуваним ROI",
+    del3: "Оцінку вартості першого етапу — або чесне «ще не час», без оплати",
+  },
+
+  sampleMap: {
+    note: "Приклад результату — ваша карта буде специфічною під ваш бізнес",
+    docTitle: "Стратегічна карта ШІ",
+    clientLabel: "[Назва вашого бізнесу]",
+    sessionLabel: "РЕЗУЛЬТАТ 90-ХВ. СЕСІЇ",
+    studioName: "care less AI automation",
+    pillarPrefix: (n, label) => `Напрям ${n} — ${label}`,
+    colPain: "Проблема / вузьке місце",
+    colCost: "Поточна вартість",
+    colFeasibility: "Здійсненність ШІ",
+    colRoi: "Очік. ROI",
+    colRank: "Пріор.",
+    phase1Heading: "Рекомендований перший етап",
+    phase1Rec: "#1 — Система реагування на ліди · WhatsApp + сайт · цілодобово",
+    phase1Timeline: "Термін: 2–3 тижні",
+    pillarLabels: [
+      "Комунікація з клієнтами",
+      "Внутрішні знання та операції",
+      "Повторювані процеси",
+    ],
   },
 
   industry: {
@@ -416,17 +456,17 @@ const uk: ShortPageDict = {
           [
             "Прискорення підготовки пропозицій та рахунків",
             "«Комерційні пропозиції готуються днями; ми програємо тим, хто відповідає першим.»",
-            "Підготовка рахунку/пропозиції: ~15 хв → ~1 хв; приблизно у 3× більша пропускна здатність тієї ж команди",
+            "Підготовка: ~15 хв → ~<strong>1 хв</strong>; ~<strong>3×</strong> пропускна здатність, та сама команда",
           ],
           [
             "Планування виробництва",
             "«Усе планування тримається в голові однієї людини й ламається, коли її немає.»",
-            "Планування: ~20 год/тиждень → ~5; вчасна доставка: 82% → 95%",
+            "Планування: <strong>~20 год/тиждень → ~5</strong>; вчасна доставка: <strong>82% → 95%</strong>",
           ],
           [
-            "Маршрутизація післяпродажних звернень",
+            "Маршрутизація після продажних звернень",
             "«Запити лежать у пошті; на виїзд відправляють не того спеціаліста.»",
-            "60–70% базових звернень відсіюються автоматично; вирішення приблизно на 50% швидше",
+            "<strong>60–70%</strong> базових звернень автоматично відсіюються; вирішення ~<strong>50%</strong> швидше",
           ],
         ],
       },
@@ -436,17 +476,17 @@ const uk: ShortPageDict = {
           [
             "Прийом клієнта та перевірка конфлікту інтересів",
             "«Онбординг забирає пів дня часу партнера.»",
-            "Від первинного запиту до листа-зобов’язання — за кілька хвилин; до ~30 годин на тиждень економії на документах",
+            "Від запиту до листа-зобов'язання за хвилини; до ~<strong>30 год/тиждень</strong> економії",
           ],
           [
             "Підготовка документів і пропозицій",
             "«Партнери щоразу готують усе з нуля.»",
-            "Виконання завдань приблизно на 25% швидше",
+            "Виконання завдань ~<strong>25%</strong> швидше",
           ],
           [
             "Фіксація оплачуваного часу",
             "«Компанія недовиставляє рахунки, бо ніхто точно не фіксує час.»",
-            "Повернення 5–8% оплачуваних годин",
+            "Повернення <strong>5–8%</strong> оплачуваних годин",
           ],
         ],
       },
@@ -456,17 +496,17 @@ const uk: ShortPageDict = {
           [
             "Автоматизація підтримки першої лінії",
             "«Підтримка тоне в запитах «де моє замовлення?».»",
-            "60–70% звернень першої лінії вирішуються автоматично",
+            "<strong>60–70%</strong> звернень першої лінії вирішуються автоматично",
           ],
           [
             "Персоналізація та рекомендації",
             "«Універсальна вітрина залишає гроші на столі.»",
-            "Покупці, які взаємодіють із чатом, конвертуються приблизно у 2–4× краще",
+            "Покупці з чатом конвертуються ~<strong>2–4×</strong> краще",
           ],
           [
             "Тексти для запуску нових SKU",
-            "«Тексти для карток товарів гальмують кожен запуск.»",
-            "Тексти для запуску N мовами — за години, а не тижні",
+            "«Тексти для карток гальмують кожен запуск.»",
+            "Тексти для запуску <strong>N мовами</strong> — за години, а не тижні",
           ],
         ],
       },
@@ -476,17 +516,17 @@ const uk: ShortPageDict = {
           [
             "Пошук і первинна оцінка угод",
             "«Хороші угоди губляться в загальному потоці.»",
-            "Приблизно у 3–4× більше угод перевіряється тією ж командою",
+            "~<strong>3–4×</strong> більше угод перевіряється тією ж командою",
           ],
           [
             "Дайджест портфеля",
-            "«Неможливо бачити картину по всіх компаніях, не ганяючись за кожною окремо.»",
-            "Щотижневий дайджест по всьому портфелю; ~6–10 годин на тиждень повертається команді",
+            "«Неможливо бачити картину по всіх компаніях, не ганяючись за кожною.»",
+            "Щотижневий дайджест; ~<strong>6–10 год/тиждень</strong> повертається",
           ],
           [
             "Операційка активів / нерухомості",
             "«Ручні процеси тягнуть NOI вниз.»",
-            "До ~10% покращення NOI, орієнтовно",
+            "До ~<strong>10%</strong> покращення NOI, орієнтовно",
           ],
         ],
       },
@@ -500,17 +540,17 @@ const uk: ShortPageDict = {
       {
         num: "01",
         title: "Забронюйте",
-        body: "Оберіть 90-хвилинний слот і дайте відповідь на 4 запитання перед дзвінком, щоб я прийшов підготовленим, а не з шаблонними ідеями.",
+        body: "Оберіть 90-хвилинний слот. Дайте відповідь на 4 запитання перед дзвінком — щоб я прийшов підготовленим, а не з шаблонними ідеями.",
       },
       {
         num: "02",
-        title: "Створюємо мапу",
+        title: "Створюємо карту",
         body: "Ми розбираємо ваш бізнес за 3 ключовими напрямами. Я оцінюю їх наживо перед вами на спільному екрані.",
       },
       {
         num: "03",
         title: "Отримайте результат",
-        body: "Стратегічна мапа ШІ буде у вас протягом 48 годин — це буде повноцінний документ, а не чернеткові нотатки. Якщо ідею варто реалізовувати, ви також отримаєте оцінку вартості першого етапу.",
+        body: "Стратегічна карта ШІ буде у вас протягом 48 годин — повноцінний документ, а не чернетки. Якщо є що будувати — ви також отримаєте оцінку вартості першого етапу.",
         trust: "Фінальний аналіз ми робимо після дзвінка. Ви отримуєте документ, а не сирі нотатки.",
       },
     ],
@@ -537,14 +577,11 @@ const uk: ShortPageDict = {
   },
 
   cta: {
-    // Note: receives nominative form ("Влад") from ShortPage — see partnerNameUk in config
     headline: (p) => `${p} відправив вас сюди не просто так.`,
-    sub: "Мапа залишається у вас у будь-якому випадку.",
+    sub: "Карта залишається у вас у будь-якому разі.",
     primaryCta: "Забронювати безкоштовну сесію",
     messengerLabel: (channel) =>
-      channel === "telegram"
-        ? "Спочатку написати в Telegram"
-        : "Спочатку написати у WhatsApp",
+      channel === "telegram" ? "Спочатку написати в Telegram" : "Спочатку написати у WhatsApp",
   },
 
   faq: {
@@ -552,34 +589,43 @@ const uk: ShortPageDict = {
     headline: "Перед бронюванням",
     items: [
       {
-        q: "Як насправді виглядає ця мапа?",
-        // TODO_UK: translate FAQ answer 1
+        q: "Чи це прихований продажний дзвінок?",
+        a: ({ partnerName }) =>
+          `Ні. Стратегічна карта ШІ — це реальний результат, а не привід для продажу. Якщо після сесії ви не захочете продовжувати — карта залишається у вас. Саме тому ${partnerName} і поділився цим зі своїм колом: тут немає підступу.`,
+      },
+      {
+        q: "Чим це відрізняється від консалтингу, демо ChatGPT або найму консультанта?",
         a: () =>
-          "It’s a one-page scored document. Three pillars of your business (customer-facing comms, internal knowledge, repeatable execution), each broken into pain points. Each gets an AI-feasibility score and an estimated ROI. You leave with 4–6 ranked use cases and a clear recommendation on Phase 1 — or an honest ‘not yet’ if none clear the bar.",
+          "Консалтинг — це 6–8 тижнів, €8–30k і слайди. Демо ChatGPT — безкоштовно, але без конкретики. Найм консультанта — пропозиція, передоплата, місяці онбордингу. Тут: 90 хвилин — і ви виходите з оцінкою власного бізнесу за ROI. Що з цим робити — ваш вибір.",
+      },
+      {
+        q: "А що, якщо мій бізнес занадто специфічний для ШІ?",
+        a: () =>
+          "Так думає кожен. Після 90 хвилин ви точно будете знати, яких частин вашого бізнесу ШІ може торкнутися — а яких ні. Іноді відповідь: «поки що майже нічого» — і це теж корисна відповідь.",
+      },
+      {
+        q: "Як виглядає ця карта насправді?",
+        a: () =>
+          "Односторінковий документ з оцінками: три напрями бізнесу, кожен розбитий на больові точки, кожна — оцінена за здійсненністю ШІ та ROI. Ви виходите з 4–6 пріоритизованими сценаріями та рекомендацією щодо першого кроку — або чесним «ще не час». Дивіться зразок вище.",
+      },
+      {
+        q: "Як зазвичай виглядає перший етап?",
+        a: ({ phase1Anchor }) =>
+          `Працюючий прототип сценарію з найвищим ROI з вашої карти. Зазвичай ${phase1Anchor}, 2–3 тижні, команда перевірених українських девелоперів. Реальне програмне забезпечення на понеділок — не стратегічний документ.`,
       },
       {
         q: "Кому це підходить — і кому ні?",
-        // TODO_UK: translate FAQ answer 2
         a: () =>
-          "It works if you’re running a business doing €50k–€200k+ per month, you can act inside 30 days, and you want numbers, not hype. It doesn’t work if your business is under €30k/month (the Phase 1 ROI math doesn’t support it yet), or if every decision needs six people in the room.",
+          "Підходить, якщо: бізнес від €50k–€200k+ на місяць, можете прийняти рішення протягом 30 днів, хочете конкретних цифр, а не хайпу. Не підходить, якщо: бізнес менше €30k на місяць (математика ще не сходиться), або якщо рішення потребує шести стейкхолдерів.",
       },
       {
-        q: "Чим це відрізняється від консалтингової презентації або демо ChatGPT?",
-        // TODO_UK: translate FAQ answer 3
-        a: () =>
-          "A consultancy charges €8–30k and gives you a presentation. A ChatGPT demo is free and gives you vague excitement. This is 90 minutes and gives you a scored, ranked, ROI-mapped document — and a clear decision point. If nothing clears the bar, you keep the map and owe nothing.",
+        q: "Чому {partnerName} ділиться цим безкоштовно?",
+        a: ({ partnerName }) =>
+          `Тому що він знає мене вже кілька років і довіряє тому, як я працюю з операторами. Він отримає невелику подяку, якщо ви врешті вирішите зі мною попрацювати. Жодного тиску — він рекомендує, а не продає.`.replace("{partnerName}", partnerName),
       },
       {
-        q: "У чому підступ?",
-        // TODO_UK: translate FAQ answer 4 (receives genitive partnerName from ShortPage)
-        a: ({ partnerName, phase1Anchor }) =>
-          `There isn’t one in the way you’re thinking. The session is complimentary through ${partnerName}. If something’s worth building, I’ll quote Phase 1 — typically ${phase1Anchor}, 2–3 weeks, Ukrainian dev capacity. If not, I’ll say so. No pitch, no follow-up sequence, no proposal you didn’t ask for.`,
-      },
-      {
-        q: "Хто такий Макс?",
-        // TODO_UK: translate FAQ answer 5
-        a: () =>
-          "Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn’t delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds in production: Amira (UK MedSpa) and Cosmetic Suite. I won’t sell you something you don’t need.",
+        q: "Якою мовою можна провести сесію?",
+        a: () => "Українською, російською, англійською — або іспанською, якщо є настрій.",
       },
     ],
   },
@@ -590,10 +636,9 @@ const uk: ShortPageDict = {
   },
 };
 
-// ─── Exported getter ───────────────────────────────────────────────────────────
+// ─── Export ───────────────────────────────────────────────────────────────────
 
 export const dict: Record<Locale, ShortPageDict> = { en, uk };
-
 export function getDict(locale: Locale): ShortPageDict {
   return dict[locale];
 }

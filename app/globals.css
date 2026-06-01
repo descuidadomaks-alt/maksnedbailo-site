@@ -153,8 +153,8 @@ h1.font-playfair, h2.font-playfair {
   opacity: 0;
   transform: translateY(22px);
   transition:
-    opacity 0.72s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
-    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+    opacity 0.76s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 0.76s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
 }
 
 /* Scroll-reveal — visible state (added by IntersectionObserver) */
@@ -163,11 +163,20 @@ h1.font-playfair, h2.font-playfair {
   transform: translateY(0);
 }
 
-/* Delay variants */
+/* Delay variants — 80ms stagger */
 [data-reveal="d0"] { --reveal-delay: 0ms; }
 [data-reveal="d1"] { --reveal-delay: 80ms; }
 [data-reveal="d2"] { --reveal-delay: 160ms; }
 [data-reveal="d3"] { --reveal-delay: 240ms; }
+
+/* Reduced motion: instant reveals, no Lenis (handled in JS) */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* ─── Connecto widget — input text colour fix ───────────────────────────────── */
 /* Our body inherits near-white (#F0ECE6) which is invisible on the widget's   */
@@ -252,6 +261,26 @@ h1.font-playfair, h2.font-playfair {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   margin: 3rem 0;
+}
+
+/* ─── Cyrillic font overrides ────────────────────────────────────────────────
+   Playfair Display and Sora lack Cyrillic glyphs — they fall back to system
+   fonts which render noticeably larger/heavier. When lang="uk" is set on <html>
+   (done by PartnerLocaleWrapper via useEffect), swap to fonts with native
+   Cyrillic support: Cormorant Garamond (display) + IBM Plex Sans (body).
+   Cormorant is optically similar to Playfair but requires a slight size nudge
+   (~95%) to match Playfair's apparent size at the same px value.
+ ──────────────────────────────────────────────────────────────────────────── */
+:lang(uk) .font-playfair,
+:lang(uk) [class*="font-playfair"] {
+  font-family: var(--font-cormorant), "Georgia", serif;
+  font-size-adjust: 0.95; /* optical size match to Playfair */
+}
+
+:lang(uk) .font-sora,
+:lang(uk) [class*="font-sora"] {
+  font-family: var(--font-ibm-plex), "system-ui", sans-serif;
+  letter-spacing: -0.005em; /* IBM Plex runs slightly wider than Sora */
 }
 
 /* ─── Partner page — LIVE badge subtle glow pulse ───────────────────────────── */

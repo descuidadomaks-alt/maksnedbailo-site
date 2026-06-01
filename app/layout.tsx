@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Sora } from "next/font/google";
+import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import LenisProvider from "./components/LenisProvider";
 
+// ── Primary display (Latin) ────────────────────────────────────────────────────
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
@@ -11,9 +13,30 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+// ── Primary body (Latin) ───────────────────────────────────────────────────────
 const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",
+  display: "swap",
+  weight: ["300", "400", "600"],
+});
+
+// ── Cyrillic display — replaces Playfair when lang="uk" ───────────────────────
+// Cormorant Garamond has native Cyrillic glyphs; similar editorial proportions
+// to Playfair Display but with genuine Cyrillic support.
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+});
+
+// ── Cyrillic body — replaces Sora when lang="uk" ─────────────────────────────
+// IBM Plex Sans has complete Cyrillic coverage and similar geometric feel to Sora.
+const ibmPlex = IBM_Plex_Sans({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-ibm-plex",
   display: "swap",
   weight: ["300", "400", "600"],
 });
@@ -145,7 +168,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${sora.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${sora.variable} ${cormorant.variable} ${ibmPlex.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -153,6 +176,7 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-bg text-fg font-sora">
+        <LenisProvider />
         {children}
 
         {/* Cloudflare Web Analytics */}

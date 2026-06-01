@@ -12,10 +12,33 @@ declare global {
 const SCROLL_HINT_KEY = "short_industry_scroll_hinted";
 type TabId = "manufacturing" | "professionalServices" | "ecommerce" | "investorOperators";
 
+/**
+ * ResultCell — renders the result string, which may contain <strong> tags
+ * for bolded key metrics. Safe because we own all values in the i18n dict.
+ */
+function ResultCell({ html }: { html: string }) {
+  return (
+    <p
+      className="font-sora leading-[1.6]"
+      style={{ fontSize: "13px", color: "rgba(212,255,43,0.82)", fontWeight: 500 }}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
 export default function SectionShortIndustry({ d }: { d: ShortPageDict }) {
   const [active, setActive] = useState<TabId>("professionalServices");
   const [showHint, setShowHint] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const tabs = d.industry.tabs;
+  const tabList: { id: TabId; label: string }[] = [
+    { id: "manufacturing", label: tabs.manufacturing.label },
+    { id: "professionalServices", label: tabs.professionalServices.label },
+    { id: "ecommerce", label: tabs.ecommerce.label },
+    { id: "investorOperators", label: tabs.investorOperators.label },
+  ];
+  const rows = tabs[active].rows;
 
   useEffect(() => {
     if (typeof localStorage !== "undefined" && !localStorage.getItem(SCROLL_HINT_KEY)) {
@@ -38,20 +61,11 @@ export default function SectionShortIndustry({ d }: { d: ShortPageDict }) {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  const tabs = d.industry.tabs;
-  const tabList: { id: TabId; label: string }[] = [
-    { id: "manufacturing", label: tabs.manufacturing.label },
-    { id: "professionalServices", label: tabs.professionalServices.label },
-    { id: "ecommerce", label: tabs.ecommerce.label },
-    { id: "investorOperators", label: tabs.investorOperators.label },
-  ];
-  const rows = tabs[active].rows;
-
   return (
     <section className="section-divider py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6">
 
-        <p data-reveal className="font-sora text-fg/30 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        <p data-reveal className="font-sora text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.industry.label}
         </p>
         <h2
@@ -87,16 +101,16 @@ export default function SectionShortIndustry({ d }: { d: ShortPageDict }) {
         </div>
 
         {showHint && (
-          <p className="md:hidden font-sora text-fg/20 mb-2 text-right" style={{ fontSize: "10px" }}>
+          <p className="md:hidden font-sora text-fg/20 mb-2 text-right italic" style={{ fontSize: "10px" }}>
             {d.industry.swipeHint}
           </p>
         )}
 
-        {/* Table — horizontal scroll on mobile, equal 3 columns */}
+        {/* Table — horizontal scroll on mobile */}
         <div
           data-reveal
           className="relative w-full rounded-2xl border border-white/[0.06] overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.014)" }}
+          style={{ background: "rgba(255,255,255,0.012)" }}
         >
           {/* Right-edge fade */}
           <div
@@ -107,37 +121,60 @@ export default function SectionShortIndustry({ d }: { d: ShortPageDict }) {
           <div
             ref={scrollRef}
             className="overflow-x-auto"
-            style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
+            style={{ WebkitOverflowScrolling: "touch" }}
           >
             <div style={{ minWidth: "580px" }}>
-              {/* Column headers */}
+
+              {/* Column headers — muted, labels not content */}
               <div
-                className="grid px-6 py-3 border-b border-white/[0.05]"
-                style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
+                className="grid px-6 py-3 border-b border-white/[0.05] gap-4"
+                style={{ gridTemplateColumns: "1.2fr 1fr 1fr" }}
               >
                 {[d.industry.colUseCase, d.industry.colPain, d.industry.colResult].map((h) => (
-                  <span key={h} className="font-sora text-fg/22" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  <span
+                    key={h}
+                    className="font-sora text-fg/45"
+                    style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
+                  >
                     {h}
                   </span>
                 ))}
               </div>
-              {/* Data rows */}
+
+              {/* Data rows — eye: result → use-case → pain */}
               {rows.map(([useCase, pain, result], i) => (
                 <div
                   key={i}
-                  className="grid px-6 py-4 border-t border-white/[0.04] hover:bg-white/[0.016] transition-colors duration-150 items-start gap-4"
-                  style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
+                  className="grid px-6 py-5 border-t border-white/[0.04] hover:bg-white/[0.016] transition-colors duration-150 items-start gap-4"
+                  style={{ gridTemplateColumns: "1.2fr 1fr 1fr" }}
                 >
-                  <p className="font-sora font-semibold text-fg/72 leading-[1.5]" style={{ fontSize: "13px" }}>{useCase}</p>
-                  <p className="font-sora font-light text-fg/48 leading-[1.6]" style={{ fontSize: "13px", fontStyle: "italic" }}>{pain}</p>
-                  <p className="font-sora font-light text-accent/65 leading-[1.6]" style={{ fontSize: "13px" }}>{result}</p>
+                  {/* Col 1 — use case: medium weight, anchor of the row */}
+                  <p
+                    className="font-sora text-fg/80 leading-[1.5]"
+                    style={{ fontSize: "14px", fontWeight: 500 }}
+                  >
+                    {useCase}
+                  </p>
+
+                  {/* Col 2 — pain: muted italic, secondary */}
+                  <p
+                    className="font-sora font-light text-fg/48 leading-[1.6]"
+                    style={{ fontSize: "13px", fontStyle: "italic" }}
+                  >
+                    {pain}
+                  </p>
+
+                  {/* Col 3 — result: HERO, accent, bold key metrics */}
+                  <ResultCell html={result} />
                 </div>
               ))}
+
             </div>
           </div>
         </div>
 
-        <p data-reveal className="font-sora font-light text-fg/[0.14] mt-6 text-center leading-relaxed" style={{ fontSize: "10px" }}>
+        {/* Sources — very subtle, below the table */}
+        <p data-reveal className="font-sora font-light text-fg/[0.14] mt-5 text-center leading-relaxed" style={{ fontSize: "10px" }}>
           {d.industry.sources}
         </p>
 

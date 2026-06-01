@@ -1,8 +1,9 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { PartnerLocaleProvider, usePartnerLocale } from "./partner-locale";
+import { getDict } from "./i18n";
 import type { Locale } from "@/content/partners/index";
 
 // ── Language toggle ────────────────────────────────────────────────────────────
@@ -11,6 +12,7 @@ function LangToggle() {
   const { locale, setLocale } = usePartnerLocale();
   const btn = (l: Locale, label: string) => (
     <button
+      key={l}
       onClick={() => setLocale(l)}
       aria-pressed={locale === l}
       className="font-sora transition-colors duration-150"
@@ -18,7 +20,7 @@ function LangToggle() {
         fontSize: "10px",
         letterSpacing: "1.5px",
         fontWeight: locale === l ? 600 : 300,
-        color: locale === l ? "rgba(212,255,43,0.75)" : "rgba(240,236,230,0.25)",
+        color: locale === l ? "rgba(212,255,43,0.78)" : "rgba(240,236,230,0.28)",
         background: "none",
         border: "none",
         cursor: "pointer",
@@ -31,7 +33,7 @@ function LangToggle() {
   return (
     <div className="flex items-center gap-2">
       {btn("en", "EN")}
-      <span style={{ color: "rgba(240,236,230,0.15)", fontSize: "10px" }}>·</span>
+      <span style={{ color: "rgba(240,236,230,0.14)", fontSize: "10px" }}>·</span>
       {btn("uk", "УК")}
     </div>
   );
@@ -40,6 +42,9 @@ function LangToggle() {
 // ── Minimal static partner header ─────────────────────────────────────────────
 
 function PartnerHeader() {
+  const { locale } = usePartnerLocale();
+  const d = getDict(locale);
+
   return (
     <header
       className="flex items-center justify-between px-5 sm:px-8"
@@ -73,14 +78,24 @@ function PartnerHeader() {
             color: "rgba(212,255,43,0.45)",
           }}
         >
-          Personal Invitation
+          {d.header.personalInvitation}
         </span>
       </div>
     </header>
   );
 }
 
-// ── Wrapper — provides context + renders header ────────────────────────────────
+// ── Lang sync — sets <html lang="uk|en"> for Cyrillic CSS font overrides ──────
+
+function LangSync() {
+  const { locale } = usePartnerLocale();
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+  return null;
+}
+
+// ── Wrapper ────────────────────────────────────────────────────────────────────
 
 export default function PartnerLocaleWrapper({
   children,
@@ -91,6 +106,7 @@ export default function PartnerLocaleWrapper({
 }) {
   return (
     <PartnerLocaleProvider defaultLocale={defaultLocale}>
+      <LangSync />
       <PartnerHeader />
       {children}
     </PartnerLocaleProvider>
