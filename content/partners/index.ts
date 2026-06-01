@@ -1,6 +1,9 @@
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Shared types ─────────────────────────────────────────────────────────────
 
 export type MessengerChannel = "telegram" | "whatsapp";
+export type Locale = "en" | "uk";
+
+// ─── Long-form page (existing) ─────────────────────────────────────────────
 
 export type PartnerData = {
   slug: string;
@@ -8,7 +11,7 @@ export type PartnerData = {
   partner: {
     name: string;
     role: string;
-    photo: string | null;    // TODO:VLAD_PHOTO — path from /public
+    photo: string | null;
     quote: string;
     introCircle: string;
   };
@@ -24,12 +27,10 @@ export type PartnerData = {
     headline: string;
     subheadline: string;
     subtext: string;
-    /** Optional one-liner shown between subtext and CTA — quiet scarcity signal */
     scarcity?: string;
     cta: string;
   };
 
-  // TODO:STATS — replace with verifiable, sourced numbers
   marqueeStats: string[];
 
   pricing: {
@@ -40,15 +41,8 @@ export type PartnerData = {
 
   booking: {
     schedulerUrl: string;
-    /**
-     * Which messenger to show as the secondary CTA.
-     * Swap per-partner without changing any component code.
-     * @default "telegram"
-     */
     messengerChannel: MessengerChannel;
-    /** Telegram deep-link — required when messengerChannel = "telegram" */
     telegram?: string;
-    /** WhatsApp deep-link — required when messengerChannel = "whatsapp" */
     whatsapp?: string;
   };
 
@@ -59,13 +53,50 @@ export type PartnerData = {
   };
 };
 
-// ─── Registry ─────────────────────────────────────────────────────────────────
+// ─── Short-form template config ────────────────────────────────────────────────
+//
+// Cloning a partner = create a new file exporting one object of this type.
+// No code changes needed in any component.
 
-const registry: Record<string, () => Promise<{ default: PartnerData }>> = {};
+export type ShortPartnerConfig = {
+  slug: string;
 
-export function registerPartner(
-  slug: string,
-  loader: () => Promise<{ default: PartnerData }>
-) {
-  registry[slug] = loader;
+  partnerName: string;
+  partnerTitle: string;
+  partnerPhoto: string | null; // TODO: path from /public, e.g. /partners/vlad/photo.jpg
+
+  /** Truthful, first-person referral quote */
+  partnerQuote: string;
+
+  messenger: {
+    channel: MessengerChannel;
+    /** Handle without leading @, e.g. "maksym_nedbailo" */
+    handle: string;
+  };
+
+  /**
+   * Default locale shown when the page loads.
+   * Partner pages default "uk"; main-site clones default "en".
+   */
+  defaultLocale: Locale;
+
+  /** ISO date "YYYY-MM-DD" — drives the countdown chip */
+  offerDeadline: string;
+
+  schedulerUrl: string;
+
+  /** Shown in FAQ + offer anchor. Default: "€4,500" */
+  phase1Anchor: string;
+};
+
+// ─── Registry helpers ──────────────────────────────────────────────────────────
+
+const _longRegistry: Record<string, () => Promise<{ default: PartnerData }>> = {};
+const _shortRegistry: Record<string, () => Promise<{ default: ShortPartnerConfig }>> = {};
+
+export function registerPartner(slug: string, loader: () => Promise<{ default: PartnerData }>) {
+  _longRegistry[slug] = loader;
+}
+export function registerShortPartner(slug: string, loader: () => Promise<{ default: ShortPartnerConfig }>) {
+  _shortRegistry[slug] = loader;
 }
