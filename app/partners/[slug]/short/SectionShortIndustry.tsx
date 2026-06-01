@@ -137,7 +137,7 @@ export default function SectionShortIndustry({ d }: { d: ShortPageDict }) {
           </div>
         </div>
 
-        <p data-reveal className="font-sora font-light text-fg/18 mt-6 text-center leading-relaxed" style={{ fontSize: "11px" }}>
+        <p data-reveal className="font-sora font-light text-fg/[0.14] mt-6 text-center leading-relaxed" style={{ fontSize: "10px" }}>
           {d.industry.sources}
         </p>
 

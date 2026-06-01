@@ -148,7 +148,7 @@ const en: ShortPageDict = {
     deliverableHeading: "You walk away with",
     del1: "3 pillars of your operation scored for AI readiness",
     del2: "4–6 use cases ranked by estimated ROI",
-    del3: "Phase 1 quoted (or an honest “not yet” — no charge either way)",
+    del3: "Phase 1 quoted (or an honest 'not yet' — no charge either way)",
     sampleNote: "Sample output — yours will be specific to your business",
     stat1Value: "3", stat1Label: "pillars scored",
     stat2Value: "6", stat2Label: "use cases ranked",
@@ -171,17 +171,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Quote/invoice acceleration",
-            "“Quotes take days; we lose jobs to whoever replies first.”",
+            "«Quotes take days; we lose jobs to whoever replies first.»",
             "Invoice/quote prep ~15 min → ~1 min; ~3× throughput, same team",
           ],
           [
             "Production scheduling",
-            "“Scheduling lives in one head and breaks when they’re out.”",
+            "«Scheduling lives in one head and breaks when they’re out.»",
             "Planning ~20 hrs/wk → ~5; on-time delivery 82% → 95%",
           ],
           [
             "After-sale routing",
-            "“Requests sit in an inbox; the wrong tech gets dispatched.”",
+            "«Requests sit in an inbox; the wrong tech gets dispatched.»",
             "60–70% tier-1 deflection; ~50% faster resolution",
           ],
         ],
@@ -191,17 +191,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Client intake & conflict check",
-            "“Onboarding eats half a day of partner time.”",
+            "«Onboarding eats half a day of partner time.»",
             "Intake → engagement letter in minutes; up to ~30 hrs/wk saved on doc tasks",
           ],
           [
             "Document & proposal drafting",
-            "“Partners draft everything from scratch.”",
+            "«Partners draft everything from scratch.»",
             "~25% faster task completion",
           ],
           [
             "Billable-time capture",
-            "“We under-bill because nobody logs time accurately.”",
+            "«We under-bill because nobody logs time accurately.»",
             "5–8% billable-hour recovery",
           ],
         ],
@@ -211,17 +211,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Tier-1 support automation",
-            "“Support drowns in ‘where’s my order’ tickets.”",
+            "«Support drowns in ‘where’s my order’ tickets.»",
             "60–70% of tier-1 tickets auto-resolved",
           ],
           [
             "Personalisation / recommendations",
-            "“Generic storefront leaves revenue on the table.”",
+            "«Generic storefront leaves revenue on the table.»",
             "Engaged-chat shoppers convert ~2–4× more",
           ],
           [
             "SKU launch copy",
-            "“Listing copy bottlenecks every launch.”",
+            "«Listing copy bottlenecks every launch.»",
             "Launch copy in N languages in hours, not weeks",
           ],
         ],
@@ -231,17 +231,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Deal sourcing / underwriting",
-            "“Good deals get missed in the pile.”",
+            "«Good deals get missed in the pile.»",
             "~3–4× more deals screened, same team",
           ],
           [
             "Portfolio digest",
-            "“Can’t see across companies without chasing each one.”",
+            "«Can’t see across companies without chasing each one.»",
             "Weekly cross-portfolio digest; ~6–10 hrs/wk recovered",
           ],
           [
             "Asset / property ops",
-            "“Manual ops drag NOI.”",
+            "«Manual ops drag NOI.»",
             "Up to ~10% NOI improvement (directional)",
           ],
         ],
@@ -408,26 +408,25 @@ const uk: ShortPageDict = {
     colPain: "Яку проблему вирішує",
     colResult: "Типовий результат",
     sources:
-      "McKinsey The State of AI 2024–2025 · Deloitte smart-manufacturing 2025 · industry benchmarks · client-reported baselines. Цифри є орієнтовними середніми показниками, а не гарантіями.",
+      "McKinsey The State of AI 2024–2025 · Deloitte smart-manufacturing 2025 · галузеві бенчмарки · базові показники зі слів клієнтів. Цифри є орієнтовними середніми показниками, а не гарантіями.",
     tabs: {
       manufacturing: {
-        // TODO_UK: Manufacturing rows not yet translated — displaying EN until translation provided
         label: "Виробництво",
         rows: [
           [
-            "Quote/invoice acceleration",
-            "“Quotes take days; we lose jobs to whoever replies first.”",
-            "Invoice/quote prep ~15 min → ~1 min; ~3× throughput, same team",
+            "Прискорення підготовки пропозицій та рахунків",
+            "«Комерційні пропозиції готуються днями; ми програємо тим, хто відповідає першим.»",
+            "Підготовка рахунку/пропозиції: ~15 хв → ~1 хв; приблизно у 3× більша пропускна здатність тієї ж команди",
           ],
           [
-            "Production scheduling",
-            "“Scheduling lives in one head and breaks when they’re out.”",
-            "Planning ~20 hrs/wk → ~5; on-time delivery 82% → 95%",
+            "Планування виробництва",
+            "«Усе планування тримається в голові однієї людини й ламається, коли її немає.»",
+            "Планування: ~20 год/тиждень → ~5; вчасна доставка: 82% → 95%",
           ],
           [
-            "After-sale routing",
-            "“Requests sit in an inbox; the wrong tech gets dispatched.”",
-            "60–70% tier-1 deflection; ~50% faster resolution",
+            "Маршрутизація післяпродажних звернень",
+            "«Запити лежать у пошті; на виїзд відправляють не того спеціаліста.»",
+            "60–70% базових звернень відсіюються автоматично; вирішення приблизно на 50% швидше",
           ],
         ],
       },
@@ -452,44 +451,42 @@ const uk: ShortPageDict = {
         ],
       },
       ecommerce: {
-        // TODO_UK: E-commerce rows not yet translated — displaying EN until translation provided
         label: "E-commerce",
         rows: [
           [
-            "Tier-1 support automation",
-            "“Support drowns in ‘where’s my order’ tickets.”",
-            "60–70% of tier-1 tickets auto-resolved",
+            "Автоматизація підтримки першої лінії",
+            "«Підтримка тоне в запитах «де моє замовлення?».»",
+            "60–70% звернень першої лінії вирішуються автоматично",
           ],
           [
-            "Personalisation / recommendations",
-            "“Generic storefront leaves revenue on the table.”",
-            "Engaged-chat shoppers convert ~2–4× more",
+            "Персоналізація та рекомендації",
+            "«Універсальна вітрина залишає гроші на столі.»",
+            "Покупці, які взаємодіють із чатом, конвертуються приблизно у 2–4× краще",
           ],
           [
-            "SKU launch copy",
-            "“Listing copy bottlenecks every launch.”",
-            "Launch copy in N languages in hours, not weeks",
+            "Тексти для запуску нових SKU",
+            "«Тексти для карток товарів гальмують кожен запуск.»",
+            "Тексти для запуску N мовами — за години, а не тижні",
           ],
         ],
       },
       investorOperators: {
-        // TODO_UK: Investor-Operators rows not yet translated — displaying EN until translation provided
         label: "Інвестори-оператори",
         rows: [
           [
-            "Deal sourcing / underwriting",
-            "“Good deals get missed in the pile.”",
-            "~3–4× more deals screened, same team",
+            "Пошук і первинна оцінка угод",
+            "«Хороші угоди губляться в загальному потоці.»",
+            "Приблизно у 3–4× більше угод перевіряється тією ж командою",
           ],
           [
-            "Portfolio digest",
-            "“Can’t see across companies without chasing each one.”",
-            "Weekly cross-portfolio digest; ~6–10 hrs/wk recovered",
+            "Дайджест портфеля",
+            "«Неможливо бачити картину по всіх компаніях, не ганяючись за кожною окремо.»",
+            "Щотижневий дайджест по всьому портфелю; ~6–10 годин на тиждень повертається команді",
           ],
           [
-            "Asset / property ops",
-            "“Manual ops drag NOI.”",
-            "Up to ~10% NOI improvement (directional)",
+            "Операційка активів / нерухомості",
+            "«Ручні процеси тягнуть NOI вниз.»",
+            "До ~10% покращення NOI, орієнтовно",
           ],
         ],
       },

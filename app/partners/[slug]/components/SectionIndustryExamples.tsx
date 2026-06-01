@@ -234,7 +234,7 @@ export default function SectionIndustryExamples() {
         </div>
 
         {/* Source footnote */}
-        <p data-reveal className="font-sora font-light text-fg/20 mt-6 text-center leading-relaxed" style={{ fontSize: "11px" }}>
+        <p data-reveal className="font-sora font-light text-fg/[0.14] mt-6 text-center leading-relaxed" style={{ fontSize: "10px" }}>
           Sources: IEEE · McKinsey The State of AI 2024 · industry conversion benchmarks · client-reported baselines.
           ROI figures are directional averages, not guarantees.
         </p>
