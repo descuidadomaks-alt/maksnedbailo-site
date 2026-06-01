@@ -20,9 +20,11 @@ function ChevronIcon({ open }: { open: boolean }) {
 export default function SectionShortFAQ({
   config,
   d,
+  partnerNameForSentences,
 }: {
   config: ShortPartnerConfig;
   d: ShortPageDict;
+  partnerNameForSentences?: string;
 }) {
   const [open, setOpen] = useState<Set<number>>(new Set());
   const toggle = (i: number) =>
@@ -32,7 +34,10 @@ export default function SectionShortFAQ({
       return next;
     });
 
-  const vars = { partnerName: config.partnerName, phase1Anchor: config.phase1Anchor };
+  const vars = {
+    partnerName: partnerNameForSentences ?? config.partnerName,
+    phase1Anchor: config.phase1Anchor,
+  };
 
   return (
     <section className="section-divider py-20 md:py-28">

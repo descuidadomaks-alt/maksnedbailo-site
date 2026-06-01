@@ -3,6 +3,8 @@ import type { ShortPartnerConfig } from "./index";
 const vladShort: ShortPartnerConfig = {
   slug: "vlad",
   partnerName: "Vlad",
+  partnerNameUk: "Влад",           // Ukrainian nominative — shown in bylines
+  partnerNameGenitiveUk: "Влада",  // Ukrainian genitive — "через Влада", "зарезервовано для вас через Влада"
   partnerTitle: "shaman & advisor",
   partnerPhoto: null, // TODO:VLAD_PHOTO — drop headshot at /public/partners/vlad/photo.jpg
 

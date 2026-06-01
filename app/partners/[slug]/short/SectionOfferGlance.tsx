@@ -9,10 +9,13 @@ import type { ShortPageDict } from "../lib/i18n";
 export default function SectionOfferGlance({
   config,
   d,
+  partnerNameForSentences,
 }: {
   config: ShortPartnerConfig;
   d: ShortPageDict;
+  partnerNameForSentences?: string;
 }) {
+  const p = partnerNameForSentences ?? config.partnerName;
   return (
     <section className="section-divider py-20 md:py-28">
       <div className="max-w-5xl mx-auto px-6">
@@ -31,7 +34,7 @@ export default function SectionOfferGlance({
               className="font-playfair font-normal text-fg mb-6"
               style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}
             >
-              {d.offer.headline(config.partnerName)}
+              {d.offer.headline(p)}
             </h2>
 
             {/* Price anchor — large strikethrough */}
@@ -52,7 +55,7 @@ export default function SectionOfferGlance({
               className="font-sora font-semibold text-accent mb-8"
               style={{ fontSize: "13px", letterSpacing: "0.5px" }}
             >
-              {d.offer.giftedLine(config.partnerName)}
+              {d.offer.giftedLine(p)}
             </p>
 
             <p

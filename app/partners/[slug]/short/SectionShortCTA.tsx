@@ -35,9 +35,12 @@ function WAIcon() {
 export default function SectionShortCTA({
   config,
   d,
+  partnerNameDisplay,
 }: {
   config: ShortPartnerConfig;
   d: ShortPageDict;
+  /** Nominative display form — "Влад sent you here" */
+  partnerNameDisplay?: string;
 }) {
   const isTelegram = config.messenger.channel === "telegram";
   const messengerUrl = isTelegram
@@ -59,7 +62,7 @@ export default function SectionShortCTA({
           className="font-playfair font-normal text-fg mb-4"
           style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}
         >
-          {d.cta.headline(config.partnerName)}
+          {d.cta.headline(partnerNameDisplay ?? config.partnerName)}
         </h2>
 
         <p

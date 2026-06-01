@@ -62,6 +62,14 @@ export type ShortPartnerConfig = {
   slug: string;
 
   partnerName: string;
+  /** Ukrainian nominative form — shown in bylines, captions. e.g. "Влад" */
+  partnerNameUk?: string;
+  /**
+   * Ukrainian genitive form — used in sentences: "через Влада", "зарезервовано через Влада".
+   * Falls back to partnerNameUk → partnerName if not set.
+   */
+  partnerNameGenitiveUk?: string;
+
   partnerTitle: string;
   partnerPhoto: string | null; // TODO: path from /public, e.g. /partners/vlad/photo.jpg
 

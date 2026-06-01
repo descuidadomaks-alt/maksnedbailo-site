@@ -28,12 +28,20 @@ function useCountdownDays(deadline: string) {
 export default function SectionShortHero({
   config,
   d,
+  partnerNameForSentences,
+  partnerNameDisplay,
 }: {
   config: ShortPartnerConfig;
   d: ShortPageDict;
+  /** Grammatically appropriate form for sentence use (genitive in UK) */
+  partnerNameForSentences?: string;
+  /** Nominative/display form for bylines and captions */
+  partnerNameDisplay?: string;
 }) {
   const daysLeft = useCountdownDays(config.offerDeadline);
-  const lines = d.hero.headline.split("\n"); // support optional line-break in headline
+  const lines = d.hero.headline.split("\n");
+  const pSentence = partnerNameForSentences ?? config.partnerName;
+  const pDisplay  = partnerNameDisplay ?? config.partnerName;
 
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "88svh", display: "flex", alignItems: "center" }}>
@@ -67,7 +75,7 @@ export default function SectionShortHero({
             className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
             style={{ background: "rgba(212,255,43,0.7)" }}
           />
-          {d.hero.eyebrow(config.partnerName)}
+          {d.hero.eyebrow(pSentence)}
         </div>
 
         {/* H1 — one focal point per viewport */}
@@ -100,7 +108,7 @@ export default function SectionShortHero({
             marginBottom: "clamp(20px, 3vw, 32px)",
           }}
         >
-          {d.hero.subheadline(config.partnerName)}
+          {d.hero.subheadline(pSentence)}
         </p>
 
         {/* Countdown chip */}
@@ -152,7 +160,7 @@ export default function SectionShortHero({
             className="font-playfair text-fg/50 leading-[1.7]"
             style={{ fontSize: "clamp(15px, 1.4vw, 18px)", fontStyle: "italic", letterSpacing: "-0.01em" }}
           >
-            &ldquo;{config.partnerQuote}&rdquo;
+            &ldquo;{d.hero.partnerQuoteOverride ?? config.partnerQuote}&rdquo;
           </blockquote>
           <figcaption className="mt-4 flex items-center gap-3">
             <div
@@ -169,8 +177,10 @@ export default function SectionShortHero({
               )}
             </div>
             <span className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase" }}>
-              {config.partnerName}
-              {config.partnerTitle && <span className="text-fg/18"> · {config.partnerTitle}</span>}
+              {pDisplay}
+              {(d.hero.partnerRoleOverride ?? config.partnerTitle) && (
+                <span className="text-fg/18"> · {d.hero.partnerRoleOverride ?? config.partnerTitle}</span>
+              )}
             </span>
           </figcaption>
         </figure>

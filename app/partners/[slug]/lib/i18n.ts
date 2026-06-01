@@ -1,11 +1,12 @@
 /**
  * Short-template locale dictionary.
  *
- * EN is complete and production-ready.
- * UK strings are marked "TODO_UK — translate: «EN text»" so a native
- * Ukrainian copywriter can fill them in without hunting through components.
+ * EN — complete and production-ready.
+ * UK — native Ukrainian translation provided by Maks.
  *
- * Search the codebase for TODO_UK to find every untranslated string.
+ * Remaining TODO_UK: FAQ answers (5) and industry rows for
+ * Manufacturing, E-commerce, and Investor-Operators tabs.
+ * Search TODO_UK to find them.
  */
 
 import type { Locale } from "@/content/partners/index";
@@ -33,13 +34,17 @@ export interface ShortPageDict {
     // ── headline in use ──────────────────────────────────────────────────────
     headline: string;
     // alt A (swap below if Maks prefers):
-    // "Everyone says 'use AI.' Almost no one tells you where it pays off in your business."
+    // EN: "Everyone says 'use AI.' Almost no one tells you where it pays off in your business."
     // alt B:
-    // "Before you automate anything, find what's actually worth automating."
+    // EN: "Before you automate anything, find what's actually worth automating."
     subheadline: (partnerName: string) => string;
     cta: string;
     daysLeft: (n: number) => string;
     offerCloses: string;
+    /** Locale-specific partner quote — falls back to config.partnerQuote if absent */
+    partnerQuoteOverride?: string;
+    /** Locale-specific partner role/title — falls back to config.partnerTitle if absent */
+    partnerRoleOverride?: string;
   };
 
   offer: {
@@ -129,6 +134,7 @@ const en: ShortPageDict = {
     cta: "Claim Your Complimentary Session",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
     offerCloses: "offer closes June 30",
+    // EN uses config values directly — no overrides needed
   },
 
   offer: {
@@ -165,17 +171,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Quote/invoice acceleration",
-            "\"Quotes take days; we lose jobs to whoever replies first.\"",
+            "“Quotes take days; we lose jobs to whoever replies first.”",
             "Invoice/quote prep ~15 min → ~1 min; ~3× throughput, same team",
           ],
           [
             "Production scheduling",
-            "\"Scheduling lives in one head and breaks when they're out.\"",
+            "“Scheduling lives in one head and breaks when they’re out.”",
             "Planning ~20 hrs/wk → ~5; on-time delivery 82% → 95%",
           ],
           [
             "After-sale routing",
-            "\"Requests sit in an inbox; the wrong tech gets dispatched.\"",
+            "“Requests sit in an inbox; the wrong tech gets dispatched.”",
             "60–70% tier-1 deflection; ~50% faster resolution",
           ],
         ],
@@ -185,17 +191,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Client intake & conflict check",
-            "\"Onboarding eats half a day of partner time.\"",
+            "“Onboarding eats half a day of partner time.”",
             "Intake → engagement letter in minutes; up to ~30 hrs/wk saved on doc tasks",
           ],
           [
             "Document & proposal drafting",
-            "\"Partners draft everything from scratch.\"",
+            "“Partners draft everything from scratch.”",
             "~25% faster task completion",
           ],
           [
             "Billable-time capture",
-            "\"We under-bill because nobody logs time accurately.\"",
+            "“We under-bill because nobody logs time accurately.”",
             "5–8% billable-hour recovery",
           ],
         ],
@@ -205,17 +211,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Tier-1 support automation",
-            "\"Support drowns in 'where's my order' tickets.\"",
+            "“Support drowns in ‘where’s my order’ tickets.”",
             "60–70% of tier-1 tickets auto-resolved",
           ],
           [
             "Personalisation / recommendations",
-            "\"Generic storefront leaves revenue on the table.\"",
+            "“Generic storefront leaves revenue on the table.”",
             "Engaged-chat shoppers convert ~2–4× more",
           ],
           [
             "SKU launch copy",
-            "\"Listing copy bottlenecks every launch.\"",
+            "“Listing copy bottlenecks every launch.”",
             "Launch copy in N languages in hours, not weeks",
           ],
         ],
@@ -225,17 +231,17 @@ const en: ShortPageDict = {
         rows: [
           [
             "Deal sourcing / underwriting",
-            "\"Good deals get missed in the pile.\"",
+            "“Good deals get missed in the pile.”",
             "~3–4× more deals screened, same team",
           ],
           [
             "Portfolio digest",
-            "\"Can't see across companies without chasing each one.\"",
+            "“Can’t see across companies without chasing each one.”",
             "Weekly cross-portfolio digest; ~6–10 hrs/wk recovered",
           ],
           [
             "Asset / property ops",
-            "\"Manual ops drag NOI.\"",
+            "“Manual ops drag NOI.”",
             "Up to ~10% NOI improvement (directional)",
           ],
         ],
@@ -260,7 +266,7 @@ const en: ShortPageDict = {
       {
         num: "03",
         title: "Receive",
-        body: "The Strategic AI Map lands within 48 hours — a proper document, not rough notes. Phase 1 quoted if it's worth building.",
+        body: "The Strategic AI Map lands within 48 hours — a proper document, not rough notes. Phase 1 quoted if it’s worth building.",
         trust: "We do the final analysis after the call. You get a document, not rough notes.",
       },
     ],
@@ -301,12 +307,12 @@ const en: ShortPageDict = {
       {
         q: "What does the map actually look like?",
         a: () =>
-          "It's a one-page scored document. Three pillars of your business (customer-facing comms, internal knowledge, repeatable execution), each broken into pain points. Each gets an AI-feasibility score and an estimated ROI. You leave with 4–6 ranked use cases and a clear recommendation on Phase 1 — or an honest 'not yet' if none of them clear the bar.",
+          "It’s a one-page scored document. Three pillars of your business (customer-facing comms, internal knowledge, repeatable execution), each broken into pain points. Each gets an AI-feasibility score and an estimated ROI. You leave with 4–6 ranked use cases and a clear recommendation on Phase 1 — or an honest ‘not yet’ if none of them clear the bar.",
       },
       {
-        q: "Who is this for — and who isn't it?",
+        q: "Who is this for — and who isn’t it?",
         a: () =>
-          "It works if you're running a business doing €50k–€200k+ per month, you can act inside 30 days, and you want numbers, not hype. It doesn't work if your business is under €30k/month (the Phase 1 ROI math doesn't support it yet), or if every decision needs six people in the room.", // NOTE: €-thresholds wrapped in TODO comment in SectionFit — pending math sign-off
+          "It works if you’re running a business doing €50k–€200k+ per month, you can act inside 30 days, and you want numbers, not hype. It doesn’t work if your business is under €30k/month (the Phase 1 ROI math doesn’t support it yet), or if every decision needs six people in the room.",
       },
       {
         q: "How is this different from a consultancy deck or a ChatGPT demo?",
@@ -314,14 +320,14 @@ const en: ShortPageDict = {
           "A consultancy charges €8–30k and gives you a presentation. A ChatGPT demo is free and gives you vague excitement. This is 90 minutes and gives you a scored, ranked, ROI-mapped document — and a clear decision point on whether to build anything. If nothing clears the bar, you keep the map and owe nothing.",
       },
       {
-        q: "What's the catch?",
+        q: "What’s the catch?",
         a: ({ partnerName, phase1Anchor }) =>
-          `There isn't one in the way you're thinking. The session is complimentary through ${partnerName}. If something's worth building, I'll quote Phase 1 — typically ${phase1Anchor}, 2–3 weeks, Ukrainian dev capacity. If not, I'll say so. No pitch, no follow-up sequence, no proposal you didn't ask for.`,
+          `There isn’t one in the way you’re thinking. The session is complimentary through ${partnerName}. If something’s worth building, I’ll quote Phase 1 — typically ${phase1Anchor}, 2–3 weeks, Ukrainian dev capacity. If not, I’ll say so. No pitch, no follow-up sequence, no proposal you didn’t ask for.`,
       },
       {
-        q: "Who's Maks?",
+        q: "Who’s Maks?",
         a: () =>
-          "Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn't delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds in production: Amira (UK MedSpa) and Cosmetic Suite. I won't sell you something you don't need.",
+          "Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn’t delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds in production: Amira (UK MedSpa) and Cosmetic Suite. I won’t sell you something you don’t need.",
       },
     ],
   },
@@ -333,133 +339,156 @@ const en: ShortPageDict = {
 };
 
 // ─── UK dictionary ─────────────────────────────────────────────────────────────
-// ALL strings below are placeholders for native Ukrainian translation.
-// Search: TODO_UK
-// DO NOT machine-translate persuasive copy — it loses punch.
-// Send this file (or the list at the bottom of the README) to a native copywriter.
+// Native Ukrainian translation by Maks Nedbailo.
+//
+// Remaining TODO_UK:
+//  - FAQ answers (5 items) — provided as questions only; answers still in EN
+//  - Industry rows: Manufacturing (3 rows), E-commerce (3 rows), Investor-Operators (3 rows)
+//
+// Notes on name grammar:
+//  - Functions receive partnerName in GENITIVE form (e.g. "Влада") for sentence contexts
+//    ("через Влада", "зарезервовано через Влада")
+//  - cta.headline receives partnerName in NOMINATIVE form ("Влад") — ShortPage handles this
+//    via config.partnerNameUk vs config.partnerNameGenitiveUk
 
 const uk: ShortPageDict = {
   header: {
-    personalInvitation: "TODO_UK — translate: «Personal Invitation»",
+    personalInvitation: "Особисте запрошення",
     langEn: "EN",
     langUk: "УК",
   },
 
   hero: {
-    eyebrow: (p) => `TODO_UK — translate: «Personal invitation through ${p}'s circle»`,
+    eyebrow: (p) => `Особисте запрошення для людей із кола ${p}`,
     headline:
-      "TODO_UK — translate: «See where AI actually pays off in your business — and where it doesn't.»",
+      "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
     subheadline: (p) =>
-      `TODO_UK — translate: «A 90-minute Strategic AI Map, ranked by ROI. Normally €1,500 — reserved for you through ${p}.»`,
-    cta: "TODO_UK — translate: «Claim Your Complimentary Session»",
-    daysLeft: (n) => `TODO_UK — translate: «${n} days left»`,
-    offerCloses: "TODO_UK — translate: «offer closes June 30»",
+      `90-хвилинна Стратегічна мапа ШІ з пріоритетами за очікуваною окупністю. Зазвичай — €1,500. Для вас — зарезервовано через ${p}.`,
+    cta: "Забронювати безкоштовну сесію",
+    daysLeft: (n) => {
+      const l = n % 10, ll = n % 100;
+      const form =
+        ll >= 11 && ll <= 14 ? "днів"
+        : l === 1 ? "день"
+        : l >= 2 && l <= 4 ? "дні"
+        : "днів";
+      return `${n} ${form} залишилось`;
+    },
+    offerCloses: "пропозиція закривається 30 червня",
+    // Partner-specific Ukrainian quote & role — overrides config.partnerQuote / config.partnerTitle
+    partnerQuoteOverride:
+      "Я знаю Макса вже багато років. Коли комусь із мого кола потрібно тверезо розібратися з ШІ, я відправляю їх до нього. Він не буде продавати вам те, що вам не потрібно.",
+    partnerRoleOverride: "шаман і радник",
   },
 
   offer: {
-    label: "TODO_UK — translate: «The Offer»",
-    headline: (p) => `TODO_UK — translate: «A €1,500 session — reserved through ${p}»`,
-    normallyLabel: "TODO_UK — translate: «Normally»",
+    label: "Пропозиція",
+    headline: (p) => `Сесія вартістю €1,500 — зарезервована для вас через ${p}`,
+    normallyLabel: "Зазвичай",
     normallyValue: "€1,500",
-    giftedLine: (p) => `TODO_UK — translate: «Gifted to you through ${p}. No strings.»`,
-    body: "TODO_UK — translate: «This isn't a discovery call with a pitch attached. It's a working session. You leave with a one-page map of every AI opportunity in your business — scored, ranked by ROI, and ready to act on. If nothing clears the bar, I'll tell you that. You keep the map either way.»",
-    deliverableHeading: "TODO_UK — translate: «You walk away with»",
-    del1: "TODO_UK — translate: «3 pillars of your operation scored for AI readiness»",
-    del2: "TODO_UK — translate: «4–6 use cases ranked by estimated ROI»",
-    del3: "TODO_UK — translate: «Phase 1 quoted (or an honest 'not yet' — no charge either way)»",
-    sampleNote: "TODO_UK — translate: «Sample output — yours will be specific to your business»",
-    stat1Value: "3", stat1Label: "TODO_UK — translate: «pillars scored»",
-    stat2Value: "6", stat2Label: "TODO_UK — translate: «use cases ranked»",
-    stat3Label: (p) => `TODO_UK — translate: «${p} quoted»`,
+    giftedLine: (p) => `Для вас — у подарунок через ${p}. Без жодних зобов’язань.`,
+    body:
+      "Це не ознайомчий дзвінок із прихованим продажем наприкінці. Це робоча сесія. Після неї у вас буде односторінкова мапа всіх можливостей для впровадження ШІ у вашому бізнесі — з оцінкою, пріоритетами за окупністю та чіткими наступними кроками. Якщо жодна ідея не проходить планку доцільності, я прямо вам про це скажу. Мапа в будь-якому разі залишається у вас.",
+    deliverableHeading: "Що ви отримаєте після сесії",
+    del1: "3 ключові напрями вашого бізнесу, оцінені на готовність до ШІ",
+    del2: "4–6 сценаріїв використання, розставлених за очікуваною окупністю",
+    del3: "Оцінку вартості першого етапу або чесне «ще не час» — без оплати в будь-якому випадку",
+    sampleNote: "Приклад результату — ваша мапа буде адаптована саме під ваш бізнес",
+    stat1Value: "3", stat1Label: "напрями оцінено",
+    stat2Value: "6", stat2Label: "сценаріїв пріоритизовано",
+    stat3Label: () => "оцінка першого етапу",
   },
 
   industry: {
-    label: "TODO_UK — translate: «Industry»",
-    headline: "TODO_UK — translate: «What this looks like in your business»",
-    sub: "TODO_UK — translate: «These are the exact patterns we map in the first 30 minutes.»",
-    swipeHint: "← TODO_UK →",
-    colUseCase: "TODO_UK — translate: «Use case»",
-    colPain: "TODO_UK — translate: «Pain it fixes»",
-    colResult: "TODO_UK — translate: «Typical result»",
+    label: "Галузь",
+    headline: "Як це може виглядати у вашому бізнесі",
+    sub: "Саме такі патерни ми розбираємо протягом перших 30 хвилин.",
+    swipeHint: "← свайп →",
+    colUseCase: "Сценарій використання",
+    colPain: "Яку проблему вирішує",
+    colResult: "Типовий результат",
     sources:
-      "McKinsey The State of AI 2024–2025 · Deloitte smart-manufacturing 2025 · industry benchmarks · client-reported baselines. TODO_UK — translate disclaimer suffix: «Figures are directional averages, not guarantees.»",
+      "McKinsey The State of AI 2024–2025 · Deloitte smart-manufacturing 2025 · industry benchmarks · client-reported baselines. Цифри є орієнтовними середніми показниками, а не гарантіями.",
     tabs: {
       manufacturing: {
-        label: "TODO_UK — translate: «Manufacturing»",
+        // TODO_UK: Manufacturing rows not yet translated — displaying EN until translation provided
+        label: "Виробництво",
         rows: [
           [
-            "TODO_UK — translate: «Quote/invoice acceleration»",
-            "TODO_UK — translate: «Quotes take days; we lose jobs to whoever replies first.»",
+            "Quote/invoice acceleration",
+            "“Quotes take days; we lose jobs to whoever replies first.”",
             "Invoice/quote prep ~15 min → ~1 min; ~3× throughput, same team",
           ],
           [
-            "TODO_UK — translate: «Production scheduling»",
-            "TODO_UK — translate: «Scheduling lives in one head and breaks when they're out.»",
+            "Production scheduling",
+            "“Scheduling lives in one head and breaks when they’re out.”",
             "Planning ~20 hrs/wk → ~5; on-time delivery 82% → 95%",
           ],
           [
-            "TODO_UK — translate: «After-sale routing»",
-            "TODO_UK — translate: «Requests sit in an inbox; the wrong tech gets dispatched.»",
+            "After-sale routing",
+            "“Requests sit in an inbox; the wrong tech gets dispatched.”",
             "60–70% tier-1 deflection; ~50% faster resolution",
           ],
         ],
       },
       professionalServices: {
-        label: "TODO_UK — translate: «Professional Services»",
+        label: "Професійні послуги",
         rows: [
           [
-            "TODO_UK — translate: «Client intake & conflict check»",
-            "TODO_UK — translate: «Onboarding eats half a day of partner time.»",
-            "TODO_UK — translate: «Intake → engagement letter in minutes; up to ~30 hrs/wk saved on doc tasks»",
+            "Прийом клієнта та перевірка конфлікту інтересів",
+            "«Онбординг забирає пів дня часу партнера.»",
+            "Від первинного запиту до листа-зобов’язання — за кілька хвилин; до ~30 годин на тиждень економії на документах",
           ],
           [
-            "TODO_UK — translate: «Document & proposal drafting»",
-            "TODO_UK — translate: «Partners draft everything from scratch.»",
-            "~25% faster task completion",
+            "Підготовка документів і пропозицій",
+            "«Партнери щоразу готують усе з нуля.»",
+            "Виконання завдань приблизно на 25% швидше",
           ],
           [
-            "TODO_UK — translate: «Billable-time capture»",
-            "TODO_UK — translate: «We under-bill because nobody logs time accurately.»",
-            "5–8% billable-hour recovery",
+            "Фіксація оплачуваного часу",
+            "«Компанія недовиставляє рахунки, бо ніхто точно не фіксує час.»",
+            "Повернення 5–8% оплачуваних годин",
           ],
         ],
       },
       ecommerce: {
-        label: "TODO_UK — translate: «E-commerce»",
+        // TODO_UK: E-commerce rows not yet translated — displaying EN until translation provided
+        label: "E-commerce",
         rows: [
           [
-            "TODO_UK — translate: «Tier-1 support automation»",
-            "TODO_UK — translate: «Support drowns in 'where's my order' tickets.»",
+            "Tier-1 support automation",
+            "“Support drowns in ‘where’s my order’ tickets.”",
             "60–70% of tier-1 tickets auto-resolved",
           ],
           [
-            "TODO_UK — translate: «Personalisation / recommendations»",
-            "TODO_UK — translate: «Generic storefront leaves revenue on the table.»",
-            "TODO_UK — translate: «Engaged-chat shoppers convert ~2–4× more»",
+            "Personalisation / recommendations",
+            "“Generic storefront leaves revenue on the table.”",
+            "Engaged-chat shoppers convert ~2–4× more",
           ],
           [
-            "TODO_UK — translate: «SKU launch copy»",
-            "TODO_UK — translate: «Listing copy bottlenecks every launch.»",
-            "TODO_UK — translate: «Launch copy in N languages in hours, not weeks»",
+            "SKU launch copy",
+            "“Listing copy bottlenecks every launch.”",
+            "Launch copy in N languages in hours, not weeks",
           ],
         ],
       },
       investorOperators: {
-        label: "TODO_UK — translate: «Investor-Operators»",
+        // TODO_UK: Investor-Operators rows not yet translated — displaying EN until translation provided
+        label: "Інвестори-оператори",
         rows: [
           [
-            "TODO_UK — translate: «Deal sourcing / underwriting»",
-            "TODO_UK — translate: «Good deals get missed in the pile.»",
+            "Deal sourcing / underwriting",
+            "“Good deals get missed in the pile.”",
             "~3–4× more deals screened, same team",
           ],
           [
-            "TODO_UK — translate: «Portfolio digest»",
-            "TODO_UK — translate: «Can't see across companies without chasing each one.»",
-            "TODO_UK — translate: «Weekly cross-portfolio digest; ~6–10 hrs/wk recovered»",
+            "Portfolio digest",
+            "“Can’t see across companies without chasing each one.”",
+            "Weekly cross-portfolio digest; ~6–10 hrs/wk recovered",
           ],
           [
-            "TODO_UK — translate: «Asset / property ops»",
-            "TODO_UK — translate: «Manual ops drag NOI.»",
+            "Asset / property ops",
+            "“Manual ops drag NOI.”",
             "Up to ~10% NOI improvement (directional)",
           ],
         ],
@@ -468,89 +497,99 @@ const uk: ShortPageDict = {
   },
 
   process: {
-    label: "TODO_UK — translate: «Process»",
-    headline: "TODO_UK — translate: «How it works»",
+    label: "Процес",
+    headline: "Як це працює",
     steps: [
       {
         num: "01",
-        title: "TODO_UK — translate: «Book»",
-        body: "TODO_UK — translate: «Pick a 90-minute slot. Answer 4 pre-call questions so I show up prepared, not generic.»",
+        title: "Забронюйте",
+        body: "Оберіть 90-хвилинний слот і дайте відповідь на 4 запитання перед дзвінком, щоб я прийшов підготовленим, а не з шаблонними ідеями.",
       },
       {
         num: "02",
-        title: "TODO_UK — translate: «Map»",
-        body: "TODO_UK — translate: «We go through your business across 3 pillars. I score it live, in front of you, on a shared screen.»",
+        title: "Створюємо мапу",
+        body: "Ми розбираємо ваш бізнес за 3 ключовими напрямами. Я оцінюю їх наживо перед вами на спільному екрані.",
       },
       {
         num: "03",
-        title: "TODO_UK — translate: «Receive»",
-        body: "TODO_UK — translate: «The Strategic AI Map lands within 48 hours — a proper document, not rough notes. Phase 1 quoted if it's worth building.»",
-        trust: "TODO_UK — translate: «We do the final analysis after the call. You get a document, not rough notes.»",
+        title: "Отримайте результат",
+        body: "Стратегічна мапа ШІ буде у вас протягом 48 годин — це буде повноцінний документ, а не чернеткові нотатки. Якщо ідею варто реалізовувати, ви також отримаєте оцінку вартості першого етапу.",
+        trust: "Фінальний аналіз ми робимо після дзвінка. Ви отримуєте документ, а не сирі нотатки.",
       },
     ],
   },
 
   proof: {
-    label: "TODO_UK — translate: «Proof»",
-    headline: "TODO_UK — translate: «Live builds»",
+    label: "Докази",
+    headline: "Реальні запущені рішення",
     liveBadge: "LIVE",
     cases: [
       {
         name: "Amira for HC MedSpa",
-        desc: "TODO_UK — translate: «AI lead-response agent. Replies in 9 seconds across WhatsApp and the website.»",
-        tag: "UK MedSpa · Lead response",
+        desc: "ШІ-агент для обробки лідів. Відповідає за 9 секунд у WhatsApp та на сайті.",
+        tag: "UK MedSpa · Відповіді на ліди",
         href: "/automations/hcmedspa",
       },
       {
         name: "Cosmetic Suite",
-        desc: "TODO_UK — translate: «WhatsApp + Instagram lead capture. Qualification and booking, automated.»",
-        tag: "Aesthetic clinic · Lead capture",
+        desc: "Збір лідів із WhatsApp та Instagram. Кваліфікація й запис — автоматизовано.",
+        tag: "Естетична клініка · Збір лідів",
         href: "/automations/cosmeticsuite",
       },
     ],
   },
 
   cta: {
-    headline: (p) => `TODO_UK — translate: «${p} sent you here for a reason.»`,
-    sub: "TODO_UK — translate: «The map is yours either way.»",
-    primaryCta: "TODO_UK — translate: «Claim Your Complimentary Session»",
+    // Note: receives nominative form ("Влад") from ShortPage — see partnerNameUk in config
+    headline: (p) => `${p} відправив вас сюди не просто так.`,
+    sub: "Мапа залишається у вас у будь-якому випадку.",
+    primaryCta: "Забронювати безкоштовну сесію",
     messengerLabel: (channel) =>
       channel === "telegram"
-        ? "TODO_UK — translate: «Message on Telegram first»"
-        : "TODO_UK — translate: «Message on WhatsApp first»",
+        ? "Спочатку написати в Telegram"
+        : "Спочатку написати у WhatsApp",
   },
 
   faq: {
-    label: "TODO_UK — translate: «Questions»",
-    headline: "TODO_UK — translate: «Before you book»",
+    label: "Питання",
+    headline: "Перед бронюванням",
     items: [
       {
-        q: "TODO_UK — translate: «What does the map actually look like?»",
-        a: () => "TODO_UK — translate FAQ answer 1 (EN: «It's a one-page scored document…»)",
+        q: "Як насправді виглядає ця мапа?",
+        // TODO_UK: translate FAQ answer 1
+        a: () =>
+          "It’s a one-page scored document. Three pillars of your business (customer-facing comms, internal knowledge, repeatable execution), each broken into pain points. Each gets an AI-feasibility score and an estimated ROI. You leave with 4–6 ranked use cases and a clear recommendation on Phase 1 — or an honest ‘not yet’ if none clear the bar.",
       },
       {
-        q: "TODO_UK — translate: «Who is this for — and who isn't it?»",
-        a: () => "TODO_UK — translate FAQ answer 2 (EN: «It works if you're running a business doing €50k–€200k+…»)",
+        q: "Кому це підходить — і кому ні?",
+        // TODO_UK: translate FAQ answer 2
+        a: () =>
+          "It works if you’re running a business doing €50k–€200k+ per month, you can act inside 30 days, and you want numbers, not hype. It doesn’t work if your business is under €30k/month (the Phase 1 ROI math doesn’t support it yet), or if every decision needs six people in the room.",
       },
       {
-        q: "TODO_UK — translate: «How is this different from a consultancy deck or a ChatGPT demo?»",
-        a: () => "TODO_UK — translate FAQ answer 3 (EN: «A consultancy charges €8–30k…»)",
+        q: "Чим це відрізняється від консалтингової презентації або демо ChatGPT?",
+        // TODO_UK: translate FAQ answer 3
+        a: () =>
+          "A consultancy charges €8–30k and gives you a presentation. A ChatGPT demo is free and gives you vague excitement. This is 90 minutes and gives you a scored, ranked, ROI-mapped document — and a clear decision point. If nothing clears the bar, you keep the map and owe nothing.",
       },
       {
-        q: "TODO_UK — translate: «What's the catch?»",
+        q: "У чому підступ?",
+        // TODO_UK: translate FAQ answer 4 (receives genitive partnerName from ShortPage)
         a: ({ partnerName, phase1Anchor }) =>
-          `TODO_UK — translate FAQ answer 4 (EN: «There isn't one… complimentary through ${partnerName}… ${phase1Anchor}…»)`,
+          `There isn’t one in the way you’re thinking. The session is complimentary through ${partnerName}. If something’s worth building, I’ll quote Phase 1 — typically ${phase1Anchor}, 2–3 weeks, Ukrainian dev capacity. If not, I’ll say so. No pitch, no follow-up sequence, no proposal you didn’t ask for.`,
       },
       {
-        q: "TODO_UK — translate: «Who's Maks?»",
-        a: () => "TODO_UK — translate FAQ answer 5 (EN: «Maks Nedbailo. Built DCoast…»)",
+        q: "Хто такий Макс?",
+        // TODO_UK: translate FAQ answer 5
+        a: () =>
+          "Maks Nedbailo. Built DCoast as a design agency, watched founders drown in operations they couldn’t delegate, pivoted to fix that one thing. Care Less is small — me plus a vetted Ukrainian dev network. Two live builds in production: Amira (UK MedSpa) and Cosmetic Suite. I won’t sell you something you don’t need.",
       },
     ],
   },
 
   footer: {
     credit: "care less AI automation",
-    location: "TODO_UK — translate: «Santander, Spain»",
+    location: "Сантандер, Іспанія",
   },
 };
 
