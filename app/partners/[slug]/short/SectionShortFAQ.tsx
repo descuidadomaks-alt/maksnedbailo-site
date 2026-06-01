@@ -44,7 +44,7 @@ export default function SectionShortFAQ({
   };
 
   return (
-    <section className="section-divider py-20 md:py-28">
+    <section className="section-divider py-14 md:py-20">
       <div className="max-w-3xl mx-auto px-6">
 
         <p data-reveal className="font-sora text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
@@ -76,7 +76,7 @@ export default function SectionShortFAQ({
                     className="font-sora text-fg/72"
                     style={{ fontSize: "15px", lineHeight: 1.5 }}
                   >
-                    {item.q}
+                    {item.q.replace("{partnerName}", vars.partnerName)}
                   </span>
                   <span className="text-fg/28 flex-shrink-0">
                     <ChevronIcon open={isOpen} />

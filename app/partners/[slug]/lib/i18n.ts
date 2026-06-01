@@ -58,6 +58,8 @@ export interface ShortPageDict {
     docTitle: string;
     clientLabel: string;
     sessionLabel: string;
+    /** Pain labels for the 6 sample rows (3 pillars × 2 items each) */
+    pillarPains: [[string, string], [string, string], [string, string]];
     studioName: string;
     pillarPrefix: (n: number, label: string) => string;
     colPain: string;
@@ -106,6 +108,8 @@ export interface ShortPageDict {
     sub: string;
     primaryCta: string;
     messengerLabel: (channel: "telegram" | "whatsapp") => string;
+    /** Guarantee micro-copy shown below the primary CTA button */
+    guarantee: string;
   };
 
   faq: {
@@ -162,6 +166,11 @@ const en: ShortPageDict = {
     clientLabel: "[Client Business Name]",
     sessionLabel: "90-MIN SESSION OUTPUT",
     studioName: "care less AI automation",
+    pillarPains: [
+      ["Lead response delay (>4h avg)", "Manual booking follow-up"],
+      ["Knowledge lives in founder's head", "Meeting notes + action tracking"],
+      ["Invoice & document processing", "Weekly reporting to stakeholders"],
+    ],
     pillarPrefix: (n, label) => `Pillar ${n} — ${label}`,
     colPain: "Pain / bottleneck",
     colCost: "Current cost",
@@ -321,6 +330,7 @@ const en: ShortPageDict = {
     primaryCta: "Claim Your Complimentary Session",
     messengerLabel: (channel) =>
       channel === "telegram" ? "Message on Telegram first" : "Message on WhatsApp first",
+    guarantee: "Free. No obligation. You keep the map.",
   },
 
   faq: {
@@ -393,9 +403,15 @@ const uk: ShortPageDict = {
       `90-хвилинна Стратегічна карта ШІ з пріоритетами за ROI. Зазвичай — €1,500. Для вас — зарезервовано через ${p}.`,
     cta: "Забронювати безкоштовну сесію",
     daysLeft: (n) => {
-      const l = n % 10, ll = n % 100;
-      const form = ll >= 11 && ll <= 14 ? "днів" : l === 1 ? "день" : l >= 2 && l <= 4 ? "дні" : "днів";
-      return `${n} ${form} залишилось`;
+      // Ukrainian plural rules for "day":
+      //  1 → день  |  2–4 → дні  |  5–20 → днів  |  11–14 always → днів
+      const d = Math.max(0, Math.floor(n));
+      const l = d % 10, ll = d % 100;
+      const form = (ll >= 11 && ll <= 14) ? "днів"
+        : l === 1 ? "день"
+        : (l >= 2 && l <= 4) ? "дні"
+        : "днів";
+      return `${d} ${form} залишилось`;
     },
     offerCloses: "пропозиція закривається 30 червня",
     partnerQuoteOverride:
@@ -423,6 +439,11 @@ const uk: ShortPageDict = {
     clientLabel: "[Назва вашого бізнесу]",
     sessionLabel: "РЕЗУЛЬТАТ 90-ХВ. СЕСІЇ",
     studioName: "care less AI automation",
+    pillarPains: [
+      ["Затримка відповіді на ліди (>4 год)", "Ручне ведення нагадувань про бронювання"],
+      ["Знання зосереджені в голові засновника", "Нотатки з нарад та відстеження задач"],
+      ["Обробка рахунків та документів", "Щотижнева звітність для стейкхолдерів"],
+    ],
     pillarPrefix: (n, label) => `Напрям ${n} — ${label}`,
     colPain: "Проблема / вузьке місце",
     colCost: "Поточна вартість",
@@ -582,6 +603,7 @@ const uk: ShortPageDict = {
     primaryCta: "Забронювати безкоштовну сесію",
     messengerLabel: (channel) =>
       channel === "telegram" ? "Спочатку написати в Telegram" : "Спочатку написати у WhatsApp",
+    guarantee: "Безкоштовно. Без зобов'язань. Карта залишається у вас.",
   },
 
   faq: {

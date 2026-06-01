@@ -44,7 +44,7 @@ export default function SectionShortHero({
   const pDisplay  = partnerNameDisplay ?? config.partnerName;
 
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "88svh", display: "flex", alignItems: "center" }}>
+    <section className="relative overflow-hidden" style={{ minHeight: "80svh", display: "flex", alignItems: "center" }}>
       {/* Ambient glow — clipped by overflow-hidden */}
       <div
         aria-hidden
@@ -55,7 +55,7 @@ export default function SectionShortHero({
         }}
       />
 
-      <div className="relative w-full max-w-[700px] mx-auto px-6 py-10 md:py-16 text-center">
+      <div className="relative w-full max-w-[700px] mx-auto px-6 py-8 md:py-12 text-center">
 
         {/* Eyebrow */}
         <div
@@ -83,7 +83,7 @@ export default function SectionShortHero({
           className="font-playfair font-normal text-fg"
           style={{
             fontSize: "clamp(30px, 4.8vw, 60px)",
-            lineHeight: 1.08,
+            lineHeight: 1.1,
             letterSpacing: "-0.025em",
             marginBottom: "clamp(16px, 2vw, 24px)",
           }}

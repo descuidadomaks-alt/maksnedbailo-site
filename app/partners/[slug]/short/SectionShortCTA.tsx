@@ -48,7 +48,7 @@ export default function SectionShortCTA({
     : `https://wa.me/${config.messenger.handle}`;
 
   return (
-    <section className="section-divider relative overflow-hidden py-24 md:py-36">
+    <section className="section-divider relative overflow-hidden py-16 md:py-28">
       {/* Ambient glow — clipped by overflow-hidden */}
       <div
         aria-hidden
@@ -87,6 +87,11 @@ export default function SectionShortCTA({
             {d.cta.primaryCta}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
           </a>
+
+          {/* Guarantee micro-copy — Hormozi risk-reversal, directly under primary CTA */}
+          <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px", letterSpacing: "0.2px" }}>
+            {d.cta.guarantee}
+          </p>
 
           {/* Tier 3 — messenger plain link */}
           <a
