@@ -1,0 +1,71 @@
+"use client";
+
+import type { DirectPageDict } from "../lib/directi18n";
+import { CHECKOUT_URL, TELEGRAM_HANDLE } from "../lib/config";
+
+declare global {
+  interface Window {
+    plausible?: (event: string, opts?: { props?: Record<string, string> }) => void;
+    clarity?: (method: string, key: string, value?: string) => void;
+  }
+}
+
+function track(event: string, props: Record<string, string>) {
+  window.plausible?.(event, { props });
+  window.clarity?.("set", event, Object.values(props).join(" | "));
+}
+
+function TelegramIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+    </svg>
+  );
+}
+
+export default function DirectFinalCTA({ d }: { d: DirectPageDict }) {
+  return (
+    <section className="section-divider relative overflow-hidden py-16 md:py-28">
+      <div aria-hidden className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none" style={{ width: "600px", height: "400px", background: "radial-gradient(ellipse, rgba(212,255,43,0.055) 0%, transparent 68%)" }} />
+      <div className="relative max-w-lg mx-auto px-6 text-center">
+
+        <h2 data-reveal className="font-playfair font-normal text-fg mb-4" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>
+          {d.finalCta.headline}
+        </h2>
+        <p data-reveal className="font-sora font-light text-fg/45 mb-12" style={{ fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.55 }}>
+          {d.finalCta.sub}
+        </p>
+
+        <div data-reveal="d1" className="flex flex-col items-center gap-4">
+          <a
+            href={CHECKOUT_URL}
+            data-primary-cta
+            className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_64px_rgba(212,255,43,0.28)] active:scale-[0.99] w-full sm:w-auto"
+            style={{ fontSize: "15px", padding: "18px 40px", minHeight: "60px", letterSpacing: "-0.01em" }}
+            onClick={() => track("direct_cta_book", { location: "final" })}
+          >
+            {d.finalCta.cta}
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+          </a>
+
+          <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px" }}>
+            {d.finalCta.guarantee}
+          </p>
+
+          <a
+            href={`https://t.me/${TELEGRAM_HANDLE}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80"
+            style={{ fontSize: "14px", color: "rgba(34,158,217,0.75)", letterSpacing: "-0.01em" }}
+            onClick={() => track("direct_telegram_click", { location: "final" })}
+          >
+            <TelegramIcon />
+            {d.finalCta.messengerLabel}
+          </a>
+        </div>
+
+      </div>
+    </section>
+  );
+}
