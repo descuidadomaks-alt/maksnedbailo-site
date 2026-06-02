@@ -13,9 +13,9 @@ const artemShort: ShortPartnerConfig = {
   partnerPhoto: "/partners/artem/photo_artem.jpg",
 
   partnerQuote:
-    "I've been working alongside Maks for a while. When someone in my circle needs honest clarity on AI for their business, I send them to him.",
+    "I've been friends with Maks for over 30 years. When someone in my circle needs to think clearly about AI, I send them to him. He won't sell you anything you don't need.",
   partnerQuoteUk:
-    "Я знайомий з Максом уже давно. Коли хтось із мого оточення потребує чіткого, чесного погляду на ШІ для свого бізнесу — я відправляю їх до нього.",
+    "Я дружу з Максом вже понад 30 років. Коли комусь із мого кола потрібно тверезо розібратися з ШІ, я відправляю їх до нього. Він не буде продавати вам те, що вам не потрібно.",
 
   messenger: {
     channel: "telegram",
