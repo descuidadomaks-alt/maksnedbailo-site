@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ShortPartnerConfig } from "@/content/partners/index";
 import type { ShortPageDict } from "../lib/i18n";
+import { usePartnerLocale } from "../lib/partner-locale";
 
 declare global {
   interface Window {
@@ -38,10 +39,22 @@ export default function SectionShortHero({
   /** Nominative/display form for bylines and captions */
   partnerNameDisplay?: string;
 }) {
+  const { locale } = usePartnerLocale();
   const daysLeft = useCountdownDays(config.offerDeadline);
   const lines = d.hero.headline.split("\n");
   const pSentence = partnerNameForSentences ?? config.partnerName;
   const pDisplay  = partnerNameDisplay ?? config.partnerName;
+
+  // Per-partner locale text: config field takes priority over the shared dict override
+  // (the shared dict override is Vlad-specific and must not bleed onto other partners)
+  const quoteText =
+    (locale === "uk" ? config.partnerQuoteUk : null) ??
+    d.hero.partnerQuoteOverride ??
+    config.partnerQuote;
+  const roleText =
+    (locale === "uk" ? config.partnerTitleUk : null) ??
+    d.hero.partnerRoleOverride ??
+    config.partnerTitle;
 
   return (
     <section className="relative overflow-hidden" style={{ minHeight: "80svh", display: "flex", alignItems: "center" }}>
@@ -159,7 +172,7 @@ export default function SectionShortHero({
             className="font-sora font-light text-fg/50 leading-[1.7]"
             style={{ fontSize: "clamp(15px, 1.4vw, 18px)", fontStyle: "italic" }}
           >
-            &ldquo;{d.hero.partnerQuoteOverride ?? config.partnerQuote}&rdquo;
+            &ldquo;{quoteText}&rdquo;
           </blockquote>
           <figcaption className="mt-4 flex items-center gap-3">
             <div
@@ -181,8 +194,8 @@ export default function SectionShortHero({
             </div>
             <span className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase" }}>
               {pDisplay}
-              {(d.hero.partnerRoleOverride ?? config.partnerTitle) && (
-                <span className="text-fg/18"> · {d.hero.partnerRoleOverride ?? config.partnerTitle}</span>
+              {roleText && (
+                <span className="text-fg/18"> · {roleText}</span>
               )}
             </span>
           </figcaption>

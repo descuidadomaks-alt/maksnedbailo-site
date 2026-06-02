@@ -71,10 +71,14 @@ export type ShortPartnerConfig = {
   partnerNameGenitiveUk?: string;
 
   partnerTitle: string;
+  /** Ukrainian form of the title, e.g. "радник і ментор" */
+  partnerTitleUk?: string;
   partnerPhoto: string | null; // TODO: path from /public, e.g. /partners/vlad/photo.jpg
 
-  /** Truthful, first-person referral quote */
+  /** Truthful, first-person referral quote (EN) */
   partnerQuote: string;
+  /** Native Ukrainian version of the quote — used instead of the shared i18n dict override */
+  partnerQuoteUk?: string;
 
   messenger: {
     channel: MessengerChannel;

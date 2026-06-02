@@ -10,12 +10,16 @@ import StickyMobileCTA from "./components/StickyMobileCTA";
 
 // ─── Short-form template ───────────────────────────────────────────────────────
 import vladShort from "@/content/partners/vlad-short";
+import artemShort from "@/content/partners/artem-short";
 import type { ShortPartnerConfig } from "@/content/partners/index";
 import ShortPage from "./short/ShortPage";
 
 // ─── Registries — add new partners here ───────────────────────────────────────
 const LONG: Record<string, PartnerData> = { vlad };
-const SHORT: Record<string, ShortPartnerConfig> = { vlad: vladShort };
+const SHORT: Record<string, ShortPartnerConfig> = {
+  vlad: vladShort,
+  artem: artemShort,
+};
 
 // ─── Next.js config ───────────────────────────────────────────────────────────
 
