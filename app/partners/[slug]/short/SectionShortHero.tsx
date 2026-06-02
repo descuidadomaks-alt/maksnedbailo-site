@@ -99,12 +99,11 @@ export default function SectionShortHero({
 
         {/* Subheadline */}
         <p
-          className="font-playfair text-fg/45 max-w-[58ch] mx-auto"
+          className="font-sora font-light text-fg/45 max-w-[58ch] mx-auto"
           style={{
-            fontSize: "clamp(16px, 1.7vw, 21px)",
-            lineHeight: 1.45,
+            fontSize: "clamp(16px, 1.7vw, 20px)",
+            lineHeight: 1.55,
             fontStyle: "italic",
-            letterSpacing: "-0.012em",
             marginBottom: "clamp(20px, 3vw, 32px)",
           }}
         >
@@ -157,19 +156,23 @@ export default function SectionShortHero({
           className="mt-14 mx-auto max-w-[480px] text-left"
         >
           <blockquote
-            className="font-playfair text-fg/50 leading-[1.7]"
-            style={{ fontSize: "clamp(15px, 1.4vw, 18px)", fontStyle: "italic", letterSpacing: "-0.01em" }}
+            className="font-sora font-light text-fg/50 leading-[1.7]"
+            style={{ fontSize: "clamp(15px, 1.4vw, 18px)", fontStyle: "italic" }}
           >
             &ldquo;{d.hero.partnerQuoteOverride ?? config.partnerQuote}&rdquo;
           </blockquote>
           <figcaption className="mt-4 flex items-center gap-3">
             <div
-              className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center shrink-0"
-              style={{ background: "rgba(212,255,43,0.04)" }}
+              className="w-10 h-10 rounded-full border border-white/10 overflow-hidden shrink-0"
+              style={{ background: "rgba(212,255,43,0.04)", flexShrink: 0 }}
             >
               {config.partnerPhoto ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={config.partnerPhoto} alt={config.partnerName} className="w-full h-full rounded-full object-cover" />
+                <img
+                  src={config.partnerPhoto}
+                  alt={config.partnerName}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                />
               ) : (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(240,236,230,0.2)" strokeWidth="1.5" aria-hidden>
                   <circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />

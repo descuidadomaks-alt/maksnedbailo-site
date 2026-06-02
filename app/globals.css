@@ -273,19 +273,44 @@ h1.font-playfair, h2.font-playfair {
    To revert to serif per-locale, change the font-family value below.
  ──────────────────────────────────────────────────────────────────────────── */
 
-/* Utility class for eyebrows, labels, column headers, and step numbers */
+/* ── Font families in the short partner page ────────────────────────────────
+   EXACTLY TWO families:
+     Family 1 (Roboto Mono):  headings, eyebrows, labels, group-headers
+     Family 2 (IBM Plex Sans): body, subheads, italic quote, all numerals
+   No serif anywhere inside [data-short-page].
+ ──────────────────────────────────────────────────────────────────────────── */
+
+/* Family 1 utility class — eyebrows, labels, column headers */
 .font-label {
   font-family: var(--font-roboto-mono), monospace;
 }
 
-/* All display headings inside the short page use Roboto Mono */
+/* Family 2 utility class — numerals, prices. Force tabular figures. */
+.font-numeral {
+  font-family: var(--font-ibm-plex), system-ui, sans-serif;
+  font-feature-settings: "tnum";
+}
+
+/* All display headings → Roboto Mono */
 [data-short-page] .font-playfair,
 [data-short-page] h1.font-playfair,
 [data-short-page] h2.font-playfair,
 [data-short-page] h3.font-playfair {
   font-family: var(--font-roboto-mono), monospace;
   font-weight: 500;
-  letter-spacing: -0.01em; /* mono runs wide; compensate slightly */
+  letter-spacing: -0.01em;
+}
+
+/* All body text → IBM Plex Sans (both locales, replaces Sora in short page) */
+[data-short-page] .font-sora,
+[data-short-page] [class*="font-sora"] {
+  font-family: var(--font-ibm-plex), system-ui, sans-serif;
+}
+
+/* Tabular figures site-wide inside short page (Roboto Mono is already monospaced,
+   so tnum is harmless there; it's critical for IBM Plex Sans price columns). */
+[data-short-page] {
+  font-feature-settings: "tnum";
 }
 
 /* Generous line-height for monospace headings — especially UK multi-line */
@@ -325,11 +350,10 @@ h1.font-playfair, h2.font-playfair {
   line-height: 1.22 !important;
 }
 
-:lang(uk) .font-sora,
-:lang(uk) [class*="font-sora"] {
-  font-family: var(--font-ibm-plex), "system-ui", sans-serif;
-  letter-spacing: -0.005em; /* IBM Plex runs slightly wider than Sora */
-}
+/* :lang(uk) .font-sora override removed — [data-short-page] .font-sora now
+   handles IBM Plex Sans for both locales inside the short partner page.
+   Non-short partner pages (long form, automations, roman) still get the
+   :lang(uk) Cyrillic override via the block above in this file. */
 
 /* ─── Partner page — LIVE badge subtle glow pulse ───────────────────────────── */
 @keyframes live-glow {

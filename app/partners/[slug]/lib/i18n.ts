@@ -197,9 +197,9 @@ const en: ShortPageDict = {
     bleedStat: "~€6,000/mo",
     bleedAnnual: "(€72k/yr)",
     bleedDesc: (p) =>
-      `Direct losses + cost of wasted time (~21 hrs/wk). Phase 1 to stop the biggest leak: ${p} one-time. Payback ~2 months.`,
+      `This business is leaking ~€6,000/mo (~€72k/yr) — direct costs plus wasted time (~21 hrs/wk). Phase 1 hits the biggest leak first (#1 — lead-response delay, ~€2,400/mo): ${p} one-time. Pays for itself in under 2 months — and the savings compound from there.`,
     bleedPhase1Label: "Phase 1",
-    bleedPayback: "Payback ~2 months",
+    bleedPayback: "Under 2 months",
   },
 
   industry: {
@@ -477,9 +477,9 @@ const uk: ShortPageDict = {
     bleedStat: "~€6,000/міс",
     bleedAnnual: "(€72k/рік)",
     bleedDesc: (p) =>
-      `Прямі витрати плюс вартість згаяного часу (~21 год/тиждень). Перший етап, щоб зупинити найбільший витік: ${p} одноразово. Окупність ~2 місяці.`,
+      `Цей бізнес втрачає ~€6,000/міс (~€72k/рік) — прямі витрати плюс згаяний час (~21 год/тиждень). Перший етап б'є по найбільшому витоку (#1 — затримка відповіді на ліди, ~€2,400/міс): ${p} одноразово. Окупність — менше 2 місяців. Далі економія лише зростає.`,
     bleedPhase1Label: "Перший етап",
-    bleedPayback: "Окупність ~2 місяці",
+    bleedPayback: "Менше 2 місяців",
   },
 
   industry: {

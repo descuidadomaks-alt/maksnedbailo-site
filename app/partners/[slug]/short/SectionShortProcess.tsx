@@ -91,8 +91,8 @@ export default function SectionShortProcess({ d }: { d: ShortPageDict }) {
                 }}
               >
                 <span
-                  className="font-label text-accent"
-                  style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1 }}
+                  className="font-numeral text-accent"
+                  style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1 }}
                 >
                   {step.num}
                 </span>
@@ -133,7 +133,7 @@ export default function SectionShortProcess({ d }: { d: ShortPageDict }) {
                   className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center"
                   style={{ background: "rgba(6,6,8,1)", border: "1px solid rgba(212,255,43,0.28)" }}
                 >
-                  <span className="font-label text-accent" style={{ fontSize: "18px", fontWeight: 700, lineHeight: 1 }}>{step.num}</span>
+                  <span className="font-numeral text-accent" style={{ fontSize: "20px", fontWeight: 700, lineHeight: 1 }}>{step.num}</span>
                 </div>
                 {i < d.process.steps.length - 1 && (
                   <div
