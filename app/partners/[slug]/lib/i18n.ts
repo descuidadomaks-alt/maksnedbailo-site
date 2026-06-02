@@ -331,10 +331,16 @@ const en: ShortPageDict = {
         href: "/automations/hcmedspa",
       },
       {
-        name: "Cosmetic Suite",
-        desc: "WhatsApp + Instagram lead capture. Qualification and booking, automated.",
-        tag: "Aesthetic clinic · Lead capture",
-        href: "/automations/cosmeticsuite",
+        name: "Elena Hotel & SPA",
+        desc: "AI agent handles booking requests and answers guest questions — 24/7 via WhatsApp and the website.",
+        tag: "Hotel · Booking & Support",
+        href: "https://bukovel-elena.com.ua/en/",
+      },
+      {
+        name: "Voice AI on Site",
+        desc: "Voice agent answers site visitor questions in real time — no forms, no waiting.",
+        tag: "Demo · Voice Agent",
+        href: "https://chasehughes.com/",
       },
     ],
   },
@@ -477,9 +483,9 @@ const uk: ShortPageDict = {
     bleedStat: "~€6,000/міс",
     bleedAnnual: "(€72k/рік)",
     bleedDesc: (p) =>
-      `Цей бізнес втрачає ~€6,000/міс (~€72k/рік) — прямі витрати плюс згаяний час (~21 год/тиждень). Перший етап б'є по найбільшому витоку (#1 — затримка відповіді на ліди, ~€2,400/міс): ${p} одноразово. Окупність — менше 2 місяців. Далі економія лише зростає.`,
+      `Цей бізнес втрачає ~€6,000/міс (~€72k/рік) — прямі витрати плюс згаяний час (~21 год/тиждень). Перший етап б'є по найбільшому витоку (#1 — затримка відповіді на ліди, ~€2,400/міс): ${p} одноразово. Окупність на цей крок — ~2 місяці. Далі економія лише зростає.`,
     bleedPhase1Label: "Перший етап",
-    bleedPayback: "Менше 2 місяців",
+    bleedPayback: "~2 міс. окупність",
   },
 
   industry: {
@@ -554,7 +560,7 @@ const uk: ShortPageDict = {
         ],
       },
       investorOperators: {
-        label: "Інвестори-оператори",
+        label: "Портфельні оператори",
         rows: [
           [
             "Пошук і первинна оцінка угод",
@@ -611,10 +617,16 @@ const uk: ShortPageDict = {
         href: "/automations/hcmedspa",
       },
       {
-        name: "Cosmetic Suite",
-        desc: "Збір лідів із WhatsApp та Instagram. Кваліфікація й запис — автоматизовано.",
-        tag: "Естетична клініка · Збір лідів",
-        href: "/automations/cosmeticsuite",
+        name: "Elena Hotel & SPA",
+        desc: "ШІ-агент обробляє запити на бронювання і відповідає на питання гостей — цілодобово у WhatsApp та на сайті.",
+        tag: "Готель · Бронювання та підтримка",
+        href: "https://bukovel-elena.com.ua/en/",
+      },
+      {
+        name: "Voice AI on Site",
+        desc: "Голосовий агент відповідає на запитання відвідувачів сайту в реальному часі — без форм, без очікування.",
+        tag: "Демонстрація · Голосовий агент",
+        href: "https://chasehughes.com/",
       },
     ],
   },

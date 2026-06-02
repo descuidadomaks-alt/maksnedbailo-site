@@ -20,7 +20,7 @@ const vladShort: ShortPartnerConfig = {
 
   offerDeadline: "2026-06-30", // drives countdown chip; update per offer cycle
 
-  schedulerUrl: "https://zcal.co/carelessmaks/vlad-strategic-ai-map",
+  schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 
   phase1Anchor: "€4,500",
 };

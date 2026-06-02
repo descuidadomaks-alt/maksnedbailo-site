@@ -33,7 +33,7 @@ export default function SectionShortProof({
         </h2>
 
         {/* 2-column — deliberately small and muted */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
           {d.proof.cases.map((c, i) => (
             <Link
               key={i}
@@ -41,7 +41,7 @@ export default function SectionShortProof({
               target="_blank"
               rel="noopener noreferrer"
               data-reveal={`d${i}`}
-              className="group rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-3 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
+              className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-3 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
             >
               {/* Title row — small, muted */}
               <div className="flex items-start justify-between gap-3">

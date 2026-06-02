@@ -42,7 +42,9 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
     <>
       <StickyShortCTA config={config} d={d} />
 
-      <main className="min-h-screen" data-short-page>
+      {/* pb-28 on mobile ensures last section never sits flush against browser chrome
+          (accounts for sticky CTA bar height + safe area) */}
+      <main className="min-h-screen pb-28 md:pb-0" data-short-page>
         <SectionShortHero
           config={config}
           d={d}
