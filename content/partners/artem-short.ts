@@ -7,8 +7,8 @@ const artemShort: ShortPartnerConfig = {
   partnerNameUk: "Артем",          // Ukrainian nominative — shown in bylines
   partnerNameGenitiveUk: "Артема", // Ukrainian genitive — "через Артема"
 
-  partnerTitle: "advisor & mentor",
-  partnerTitleUk: "радник і ментор",
+  partnerTitle: "Property Developer",
+  partnerTitleUk: "Забудовник нерухомості",
 
   partnerPhoto: "/partners/artem/photo_artem.jpg",
 
