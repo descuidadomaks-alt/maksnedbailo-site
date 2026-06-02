@@ -263,6 +263,43 @@ h1.font-playfair, h2.font-playfair {
   margin: 3rem 0;
 }
 
+/* ─── Partner short-page type system ─────────────────────────────────────────
+   Scoped to [data-short-page] so the main site is unaffected.
+
+   Title/display font: Roboto Mono (--font-roboto-mono) — full Latin + Cyrillic.
+   Body font: IBM Plex Sans (--font-ibm-plex) via :lang(uk) override.
+   EN body: Sora (unchanged).
+
+   To revert to serif per-locale, change the font-family value below.
+ ──────────────────────────────────────────────────────────────────────────── */
+
+/* Utility class for eyebrows, labels, column headers, and step numbers */
+.font-label {
+  font-family: var(--font-roboto-mono), monospace;
+}
+
+/* All display headings inside the short page use Roboto Mono */
+[data-short-page] .font-playfair,
+[data-short-page] h1.font-playfair,
+[data-short-page] h2.font-playfair,
+[data-short-page] h3.font-playfair {
+  font-family: var(--font-roboto-mono), monospace;
+  font-weight: 500;
+  letter-spacing: -0.01em; /* mono runs wide; compensate slightly */
+}
+
+/* Generous line-height for monospace headings — especially UK multi-line */
+[data-short-page] h1,
+[data-short-page] h2,
+[data-short-page] h3 {
+  line-height: 1.15;
+}
+:lang(uk) [data-short-page] h1,
+:lang(uk) [data-short-page] h2,
+:lang(uk) [data-short-page] h3 {
+  line-height: 1.22 !important;
+}
+
 /* ─── Cyrillic font overrides ────────────────────────────────────────────────
    Playfair Display and Sora lack Cyrillic glyphs. When lang="uk" is active
    (set by PartnerLocaleWrapper.useEffect), use Cormorant Garamond (display)

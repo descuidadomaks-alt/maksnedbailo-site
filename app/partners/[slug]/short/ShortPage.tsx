@@ -42,7 +42,7 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
     <>
       <StickyShortCTA config={config} d={d} />
 
-      <main className="min-h-screen">
+      <main className="min-h-screen" data-short-page>
         <SectionShortHero
           config={config}
           d={d}

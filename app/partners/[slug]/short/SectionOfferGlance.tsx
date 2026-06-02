@@ -5,22 +5,23 @@ import type { ShortPartnerConfig } from "@/content/partners/index";
 import type { ShortPageDict } from "../lib/i18n";
 
 /**
- * Offer at a Glance.
- * Layout: value anchor copy (left-aligned, full-width, clean) then the full
- * Strategic AI Map sample beneath it — the actual deliverable.
- * The redundant 3-stat mini card has been removed; €4,500 is only shown in
- * the Phase 1 footer labeled "if you choose to proceed."
+ * Offer at a Glance — value anchor + full 4-column Strategic AI Map sample
+ * + cost-of-inaction summary strip.
+ *
+ * Table columns: Problem | Losing Now | AI Feasibility | Priority
+ * (removed redundant Est. ROI column — "Losing Now" IS the ROI story)
  */
 
 const SCROLL_HINT_KEY = "offer_map_scroll_hinted";
 
+// Numerical data stays language-neutral; pain labels come from i18n pillarPains
 const PILLARS_BASE = [
-  { cost: "€2,400/mo", feasibility: 5, roi: "€2,400/mo", rank: 1 },
-  { cost: "8 hrs/wk",  feasibility: 4, roi: "8 hrs/wk",  rank: 3 },
-  { cost: "6 hrs/wk",  feasibility: 5, roi: "12 hrs/wk", rank: 2 },
-  { cost: "3 hrs/wk",  feasibility: 4, roi: "3 hrs/wk",  rank: 5 },
-  { cost: "€900/mo",   feasibility: 5, roi: "€900/mo",   rank: 3 },
-  { cost: "4 hrs/wk",  feasibility: 4, roi: "4 hrs/wk",  rank: 4 },
+  { cost: "€2,400/mo", feasibility: 5, rank: 1 },
+  { cost: "8 hrs/wk",  feasibility: 4, rank: 3 },
+  { cost: "6 hrs/wk",  feasibility: 5, rank: 2 },
+  { cost: "3 hrs/wk",  feasibility: 4, rank: 5 },
+  { cost: "€900/mo",   feasibility: 5, rank: 3 },
+  { cost: "4 hrs/wk",  feasibility: 4, rank: 4 },
 ];
 
 function FeasibilityDots({ score }: { score: number }) {
@@ -71,7 +72,7 @@ export default function SectionOfferGlance({
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Merge locale-specific pain labels with fixed cost/roi/rank data
+  // Merge locale pain labels with fixed numerical data
   const pillars = [
     {
       label: sm.pillarLabels[0],
@@ -100,8 +101,8 @@ export default function SectionOfferGlance({
     <section className="section-divider py-14 md:py-20">
       <div className="max-w-5xl mx-auto px-6">
 
-        {/* ── Value anchor + copy (full-width, left-aligned) ── */}
-        <p data-reveal className="font-sora text-fg/30 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        {/* ── Value anchor + copy ── */}
+        <p data-reveal className="font-label text-fg/30 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.offer.label}
         </p>
 
@@ -119,8 +120,8 @@ export default function SectionOfferGlance({
             {d.offer.normallyLabel}
           </span>
           <span
-            className="font-playfair text-fg/28 line-through"
-            style={{ fontSize: "clamp(26px, 2.8vw, 38px)", lineHeight: 1, letterSpacing: "-0.03em" }}
+            className="font-label text-fg/28 line-through"
+            style={{ fontSize: "clamp(24px, 2.6vw, 36px)", lineHeight: 1 }}
           >
             {d.offer.normallyValue}
           </span>
@@ -133,18 +134,22 @@ export default function SectionOfferGlance({
           {d.offer.body}
         </p>
 
-        {/* Deliverable list */}
+        {/* Deliverable list — numbers larger in Roboto Mono */}
         <div data-reveal className="mb-12">
-          <p className="font-sora text-fg/28 mb-4" style={{ fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
+          <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "2.5px", textTransform: "uppercase" }}>
             {d.offer.deliverableHeading}
           </p>
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-4">
             {[d.offer.del1, d.offer.del2, d.offer.del3].map((item, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="shrink-0 font-playfair text-accent" style={{ fontSize: "16px", lineHeight: 1.5, letterSpacing: "-0.02em" }} aria-hidden>
+              <li key={i} className="flex items-start gap-4">
+                <span
+                  className="font-label shrink-0 text-accent"
+                  style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.3 }}
+                  aria-hidden
+                >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="font-sora font-light text-fg/60 leading-[1.65]" style={{ fontSize: "14px" }}>
+                <span className="font-sora font-light text-fg/60 leading-[1.65]" style={{ fontSize: "14px", paddingTop: "2px" }}>
                   {item}
                 </span>
               </li>
@@ -155,7 +160,7 @@ export default function SectionOfferGlance({
         {/* ── Full Strategic AI Map sample ── */}
         <div data-reveal>
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <p className="font-sora text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
+            <p className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
               {sm.docTitle}
             </p>
             {showHint && (
@@ -165,6 +170,7 @@ export default function SectionOfferGlance({
             )}
           </div>
 
+          {/* 4-column table — no header collision */}
           <div
             className="relative w-full rounded-2xl border border-white/[0.08] overflow-hidden"
             style={{ background: "rgba(255,255,255,0.016)", boxShadow: "0 12px 48px rgba(0,0,0,0.36), 0 0 0 1px rgba(212,255,43,0.05)" }}
@@ -177,34 +183,44 @@ export default function SectionOfferGlance({
             />
 
             <div ref={scrollRef} className="overflow-x-auto" style={{ WebkitOverflowScrolling: "touch" }}>
-              <div style={{ minWidth: "520px" }}>
+              {/* min-width ensures headers never collide; explicit column widths */}
+              <div style={{ minWidth: "480px" }}>
 
                 {/* Doc header */}
                 <div className="px-6 py-4 border-b border-white/[0.06]" style={{ background: "rgba(212,255,43,0.055)" }}>
                   <div className="flex items-center justify-between flex-wrap gap-3">
                     <div>
-                      <p className="font-sora text-accent/65" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>{sm.docTitle}</p>
-                      <p className="font-playfair text-fg mt-0.5" style={{ fontSize: "16px", letterSpacing: "-0.02em" }}>{sm.clientLabel}</p>
+                      <p className="font-label text-accent/65" style={{ fontSize: "9px", letterSpacing: "2.5px", textTransform: "uppercase" }}>{sm.docTitle}</p>
+                      <p className="font-label text-fg mt-0.5 font-medium" style={{ fontSize: "15px" }}>{sm.clientLabel}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-sora text-fg/22" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>{sm.sessionLabel}</p>
+                      <p className="font-label text-fg/22" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.sessionLabel}</p>
                       <p className="font-sora text-fg/35" style={{ fontSize: "9px" }}>{sm.studioName}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Column headers */}
-                <div className="grid px-6 py-2 border-b border-white/[0.04]" style={{ gridTemplateColumns: "1fr 80px 80px 72px 44px" }}>
-                  {[sm.colPain, sm.colCost, sm.colFeasibility, sm.colRoi, sm.colRank].map((h) => (
-                    <span key={h} className="font-sora text-fg/20" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>{h}</span>
+                {/* Column headers — explicit widths prevent collision */}
+                <div
+                  className="grid px-6 py-2.5 border-b border-white/[0.04]"
+                  style={{ gridTemplateColumns: "1fr 88px 100px 64px" }}
+                >
+                  {[sm.colPain, sm.colLosingNow, sm.colFeasibility, sm.colPriority].map((h) => (
+                    <span
+                      key={h}
+                      className="font-label text-fg/38"
+                      style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}
+                    >
+                      {h}
+                    </span>
                   ))}
                 </div>
 
                 {/* Pillars */}
                 {pillars.map((pillar, pi) => (
                   <div key={pi} className={pi < pillars.length - 1 ? "border-b border-white/[0.05]" : ""}>
-                    <div className="px-6 py-2.5" style={{ background: "rgba(255,255,255,0.01)" }}>
-                      <span className="font-sora font-semibold text-accent/55" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                    <div className="px-6 py-2" style={{ background: "rgba(255,255,255,0.01)" }}>
+                      <span className="font-label text-accent/55" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>
                         {sm.pillarPrefix(pi + 1, pillar.label)}
                       </span>
                     </div>
@@ -212,21 +228,20 @@ export default function SectionOfferGlance({
                       <div
                         key={ii}
                         className="grid px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.015] transition-colors duration-150 items-center gap-2"
-                        style={{ gridTemplateColumns: "1fr 80px 80px 72px 44px" }}
+                        style={{ gridTemplateColumns: "1fr 88px 100px 64px" }}
                       >
                         <p className="font-sora font-light text-fg/62" style={{ fontSize: "12px" }}>{item.pain}</p>
-                        <p className="font-sora text-fg/32" style={{ fontSize: "11px" }}>{item.cost}</p>
+                        <p className="font-label text-fg/55" style={{ fontSize: "11px" }}>{item.cost}</p>
                         <FeasibilityDots score={item.feasibility} />
-                        <p className="font-sora text-accent/65" style={{ fontSize: "11px" }}>{item.roi}</p>
-                        <p className="font-sora font-semibold text-fg/35 text-center" style={{ fontSize: "11px" }}>#{item.rank}</p>
+                        <p className="font-label text-fg/38 text-right" style={{ fontSize: "12px" }}>#{item.rank}</p>
                       </div>
                     ))}
                   </div>
                 ))}
 
-                {/* Phase 1 footer */}
+                {/* Phase 1 footer — clean layout */}
                 <div className="px-6 py-4" style={{ background: "rgba(212,255,43,0.065)", borderTop: "1px solid rgba(212,255,43,0.16)" }}>
-                  <p className="font-sora text-accent/65 mb-1.5" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  <p className="font-label text-accent/65 mb-2" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
                     {sm.phase1Heading}
                   </p>
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -234,16 +249,61 @@ export default function SectionOfferGlance({
                     <div className="flex items-center gap-3 shrink-0">
                       <span className="font-sora text-fg/30" style={{ fontSize: "10px" }}>{sm.phase1Timeline}</span>
                       <div className="text-right">
-                        <p className="font-playfair text-accent" style={{ fontSize: "14px", letterSpacing: "-0.02em" }}>
+                        <p className="font-label font-bold text-accent" style={{ fontSize: "16px" }}>
                           {config.phase1Anchor}
                         </p>
-                        <p className="font-sora text-fg/20 leading-none" style={{ fontSize: "9px" }}>if you proceed</p>
+                        <p className="font-sora text-fg/25 leading-none" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
               </div>
+            </div>
+          </div>
+
+          {/* ── Cost-of-inaction summary ── */}
+          <div
+            className="mt-4 rounded-2xl border border-white/[0.06] overflow-hidden"
+            style={{ background: "rgba(255,255,255,0.012)" }}
+          >
+            <div className="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+              {/* Left — bleed stat */}
+              <div className="shrink-0">
+                <p className="font-label text-fg/22 uppercase mb-1" style={{ fontSize: "9px", letterSpacing: "2px" }}>
+                  {sm.bleedLabel}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <span
+                    className="font-label font-bold text-fg/60"
+                    style={{ fontSize: "clamp(22px, 3vw, 32px)", lineHeight: 1 }}
+                  >
+                    {sm.bleedStat}
+                  </span>
+                  <span className="font-sora text-fg/30" style={{ fontSize: "12px" }}>{sm.bleedAnnual}</span>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div className="hidden sm:block w-px self-stretch" style={{ background: "rgba(255,255,255,0.06)" }} aria-hidden />
+
+              {/* Right — phase 1 contrast */}
+              <div className="shrink-0">
+                <p className="font-label text-accent/50 uppercase mb-1" style={{ fontSize: "9px", letterSpacing: "2px" }}>
+                  {sm.bleedPhase1Label}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-label font-bold text-accent" style={{ fontSize: "clamp(22px, 3vw, 32px)", lineHeight: 1 }}>
+                    {config.phase1Anchor}
+                  </span>
+                  <span className="font-sora text-accent/55" style={{ fontSize: "12px" }}>{sm.bleedPayback}</span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <p className="font-sora font-light text-fg/40 leading-[1.75] text-sm">
+                {sm.bleedDesc(config.phase1Anchor)}
+              </p>
             </div>
           </div>
 

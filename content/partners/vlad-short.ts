@@ -5,8 +5,8 @@ const vladShort: ShortPartnerConfig = {
   partnerName: "Vlad",
   partnerNameUk: "Влад",           // Ukrainian nominative — shown in bylines
   partnerNameGenitiveUk: "Влада",  // Ukrainian genitive — "через Влада", "зарезервовано для вас через Влада"
-  partnerTitle: "shaman & advisor",
-  partnerPhoto: null, // TODO:VLAD_PHOTO — drop headshot at /public/partners/vlad/photo.jpg
+  partnerTitle: "advisor & mentor",
+  partnerPhoto: "/partners/vlad/photo.jpg",
 
   partnerQuote:
     "I've known Maks for years. When someone in my circle needs to think clearly about AI, I send them to him. He won't sell you anything you don't need.",

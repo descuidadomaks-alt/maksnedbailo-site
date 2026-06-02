@@ -61,7 +61,7 @@ export default function SectionShortHero({
         <div
           className="inline-flex items-center gap-2.5 mb-9"
           style={{
-            fontFamily: "var(--font-sora)",
+            fontFamily: "var(--font-roboto-mono)",
             fontSize: "9.5px",
             letterSpacing: "2.5px",
             textTransform: "uppercase",

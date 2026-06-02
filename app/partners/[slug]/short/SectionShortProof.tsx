@@ -21,7 +21,7 @@ export default function SectionShortProof({
     <section className="section-divider py-14 md:py-20">
       <div className="max-w-5xl mx-auto px-6">
 
-        <p data-reveal className="font-sora text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.proof.label}
         </p>
         <h2

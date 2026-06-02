@@ -22,7 +22,7 @@ export default function SectionShortProcess({ d }: { d: ShortPageDict }) {
     <section ref={sectionRef} className="section-divider py-14 md:py-20">
       <div className="max-w-5xl mx-auto px-6">
 
-        <p data-reveal className="font-sora text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.process.label}
         </p>
         <h2
@@ -91,8 +91,8 @@ export default function SectionShortProcess({ d }: { d: ShortPageDict }) {
                 }}
               >
                 <span
-                  className="font-playfair font-bold text-accent"
-                  style={{ fontSize: "14px", letterSpacing: "-0.03em" }}
+                  className="font-label text-accent"
+                  style={{ fontSize: "22px", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1 }}
                 >
                   {step.num}
                 </span>
@@ -130,10 +130,10 @@ export default function SectionShortProcess({ d }: { d: ShortPageDict }) {
             <div key={step.num} data-reveal={`d${i}`} className="flex gap-4">
               <div className="flex flex-col items-center">
                 <div
-                  className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center"
+                  className="w-11 h-11 rounded-full flex-shrink-0 flex items-center justify-center"
                   style={{ background: "rgba(6,6,8,1)", border: "1px solid rgba(212,255,43,0.28)" }}
                 >
-                  <span className="font-playfair font-bold text-accent" style={{ fontSize: "12px" }}>{step.num}</span>
+                  <span className="font-label text-accent" style={{ fontSize: "18px", fontWeight: 700, lineHeight: 1 }}>{step.num}</span>
                 </div>
                 {i < d.process.steps.length - 1 && (
                   <div

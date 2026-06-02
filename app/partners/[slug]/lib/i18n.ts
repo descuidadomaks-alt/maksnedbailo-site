@@ -62,15 +62,23 @@ export interface ShortPageDict {
     pillarPains: [[string, string], [string, string], [string, string]];
     studioName: string;
     pillarPrefix: (n: number, label: string) => string;
+    /** 4-column layout: Problem | Losing Now | AI Feasibility | Priority */
     colPain: string;
-    colCost: string;
+    colLosingNow: string;
     colFeasibility: string;
-    colRoi: string;
-    colRank: string;
+    colPriority: string;
     phase1Heading: string;
     phase1Rec: string;
     phase1Timeline: string;
+    phase1IfProceed: string;
     pillarLabels: [string, string, string];
+    /** Cost-of-inaction summary strip */
+    bleedLabel: string;
+    bleedStat: string;
+    bleedAnnual: string;
+    bleedDesc: (phase1Anchor: string) => string;
+    bleedPhase1Label: string;
+    bleedPayback: string;
   };
 
   industry: {
@@ -172,19 +180,26 @@ const en: ShortPageDict = {
       ["Invoice & document processing", "Weekly reporting to stakeholders"],
     ],
     pillarPrefix: (n, label) => `Pillar ${n} — ${label}`,
-    colPain: "Pain / bottleneck",
-    colCost: "Current cost",
-    colFeasibility: "AI feasibility",
-    colRoi: "Est. ROI",
-    colRank: "Rank",
+    colPain: "Problem",
+    colLosingNow: "Losing Now",
+    colFeasibility: "AI Feasibility",
+    colPriority: "Priority",
     phase1Heading: "Phase 1 Recommended Build",
-    phase1Rec: "#1 — AI Lead Response System · WhatsApp + website · 24/7 coverage",
-    phase1Timeline: "Timeline: 2–3 weeks",
+    phase1Rec: "#1 — AI Lead Response System · WhatsApp + website · 24/7",
+    phase1Timeline: "2–3 weeks",
+    phase1IfProceed: "if you proceed",
     pillarLabels: [
       "Customer-Facing Communication",
       "Internal Knowledge & Ops",
       "Repeatable Execution",
     ],
+    bleedLabel: "Example",
+    bleedStat: "~€6,000/mo",
+    bleedAnnual: "(€72k/yr)",
+    bleedDesc: (p) =>
+      `Direct losses + cost of wasted time (~21 hrs/wk). Phase 1 to stop the biggest leak: ${p} one-time. Payback ~2 months.`,
+    bleedPhase1Label: "Phase 1",
+    bleedPayback: "Payback ~2 months",
   },
 
   industry: {
@@ -416,7 +431,7 @@ const uk: ShortPageDict = {
     offerCloses: "пропозиція закривається 30 червня",
     partnerQuoteOverride:
       "Я знаю Макса вже багато років. Коли комусь із мого кола потрібно тверезо розібратися з ШІ, я відправляю їх до нього. Він не буде продавати вам те, що вам не потрібно.",
-    partnerRoleOverride: "шаман і радник",
+    partnerRoleOverride: "радник і ментор",
   },
 
   offer: {
@@ -445,19 +460,26 @@ const uk: ShortPageDict = {
       ["Обробка рахунків та документів", "Щотижнева звітність для стейкхолдерів"],
     ],
     pillarPrefix: (n, label) => `Напрям ${n} — ${label}`,
-    colPain: "Проблема / вузьке місце",
-    colCost: "Поточна вартість",
+    colPain: "Проблема",
+    colLosingNow: "Втрачаєте зараз",
     colFeasibility: "Здійсненність ШІ",
-    colRoi: "Очік. ROI",
-    colRank: "Пріор.",
+    colPriority: "Пріоритет",
     phase1Heading: "Рекомендований перший етап",
     phase1Rec: "#1 — Система реагування на ліди · WhatsApp + сайт · цілодобово",
-    phase1Timeline: "Термін: 2–3 тижні",
+    phase1Timeline: "2–3 тижні",
+    phase1IfProceed: "якщо вирішите впроваджувати",
     pillarLabels: [
       "Комунікація з клієнтами",
       "Внутрішні знання та операції",
       "Повторювані процеси",
     ],
+    bleedLabel: "Приклад",
+    bleedStat: "~€6,000/міс",
+    bleedAnnual: "(€72k/рік)",
+    bleedDesc: (p) =>
+      `Прямі витрати плюс вартість згаяного часу (~21 год/тиждень). Перший етап, щоб зупинити найбільший витік: ${p} одноразово. Окупність ~2 місяці.`,
+    bleedPhase1Label: "Перший етап",
+    bleedPayback: "Окупність ~2 місяці",
   },
 
   industry: {

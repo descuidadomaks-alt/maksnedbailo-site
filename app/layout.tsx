@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans } from "next/font/google";
+import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans, Roboto_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "./components/LenisProvider";
@@ -39,6 +39,17 @@ const ibmPlex = IBM_Plex_Sans({
   variable: "--font-ibm-plex",
   display: "swap",
   weight: ["300", "400", "600"],
+});
+
+// ── Premium-tech mono — partner pages headings/labels/numbers ─────────────────
+// Roboto Mono: complete Latin + Cyrillic coverage. Used for titles, eyebrows,
+// section labels, step-numbers, and table column headers in the short template.
+// Body text stays as IBM Plex Sans (Cyrillic) / Sora (Latin).
+const robotoMono = Roboto_Mono({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-roboto-mono",
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -168,7 +179,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${sora.variable} ${cormorant.variable} ${ibmPlex.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${sora.variable} ${cormorant.variable} ${ibmPlex.variable} ${robotoMono.variable}`}>
       <head>
         <script
           type="application/ld+json"
