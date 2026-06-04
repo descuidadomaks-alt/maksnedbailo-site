@@ -107,6 +107,11 @@ export const content = {
       en: "From a team that has delivered 500+ projects across 34+ countries — for Fortune 500s to local clinics, restaurants, and salons.",
       es: "De un equipo que ha entregado +500 proyectos en 34+ países — desde Fortune 500 hasta clínicas, restaurantes y salones locales.",
     },
+    // trustNew — used only on /new; live homepage keeps original `trust` above
+    trustNew: {
+      en: "Built on 16 years and 500+ design & digital projects across 34+ countries — from Fortune 500s to local clinics. Now focused entirely on AI.",
+      es: "Construido sobre 16 años y más de 500 proyectos de diseño y digitales en más de 34 países — desde Fortune 500 hasta clínicas locales. Ahora enfocado por completo en la IA.",
+    },
     cards: [
       {
         num: "01",

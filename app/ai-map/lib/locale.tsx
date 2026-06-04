@@ -2,13 +2,12 @@
 
 /**
  * Self-contained locale context for /ai-map.
- * Mirrors app/partners/[slug]/lib/partner-locale.tsx but lives here so
- * the /ai-map route has no dependency on the [slug] dynamic segment path.
+ * DirectLocale = "en" | "es" | "uk" — three options, EN default.
  */
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
-export type DirectLocale = "en" | "uk";
+export type DirectLocale = "en" | "es" | "uk";
 
 interface DirectLocaleCtx {
   locale: DirectLocale;
@@ -30,7 +29,7 @@ export function DirectLocaleProvider({
   const [locale, setLocale] = useState<DirectLocale>(defaultLocale);
 
   useEffect(() => {
-    document.documentElement.lang = locale;
+    document.documentElement.lang = locale === "uk" ? "uk" : "en";
   }, [locale]);
 
   return (

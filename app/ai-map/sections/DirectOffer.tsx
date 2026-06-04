@@ -42,7 +42,14 @@ function FeasibilityDots({ score }: { score: number }) {
   );
 }
 
-export default function DirectOffer({ d, locale }: { d: DirectPageDict; locale: "en" | "uk" }) {
+// ES pillar pains (3.9 — added for Spanish locale)
+const PILLAR_PAINS_ES = [
+  ["Retraso en respuesta a leads (>4h)", "Seguimiento manual de reservas"],
+  ["El conocimiento vive en la cabeza del fundador", "Notas de reuniones y seguimiento de acciones"],
+  ["Procesamiento de facturas y documentos", "Informes semanales a stakeholders"],
+];
+
+export default function DirectOffer({ d, locale }: { d: DirectPageDict; locale: "en" | "es" | "uk" }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showHint, setShowHint] = useState(false);
 
@@ -57,7 +64,7 @@ export default function DirectOffer({ d, locale }: { d: DirectPageDict; locale: 
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
-  const pains = locale === "uk" ? PILLAR_PAINS_UK : PILLAR_PAINS_EN;
+  const pains = locale === "uk" ? PILLAR_PAINS_UK : locale === "es" ? PILLAR_PAINS_ES : PILLAR_PAINS_EN;
   const sm = {
     docTitle: locale === "uk" ? "Стратегічна карта ШІ" : "Strategic AI Map",
     clientLabel: locale === "uk" ? "[Назва вашого бізнесу]" : "[Client Business Name]",
@@ -132,27 +139,38 @@ export default function DirectOffer({ d, locale }: { d: DirectPageDict; locale: 
             </ul>
           </div>
 
-          {/* Price block */}
+          {/* Price block — COMPLIMENTARY phase (active until June 15)
+               PAID phase block is commented out below for easy restore */}
           <div
             className="rounded-2xl p-6 text-right"
-            style={{ background: "rgba(212,255,43,0.06)", border: "1px solid rgba(212,255,43,0.18)", minWidth: "200px" }}
+            style={{ background: "rgba(212,255,43,0.06)", border: "1px solid rgba(212,255,43,0.18)", minWidth: "220px" }}
           >
+            {/* Anchor — show "Normally €1,500" so value is established */}
             <p className="font-label text-fg/30 mb-2" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
               {d.offer.anchorLabel}
             </p>
             <p className="font-numeral text-fg/25 line-through mb-4" style={{ fontSize: "22px", fontWeight: 600, lineHeight: 1 }}>
               {d.offer.anchorValue}
             </p>
-            <p className="font-label text-fg/30 mb-1" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
-              {d.offer.currentPriceLabel}
+            {/* Complimentary label */}
+            <p className="font-label text-accent/65 mb-1" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+              {d.offer.compPriceLabel}
             </p>
-            <p className="font-numeral text-accent font-bold" style={{ fontSize: "36px", lineHeight: 1 }}>
-              {d.offer.currentPriceValue}
+            <p className="font-sora font-bold text-accent" style={{ fontSize: "28px", lineHeight: 1 }}>
+              {d.offer.compPriceValue}
             </p>
-            <p className="font-sora font-light text-accent/55 mt-3" style={{ fontSize: "11px", lineHeight: 1.6, maxWidth: "22ch", marginLeft: "auto" }}>
-              {d.offer.creditNote}
+            <p className="font-sora font-light text-fg/45 mt-3" style={{ fontSize: "11px", lineHeight: 1.65, maxWidth: "24ch", marginLeft: "auto" }}>
+              {d.offer.compJustify}
             </p>
           </div>
+          {/* PAID phase price block — restore after June 15:
+          <div className="rounded-2xl p-6 text-right" style={{...}}>
+            <p>{d.offer.anchorLabel}</p>
+            <p className="line-through">{d.offer.anchorValue}</p>
+            <p>{d.offer.currentPriceLabel}</p>
+            <p className="text-accent font-bold text-[36px]">{d.offer.currentPriceValue}</p>
+            <p>{d.offer.creditNote}</p>
+          </div> */}
         </div>
 
         {/* Full sample map table */}

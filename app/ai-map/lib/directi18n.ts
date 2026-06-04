@@ -1,33 +1,35 @@
 /**
  * Direct sales page i18n — /ai-map
+ * Locales: EN (default) · ES · УК
  *
- * EN — complete. UK — native Ukrainian (confident, plain-spoken, Hormozi/Sinek tone).
- * No partner-specific framing. No "free/gifted/complimentary."
+ * PRICING STATE: complimentary until June 15.
+ * Paid pricing strings are commented out with "// PAID:" prefix — restore after June 15.
  */
 
 import type { DirectLocale } from "./locale";
 import type { IndustryTab } from "@/app/partners/[slug]/lib/i18n";
+import { PHASE1_ANCHOR, COMP_DEADLINE } from "./config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface DirectPageDict {
-  header: { langEn: string; langUk: string };
+  header: { langEn: string; langEs: string; langUk: string };
 
   hero: {
     eyebrow: string;
-    headline: string;
+    headlineStart: string;   // text before the accent span
+    headlineAccent: string;  // text rendered in accent color
     subheadline: string;
     cta: string;
+    /** shown in both paid and complimentary phases */
     daysLeft: (n: number) => string;
     offerCloses: string;
-    priceChip: string;
+    /** complimentary chip copy */
+    compChip: string;
+    // PAID: priceChip: string;
   };
 
-  problem: {
-    label: string;
-    headline: string;
-    body: string;
-  };
+  problem: { label: string; headline: string; body: string };
 
   offer: {
     label: string;
@@ -38,20 +40,18 @@ export interface DirectPageDict {
     del1: string;
     del2: string;
     del3: string;
+    /** "Normally €1,500" anchor line */
     anchorLabel: string;
     anchorValue: string;
-    currentPriceLabel: string;
-    currentPriceValue: string;
-    creditNote: string;
-    // shared map labels come from ShortPageDict via getDict() in DirectPage
+    /** complimentary framing */
+    compPriceLabel: string;
+    compPriceValue: string;
+    compJustify: string;
+    /** creditNote — only shown in paid phase */
+    // PAID: creditNote: string;
   };
 
-  guarantee: {
-    label: string;
-    headline: string;
-    body: string;
-    highlight: string;
-  };
+  guarantee: { label: string; headline: string; body: string; highlight: string };
 
   close: {
     label: string;
@@ -59,9 +59,11 @@ export interface DirectPageDict {
     included1: string;
     included2: string;
     included3: string;
-    creditLine: string;
+    /** complimentary framing line */
+    compLine: string;
     guaranteeLine: string;
     deadlineChip: string;
+    // PAID: creditLine: string;
   };
 
   process: {
@@ -95,7 +97,6 @@ export interface DirectPageDict {
 
   footer: { credit: string; location: string };
 
-  // Industry tabs — same shape as partner page (passed to SectionShortIndustry)
   industry: {
     label: string;
     headline: string;
@@ -117,17 +118,19 @@ export interface DirectPageDict {
 // ─── EN ───────────────────────────────────────────────────────────────────────
 
 const en: DirectPageDict = {
-  header: { langEn: "EN", langUk: "UK" },
+  header: { langEn: "EN", langEs: "ES", langUk: "UK" },
 
   hero: {
     eyebrow: "Strategic AI Map",
-    headline: "See where AI actually pays off in your business — and where it doesn't.",
+    headlineStart: "See where AI actually pays off in your business — ",
+    headlineAccent: "and where it doesn't.",
     subheadline:
       "A 90-minute working session that maps every AI opportunity in your business, ranked by ROI. Delivered as a one-page document within 48 hours.",
     cta: "Book your Strategic AI Map",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
-    offerCloses: "offer closes June 30",
-    priceChip: "€997 — was €1,500",
+    offerCloses: `offer closes ${COMP_DEADLINE}`,
+    compChip: `Complimentary until ${COMP_DEADLINE}`,
+    // PAID: priceChip: "€997 — was €1,500",
   },
 
   problem: {
@@ -148,19 +151,20 @@ const en: DirectPageDict = {
     del1: "Your operation mapped across 3 pillars",
     del2: "4–6 use cases ranked by estimated ROI",
     del3: "Phase 1 quoted — or an honest 'not yet'",
-    anchorLabel: "Full price",
+    anchorLabel: "Normally",
     anchorValue: "€1,500",
-    currentPriceLabel: "Until June 30",
-    currentPriceValue: "€997",
-    creditNote:
-      "The €997 is fully credited toward Phase 1 if you proceed — so the map effectively costs you nothing.",
+    compPriceLabel: `Complimentary until ${COMP_DEADLINE}`,
+    compPriceValue: "Free",
+    compJustify:
+      "This isn't a discovery call with a pitch at the end. It's a real working session with a real deliverable — a one-page, ROI-ranked map of your entire operation. If nothing's worth automating, I'll tell you straight. The map is yours either way.",
+    // PAID: creditNote: "The €997 is fully credited toward Phase 1 if you proceed — so the map effectively costs you nothing.",
   },
 
   guarantee: {
     label: "Guarantee",
     headline: "The 10× Guarantee",
     body:
-      "In 90 minutes I'll identify at least €10,000 per year in recoverable cost or wasted time in your business — quantified and ROI-ranked on your map. If I can't find it, you pay nothing and you keep the map.",
+      "In 90 minutes I'll identify at least €10,000/year in recoverable cost or wasted time — quantified and ROI-ranked on your map. If I can't, I'll tell you straight: there's nothing worth automating yet. Your 90 minutes, and the map, are yours either way.",
     highlight: "A 10× return before we build a single thing.",
   },
 
@@ -170,10 +174,10 @@ const en: DirectPageDict = {
     included1: "90-minute Strategic AI Map session",
     included2: "One-page ROI-ranked map, delivered within 48 hours",
     included3: "Phase 1 quoted — or an honest 'not yet'",
-    creditLine:
-      "Fully credited toward Phase 1 — the map effectively costs you nothing if you proceed.",
-    guaranteeLine: "10× guarantee: find €10k+/yr in your business — or you pay nothing.",
-    deadlineChip: "€997 until June 30 · was €1,500",
+    compLine: `Complimentary until ${COMP_DEADLINE}. No pitch, no obligation.`,
+    guaranteeLine: "10× guarantee: find €10k+/yr in your business — or you owe nothing.",
+    deadlineChip: `Complimentary until ${COMP_DEADLINE}`,
+    // PAID: creditLine: "Fully credited toward Phase 1 — the map effectively costs you nothing if you proceed.",
   },
 
   process: {
@@ -189,6 +193,7 @@ const en: DirectPageDict = {
         num: "02",
         title: "Map",
         body: "We go through your business across 3 pillars. Every pain point gets scored for AI feasibility and estimated ROI.",
+        // NOTE: "shared screen" line removed per spec (Phase 1 removal)
       },
       {
         num: "03",
@@ -232,19 +237,16 @@ const en: DirectPageDict = {
     headline: "Before you book",
     items: [
       {
-        q: "Why €997? Why isn't this free?",
-        a: ({ phase1Anchor }) =>
-          `Because it's a real working session with a real deliverable — not a discovery call or a free audit. The €997 is also fully credited toward Phase 1 if you proceed: if your map leads to a build, the session costs you nothing. If it doesn't, you've paid €997 for clarity on your entire operation. That's a good deal either way.`,
-      },
-      {
-        q: "Is €997 worth it?",
+        // MERGED from: "Why €997? Why isn't this free?" + "Is €997 worth it?"
+        // PAID: restore those two questions and remove this one after June 15
+        q: "It's free — so what's the catch?",
         a: () =>
-          "The 10× guarantee puts that question to rest: if I can't find at least €10,000/year in recoverable value in your business, you pay nothing and you keep the map. If I can — you're paying €997 to find €10k+/yr in savings or recovered revenue. And the €997 comes off your Phase 1 build.",
+          `No catch. Until ${COMP_DEADLINE} the Strategic AI Map is complimentary while I build out case studies across new industries. It's a real working session with a real one-page deliverable — not a disguised sales call. If your map leads to a build, great. If it doesn't, the map and the clarity are yours. Either way, you walk away knowing exactly where AI fits your business and where it doesn't.`,
       },
       {
         q: "What if I can't implement what's on the map?",
-        a: ({ phase1Anchor }) =>
-          `That's exactly what Phase 1 is — done-for-you implementation of the highest-ROI use case from your map. Typically ${phase1Anchor}, 2–3 weeks. If you want to proceed, I'll quote it. If you don't, the map and the clarity are yours either way.`,
+        a: () =>
+          `That's exactly what Phase 1 is — done-for-you implementation of the highest-ROI use case from your map. Typically ${PHASE1_ANCHOR}, 2–3 weeks. If you want to proceed, I'll quote it. If you don't, the map and the clarity are yours either way.`,
       },
       {
         q: "How is this different from a consultancy deck, a ChatGPT demo, or hiring a consultant?",
@@ -263,8 +265,8 @@ const en: DirectPageDict = {
       },
       {
         q: "What does Phase 1 typically look like?",
-        a: ({ phase1Anchor }) =>
-          `A working prototype of the highest-ROI use case from your map. Typically ${phase1Anchor}, 2–3 weeks, built with Ukrainian dev capacity. Real software you can use on Monday — not a strategy document.`,
+        a: () =>
+          `A working prototype of the highest-ROI use case from your map. Typically ${PHASE1_ANCHOR}, 2–3 weeks, built with Ukrainian dev capacity. Real software you can use on Monday — not a strategy document.`,
       },
       {
         q: "Who is this for?",
@@ -280,10 +282,10 @@ const en: DirectPageDict = {
 
   finalCta: {
     headline: "Get your map. Know your number.",
-    sub: "90 minutes. €997. Fully credited toward Phase 1.",
+    sub: `Complimentary until ${COMP_DEADLINE}. 90 minutes. No pitch.`,
     cta: "Book your Strategic AI Map",
     messengerLabel: "Message on Telegram first",
-    guarantee: "10× guarantee: find €10k+/yr — or pay nothing.",
+    guarantee: "10× guarantee: find €10k+/yr — or owe nothing.",
   },
 
   footer: { credit: "care less AI automation", location: "Santander, Spain" },
@@ -335,14 +337,232 @@ const en: DirectPageDict = {
   },
 };
 
+// ─── ES ───────────────────────────────────────────────────────────────────────
+
+const es: DirectPageDict = {
+  header: { langEn: "EN", langEs: "ES", langUk: "UK" },
+
+  hero: {
+    eyebrow: "Mapa Estratégico de IA",
+    headlineStart: "Descubre dónde la IA realmente vale la pena en tu negocio — ",
+    headlineAccent: "y dónde no.",
+    subheadline:
+      "Una sesión de trabajo de 90 minutos que mapea cada oportunidad de IA en tu negocio, priorizada por ROI. Entregada como un documento de una página en 48 horas.",
+    cta: "Reserva tu Mapa Estratégico de IA",
+    daysLeft: (n) => `${n} ${n === 1 ? "día" : "días"} restantes`,
+    offerCloses: `oferta cierra el ${COMP_DEADLINE}`,
+    compChip: `Gratis hasta el ${COMP_DEADLINE}`,
+    // PAID: priceChip: "€997 — antes €1,500",
+  },
+
+  problem: {
+    label: "El Problema",
+    headline: "Tu operación está perdiendo dinero. Solo que no ves dónde.",
+    body:
+      "Las respuestas lentas pierden leads antes de que sepas que existían. El trabajo manual que debería estar automatizado te cuesta horas cada semana. Las decisiones que se bloquean en ti frenan todo. Por separado, cada una es molesta. Juntas, se acumulan en miles de euros al mes saliendo de tu negocio. El problema no son las fugas — es que no tienes un mapa de ellas.",
+  },
+
+  offer: {
+    label: "La Solución",
+    headline: "El Mapa Estratégico de IA",
+    subhead:
+      "Una sesión de trabajo de 90 minutos + un documento de una página priorizado por ROI, entregado en 48 horas.",
+    body:
+      "Revisamos tu negocio en tres pilares: comunicación con clientes, operaciones internas y ejecución repetible. Cada punto de dolor recibe una puntuación de viabilidad de IA y ROI estimado. Sales con un mapa claro, clasificado y accionable. Sin ventas. Sin propuesta que no pediste.",
+    valueLabel: "Qué obtienes",
+    del1: "Tu operación mapeada en 3 pilares",
+    del2: "4–6 casos de uso clasificados por ROI estimado",
+    del3: "Fase 1 cotizada — o un honesto 'todavía no'",
+    anchorLabel: "Normalmente",
+    anchorValue: "€1,500",
+    compPriceLabel: `Gratis hasta el ${COMP_DEADLINE}`,
+    compPriceValue: "Gratis",
+    compJustify:
+      "Esto no es una llamada de descubrimiento con una venta al final. Es una sesión de trabajo real con un entregable real: un mapa de una página, priorizado por ROI, de toda tu operación. Si no hay nada que valga la pena automatizar, te lo diré claramente. El mapa es tuyo en cualquier caso.",
+  },
+
+  guarantee: {
+    label: "Garantía",
+    headline: "La Garantía 10×",
+    body:
+      "En 90 minutos identificaré al menos €10,000/año en costes recuperables o tiempo perdido — cuantificado y priorizado por ROI en tu mapa. Si no puedo, te lo diré claramente: aún no hay nada que valga la pena automatizar. Tus 90 minutos, y el mapa, son tuyos en cualquier caso.",
+    highlight: "Un retorno 10× antes de construir nada.",
+  },
+
+  close: {
+    label: "La Oferta",
+    headline: "Todo lo que necesitas para saber qué construir — y si construirlo.",
+    included1: "Sesión del Mapa Estratégico de IA de 90 minutos",
+    included2: "Mapa de una página priorizado por ROI, entregado en 48 horas",
+    included3: "Fase 1 cotizada — o un honesto 'todavía no'",
+    compLine: `Gratis hasta el ${COMP_DEADLINE}. Sin venta, sin obligación.`,
+    guaranteeLine: "Garantía 10×: encontramos €10k+/año en tu negocio — o no debes nada.",
+    deadlineChip: `Gratis hasta el ${COMP_DEADLINE}`,
+  },
+
+  process: {
+    label: "Proceso",
+    headline: "Cómo funciona",
+    steps: [
+      {
+        num: "01",
+        title: "Reserva",
+        body: "Elige un horario de 90 minutos. Responde 4 preguntas previas para que llegue preparado, no genérico.",
+      },
+      {
+        num: "02",
+        title: "Mapeamos",
+        body: "Revisamos tu negocio en 3 pilares. Cada punto de dolor recibe una puntuación de viabilidad de IA y ROI estimado.",
+      },
+      {
+        num: "03",
+        title: "Recibes",
+        body: "Tu Mapa Estratégico de IA llega en 48 horas — un documento real, no notas en borrador. Fase 1 cotizada si vale la pena construirla.",
+        trust: "Hacemos el análisis final después de la llamada. Recibes un documento, no notas en borrador.",
+      },
+    ],
+  },
+
+  proof: {
+    label: "Pruebas",
+    headline: "Sistemas en producción",
+    liveBadge: "EN VIVO",
+    sub: "Software en producción, gestionando conversaciones reales cada día.",
+    slotLabel: "Más casos de estudio de las primeras sesiones — próximamente.",
+    cases: [
+      {
+        name: "Amira for HC MedSpa",
+        desc: "Agente de respuesta a leads con IA. Responde en 9 segundos vía WhatsApp y web.",
+        tag: "MedSpa UK · Respuesta de leads",
+        href: "/automations/hcmedspa",
+      },
+      {
+        name: "Elena Hotel & SPA",
+        desc: "Agente de IA gestiona reservas y responde preguntas de huéspedes — 24/7 vía WhatsApp y web.",
+        tag: "Hotel · Reservas y soporte",
+        href: "https://bukovel-elena.com.ua/en/",
+      },
+      {
+        name: "Voice AI on Site",
+        desc: "Agente de voz responde preguntas de visitantes en tiempo real — sin formularios, sin esperas.",
+        tag: "Demo · Agente de voz",
+        href: "https://chasehughes.com/",
+      },
+    ],
+  },
+
+  faq: {
+    label: "Preguntas",
+    headline: "Antes de reservar",
+    items: [
+      {
+        q: "Es gratis, ¿cuál es el truco?",
+        a: () =>
+          `Ningún truco. Hasta el ${COMP_DEADLINE} el Mapa Estratégico de IA es gratuito mientras desarrollo casos de estudio en nuevos sectores. Es una sesión de trabajo real con un entregable real de una página, no una llamada de ventas disfrazada. Si tu mapa lleva a un proyecto, perfecto. Si no, el mapa y la claridad son tuyos. En cualquier caso, sales sabiendo exactamente dónde encaja la IA en tu negocio y dónde no.`,
+      },
+      {
+        q: "¿Qué pasa si no puedo implementar lo del mapa?",
+        a: () =>
+          `Para eso existe la Fase 1: implementación hecha-por-ti del caso de uso con mayor ROI de tu mapa. Típicamente ${PHASE1_ANCHOR}, 2–3 semanas. Si quieres proceder, te haré un presupuesto. Si no, el mapa y la claridad son tuyos de todas formas.`,
+      },
+      {
+        q: "¿En qué se diferencia de una consultoría, un demo de ChatGPT o contratar un consultor?",
+        a: () =>
+          "Una consultoría tarda 6–8 semanas, cuesta €8–30k y te da una presentación. Un demo de ChatGPT es gratis y te da vaga emoción. Contratar un consultor implica propuesta, anticipo y meses de onboarding. Esto son 90 minutos y te da un mapa puntuado y clasificado por ROI de tu propio negocio.",
+      },
+      {
+        q: "¿Y si mi negocio es demasiado único para la IA?",
+        a: () =>
+          "Todos los fundadores piensan esto. Tras 90 minutos sabrás exactamente qué partes de tu negocio puede tocar la IA — y cuáles genuinamente no. A veces la respuesta es 'casi ninguna todavía' — y eso también es una respuesta valiosa.",
+      },
+      {
+        q: "¿Cómo es el mapa en realidad?",
+        a: () =>
+          "Es un documento puntuado de una página: tres pilares de tu negocio, cada uno desglosado en puntos de dolor, cada uno puntuado por viabilidad de IA y ROI estimado. Sales con 4–6 casos de uso clasificados. Mira el ejemplo arriba.",
+      },
+      {
+        q: "¿Cómo suele ser la Fase 1?",
+        a: () =>
+          `Un prototipo funcional del caso de uso con mayor ROI de tu mapa. Típicamente ${PHASE1_ANCHOR}, 2–3 semanas, con capacidad de desarrollo ucraniana. Software real que puedes usar el lunes — no un documento estratégico.`,
+      },
+      {
+        q: "¿Para quién es esto?",
+        a: () =>
+          "Para ti si: tienes un negocio con €30k–€200k+/mes, puedes decidir y actuar en 30 días, y quieres cifras, no hype. No para ti si: cada decisión necesita seis partes interesadas.",
+      },
+      {
+        q: "¿En qué idioma podemos hacer la sesión?",
+        a: () => "Ucraniano, ruso, inglés — o español si te apetece.",
+      },
+    ],
+  },
+
+  finalCta: {
+    headline: "Obtén tu mapa. Conoce tu número.",
+    sub: `Gratis hasta el ${COMP_DEADLINE}. 90 minutos. Sin venta.`,
+    cta: "Reserva tu Mapa Estratégico de IA",
+    messengerLabel: "Escribe primero por Telegram",
+    guarantee: "Garantía 10×: €10k+/año — o no debes nada.",
+  },
+
+  footer: { credit: "care less AI automation", location: "Santander, España" },
+
+  industry: {
+    label: "Sector",
+    headline: "Cómo se ve esto en tu negocio",
+    sub: "Estos son los patrones exactos que mapeamos en los primeros 30 minutos.",
+    swipeHint: "← desliza →",
+    colUseCase: "Caso de uso",
+    colPain: "Problema que resuelve",
+    colResult: "Resultado típico",
+    sources:
+      "McKinsey The State of AI 2024–2025 · Deloitte smart-manufacturing 2025 · benchmarks del sector · datos reportados por clientes. Las cifras son promedios orientativos, no garantías.",
+    tabs: {
+      manufacturing: {
+        label: "Fabricación",
+        rows: [
+          ["Aceleración de presupuestos/facturas", "\"Los presupuestos tardan días; perdemos trabajos ante quien responde primero.\"", "Prep: ~15 min → ~<strong>1 min</strong>; ~<strong>3×</strong> rendimiento, mismo equipo"],
+          ["Planificación de producción", "\"La planificación vive en la cabeza de una persona y falla cuando no está.\"", "Planificación: <strong>~20 h/sem → ~5</strong>; entregas a tiempo <strong>82% → 95%</strong>"],
+          ["Enrutamiento de posventa", "\"Las solicitudes se quedan en una bandeja; se envía al técnico equivocado.\"", "<strong>60–70%</strong> de deflexión tier-1; resolución ~<strong>50%</strong> más rápida"],
+        ],
+      },
+      professionalServices: {
+        label: "Servicios Profesionales",
+        rows: [
+          ["Acogida de clientes y verificación de conflictos", "\"El onboarding consume medio día del socio.\"", "Solicitud → carta de compromiso en minutos; hasta ~<strong>30 h/sem</strong> ahorradas"],
+          ["Redacción de documentos y propuestas", "\"Los socios redactan todo desde cero.\"", "~<strong>25%</strong> más rápido en completar tareas"],
+          ["Registro de horas facturables", "\"Facturamos de menos porque nadie registra el tiempo con precisión.\"", "Recuperación de <strong>5–8%</strong> de horas facturables"],
+        ],
+      },
+      ecommerce: {
+        label: "E-commerce",
+        rows: [
+          ["Automatización de soporte tier-1", "\"El soporte se ahoga en tickets de '¿dónde está mi pedido?'.\"", "<strong>60–70%</strong> de tickets tier-1 resueltos automáticamente"],
+          ["Personalización y recomendaciones", "\"Una tienda genérica deja ingresos sobre la mesa.\"", "Compradores que interactúan con el chat convierten ~<strong>2–4×</strong> más"],
+          ["Textos de lanzamiento de SKU", "\"Los textos de producto cuellan cada lanzamiento.\"", "Textos en <strong>N idiomas</strong> en horas, no semanas"],
+        ],
+      },
+      investorOperators: {
+        label: "Inversores-Operadores",
+        rows: [
+          ["Búsqueda y análisis de operaciones", "\"Las buenas operaciones se pierden entre montones de datos.\"", "~<strong>3–4×</strong> más operaciones analizadas, mismo equipo"],
+          ["Resumen de cartera", "\"No puedo ver el panorama de todas mis empresas sin perseguir a cada una.\"", "Resumen semanal de cartera; ~<strong>6–10 h/sem</strong> recuperadas"],
+          ["Operaciones de activos / inmuebles", "\"Los procesos manuales arrastran el NOI.\"", "Hasta ~<strong>10%</strong> de mejora en NOI (orientativo)"],
+        ],
+      },
+    },
+  },
+};
+
 // ─── UK ───────────────────────────────────────────────────────────────────────
 
 const uk: DirectPageDict = {
-  header: { langEn: "EN", langUk: "УК" },
+  header: { langEn: "EN", langEs: "ES", langUk: "УК" },
 
   hero: {
     eyebrow: "Стратегічна карта ШІ",
-    headline: "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
+    headlineStart: "Побачте, де ШІ справді окупається у вашому бізнесі — ",
+    headlineAccent: "а де ні.",
     subheadline:
       "90-хвилинна робоча сесія, яка відображає кожну можливість для ШІ у вашому бізнесі з пріоритетами за ROI. Результат — односторінковий документ протягом 48 годин.",
     cta: "Забронювати Стратегічну карту ШІ",
@@ -351,15 +571,15 @@ const uk: DirectPageDict = {
       const form = (ll >= 11 && ll <= 14) ? "днів" : l === 1 ? "день" : (l >= 2 && l <= 4) ? "дні" : "днів";
       return `${n} ${form} залишилось`;
     },
-    offerCloses: "пропозиція закривається 30 червня",
-    priceChip: "€997 — було €1,500",
+    offerCloses: `пропозиція закривається ${COMP_DEADLINE}`,
+    compChip: `Безкоштовно до ${COMP_DEADLINE}`,
   },
 
   problem: {
     label: "Проблема",
     headline: "Ваш бізнес втрачає гроші. Просто не видно де.",
     body:
-      "Повільні відповіді на запити = втрачені ліди, ще до того як ви дізналися про них. Ручні процеси, які мали б бути автоматизовані = зайві години щотижня. Рішення, що зависають на вас = вузькі місця скрізь. Окремо — кожне дратує. Разом — це тисячі євро на місяць, що виходять з бізнесу. Проблема не в самих витоках — у тому, що у вас немає карти.",
+      "Повільні відповіді = втрачені ліди, ще до того як ви дізналися про них. Ручні процеси = зайві години щотижня. Рішення, що зависають на вас = вузькі місця скрізь. Разом — тисячі євро на місяць, що виходять з бізнесу. Проблема не в самих витоках — у тому, що у вас немає карти.",
   },
 
   offer: {
@@ -368,24 +588,24 @@ const uk: DirectPageDict = {
     subhead:
       "90-хвилинна робоча сесія + односторінковий документ з пріоритетами за ROI протягом 48 годин.",
     body:
-      "Ми розбираємо ваш бізнес за трьома напрямами — комунікація з клієнтами, внутрішні операції, повторювані процеси. Кожне вузьке місце оцінюється за здійсненністю ШІ та очікуваним ROI. Ви отримуєте чітку, пріоритизовану, готову до дій карту — що виправити і що автоматизувати в першу чергу. Без прихованих продажів.",
+      "Ми розбираємо ваш бізнес за трьома напрямами — комунікація з клієнтами, внутрішні операції, повторювані процеси. Кожне вузьке місце оцінюється за здійсненністю ШІ та ROI. Ви отримуєте чітку, пріоритизовану, готову до дій карту. Без прихованих продажів.",
     valueLabel: "Що ви отримуєте",
     del1: "Бізнес відображено за 3 ключовими напрямами",
     del2: "4–6 сценаріїв, пріоритизованих за ROI",
     del3: "Оцінка першого етапу — або чесне «ще не час»",
-    anchorLabel: "Повна ціна",
+    anchorLabel: "Зазвичай",
     anchorValue: "€1,500",
-    currentPriceLabel: "До 30 червня",
-    currentPriceValue: "€997",
-    creditNote:
-      "€997 повністю зараховуються в рахунок першого етапу — карта фактично обходиться вам безкоштовно, якщо ви вирішите рухатися далі.",
+    compPriceLabel: `Безкоштовно до ${COMP_DEADLINE}`,
+    compPriceValue: "Безкоштовно",
+    compJustify:
+      "Це не ознайомчий дзвінок із продажем наприкінці. Це реальна робоча сесія з реальним результатом — односторінкова карта вашого бізнесу з пріоритетами за ROI. Якщо нічого не варто автоматизувати — я скажу прямо. Карта залишається у вас у будь-якому разі.",
   },
 
   guarantee: {
     label: "Гарантія",
     headline: "Гарантія 10×",
     body:
-      "За 90 хвилин я визначу щонайменше €10,000 на рік у відновлювальних витратах або змарнованому часі у вашому бізнесі — з конкретними цифрами та пріоритетами на вашій карті. Якщо не знайду — ви не платите нічого, і карта залишається у вас.",
+      "За 90 хвилин я знайду щонайменше €10,000/рік відновлюваних витрат або змарнованого часу — з оцінкою та пріоритетами за ROI на вашій карті. Якщо не зможу — скажу прямо: поки що немає чого автоматизувати. Ваші 90 хвилин і карта залишаються у вас у будь-якому разі.",
     highlight: "Повернення 10× ще до того, як ми збудуємо хоч щось.",
   },
 
@@ -395,10 +615,9 @@ const uk: DirectPageDict = {
     included1: "90-хвилинна сесія Стратегічної карти ШІ",
     included2: "Односторінковий ROI-пріоритизований документ протягом 48 годин",
     included3: "Оцінка першого етапу — або чесне «ще не час»",
-    creditLine:
-      "Повністю зараховується в перший етап — карта фактично безкоштовна, якщо ви вирішите рухатися далі.",
-    guaranteeLine: "Гарантія 10×: знайдемо €10k+/рік у вашому бізнесі — або ви не платите нічого.",
-    deadlineChip: "€997 до 30 червня · було €1,500",
+    compLine: `Безкоштовно до ${COMP_DEADLINE}. Без продажу, без зобов'язань.`,
+    guaranteeLine: "Гарантія 10×: знайдемо €10k+/рік у вашому бізнесі — або ви нічого не платите.",
+    deadlineChip: `Безкоштовно до ${COMP_DEADLINE}`,
   },
 
   process: {
@@ -408,7 +627,7 @@ const uk: DirectPageDict = {
       {
         num: "01",
         title: "Забронюйте",
-        body: "Оберіть 90-хвилинний слот. Дайте відповідь на 4 запитання перед дзвінком — щоб я прийшов підготовленим, а не з шаблонними ідеями.",
+        body: "Оберіть 90-хвилинний слот. Дайте відповідь на 4 запитання перед дзвінком — щоб я прийшов підготовленим.",
       },
       {
         num: "02",
@@ -457,24 +676,19 @@ const uk: DirectPageDict = {
     headline: "Перед бронюванням",
     items: [
       {
-        q: "Чому €997? Чому не безкоштовно?",
+        q: "Це безкоштовно — у чому підступ?",
         a: () =>
-          "Тому що це реальна робоча сесія з реальним результатом — не ознайомчий дзвінок і не безкоштовний аудит. €997 також повністю зараховуються в перший етап: якщо карта веде до побудови — сесія коштує вам нічого. Якщо ні — ви заплатили €997 за чіткість щодо всього вашого бізнесу. Вигідно в обох випадках.",
-      },
-      {
-        q: "Чи варта €997?",
-        a: () =>
-          "Гарантія 10× закриває це питання: якщо я не знайду щонайменше €10,000 на рік відновлюваних витрат у вашому бізнесі — ви не платите нічого. Якщо знайду — ви платите €997, щоб знайти €10k+/рік. І €997 знімаються з вартості першого етапу.",
+          `Жодного підступу. До ${COMP_DEADLINE} Стратегічна карта ШІ безкоштовна, поки я напрацьовую кейси в нових галузях. Це реальна робоча сесія з реальним результатом на одну сторінку, а не замаскований продаж. Якщо карта приведе до проєкту — чудово. Якщо ні — карта і ясність залишаються у вас. У будь-якому разі ви дізнаєтесь, де саме ШІ підходить вашому бізнесу, а де ні.`,
       },
       {
         q: "А якщо я не зможу впровадити те, що є на карті?",
-        a: ({ phase1Anchor }) =>
-          `Саме для цього і є перший етап — готова реалізація найпріоритетнішого сценарію. Зазвичай ${phase1Anchor}, 2–3 тижні. Якщо захочете рухатися — я дам оцінку. Якщо ні — карта і ясність залишаються у вас.`,
+        a: () =>
+          `Саме для цього і є перший етап — готова реалізація найпріоритетнішого сценарію. Зазвичай ${PHASE1_ANCHOR}, 2–3 тижні. Якщо захочете рухатися — я дам оцінку. Якщо ні — карта і ясність залишаються у вас.`,
       },
       {
         q: "Чим це відрізняється від консалтингу, демо ChatGPT або найму консультанта?",
         a: () =>
-          "Консалтинг — 6–8 тижнів, €8–30k і слайди. Демо ChatGPT — безкоштовно, але без конкретики. Найм консультанта — пропозиція, передоплата, місяці онбордингу. Тут: 90 хвилин — і ви виходите з оцінкою власного бізнесу за ROI. Що з цим робити — ваш вибір.",
+          "Консалтинг — 6–8 тижнів, €8–30k і слайди. Демо ChatGPT — безкоштовно, але без конкретики. Найм консультанта — пропозиція, передоплата, місяці онбордингу. Тут: 90 хвилин — і ви виходите з оцінкою власного бізнесу за ROI.",
       },
       {
         q: "А що, якщо мій бізнес занадто специфічний для ШІ?",
@@ -484,17 +698,17 @@ const uk: DirectPageDict = {
       {
         q: "Як виглядає ця карта насправді?",
         a: () =>
-          "Односторінковий документ з оцінками: три напрями бізнесу, кожен розбитий на больові точки, кожна — оцінена за здійсненністю ШІ та ROI. Ви виходите з 4–6 пріоритизованими сценаріями та рекомендацією. Дивіться зразок вище.",
+          "Односторінковий документ з оцінками: три напрями бізнесу, кожен розбитий на больові точки, кожна — оцінена за здійсненністю ШІ та ROI. Ви виходите з 4–6 пріоритизованими сценаріями. Дивіться зразок вище.",
       },
       {
         q: "Як зазвичай виглядає перший етап?",
-        a: ({ phase1Anchor }) =>
-          `Працюючий прототип сценарію з найвищим ROI з вашої карти. Зазвичай ${phase1Anchor}, 2–3 тижні, команда перевірених українських девелоперів. Реальне програмне забезпечення на понеділок — не стратегічний документ.`,
+        a: () =>
+          `Працюючий прототип сценарію з найвищим ROI з вашої карти. Зазвичай ${PHASE1_ANCHOR}, 2–3 тижні, команда перевірених українських девелоперів. Реальне програмне забезпечення на понеділок — не стратегічний документ.`,
       },
       {
         q: "Кому це підходить?",
         a: () =>
-          "Підходить, якщо: бізнес від €30k–€200k+ на місяць, можете прийняти рішення протягом 30 днів, хочете конкретних цифр, а не хайпу. Не підходить, якщо рішення потребує шести стейкхолдерів або ви шукаєте того, хто продасть вам ШІ-інструмент.",
+          "Підходить, якщо: бізнес від €30k–€200k+ на місяць, можете прийняти рішення протягом 30 днів, хочете конкретних цифр, а не хайпу.",
       },
       {
         q: "Якою мовою можна провести сесію?",
@@ -505,10 +719,10 @@ const uk: DirectPageDict = {
 
   finalCta: {
     headline: "Отримайте карту. Дізнайтеся свої цифри.",
-    sub: "90 хвилин. €997. Повністю зараховується в перший етап.",
+    sub: `Безкоштовно до ${COMP_DEADLINE}. 90 хвилин. Без продажу.`,
     cta: "Забронювати Стратегічну карту ШІ",
     messengerLabel: "Спочатку написати в Telegram",
-    guarantee: "Гарантія 10×: знайдемо €10k+/рік — або ви не платите нічого.",
+    guarantee: "Гарантія 10×: €10k+/рік — або ви нічого не платите.",
   },
 
   footer: { credit: "care less AI automation", location: "Сантандер, Іспанія" },
@@ -528,8 +742,8 @@ const uk: DirectPageDict = {
         label: "Виробництво",
         rows: [
           ["Прискорення підготовки пропозицій та рахунків", "«Комерційні пропозиції готуються днями; ми програємо тим, хто відповідає першим.»", "Підготовка: ~15 хв → ~<strong>1 хв</strong>; ~<strong>3×</strong> пропускна здатність, та сама команда"],
-          ["Планування виробництва", "«Усе планування тримається в голові однієї людини й ламається, коли її немає.»", "Планування: <strong>~20 год/тиждень → ~5</strong>; вчасна доставка: <strong>82% → 95%</strong>"],
-          ["Маршрутизація після продажних звернень", "«Запити лежать у пошті; на виїзд відправляють не того спеціаліста.»", "<strong>60–70%</strong> базових звернень автоматично відсіюються; вирішення ~<strong>50%</strong> швидше"],
+          ["Планування виробництва", "«Усе планування тримається в голові однієї людини.»", "Планування: <strong>~20 год/тиждень → ~5</strong>; вчасна доставка: <strong>82% → 95%</strong>"],
+          ["Маршрутизація після продажних звернень", "«Запити лежать у пошті; відправляють не того спеціаліста.»", "<strong>60–70%</strong> базових звернень відсіюються автоматично; ~<strong>50%</strong> швидше"],
         ],
       },
       professionalServices: {
@@ -552,7 +766,7 @@ const uk: DirectPageDict = {
         label: "Портфельні оператори",
         rows: [
           ["Пошук і первинна оцінка угод", "«Хороші угоди губляться в загальному потоці.»", "~<strong>3–4×</strong> більше угод перевіряється тією ж командою"],
-          ["Дайджест портфеля", "«Неможливо бачити картину по всіх компаніях, не ганяючись за кожною.»", "Щотижневий дайджест; ~<strong>6–10 год/тиждень</strong> повертається"],
+          ["Дайджест портфеля", "«Неможливо бачити картину по всіх компаніях.»", "Щотижневий дайджест; ~<strong>6–10 год/тиждень</strong> повертається"],
           ["Операційка активів / нерухомості", "«Ручні процеси тягнуть NOI вниз.»", "До ~<strong>10%</strong> покращення NOI, орієнтовно"],
         ],
       },
@@ -562,7 +776,7 @@ const uk: DirectPageDict = {
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 
-export const directDict: Record<DirectLocale, DirectPageDict> = { en, uk };
+export const directDict: Record<DirectLocale, DirectPageDict> = { en, es, uk };
 
 export function getDirectDict(locale: DirectLocale): DirectPageDict {
   return directDict[locale];

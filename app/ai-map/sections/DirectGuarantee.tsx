@@ -35,6 +35,7 @@ export default function DirectGuarantee({ d }: { d: DirectPageDict }) {
               >
                 {d.guarantee.headline}
               </h2>
+              {/* guarantee.body updated per spec 3.5 — no "you pay nothing" phrasing */}
               <p className="font-sora font-light text-fg/65 leading-[1.85] mb-5" style={{ fontSize: "15px", maxWidth: "58ch" }}>
                 {d.guarantee.body}
               </p>

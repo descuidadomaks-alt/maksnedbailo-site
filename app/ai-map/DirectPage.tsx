@@ -16,16 +16,18 @@ import DirectStickyCTA from "./sections/DirectStickyCTA";
 
 /**
  * Direct sales page — /ai-map
+ * Locales: EN (default) · ES · УК
  *
- * Arc: Hook → Problem → Solution + Sample → Industry → Proof → Process → Guarantee → Close → FAQ → CTA
+ * Complimentary phase (active until June 15):
+ *  - CHECKOUT_URL → zcal booking (no payment)
+ *  - Price block shows "Complimentary until June 15" (paid block commented out)
+ *  - FAQ merged: "It's free — what's the catch?" replaces the two paid-price questions
+ *  - Guarantee: no "pay nothing" phrasing — honest "yours either way"
  *
- * All polished components inherited:
- *  - 2-family type system: Roboto Mono (headings/labels) + IBM Plex Sans (body/numerals)
- *  - tabular figures via font-feature-settings:"tnum" + .font-numeral class
- *  - [data-short-page] CSS scope provides font overrides automatically
- *  - Lenis smooth scroll + data-reveal stagger animations (root layout)
- *  - All tables: aligned fr-grid, mobile card reflow, no overflow
- *  - Corrected cost-of-inaction math (€4,500 vs #1 leak €2,400/mo = under 2 months)
+ * To restore paid phase after June 15:
+ *  1. Update CHECKOUT_URL in lib/config.ts to Stripe Payment Link
+ *  2. Uncomment PAID sections in DirectHero, DirectOffer, DirectClose, DirectFAQ
+ *  3. Swap compChip/compPriceLabel → priceChip/currentPriceLabel in hero
  */
 export default function DirectPage() {
   const { locale } = useDirectLocale();
@@ -34,9 +36,11 @@ export default function DirectPage() {
   return (
     <>
       <DirectStickyCTA d={d} />
+
       <main className="min-h-screen pb-28 md:pb-0" data-short-page>
         <DirectHero d={d} />
         <DirectProblem d={d} />
+        {/* DirectOffer receives locale for ES pillar pain labels */}
         <DirectOffer d={d} locale={locale} />
         <DirectIndustry d={d} />
         <DirectProof d={d} />
@@ -46,7 +50,6 @@ export default function DirectPage() {
         <DirectFAQ d={d} />
         <DirectFinalCTA d={d} />
 
-        {/* Footer */}
         <footer className="border-t px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt={d.footer.credit} style={{ height: "20px", opacity: 0.35 }} />

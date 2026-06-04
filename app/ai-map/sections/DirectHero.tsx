@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { DirectPageDict } from "../lib/directi18n";
-import { OFFER_DEADLINE_ISO, CHECKOUT_URL, PRICE_CURRENT, PRICE_ANCHOR } from "../lib/config";
+import { COMP_DEADLINE_ISO, CHECKOUT_URL } from "../lib/config";
 
 declare global {
   interface Window {
@@ -19,7 +19,7 @@ function track(event: string, props: Record<string, string>) {
 function useCountdownDays() {
   const [days, setDays] = useState<number | null>(null);
   useEffect(() => {
-    const ms = new Date(OFFER_DEADLINE_ISO).getTime() - Date.now();
+    const ms = new Date(COMP_DEADLINE_ISO).getTime() - Date.now();
     setDays(Math.max(0, Math.ceil(ms / 86_400_000)));
   }, []);
   return days;
@@ -59,12 +59,13 @@ export default function DirectHero({ d }: { d: DirectPageDict }) {
           {d.hero.eyebrow}
         </div>
 
-        {/* H1 */}
+        {/* H1 — accent span wraps the trailing phrase (3.2) */}
         <h1
           className="font-playfair font-normal text-fg"
           style={{ fontSize: "clamp(28px, 4.6vw, 58px)", lineHeight: 1.1, letterSpacing: "-0.025em", marginBottom: "clamp(16px, 2vw, 24px)" }}
         >
-          {d.hero.headline}
+          {d.hero.headlineStart}
+          <span className="text-accent">{d.hero.headlineAccent}</span>
         </h1>
 
         {/* Subheadline */}
@@ -75,20 +76,20 @@ export default function DirectHero({ d }: { d: DirectPageDict }) {
           {d.hero.subheadline}
         </p>
 
-        {/* Price chip + countdown */}
+        {/* Complimentary chip + countdown (3.4) */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-7">
           <span
-            className="font-numeral"
+            className="font-label"
             style={{
               fontSize: "13px",
               color: "rgba(212,255,43,0.75)",
               border: "1px solid rgba(212,255,43,0.22)",
               borderRadius: "999px",
               padding: "5px 14px",
+              fontWeight: 600,
             }}
           >
-            <span style={{ fontWeight: 700 }}>{PRICE_CURRENT}</span>
-            <span style={{ color: "rgba(212,255,43,0.4)", textDecoration: "line-through", marginLeft: "8px" }}>{PRICE_ANCHOR}</span>
+            {d.hero.compChip}
           </span>
           {daysLeft !== null && daysLeft > 0 && (
             <span
@@ -106,8 +107,12 @@ export default function DirectHero({ d }: { d: DirectPageDict }) {
             </span>
           )}
         </div>
+        {/* PAID phase price chip — commented out for restore after June 15
+        <span className="font-numeral" style={{ fontSize:"13px", color:"rgba(212,255,43,0.75)", ... }}>
+          {d.hero.priceChip}
+        </span> */}
 
-        {/* Primary CTA → CHECKOUT_URL */}
+        {/* Primary CTA */}
         <a
           href={CHECKOUT_URL}
           data-primary-cta
@@ -119,9 +124,8 @@ export default function DirectHero({ d }: { d: DirectPageDict }) {
           <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
         </a>
 
-        {/* Guarantee micro-line */}
         <p className="font-sora font-light text-fg/25 mt-4" style={{ fontSize: "12px" }}>
-          10× guarantee: find €10k+/yr or pay nothing.
+          {d.guarantee.highlight}
         </p>
 
         <div data-hero-sentinel aria-hidden="true" />

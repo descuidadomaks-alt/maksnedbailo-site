@@ -1,7 +1,8 @@
 "use client";
 
 import type { DirectPageDict } from "../lib/directi18n";
-import { CHECKOUT_URL, PRICE_CURRENT, PRICE_ANCHOR } from "../lib/config";
+import { CHECKOUT_URL } from "../lib/config";
+// PAID: import { PRICE_CURRENT, PRICE_ANCHOR } from "../lib/config"; — restore after June 15
 
 declare global {
   interface Window {
@@ -56,37 +57,44 @@ export default function DirectClose({ d }: { d: DirectPageDict }) {
               ))}
             </ul>
 
+            {/* COMPLIMENTARY framing — replace with creditLine+guaranteeLine after June 15 */}
             <div className="rounded-2xl border border-white/[0.06] bg-white/[0.015] p-5 flex flex-col gap-3">
               <p className="font-sora font-light text-fg/55 leading-[1.7]" style={{ fontSize: "13px" }}>
-                {d.close.creditLine}
+                {d.close.compLine}
               </p>
               <p className="font-sora font-light text-fg/40 leading-[1.7]" style={{ fontSize: "13px" }}>
                 {d.close.guaranteeLine}
               </p>
             </div>
+            {/* PAID: restore creditLine above compLine after June 15
+            <p>{d.close.creditLine}</p> */}
           </div>
 
-          {/* Right — price + CTA */}
+          {/* Right — complimentary price + CTA */}
           <div className="flex flex-col items-start md:items-end gap-6 md:min-w-[220px]">
+            {/* Anchor line — establishes the €1,500 value */}
             <div>
               <p className="font-label text-fg/28 mb-1" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
                 {d.offer.anchorLabel}
               </p>
               <p className="font-numeral text-fg/22 line-through" style={{ fontSize: "20px", fontWeight: 600, lineHeight: 1 }}>
-                {PRICE_ANCHOR}
+                {d.offer.anchorValue}
               </p>
             </div>
+            {/* Complimentary price block */}
             <div>
-              <p className="font-numeral font-bold text-accent" style={{ fontSize: "clamp(36px, 5vw, 52px)", lineHeight: 1 }}>
-                {PRICE_CURRENT}
+              <p className="font-sora font-bold text-accent" style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1 }}>
+                {d.offer.compPriceValue}
               </p>
-              <p
-                className="font-label text-accent/50 uppercase mt-1"
-                style={{ fontSize: "9px", letterSpacing: "2px" }}
-              >
+              <p className="font-label text-accent/50 uppercase mt-1" style={{ fontSize: "9px", letterSpacing: "2px" }}>
                 {d.close.deadlineChip}
               </p>
             </div>
+            {/* PAID phase block — restore after June 15:
+            <div>
+              <p className="font-numeral font-bold text-accent" style={{ fontSize:"clamp(36px,5vw,52px)", lineHeight:1 }}>{PRICE_CURRENT}</p>
+              <p className="font-label text-accent/50 uppercase mt-1">{d.close.deadlineChip}</p>
+            </div> */}
 
             <a
               href={CHECKOUT_URL}
