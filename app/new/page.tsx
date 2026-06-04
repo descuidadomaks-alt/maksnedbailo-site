@@ -1,18 +1,19 @@
 /**
  * /new — staging copy of the homepage.
- * Changes vs live home:
- *   1. `data-short-page` on <main> → partner-page Cyrillic-safe font stack
- *   2. Bridge section inserted after Hero (before TheShift)
- *   3. TheSolutionNew replaces TheSolution (updated 500+/34 trust line)
  *
- * The live home (app/(site)/page.tsx) is NOT modified.
- * Swap manually: rename this file to page.tsx when ready to go live.
+ * Changes vs live home (app/(site)/page.tsx):
+ *   1. data-short-page on <main> → partner-page Cyrillic-safe font stack
+ *   2. Bridge section (VoidSection) inserted after Hero, before TheShift
+ *   3. TheSolutionNew replaces TheSolution (updated 500+/34 trust line)
+ *   4. GotAProblemNew replaces GotAProblem (bottom CTA → /ai-map)
+ *
+ * Live homepage is NOT modified. Swap manually by renaming this file when ready.
  */
 "use client";
 
 import { useLang } from "@/lib/LanguageContext";
 import Hero from "@/components/Hero";
-import GotAProblem from "@/components/GotAProblem";
+import GotAProblemNew from "@/components/GotAProblemNew";
 import TheShift from "@/components/TheShift";
 import TheProblem from "@/components/TheProblem";
 import TheSolutionNew from "./components/TheSolutionNew";
@@ -23,8 +24,9 @@ import FAQ from "@/components/FAQ";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import VoidSection from "@/components/VoidSection";
 
-// ─── Bridge section copy ────────────────────────────────────────────────────
+// ─── Bridge section content ─────────────────────────────────────────────────
 
 const BRIDGE = {
   eyebrow: {
@@ -39,9 +41,10 @@ const BRIDGE = {
     en: "Most businesses don't have a chatbot problem. They have a \"nobody's mapped where the money actually leaks\" problem. Before you automate anything, see the whole picture — every AI opportunity in your business, ranked by ROI, in 90 minutes.",
     es: 'La mayoría de los negocios no tienen un problema de chatbot. Tienen un problema de "nadie ha mapeado por dónde se escapa el dinero". Antes de automatizar nada, ve el panorama completo: cada oportunidad de IA en tu negocio, priorizada por ROI, en 90 minutos.',
   },
+  // 3.1 — CTA updated to "Map my operation →" per spec
   cta: {
-    en: "Get your Strategic AI Map →",
-    es: "Consigue tu Mapa Estratégico de IA →",
+    en: "Map my operation →",
+    es: "Mapear mi operación →",
   },
 };
 
@@ -52,33 +55,28 @@ function t(obj: { en: string; es: string }, lang: string): string {
 function AiMapBridge() {
   const { lang } = useLang();
   return (
-    <section
-      className="section-divider"
-      style={{
-        background: "linear-gradient(135deg, rgba(212,255,43,0.04) 0%, rgba(212,255,43,0.01) 100%)",
-        borderTop: "1px solid rgba(212,255,43,0.12)",
-        borderBottom: "1px solid rgba(212,255,43,0.12)",
-      }}
-    >
-      <div className="max-w-3xl mx-auto px-6 py-14 md:py-18">
+    // VoidSection provides the pure-black background + parallax dots.
+    // All text is center-aligned per spec. Hard-cut edges (no border-radius / gradient).
+    <VoidSection className="section-divider">
+      <div className="max-w-3xl mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
         {/* Eyebrow */}
         <p
-          className="font-sora font-semibold text-accent uppercase mb-3"
+          className="font-sora font-semibold text-accent uppercase mb-4"
           style={{ fontSize: "11px", letterSpacing: "2.5px" }}
         >
           {t(BRIDGE.eyebrow, lang)}
         </p>
         {/* Headline */}
         <h2
-          className="font-playfair font-normal text-fg mb-5"
-          style={{ fontSize: "clamp(22px, 3vw, 34px)", lineHeight: 1.15, letterSpacing: "-0.02em" }}
+          className="font-playfair font-normal text-fg mb-6"
+          style={{ fontSize: "clamp(22px, 3vw, 34px)", lineHeight: 1.15, letterSpacing: "-0.02em", maxWidth: "22ch" }}
         >
           {t(BRIDGE.headline, lang)}
         </h2>
         {/* Body */}
         <p
-          className="font-sora font-light text-fg/55 leading-[1.85] mb-8"
-          style={{ fontSize: "15px", maxWidth: "58ch" }}
+          className="font-sora font-light text-fg/55 leading-[1.85] mb-10"
+          style={{ fontSize: "15px", maxWidth: "52ch" }}
         >
           {t(BRIDGE.body, lang)}
         </p>
@@ -91,31 +89,33 @@ function AiMapBridge() {
           {t(BRIDGE.cta, lang)}
         </a>
       </div>
-    </section>
+    </VoidSection>
   );
 }
 
-// ─── Page ──────────────────────────────────────────────────────────────────
+// ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function NewHomePage() {
   return (
     <>
-      {/* data-short-page activates the partner-page Cyrillic-safe font stack
-          (Roboto Mono for headings/labels, IBM Plex Sans for body/numerals).
-          Scoped to this page only — does not affect the live homepage. */}
+      {/*
+       * data-short-page activates the Cyrillic-safe font stack (Roboto Mono headings,
+       * IBM Plex Sans body) scoped to this page only. See globals.css [data-short-page].
+       */}
       <main data-short-page>
         <Hero />
-        {/* Bridge section — inserted between Hero and TheShift (Phase 2.3) */}
+        {/* Bridge section — void background, parallax dots, center-aligned */}
         <AiMapBridge />
         <TheShift />
         <TheProblem />
-        {/* TheSolutionNew — identical to TheSolution but with updated trust line */}
+        {/* TheSolutionNew — same as TheSolution but with updated 500+/34 trust line */}
         <TheSolutionNew />
         <Proof />
         <BotInAction />
         <TheOffer />
         <FAQ />
-        <GotAProblem />
+        {/* GotAProblemNew — same as GotAProblem but bottom CTA → /ai-map */}
+        <GotAProblemNew />
         <CTASection />
       </main>
       <Footer />

@@ -198,9 +198,11 @@ export default function DirectOffer({ d, locale }: { d: DirectPageDict; locale: 
             {/* Desktop table */}
             <div className="hidden md:block">
               <div className="grid px-6 py-2.5 border-b border-white/[0.04]" style={{ gridTemplateColumns: COL_TEMPLATE }}>
-                {[sm.colPain, sm.colLosingNow, sm.colFeasibility, sm.colPriority].map((h) => (
+                {[sm.colPain, sm.colLosingNow, sm.colFeasibility].map((h) => (
                   <span key={h} className="font-label text-fg/38" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{h}</span>
                 ))}
+                {/* Priority header right-aligned to match right-aligned data cells */}
+                <span className="font-label text-fg/38 text-right" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPriority}</span>
               </div>
               {pillars.map((pillar, pi) => (
                 <div key={pi} className={pi < pillars.length - 1 ? "border-b border-white/[0.05]" : ""}>

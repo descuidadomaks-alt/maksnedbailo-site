@@ -1,6 +1,10 @@
 /**
- * Layout for /new — same as the site layout but uses NavNew (adds AI Map link).
- * The live homepage layout (app/(site)/layout.tsx) is NOT modified.
+ * Standalone layout for /new.
+ * Lives OUTSIDE the (site) route group so it doesn't inherit
+ * app/(site)/layout.tsx — that parent layout would add a second
+ * AnnouncementBar and a second Nav, causing duplicate ticker + duplicate header.
+ *
+ * This layout is the sole layout for /new; it provides everything the page needs.
  */
 import type { ReactNode } from "react";
 import { LanguageProvider } from "@/lib/LanguageContext";

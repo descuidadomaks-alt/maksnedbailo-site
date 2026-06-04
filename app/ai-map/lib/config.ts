@@ -24,4 +24,4 @@ export const TELEGRAM_HANDLE = "maksym_nedbailo";
  * Previous paid URL (keep for restore):
  * // export const CHECKOUT_URL = "https://buy.stripe.com/TODO_CHECKOUT_URL";
  */
-export const CHECKOUT_URL = "https://zcal.co/carelessmaks/vlad-strategic-ai-map";
+export const CHECKOUT_URL = "https://zcal.co/carelessmaks/ai-map";
