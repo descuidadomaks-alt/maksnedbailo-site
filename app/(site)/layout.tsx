@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import AnnouncementBar from "@/components/AnnouncementBar";
-import Nav from "@/components/Nav";
+import NavNew from "@/components/NavNew"; // NavNew adds "AI Map" link — replaces Nav after homepage swap
 
 /**
  * Layout for all public "site" pages — homepage, blog, city pages.
@@ -12,7 +12,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <LanguageProvider>
       <AnnouncementBar />
-      <Nav />
+      <NavNew />
       {children}
     </LanguageProvider>
   );
