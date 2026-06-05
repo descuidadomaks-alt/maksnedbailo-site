@@ -25,23 +25,24 @@ import { useRef, useEffect, type ReactNode, type CSSProperties } from "react";
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const FOCAL           = 380;
-const BASE_RADIUS     = 1.8;   // dot radius at z = FOCAL; ALL size comes from z
-const NEAR_CLIP       = 35;    // skip dots with z < NEAR_CLIP
-const MAX_CAMERA_Y    = 1600;  // world-Y camera travels across full section scroll
+const BASE_RADIUS     = 3.0;   // ~4px at near layer (z=280); no blobs
+const NEAR_CLIP       = 35;
+const MAX_OPACITY     = 0.68;  // opacity ceiling — used in formula below
+const MAX_CAMERA_Y    = 100;   // camera barely drifts — mirror-corridor stillness
 
 // Grid
 const X_COLS          = 13;    // -6 to +6 horizontal columns
-const X_SPACING       = 160;   // world units between columns
-const X_JITTER        = 14;    // small x randomness per dot
+const X_SPACING       = 340;   // wide: only 2–3 near columns visible = sparse, readable
+const X_JITTER        = 22;
 
-// Z layers: fixed distances from viewer — these define the parallax layers
-const Z_LAYERS = [90, 210, 360, 520, 700, 920, 1200, 1650];
+// Z layers: start much further from camera — smallest dot at z=280 ≈ 4px, not a blob
+const Z_LAYERS = [280, 440, 640, 880, 1160, 1500, 1900, 2400];
 
-// Y extent: must span well above + below the camera travel range
-const Y_START   = -350;                      // above camera start
-const Y_END     = MAX_CAMERA_Y + 350;        // below camera end
-const Y_SPACING = 88;                        // vertical spacing between rows
-const Y_JITTER  = 10;                        // small y randomness per dot
+// Y extent: camera only travels 100 units; no need for wide Y range
+const Y_START   = -200;
+const Y_END     = 350;   // MAX_CAMERA_Y + generous padding
+const Y_SPACING = 125;   // wider breathing room between rows
+const Y_JITTER  = 12;
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -128,10 +129,18 @@ function renderFrame(
     if (sx < -30 || sx > cw + 30) continue;
     if (sy < -30 || sy > ch + 30) continue;
 
-    // Fade very far dots; keep near-to-mid bright
-    const opacity = Math.min(1, (1800 - d.z) / 600) *
-                    Math.min(1, d.z / 80) *
-                    0.86;
+    // Mirror-corridor opacity:
+    //   nearFade — fade in from NEAR_CLIP so there's no hard pop at the threshold
+    //   farFade  — fade out at extreme distance (z > 2000)
+    //   nearDim  — dim the closest dots so near layer is soft, not full-white
+    //   ceiling  — MAX_OPACITY so nothing blows out to pure white
+    // Sanity: z=280 → nearDim=280/342≈0.82 → opacity≈0.56  (soft near dot) ✓
+    //         z=640 → nearDim=1.0            → opacity≈0.68  (brightest)    ✓
+    //         z=2400 → farFade=0.33          → opacity≈0.22  (barely there) ✓
+    const nearFade = Math.min(1, (d.z - NEAR_CLIP) / 120);
+    const farFade  = Math.min(1, (2600 - d.z) / 600);
+    const nearDim  = Math.min(1, d.z / (FOCAL * 0.9));
+    const opacity  = nearFade * farFade * nearDim * MAX_OPACITY;
     if (opacity <= 0) continue;
 
     visible.push({ sx, sy, radius, opacity });
@@ -142,7 +151,7 @@ function renderFrame(
 
   for (const v of visible) {
     ctx.beginPath();
-    ctx.arc(v.sx, v.sy, Math.min(v.radius, 20), 0, Math.PI * 2);
+    ctx.arc(v.sx, v.sy, Math.min(v.radius, 8), 0, Math.PI * 2); // cap 8px — no blobs
     ctx.fillStyle = `rgba(255,255,255,${v.opacity.toFixed(3)})`;
     ctx.fill();
   }
