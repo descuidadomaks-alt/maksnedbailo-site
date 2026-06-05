@@ -1,71 +1,119 @@
 "use client";
 
 /**
- * VoidSection — perspective tunnel effect.
+ * VoidSection — scroll-driven perspective tunnel.
  *
- * Visual: looking into an elevator shaft.  Dots sit at intersections of an
- * imaginary 3-D grid receding to a vanishing point at canvas center.
- *   • Far dots  → tiny (< 1 px radius), packed near screen center
- *   • Close dots → large (8–14 px radius), near screen edges
- *   • Size is 100 % depth-driven: radius = BASE_RADIUS * (FOCAL / z)
- *   • Scrolling pushes the viewer forward — far dots grow and drift outward
- *   • Auto-animation (constant slow forward drift) even without scrolling
- *   • Dots recycle to the back when they pass MIN_Z — no pop/flash
+ * Mental model: dots are FIXED in 3-D space and never move.
+ * The CAMERA moves along the z-axis as the user scrolls through the section.
+ *   Scroll down → camera moves forward → dots grow and drift outward from centre.
+ *   Scroll up   → camera moves backward → bidirectional, same projection, no special handling.
  *
- * Canvas 2D, no Three.js.  rAF paused by IntersectionObserver when offscreen.
+ * "Like standing in an elevator shaft full of fixed dots. You move. They don't."
+ *
+ * Removed entirely vs previous version:
+ *   - AUTO_SPEED / constant animation loop
+ *   - dot.z mutations inside render
+ *   - recycling logic
+ *   - rAF spinning every frame regardless of scroll
+ *
+ * Render fires only on scroll or resize (dirty flag + single scheduled rAF).
+ * No Three.js — Canvas 2D.
  *
  * Used in:
- *   /new   — bridge section ("Different problem?")
+ *   /new    — bridge section ("Different problem?")
  *   /ai-map — DirectProblem ("Your operation is leaking money")
  */
 
-import {
-  useRef,
-  useEffect,
-  type ReactNode,
-  type CSSProperties,
-} from "react";
+import { useRef, useEffect, type ReactNode, type CSSProperties } from "react";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const FOCAL        = 350;   // focal length — controls apparent FOV
-const NUM_DOTS     = 280;   // total dots in the tunnel
-const MIN_Z        = 2;     // recycle threshold (dot has "passed" the viewer)
-const MAX_Z        = 900;   // max depth (invisible at this distance)
-const BASE_RADIUS  = 2.2;   // dot radius when z === FOCAL (reference depth)
-const SPREAD       = 0.85;  // x/y spread multiplier relative to FOCAL
-const AUTO_SPEED   = 0.5;   // z units/frame constant forward movement
-const SCROLL_SPEED = 3.0;   // extra z units consumed per pixel of downward scroll
+const NUM_DOTS           = 400;
+const FOCAL              = 320;
+const NEAR_CLIP          = 40;    // don't render dots closer than this to camera
+const DOT_BASE_RADIUS    = 2.0;   // radius when z_relative === FOCAL
+const MAX_DOT_RADIUS     = 22;    // cap very close dots
+const MAX_CAMERA_TRAVEL  = 1800;  // total z-distance camera travels across full scroll height
 
-// ── Dot type ─────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 interface Dot {
-  x: number; // world-space x (centered at 0)
-  y: number; // world-space y (centered at 0)
-  z: number; // depth (positive = away from viewer; MIN_Z → MAX_Z)
+  x: number;
+  y: number;
+  z: number; // absolute, FIXED — never mutated after generation
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function randomX(cw: number): number {
-  return (Math.random() - 0.5) * 2 * FOCAL * SPREAD * (cw / FOCAL);
+function generateDots(cw: number, ch: number): Dot[] {
+  const dots: Dot[] = [];
+  for (let i = 0; i < NUM_DOTS; i++) {
+    // Bias distribution: more dots near-to-mid depth, fewer at extreme far
+    const z = 80 + Math.pow(Math.random(), 0.55) * 2520;
+    // Spread proportional to z so the distribution looks natural at all depths
+    const spread = z * 0.75;
+    dots.push({
+      x: (Math.random() - 0.5) * spread * 2,
+      y: (Math.random() - 0.5) * spread * (ch / cw) * 2,
+      z,
+    });
+  }
+  return dots;
 }
 
-function randomY(cw: number, ch: number): number {
-  return (Math.random() - 0.5) * 2 * FOCAL * SPREAD * (ch / FOCAL);
+/**
+ * Returns camera z-position as a function of the section's current scroll progress.
+ * scrollProgress 0 = section top at viewport bottom (just entered)
+ *               1 = section bottom at viewport top (just left)
+ * This is purely derived from current scroll position — bidirectional for free.
+ */
+function getCameraZ(sectionEl: HTMLElement): number {
+  const rect      = sectionEl.getBoundingClientRect();
+  const sectionH  = sectionEl.offsetHeight;
+  const windowH   = window.innerHeight;
+  const progress  = (windowH - rect.top) / (sectionH + windowH);
+  const clamped   = Math.max(-0.1, Math.min(1.1, progress));
+  return clamped * MAX_CAMERA_TRAVEL;
 }
 
-/** Non-uniform z distribution: slightly more dots at medium depth than extreme far. */
-function randomZ(): number {
-  return MIN_Z + Math.pow(Math.random(), 0.7) * (MAX_Z - MIN_Z);
-}
+function renderFrame(
+  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
+  dots: Dot[],
+  cameraZ: number,
+): void {
+  const { width: cw, height: ch } = canvas;
+  ctx.clearRect(0, 0, cw, ch);
 
-function initDots(cw: number, ch: number): Dot[] {
-  return Array.from({ length: NUM_DOTS }, () => ({
-    x: randomX(cw),
-    y: randomY(cw, ch),
-    z: randomZ(),
-  }));
+  const cx = cw / 2;
+  const cy = ch / 2;
+
+  // Compute relative z for each dot and cull non-visible
+  const visible = dots
+    .map(d => ({ d, rz: d.z - cameraZ }))
+    .filter(({ rz }) => rz > NEAR_CLIP)
+    .sort((a, b) => b.rz - a.rz); // far → near so large close dots paint on top
+
+  for (const { d, rz } of visible) {
+    const scale  = FOCAL / rz;
+    const sx     = d.x * scale + cx;
+    const sy     = d.y * scale + cy;
+    const radius = Math.min(DOT_BASE_RADIUS * scale, MAX_DOT_RADIUS);
+
+    if (radius < 0.25) continue;
+    if (sx < -20 || sx > cw + 20 || sy < -20 || sy > ch + 20) continue;
+
+    // Fade at extreme far (rz > 1800) and extreme near (rz approaching NEAR_CLIP)
+    const farFade  = Math.min(1, (2200 - rz) / 400);
+    const nearFade = Math.min(1, (rz - NEAR_CLIP) / 80);
+    const opacity  = farFade * nearFade * 0.88;
+    if (opacity <= 0) continue;
+
+    ctx.beginPath();
+    ctx.arc(sx, sy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+    ctx.fill();
+  }
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
@@ -81,141 +129,74 @@ export default function VoidSection({
   className = "",
   minHeight = "70vh",
 }: VoidSectionProps) {
-  const sectionRef  = useRef<HTMLElement>(null);
-  const canvasRef   = useRef<HTMLCanvasElement>(null);
-  const dotsRef     = useRef<Dot[]>([]);
-  const rafRef      = useRef<number>(0);
-  const runningRef  = useRef(false);
-  const scrollYRef  = useRef(0);   // last known scrollY (read in rAF, not handler)
-  const prevScrollY = useRef(0);   // scrollY of previous frame
+  const sectionRef = useRef<HTMLElement>(null);
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+  const dotsRef    = useRef<Dot[]>([]);
 
   useEffect(() => {
     const section = sectionRef.current;
     const canvas  = canvasRef.current;
     if (!section || !canvas) return;
 
-    // ── Size canvas to section ───────────────────────────────────────────────
-    let cw = 0, ch = 0;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const resize = () => {
-      cw = section.offsetWidth;
-      ch = section.offsetHeight;
-      canvas.width  = cw;
-      canvas.height = ch;
-      // Dots keep their world-space x/y/z — projection re-adapts automatically
+    // ── Size canvas + generate fixed dot cloud ──────────────────────────────
+    const init = () => {
+      canvas.width  = section.offsetWidth;
+      canvas.height = section.offsetHeight;
+      dotsRef.current = generateDots(canvas.width, canvas.height);
     };
-    resize();
+    init();
 
-    // ── Initialise dots ──────────────────────────────────────────────────────
-    dotsRef.current = initDots(cw, ch);
+    // ── Dirty-flag + single-scheduled rAF ───────────────────────────────────
+    let rafId: number | null = null;
+    let dirty = false;
 
-    // ── Recycle a single dot to the back ─────────────────────────────────────
-    const recycle = (dot: Dot) => {
-      dot.z = MAX_Z * (0.6 + Math.random() * 0.4); // back-to-mid range
-      dot.x = randomX(cw);
-      dot.y = randomY(cw, ch);
-    };
-
-    // ── Draw frame ────────────────────────────────────────────────────────────
-    const draw = () => {
-      const ctx = canvas.getContext("2d");
-      if (!ctx || cw === 0 || ch === 0) return;
-
-      // Scroll delta (computed here in the rAF, not in the scroll handler)
-      const curScroll = scrollYRef.current;
-      const scrollDelta = Math.max(0, curScroll - prevScrollY.current);
-      prevScrollY.current = curScroll;
-
-      // Advance all dots toward the viewer
-      const advance = AUTO_SPEED + scrollDelta * SCROLL_SPEED;
-
-      ctx.clearRect(0, 0, cw, ch);
-
-      const cx = cw / 2;
-      const cy = ch / 2;
-
-      for (const dot of dotsRef.current) {
-        dot.z -= advance;
-
-        // Recycle dots that have passed the viewer
-        if (dot.z < MIN_Z) {
-          recycle(dot);
-        }
-
-        const scale  = FOCAL / dot.z;
-        const sx     = dot.x * scale + cx;
-        const sy     = dot.y * scale + cy;
-        const radius = BASE_RADIUS * scale;
-
-        // Skip invisible dots
-        if (radius < 0.3) continue;
-        if (sx < -20 || sx > cw + 20 || sy < -20 || sy > ch + 20) continue;
-
-        // Opacity: bright when close (small z), faint when far (large z)
-        const opacity = Math.pow(1 - dot.z / MAX_Z, 1.4) * 0.92;
-
-        ctx.beginPath();
-        ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
-        ctx.fill();
-      }
+    const scheduleRender = () => {
+      if (rafId !== null) return; // already scheduled
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!dirty) return;
+        dirty = false;
+        renderFrame(canvas, ctx, dotsRef.current, getCameraZ(section));
+      });
     };
 
-    // ── rAF loop ─────────────────────────────────────────────────────────────
-    const loop = () => {
-      if (!runningRef.current) return;
-      draw();
-      rafRef.current = requestAnimationFrame(loop);
-    };
-
-    // ── IntersectionObserver — pause when offscreen ───────────────────────────
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        runningRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          prevScrollY.current = window.scrollY; // reset delta on re-entry
-          rafRef.current = requestAnimationFrame(loop);
-        } else {
-          cancelAnimationFrame(rafRef.current);
-        }
-      },
-      { threshold: 0 }
-    );
-    io.observe(section);
-
-    // ── Passive scroll listener — update ref only; delta computed in rAF ─────
     const onScroll = () => {
-      scrollYRef.current = window.scrollY;
+      dirty = true;
+      scheduleRender();
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
 
-    // ── Resize ────────────────────────────────────────────────────────────────
     const onResize = () => {
-      resize();
-      // Dots' world-space coords stay; perspective projection adapts naturally
+      init();
+      dirty = true;
+      scheduleRender();
     };
+
+    // Initial render at current scroll position
+    dirty = true;
+    scheduleRender();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
-    // ── Cleanup ───────────────────────────────────────────────────────────────
     return () => {
-      runningRef.current = false;
-      cancelAnimationFrame(rafRef.current);
-      io.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 
   const sectionStyle: CSSProperties = {
     position: "relative",
     minHeight,
-    background: "#000000", // pure black — contrast vs site's #060608 dark gray
-    overflow: "hidden",    // hard cut top + bottom edges — no radius, no gradient
+    background: "#000000", // pure black — distinct from site's #060608
+    overflow: "hidden",    // hard cut top + bottom, no border-radius, no gradient
   };
 
   return (
     <section ref={sectionRef} className={className} style={sectionStyle}>
-      {/* Canvas lives at z-index 0, fills the section completely */}
       <canvas
         ref={canvasRef}
         aria-hidden
@@ -229,7 +210,6 @@ export default function VoidSection({
           zIndex: 0,
         }}
       />
-      {/* Content floats above canvas */}
       <div
         style={{
           position: "relative",

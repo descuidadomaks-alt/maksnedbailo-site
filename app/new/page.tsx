@@ -90,19 +90,21 @@ function AiMapBridge() {
             fontSize: "15px",
             padding: "15px 32px",
             letterSpacing: "-0.01em",
-            color: "rgba(255,255,255,0.9)",
-            border: "1.5px solid rgba(255,255,255,0.6)",
+            // Use the site's existing accent CSS variable — no hex hardcoded
+            color: "var(--accent)",
+            border: "1.5px solid var(--accent)",
             background: "transparent",
+            opacity: 0.85,
           }}
           onMouseEnter={e => {
             const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = "rgba(255,255,255,0.08)";
-            el.style.borderColor = "rgba(255,255,255,0.9)";
+            el.style.opacity = "1";
+            el.style.background = "rgba(212,255,43,0.08)";
           }}
           onMouseLeave={e => {
             const el = e.currentTarget as HTMLAnchorElement;
+            el.style.opacity = "0.85";
             el.style.background = "transparent";
-            el.style.borderColor = "rgba(255,255,255,0.6)";
           }}
         >
           {t(BRIDGE.cta, lang)}
