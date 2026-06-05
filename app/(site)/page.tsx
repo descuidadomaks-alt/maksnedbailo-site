@@ -41,8 +41,8 @@ const BRIDGE = {
     es: 'La mayoría de los negocios no tienen un problema de chatbot. Tienen un problema de "nadie ha mapeado por dónde se escapa el dinero". Antes de automatizar nada, ve el panorama completo: cada oportunidad de IA en tu negocio, priorizada por ROI, en 90 minutos.',
   },
   cta: {
-    en: "Show me what's broken →",
-    es: "Muéstrame qué está roto →",
+    en: "Map my operation →",
+    es: "Mapear mi operación →",
   },
 };
 

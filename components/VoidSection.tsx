@@ -29,8 +29,9 @@ const FOCAL        = 380;
 const BASE_RADIUS  = 1.8;  // radius at z=FOCAL; slightly larger for readability
 const NEAR_CLIP    = 40;
 
-// Three horizontal floor planes the camera passes through
-const PLANES_Y = [80, 290, 500];
+// Five horizontal floor planes — 130 world-units apart
+// Max gap between passes: 20% of scroll → near dots always on screen
+const PLANES_Y = [50, 180, 310, 440, 570];
 
 // Grid within each plane
 const X_COLS    = 13;    // -6 to +6
@@ -42,14 +43,11 @@ const X_JITTER  = 14;
 const Z_DEPTHS = [90, 140, 210, 310, 440, 620, 840, 1100, 1420, 1800, 2300];
 const Z_JITTER = 0.07;   // 7% z jitter — prevents z-fighting artefacts
 
-// Camera travel range — starts/ends close to outer planes so dots always visible
-// progress=0%:   cameraY=10  → plane1 relY=70  → near dots visible immediately ✓
-// progress=12%:  cameraY=80  → plane1 at center → first max-depth moment ✓
-// progress=50%:  cameraY=290 → plane2 at center → mid-section centrepiece ✓
-// progress=88%:  cameraY=500 → plane3 at center → third max-depth moment ✓
-// progress=100%: cameraY=570 → plane3 relY=-70 → near dots visible until end ✓
-const CAMERA_Y_START = 60;   // 20 world-units below plane 1 — dots visible from first pixel
-const CAMERA_Y_END   = 520;  // 20 world-units above plane 3 — dots visible until last pixel
+// Camera travels 660 world units across full scroll
+// Planes pass at ~10%, 30%, 50%, 70%, 89% of scroll progress
+// Camera starts 70 below plane1 and ends 70 past plane5 — dots visible throughout
+const CAMERA_Y_START = -20;  // 70 world-units below plane1 → near dots visible immediately
+const CAMERA_Y_END   = 640;  // 70 world-units past plane5  → near dots visible until end
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
