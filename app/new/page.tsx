@@ -41,10 +41,10 @@ const BRIDGE = {
     en: "Most businesses don't have a chatbot problem. They have a \"nobody's mapped where the money actually leaks\" problem. Before you automate anything, see the whole picture — every AI opportunity in your business, ranked by ROI, in 90 minutes.",
     es: 'La mayoría de los negocios no tienen un problema de chatbot. Tienen un problema de "nadie ha mapeado por dónde se escapa el dinero". Antes de automatizar nada, ve el panorama completo: cada oportunidad de IA en tu negocio, priorizada por ROI, en 90 minutos.',
   },
-  // 3.1 — CTA updated to "Map my operation →" per spec
+  // Ghost button — visually distinct from filled CTAs elsewhere on the page
   cta: {
-    en: "Map my operation →",
-    es: "Mapear mi operación →",
+    en: "Show me what's broken →",
+    es: "Muéstrame qué está roto →",
   },
 };
 
@@ -80,11 +80,30 @@ function AiMapBridge() {
         >
           {t(BRIDGE.body, lang)}
         </p>
-        {/* CTA */}
+        {/* CTA — ghost button: outline only, no fill.
+             Visually distinct from every filled CTA on the page.
+             White border/text signals a different type of action. */}
         <a
           href="/ai-map"
-          className="inline-flex items-center gap-2 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(212,255,43,0.22)]"
-          style={{ fontSize: "15px", padding: "16px 32px", letterSpacing: "-0.01em" }}
+          className="inline-flex items-center gap-2 font-sora font-semibold rounded-xl transition-all duration-200"
+          style={{
+            fontSize: "15px",
+            padding: "15px 32px",
+            letterSpacing: "-0.01em",
+            color: "rgba(255,255,255,0.9)",
+            border: "1.5px solid rgba(255,255,255,0.6)",
+            background: "transparent",
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.background = "rgba(255,255,255,0.08)";
+            el.style.borderColor = "rgba(255,255,255,0.9)";
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.background = "transparent";
+            el.style.borderColor = "rgba(255,255,255,0.6)";
+          }}
         >
           {t(BRIDGE.cta, lang)}
         </a>
