@@ -44,8 +44,8 @@ function LangToggle() {
       {label}
     </button>
   );
+  // EN/ES only — matches homepage header; УК toggle removed
   return (
-    {/* EN/ES only — matches homepage header; no УК toggle */}
     <div className="flex items-center gap-0.5 p-1" style={GLASS}>
       {btn("en", "EN", "Switch to English")}
       {btn("es", "ES", "Cambiar a Español")}
