@@ -132,9 +132,9 @@ export default function NavNew() {
             <span className="hidden xs:inline">{t(content.nav.blog, lang)}</span>
           </Link>
 
-          {/* AI Map — new link added between Blog and lang switcher */}
+          {/* AI Map — pass current lang so /ai-map loads in the same language */}
           <Link
-            href="/ai-map"
+            href={lang !== "en" ? `/ai-map?lang=${lang}` : "/ai-map"}
             className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
             style={GLASS}
             aria-label="AI Map"

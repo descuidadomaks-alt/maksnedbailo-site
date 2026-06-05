@@ -91,7 +91,12 @@ function getCameraY(sectionEl: HTMLElement): number {
   const rect     = sectionEl.getBoundingClientRect();
   const windowH  = window.innerHeight;
   const sectionH = sectionEl.offsetHeight;
-  const progress = (windowH - rect.top) / (sectionH + windowH);
+  // PREVIEW_PX: start rendering 300px BEFORE section enters viewport.
+  // Without this, progress=0 when section top hits viewport bottom — camera is
+  // far below plane1 so dots project to bottom 10% of canvas (user sees top first).
+  // With preview, progress is already ~20% when section peeks in → dots visible immediately.
+  const PREVIEW_PX = 300;
+  const progress = (windowH + PREVIEW_PX - rect.top) / (sectionH + windowH + PREVIEW_PX);
   const clamped  = Math.max(0, Math.min(1, progress));
   return CAMERA_Y_START + clamped * (CAMERA_Y_END - CAMERA_Y_START);
 }
@@ -206,10 +211,19 @@ export default function VoidSection({
     dirty = true;
     scheduleRender();
 
+    // IntersectionObserver with 300px rootMargin — fires a fresh render when the
+    // section is within 300px of the viewport, matching the PREVIEW_PX in getCameraY.
+    const io = new IntersectionObserver(
+      () => { dirty = true; scheduleRender(); },
+      { rootMargin: "300px 0px 0px 0px" }
+    );
+    io.observe(section);
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
+      io.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       if (rafId !== null) cancelAnimationFrame(rafId);

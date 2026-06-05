@@ -81,8 +81,8 @@ function DirectHeader() {
   return (
     <header className="fixed left-0 right-0 z-50 pointer-events-none" style={{ top: "36px" }}>
       <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
-        {/* Logo */}
-        <Link href="/" className="pointer-events-auto flex items-center" aria-label="care less AI automation home">
+        {/* Logo — pass lang back so homepage loads in the same language */}
+        <Link href={locale !== "en" ? `/?lang=${locale}` : "/"} className="pointer-events-auto flex items-center" aria-label="care less AI automation home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="care less AI automation" className="w-auto shrink-0" style={{ height: "36px" }} />
         </Link>
