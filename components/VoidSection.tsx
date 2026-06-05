@@ -1,117 +1,149 @@
 "use client";
 
 /**
- * VoidSection — scroll-driven perspective tunnel.
+ * VoidSection — scroll-driven Y-axis parallax tunnel.
  *
- * Mental model: dots are FIXED in 3-D space and never move.
- * The CAMERA moves along the z-axis as the user scrolls through the section.
- *   Scroll down → camera moves forward → dots grow and drift outward from centre.
- *   Scroll up   → camera moves backward → bidirectional, same projection, no special handling.
+ * Axis definitions:
+ *   X = left–right  (horizontal spread across canvas)
+ *   Y = up–down     = scroll axis  (camera moves here)
+ *   Z = depth       = parallax axis (determines dot size + vertical scroll speed)
  *
- * "Like standing in an elevator shaft full of fixed dots. You move. They don't."
+ * Mental model: you are an elevator moving vertically through a shaft.
+ * Dots are fixed at positions on the shaft walls at various Z distances.
+ * Close dots (small Z) have strong vertical parallax — they rush past.
+ * Far dots (large Z) barely move — they are deep in the shaft.
+ * Camera NEVER moves in Z — no "flying into dots", no recycling needed.
  *
- * Removed entirely vs previous version:
- *   - AUTO_SPEED / constant animation loop
- *   - dot.z mutations inside render
- *   - recycling logic
- *   - rAF spinning every frame regardless of scroll
- *
- * Render fires only on scroll or resize (dirty flag + single scheduled rAF).
- * No Three.js — Canvas 2D.
- *
- * Used in:
- *   /new    — bridge section ("Different problem?")
- *   /ai-map — DirectProblem ("Your operation is leaking money")
+ * Dots: fixed grid — 8 Z layers × 13 X columns × ~25 Y rows ≈ 2,600 dots.
+ * Generated once on mount, never mutated.
+ * Render fires only on scroll or resize (dirty flag + single rAF).
+ * Fully bidirectional: getCameraY is a pure function of scroll position.
  */
 
 import { useRef, useEffect, type ReactNode, type CSSProperties } from "react";
 
-// ── Constants ────────────────────────────────────────────────────────────────
+// ── Constants ─────────────────────────────────────────────────────────────────
 
-const NUM_DOTS           = 400;
-const FOCAL              = 320;
-const NEAR_CLIP          = 40;    // don't render dots closer than this to camera
-const DOT_BASE_RADIUS    = 2.0;   // radius when z_relative === FOCAL
-const MAX_DOT_RADIUS     = 22;    // cap very close dots
-const MAX_CAMERA_TRAVEL  = 1800;  // total z-distance camera travels across full scroll height
+const FOCAL           = 380;
+const BASE_RADIUS     = 1.8;   // dot radius at z = FOCAL; ALL size comes from z
+const NEAR_CLIP       = 35;    // skip dots with z < NEAR_CLIP
+const MAX_CAMERA_Y    = 1600;  // world-Y camera travels across full section scroll
+
+// Grid
+const X_COLS          = 13;    // -6 to +6 horizontal columns
+const X_SPACING       = 160;   // world units between columns
+const X_JITTER        = 14;    // small x randomness per dot
+
+// Z layers: fixed distances from viewer — these define the parallax layers
+const Z_LAYERS = [90, 210, 360, 520, 700, 920, 1200, 1650];
+
+// Y extent: must span well above + below the camera travel range
+const Y_START   = -350;                      // above camera start
+const Y_END     = MAX_CAMERA_Y + 350;        // below camera end
+const Y_SPACING = 88;                        // vertical spacing between rows
+const Y_JITTER  = 10;                        // small y randomness per dot
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 interface Dot {
   x: number;
-  y: number;
-  z: number; // absolute, FIXED — never mutated after generation
+  y: number; // absolute world-Y — FIXED, never mutated
+  z: number; // depth — FIXED, never mutated
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+interface VisibleDot {
+  sx: number;
+  sy: number;
+  radius: number;
+  opacity: number;
+}
 
-function generateDots(cw: number, ch: number): Dot[] {
+// ── generateDots ──────────────────────────────────────────────────────────────
+// Produces a structured grid: every Z layer × X column gets dots spaced at Y_SPACING
+// across the full camera travel range.  Dots are never regenerated on scroll.
+
+function generateDots(): Dot[] {
   const dots: Dot[] = [];
-  for (let i = 0; i < NUM_DOTS; i++) {
-    // Bias distribution: more dots near-to-mid depth, fewer at extreme far
-    const z = 80 + Math.pow(Math.random(), 0.55) * 2520;
-    // Spread proportional to z so the distribution looks natural at all depths
-    const spread = z * 0.75;
-    dots.push({
-      x: (Math.random() - 0.5) * spread * 2,
-      y: (Math.random() - 0.5) * spread * (ch / cw) * 2,
-      z,
-    });
+  for (const z of Z_LAYERS) {
+    for (let col = 0; col < X_COLS; col++) {
+      const ix = col - Math.floor(X_COLS / 2); // -6 … +6
+      let y = Y_START;
+      while (y <= Y_END) {
+        dots.push({
+          x: ix * X_SPACING + (Math.random() - 0.5) * X_JITTER,
+          y: y + (Math.random() - 0.5) * Y_JITTER,
+          z: z + (Math.random() - 0.5) * (z * 0.06), // ≤ 6 % z jitter
+        });
+        y += Y_SPACING;
+      }
+    }
   }
   return dots;
 }
 
-/**
- * Returns camera z-position as a function of the section's current scroll progress.
- * scrollProgress 0 = section top at viewport bottom (just entered)
- *               1 = section bottom at viewport top (just left)
- * This is purely derived from current scroll position — bidirectional for free.
- */
-function getCameraZ(sectionEl: HTMLElement): number {
-  const rect      = sectionEl.getBoundingClientRect();
-  const sectionH  = sectionEl.offsetHeight;
-  const windowH   = window.innerHeight;
-  const progress  = (windowH - rect.top) / (sectionH + windowH);
-  const clamped   = Math.max(-0.1, Math.min(1.1, progress));
-  return clamped * MAX_CAMERA_TRAVEL;
+// ── getCameraY ────────────────────────────────────────────────────────────────
+// Pure function of current scroll position.  Bidirectional for free.
+
+function getCameraY(sectionEl: HTMLElement): number {
+  const rect     = sectionEl.getBoundingClientRect();
+  const windowH  = window.innerHeight;
+  const sectionH = sectionEl.offsetHeight;
+  // 0 = section top at viewport top; 1 = section bottom at viewport top
+  const progress = (windowH - rect.top) / (sectionH + windowH);
+  const clamped  = Math.max(-0.15, Math.min(1.15, progress));
+  return clamped * MAX_CAMERA_Y;
 }
+
+// ── renderFrame ───────────────────────────────────────────────────────────────
 
 function renderFrame(
   canvas: HTMLCanvasElement,
   ctx: CanvasRenderingContext2D,
   dots: Dot[],
-  cameraZ: number,
+  cameraY: number,
 ): void {
-  const { width: cw, height: ch } = canvas;
+  const cw = canvas.width;
+  const ch = canvas.height;
   ctx.clearRect(0, 0, cw, ch);
 
   const cx = cw / 2;
   const cy = ch / 2;
 
-  // Compute relative z for each dot and cull non-visible
-  const visible = dots
-    .map(d => ({ d, rz: d.z - cameraZ }))
-    .filter(({ rz }) => rz > NEAR_CLIP)
-    .sort((a, b) => b.rz - a.rz); // far → near so large close dots paint on top
+  const visible: VisibleDot[] = [];
 
-  for (const { d, rz } of visible) {
-    const scale  = FOCAL / rz;
-    const sx     = d.x * scale + cx;
-    const sy     = d.y * scale + cy;
-    const radius = Math.min(DOT_BASE_RADIUS * scale, MAX_DOT_RADIUS);
+  for (const d of dots) {
+    if (d.z < NEAR_CLIP) continue;
 
-    if (radius < 0.25) continue;
-    if (sx < -20 || sx > cw + 20 || sy < -20 || sy > ch + 20) continue;
+    // ── KEY CHANGE FROM PREVIOUS VERSION ──────────────────────────────────
+    // relY = d.y - cameraY   (Y is relative to camera; X is not)
+    // screenX = (d.x   / d.z) * FOCAL + cx   ← unchanged
+    // screenY = (relY  / d.z) * FOCAL + cy   ← was d.y/d.z in v4 (wrong)
+    const relY   = d.y - cameraY;
+    const scale  = FOCAL / d.z;
+    const sx     = d.x  * scale + cx;
+    const sy     = relY * scale + cy;
+    const radius = BASE_RADIUS * scale;
 
-    // Fade at extreme far (rz > 1800) and extreme near (rz approaching NEAR_CLIP)
-    const farFade  = Math.min(1, (2200 - rz) / 400);
-    const nearFade = Math.min(1, (rz - NEAR_CLIP) / 80);
-    const opacity  = farFade * nearFade * 0.88;
+    if (radius < 0.22) continue;
+    if (sx < -30 || sx > cw + 30) continue;
+    if (sy < -30 || sy > ch + 30) continue;
+
+    // Fade very far dots; keep near-to-mid bright
+    const opacity = Math.min(1, (1800 - d.z) / 600) *
+                    Math.min(1, d.z / 80) *
+                    0.86;
     if (opacity <= 0) continue;
 
+    visible.push({ sx, sy, radius, opacity });
+  }
+
+  // Draw smallest (farthest) first so large close dots paint on top
+  visible.sort((a, b) => a.radius - b.radius);
+
+  for (const v of visible) {
     ctx.beginPath();
-    ctx.arc(sx, sy, radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
+    ctx.arc(v.sx, v.sy, Math.min(v.radius, 20), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${v.opacity.toFixed(3)})`;
     ctx.fill();
   }
 }
@@ -141,32 +173,29 @@ export default function VoidSection({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // ── Size canvas + generate fixed dot cloud ──────────────────────────────
+    // ── Init: size canvas + generate fixed dot grid ──────────────────────────
     const init = () => {
       canvas.width  = section.offsetWidth;
       canvas.height = section.offsetHeight;
-      dotsRef.current = generateDots(canvas.width, canvas.height);
+      dotsRef.current = generateDots(); // grid is aspect-agnostic; X_SPACING handles it
     };
     init();
 
-    // ── Dirty-flag + single-scheduled rAF ───────────────────────────────────
+    // ── Dirty-flag + single-scheduled rAF (same as v4) ───────────────────────
     let rafId: number | null = null;
     let dirty = false;
 
     const scheduleRender = () => {
-      if (rafId !== null) return; // already scheduled
+      if (rafId !== null) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
         if (!dirty) return;
         dirty = false;
-        renderFrame(canvas, ctx, dotsRef.current, getCameraZ(section));
+        renderFrame(canvas, ctx, dotsRef.current, getCameraY(section));
       });
     };
 
-    const onScroll = () => {
-      dirty = true;
-      scheduleRender();
-    };
+    const onScroll = () => { dirty = true; scheduleRender(); };
 
     const onResize = () => {
       init();
@@ -191,7 +220,7 @@ export default function VoidSection({
   const sectionStyle: CSSProperties = {
     position: "relative",
     minHeight,
-    background: "#000000", // pure black — distinct from site's #060608
+    background: "#000000", // pure black — hard-cut contrast with site's #060608
     overflow: "hidden",    // hard cut top + bottom, no border-radius, no gradient
   };
 
@@ -202,10 +231,8 @@ export default function VoidSection({
         aria-hidden
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
+          top: 0, left: 0,
+          width: "100%", height: "100%",
           pointerEvents: "none",
           zIndex: 0,
         }}
