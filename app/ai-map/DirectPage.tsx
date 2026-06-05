@@ -13,6 +13,7 @@ import DirectProcess from "./sections/DirectProcess";
 import DirectFAQ from "./sections/DirectFAQ";
 import DirectFinalCTA from "./sections/DirectFinalCTA";
 import DirectStickyCTA from "./sections/DirectStickyCTA";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 /**
  * Direct sales page — /ai-map
@@ -58,6 +59,7 @@ export default function DirectPage() {
           </p>
         </footer>
       </main>
+      <FloatingWhatsApp />
     </>
   );
 }
