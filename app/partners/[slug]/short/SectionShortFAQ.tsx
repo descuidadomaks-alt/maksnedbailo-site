@@ -41,6 +41,7 @@ export default function SectionShortFAQ({
   const vars = {
     partnerName: partnerNameForSentences ?? config.partnerName,
     phase1Anchor: config.phase1Anchor,
+    gender: (config.gender ?? 'm') as 'f' | 'm',
   };
 
   return (

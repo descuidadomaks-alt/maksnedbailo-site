@@ -99,6 +99,12 @@ export type ShortPartnerConfig = {
 
   /** Shown in FAQ + offer anchor. Default: "€4,500" */
   phase1Anchor: string;
+
+  /**
+   * Grammatical gender of the partner — used for pronoun agreement in UK/EN copy.
+   * 'm' (default) = male, 'f' = female.
+   */
+  gender?: 'f' | 'm';
 };
 
 // ─── Registry helpers ──────────────────────────────────────────────────────────

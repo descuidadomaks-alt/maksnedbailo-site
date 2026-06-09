@@ -11,6 +11,8 @@ import StickyMobileCTA from "./components/StickyMobileCTA";
 // ─── Short-form template ───────────────────────────────────────────────────────
 import vladShort from "@/content/partners/vlad-short";
 import artemShort from "@/content/partners/artem-short";
+import juliaShort from "@/content/partners/julia-short";
+import marinaShort from "@/content/partners/marina-short";
 import type { ShortPartnerConfig } from "@/content/partners/index";
 import ShortPage from "./short/ShortPage";
 
@@ -19,6 +21,8 @@ const LONG: Record<string, PartnerData> = { vlad };
 const SHORT: Record<string, ShortPartnerConfig> = {
   vlad: vladShort,
   artem: artemShort,
+  julia: juliaShort,
+  marina: marinaShort,
 };
 
 // ─── Next.js config ───────────────────────────────────────────────────────────

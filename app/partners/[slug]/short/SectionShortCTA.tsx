@@ -62,7 +62,7 @@ export default function SectionShortCTA({
           className="font-playfair font-normal text-fg mb-4"
           style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}
         >
-          {d.cta.headline(partnerNameDisplay ?? config.partnerName)}
+          {d.cta.headline(partnerNameDisplay ?? config.partnerName, config.gender ?? 'm')}
         </h2>
 
         <p

@@ -112,7 +112,7 @@ export interface ShortPageDict {
   };
 
   cta: {
-    headline: (partnerName: string) => string;
+    headline: (partnerName: string, gender?: 'f' | 'm') => string;
     sub: string;
     primaryCta: string;
     messengerLabel: (channel: "telegram" | "whatsapp") => string;
@@ -125,7 +125,7 @@ export interface ShortPageDict {
     headline: string;
     items: {
       q: string;
-      a: (vars: { partnerName: string; phase1Anchor: string }) => string;
+      a: (vars: { partnerName: string; phase1Anchor: string; gender: 'f' | 'm' }) => string;
     }[];
   };
 
@@ -346,7 +346,7 @@ const en: ShortPageDict = {
   },
 
   cta: {
-    headline: (p) => `${p} sent you here for a reason.`,
+    headline: (p) => `${p} sent you here for a reason.`, // gender-neutral in EN
     sub: "The map is yours either way.",
     primaryCta: "Claim Your Complimentary Session",
     messengerLabel: (channel) =>
@@ -390,8 +390,11 @@ const en: ShortPageDict = {
       },
       {
         q: "Why is {partnerName} giving this away?",
-        a: ({ partnerName }) =>
-          `Because he's known me for years and trusts how I work with operators. He gets a small thank-you if you eventually decide to work with me. No pressure — he's not selling, he's sharing.`.replace("{partnerName}", partnerName),
+        a: ({ partnerName, gender = 'm' }) => {
+          const they = gender === 'f' ? "she's" : "he's";
+          const They = gender === 'f' ? "She" : "He";
+          return `Because ${they} known me for years and trusts how I work with operators. ${They} gets a small thank-you if you eventually decide to work with me. No pressure — ${they} not selling, ${they} sharing.`.replace("{partnerName}", partnerName);
+        },
       },
       {
         q: "In what language can we run the session?",
@@ -632,7 +635,7 @@ const uk: ShortPageDict = {
   },
 
   cta: {
-    headline: (p) => `${p} відправив вас сюди не просто так.`,
+    headline: (p, g = 'm') => `${p} відправив${g === 'f' ? 'а' : ''} вас сюди не просто так.`,
     sub: "Карта залишається у вас у будь-якому разі.",
     primaryCta: "Забронювати безкоштовну сесію",
     messengerLabel: (channel) =>
@@ -676,8 +679,11 @@ const uk: ShortPageDict = {
       },
       {
         q: "Чому {partnerName} ділиться цим безкоштовно?",
-        a: ({ partnerName }) =>
-          `Тому що він знає мене вже кілька років і довіряє тому, як я працюю з операторами. Він отримає невелику подяку, якщо ви врешті вирішите зі мною попрацювати. Жодного тиску — він рекомендує, а не продає.`.replace("{partnerName}", partnerName),
+        a: ({ partnerName, gender = 'm' }) => {
+          const vin = gender === 'f' ? 'вона' : 'він';
+          const Vin = gender === 'f' ? 'Вона' : 'Він';
+          return `Тому що ${vin} знає мене вже кілька років і довіряє тому, як я працюю з операторами. ${Vin} отримає невелику подяку, якщо ви врешті вирішите зі мною попрацювати. Жодного тиску — ${vin} рекомендує, а не продає.`.replace("{partnerName}", partnerName);
+        },
       },
       {
         q: "Якою мовою можна провести сесію?",
