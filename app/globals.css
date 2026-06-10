@@ -67,6 +67,54 @@ body::before {
   animation-play-state: paused;
 }
 
+/* ─── /new testimonials — quote marquee ─────────────────────────────────────
+   Desktop (lg+): vertical auto-scroll, list duplicated ×2 for a seamless
+   -50% loop. Mobile: horizontal swipeable row (scroll-snap, no animation).
+ ──────────────────────────────────────────────────────────────────────────── */
+@keyframes ticker-vertical {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.testimonial-marquee {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  padding: 1rem;
+}
+.testimonial-marquee > * {
+  flex: 0 0 auto;
+  width: min(78vw, 320px);
+  scroll-snap-align: start;
+}
+@media (min-width: 1024px) {
+  .testimonial-marquee-wrap {
+    overflow: hidden;
+    max-height: 560px;
+  }
+  .testimonial-marquee {
+    flex-direction: column;
+    overflow: visible;
+    padding: 1rem;
+    animation: ticker-vertical 60s linear infinite;
+    will-change: transform;
+  }
+  .testimonial-marquee:hover {
+    animation-play-state: paused;
+  }
+  .testimonial-marquee > * {
+    width: 100%;
+    flex: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-marquee {
+    animation: none;
+  }
+}
+
 /* Hero ambient orb pulse */
 @keyframes orb-drift {
   0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
@@ -411,4 +459,77 @@ h1.font-playfair, h2.font-playfair {
   background: radial-gradient(circle at 50% 42%, rgba(212,255,43,0.22) 0%, transparent 65%);
   filter: blur(50px);
   animation: orb-drift 14s ease-in-out infinite;
+}
+
+/* ─── /new dual CTA (Score + Map) — final section ───────────────────────────
+   Score is the primary (accent-fill) action on mobile, Map is primary on
+   desktop — the swap is pure CSS so the DOM order can stay constant.
+ ──────────────────────────────────────────────────────────────────────────── */
+.dual-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  padding: 18px 32px;
+  min-height: 60px;
+  transition: all 0.3s ease;
+}
+@media (max-width: 639px) {
+  .cta-score {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .cta-score:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 60px rgba(212, 255, 43, 0.22);
+  }
+  .cta-map {
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(240, 236, 230, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .cta-map:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+@media (min-width: 640px) {
+  .cta-map {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .cta-map:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 60px rgba(212, 255, 43, 0.22);
+  }
+  .cta-score {
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(240, 236, 230, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .cta-score:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* ─── /score — Bottleneck Score quiz step transition ────────────────────────
+   Each screen (intro / question / gate / result) is keyed so React remounts
+   it on step change, replaying this fade-up entrance.
+ ──────────────────────────────────────────────────────────────────────────── */
+@keyframes quiz-step-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quiz-step {
+  animation: quiz-step-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .quiz-step {
+    animation: none;
+  }
 }

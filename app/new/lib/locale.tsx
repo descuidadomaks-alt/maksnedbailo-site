@@ -2,17 +2,16 @@
 
 /**
  * Self-contained locale context for /new.
- * EN default + UK toggle (per Care Less positioning brief — "EN default + UK
- * toggle in header. Full native Ukrainian for all new strings.").
+ * EN default + ES toggle. (Previously EN/UK — Ukrainian remains on
+ * /partners/* only, which has its own separate locale system.)
  *
- * On mount: resolves lang from URL param (?lang=uk) -> localStorage -> "en".
- * On change: persists to localStorage and sets <html lang> so the
- * :lang(uk) Cyrillic font/sizing fixes (globals.css) apply correctly.
+ * On mount: resolves lang from URL param (?lang=es) -> localStorage -> "en".
+ * On change: persists to localStorage and sets <html lang>.
  */
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 
-export type NewLocale = "en" | "uk";
+export type NewLocale = "en" | "es";
 
 interface NewLocaleCtx {
   locale: NewLocale;
@@ -36,7 +35,7 @@ export function NewLocaleProvider({ children }: { children: ReactNode }) {
     const urlLang = params.get("lang");
     const stored = localStorage.getItem(STORAGE_KEY);
     const resolved = urlLang || stored;
-    if (resolved === "en" || resolved === "uk") {
+    if (resolved === "en" || resolved === "es") {
       setLocaleState(resolved);
     }
   }, []);

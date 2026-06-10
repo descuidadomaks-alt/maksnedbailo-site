@@ -2,17 +2,22 @@
 
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
-import { content } from "@/lib/content";
+import { SCORE_TARGET } from "../lib/config";
 
 /**
- * Section 6 — PROOF, two kinds.
- *  a) "Real systems, live now" (capability) — 3 live case cards, each with
- *     a small agent-UI mock (chat reply / booking confirmation / voice
- *     waveform) so proof is visual, not text-only. Card layout ported from
- *     app/ai-map/sections/DirectProof.tsx.
- *  b) "What it's like to work with me" (trust) — ported video testimonials.
- *     VideoEmbed ported from components/Proof.tsx; source data from
- *     lib/content.ts -> content.proof.videos (Garrett Williams, AJ).
+ * Section 6 — PROOF (capability): "Real systems, live now".
+ * 3 live case cards, each with a small agent-UI mock (chat reply / booking
+ * confirmation / voice waveform) so proof is visual, not text-only. Card
+ * layout ported from app/ai-map/sections/DirectProof.tsx. Each visual sits
+ * in a fixed-height slot so the title/desc rows line up across cards
+ * regardless of which mock renders.
+ *
+ * Trust-proof (video testimonials) now lives in its own Testimonials
+ * section — see ../sections/Testimonials.tsx.
+ *
+ * TODO: swap these illustrative UI mocks for real screen recordings /
+ * screenshots from live client systems once the first founding clients
+ * are onboarded.
  */
 
 function ArrowIcon() {
@@ -102,27 +107,6 @@ function VoiceMock() {
 
 const CASE_VISUALS = [ChatMock, BookingMock, VoiceMock];
 
-function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: string; company: string }) {
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="relative rounded-xl overflow-hidden bg-black" style={{ aspectRatio: "9/16" }}>
-        <iframe
-          src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`}
-          title={`Testimonial from ${name}`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full border-0"
-          loading="lazy"
-        />
-      </div>
-      <div className="text-left">
-        <p className="font-sora text-[12px] font-semibold text-fg/65">{name}</p>
-        <p className="font-sora text-[10px] text-fg/30 mt-0.5">{company}</p>
-      </div>
-    </div>
-  );
-}
-
 export default function ProofSection({ d }: { d: NewPageDict }) {
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
@@ -154,13 +138,17 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
             return (
               <Link
                 key={i}
+                id={c.href.startsWith("#") ? c.href.slice(1) : undefined}
                 href={c.href}
                 target={c.href.startsWith("http") ? "_blank" : undefined}
                 rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 data-reveal={`d${i}`}
                 className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-4 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
               >
-                {Visual && <Visual />}
+                {/* Fixed-height slot — keeps title/desc rows on the same baseline across cards */}
+                <div className="shrink-0 flex flex-col justify-center" style={{ minHeight: "150px" }}>
+                  {Visual && <Visual />}
+                </div>
                 <div className="flex flex-col gap-3 flex-1">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-playfair font-normal text-fg/75" style={{ fontSize: "clamp(14px, 1.3vw, 16px)", lineHeight: 1.3 }}>
@@ -182,29 +170,16 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
           })}
         </div>
 
-        <div data-reveal className="rounded-2xl border border-dashed border-white/[0.08] p-6 text-center mb-20" style={{ background: "rgba(255,255,255,0.008)" }}>
-          <p className="font-label text-fg/20 uppercase" style={{ fontSize: "9px", letterSpacing: "2.5px" }}>
-            {d.proof.slotLabel}
-          </p>
-        </div>
-
-        {/* ── 6b: What it's like to work with me — ported video testimonials ── */}
-        <div className="max-w-2xl mb-10">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-            {d.proof.videoLabel}
-          </p>
-          <h3 data-reveal className="font-playfair font-normal text-fg mb-3" style={{ fontSize: "clamp(20px, 2.6vw, 32px)", lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-            {d.proof.videoHeadline}
-          </h3>
-          <p data-reveal className="font-sora font-light text-fg/35" style={{ fontSize: "14px" }}>
-            {d.proof.videoSub}
-          </p>
-        </div>
-
-        <div data-reveal className="grid grid-cols-2 gap-4 sm:gap-6" style={{ maxWidth: "640px" }}>
-          {content.proof.videos.map((video, i) => (
-            <VideoEmbed key={i} youtubeId={video.youtubeId} name={video.name} company={video.company} />
-          ))}
+        {/* CTA — low-friction, routes to the Bottleneck Score */}
+        <div data-reveal className="text-center">
+          <Link
+            href={SCORE_TARGET}
+            className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent"
+            style={{ fontSize: "13px" }}
+          >
+            {d.proof.ctaLabel}
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+          </Link>
         </div>
 
       </div>

@@ -185,17 +185,45 @@ export default function VoidSection({
     };
     init();
 
+    // ── Idle ambient drift ────────────────────────────────────────────────────
+    // A slow sine wave nudges the camera even when the user isn't scrolling, so
+    // the void never feels like a static screenshot. Skipped entirely under
+    // prefers-reduced-motion — the section then only renders on scroll/resize,
+    // each frame an exact 1:1 read of scroll position via getCameraY.
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const AMBIENT_AMPLITUDE = 8;     // world units
+    const AMBIENT_PERIOD    = 9000;  // ms per full drift cycle
+    const startTime = performance.now();
+
+    const computeCameraY = () => {
+      const cameraY = getCameraY(section);
+      if (prefersReducedMotion) return cameraY;
+      const t = performance.now() - startTime;
+      return cameraY + Math.sin((t / AMBIENT_PERIOD) * Math.PI * 2) * AMBIENT_AMPLITUDE;
+    };
+
+    const render = () => renderFrame(canvas, ctx, dotsRef.current, computeCameraY());
+
     // ── Dirty-flag + single-scheduled rAF ────────────────────────────────────
+    // While in view (and motion allowed), `ambientActive` keeps the rAF chain
+    // running every frame for the drift. Otherwise we fall back to rendering
+    // only when scroll/resize mark the frame dirty — exact 1:1 tracking.
     let rafId: number | null = null;
     let dirty = false;
+    let ambientActive = false;
 
     const scheduleRender = () => {
       if (rafId !== null) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
+        if (ambientActive) {
+          render();
+          scheduleRender();
+          return;
+        }
         if (!dirty) return;
         dirty = false;
-        renderFrame(canvas, ctx, dotsRef.current, getCameraY(section));
+        render();
       });
     };
 
@@ -213,8 +241,13 @@ export default function VoidSection({
 
     // IntersectionObserver with 300px rootMargin — fires a fresh render when the
     // section is within 300px of the viewport, matching the PREVIEW_PX in getCameraY.
+    // Also gates the ambient drift loop so it only runs while visible.
     const io = new IntersectionObserver(
-      () => { dirty = true; scheduleRender(); },
+      ([entry]) => {
+        if (!prefersReducedMotion) ambientActive = entry?.isIntersecting ?? false;
+        dirty = true;
+        scheduleRender();
+      },
       { rootMargin: "300px 0px 0px 0px" }
     );
     io.observe(section);
@@ -224,6 +257,7 @@ export default function VoidSection({
 
     return () => {
       io.disconnect();
+      ambientActive = false;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       if (rafId !== null) cancelAnimationFrame(rafId);

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import VoidSection from "@/components/VoidSection";
 import type { NewPageDict } from "../lib/i18n";
-import { PHASE1_ANCHOR } from "../lib/config";
+import { CTA_TARGET, PHASE1_ANCHOR } from "../lib/config";
+import { FOUNDING_RATE } from "../lib/site.config";
 
 /**
  * Section 5 — THE BOTTLENECK MAP (mechanism).
@@ -287,6 +288,20 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
           </div>
 
           <p className="font-sora text-fg/[0.14] mt-4 text-center italic" style={{ fontSize: "10px" }}>{sm.note}</p>
+
+          {/* CTA — high-friction, books the real Bottleneck Map session */}
+          <div data-reveal className="text-center mt-10">
+            <a
+              href={CTA_TARGET}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
+              style={{ fontSize: "14px", padding: "15px 32px", minHeight: "52px", letterSpacing: "-0.01em" }}
+            >
+              {d.map.ctaLabel(FOUNDING_RATE)}
+              <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+            </a>
+          </div>
         </div>
       </section>
     </>

@@ -48,14 +48,23 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <div className="relative max-w-6xl mx-auto px-6">
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mx-auto">
 
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.faq.label}
-        </p>
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>
-          {d.faq.headline}
-        </h2>
+        <div className="text-center mb-12">
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.faq.label}
+          </p>
+          <h2 data-reveal className="font-playfair font-normal text-fg mx-auto mb-5" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>
+            {d.faq.headline}
+          </h2>
+          <p
+            data-reveal
+            className="font-sora font-light text-accent/65 inline-block"
+            style={{ fontSize: "13px", border: "1px solid rgba(212,255,43,0.18)", borderRadius: "999px", padding: "8px 18px" }}
+          >
+            {d.faq.guarantee}
+          </p>
+        </div>
 
         <div data-reveal className="flex flex-col">
           {d.faq.items.map((item, i) => {

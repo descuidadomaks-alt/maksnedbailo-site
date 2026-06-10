@@ -1,12 +1,15 @@
 /**
  * /new — Care Less brand homepage dictionary.
- * EN (default) + native Ukrainian. No English leaking into the UK view.
+ * EN (default) + ES toggle. ES is currently an EN-copy placeholder — see the
+ * `es` object below. Do not machine-translate the sales copy; replace field
+ * by field once Maks approves the Spanish translation.
  *
  * Source of truth: D:\AI Automation\Service\care-less-positioning.md
  * (founder-bottleneck + losing-deals + anti-hype + operator-not-consultant).
  */
 
 import type { NewLocale } from "./locale";
+import { VOICE_DEMO_ANCHOR } from "./config";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -43,6 +46,12 @@ export interface ProofCase {
   href: string;
 }
 
+export interface TestimonialItem {
+  quote: string;
+  author: string;
+  role: string;
+}
+
 export interface NewPageDict {
   header: {
     ctaLabel: string;
@@ -55,7 +64,10 @@ export interface NewPageDict {
     /** Each entry renders as its own line (preserves the hook's rhythm) */
     headlineLines: string[];
     sub: string;
+    /** Primary CTA -> /score (Bottleneck Score quiz) */
     primaryCta: string;
+    /** Secondary ghost CTA -> CTA_TARGET (Bottleneck Map booking) */
+    secondaryCta: string;
     /** Risk-reversal line shown directly under the hero CTA */
     guarantee: string;
     /** Mono mini-proof strip shown in the hero, above the fold */
@@ -68,6 +80,8 @@ export interface NewPageDict {
     headline: string;
     lines: string[];
     punch: string;
+    /** Inline link after this section -> /score */
+    ctaLabel: string;
   };
 
   reframe: {
@@ -75,6 +89,8 @@ export interface NewPageDict {
     headline: string;
     body: string;
     enemies: { title: string; desc: string }[];
+    /** Button after this section -> /score */
+    ctaLabel: string;
   };
 
   belief: {
@@ -92,6 +108,8 @@ export interface NewPageDict {
     bullets: string[];
     sample: SampleMapDict;
     note: string;
+    /** Button after this section -> CTA_TARGET. Takes the live founding/standard rate. */
+    ctaLabel: (rate: string) => string;
   };
 
   proof: {
@@ -100,10 +118,15 @@ export interface NewPageDict {
     sub: string;
     liveBadge: string;
     cases: ProofCase[];
-    slotLabel: string;
-    videoLabel: string;
-    videoHeadline: string;
-    videoSub: string;
+    /** Link after this section -> /score */
+    ctaLabel: string;
+  };
+
+  testimonials: {
+    label: string;
+    headline: string;
+    sub: string;
+    items: TestimonialItem[];
   };
 
   whyMe: {
@@ -114,13 +137,23 @@ export interface NewPageDict {
     rows: [string, string][];
   };
 
+  services: {
+    label: string;
+    tags: string[];
+  };
+
   cta: {
     label: string;
     headline: string;
     sub: string;
     primaryCta: string;
+    /** Score CTA used in the dual-CTA row (mobile-primary) */
+    scoreCta: string;
     guarantee: string;
+    /** WhatsApp secondary CTA (replaces the old Telegram link) */
     secondaryCta: string;
+    /** Founding-rate microcopy under the Map CTA. */
+    foundingRateLine: (slotsLeft: number, foundingRate: string, standardRate: string) => string;
     closing: string;
   };
 
@@ -128,6 +161,8 @@ export interface NewPageDict {
     label: string;
     headline: string;
     items: { q: string; a: string }[];
+    /** Explicit guarantee, shown near the FAQ */
+    guarantee: string;
   };
 
   footer: {
@@ -137,6 +172,109 @@ export interface NewPageDict {
     waLabel: string;
   };
 }
+
+// ─── Shared data (identical across locales) ────────────────────────────────
+
+// Real client quotes — ported from components/Proof.tsx CARDS. Kept in their
+// original language (English) for both locales; these are verbatim reviews.
+const TESTIMONIAL_ITEMS: TestimonialItem[] = [
+  {
+    quote: "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!",
+    author: "Corinna C.",
+    role: "Verified client · UK",
+  },
+  {
+    quote: "Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.",
+    author: "Sophie M.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Excellent communication and very quick to understand what I was looking for. Delivered high-quality work with great attention to detail.",
+    author: "Daniel R.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym understood the brief quickly and delivered exactly what was needed. Communication was excellent throughout.",
+    author: "Eleanor K.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Great communication, very responsive, and delivered the work on time with high quality. Would definitely work with him again.",
+    author: "Rachel T.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Very easy to work with, excellent communication, and always available for feedback and revisions.",
+    author: "Chris B.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym delivered exactly what we needed. He was proactive with suggestions and very responsive throughout the project.",
+    author: "Laura P.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "You are so great to work with! Thank you so much for all your hard work and for being so patient with all of my changes.",
+    author: "Michelle K.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym was a fantastic partner on this project. His attention to detail and willingness to iterate until we got it just right made all the difference.",
+    author: "David W.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym is a great designer who listens carefully to what you need and delivers great results. Very responsive and professional.",
+    author: "Anna G.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym is very professional, responsive, and attentive to details. He really took the time to understand our brand and vision.",
+    author: "Tom H.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Professional, creative, and great at understanding the business needs behind the design request. Communication was top-notch.",
+    author: "Sarah L.",
+    role: "Verified client · 5★",
+  },
+  {
+    quote: "Maksym was a pleasure to work with and very very talented.",
+    author: "James T.",
+    role: "Verified client · 5★",
+  },
+];
+
+// Service tags — ported from components/GotAProblem.tsx SERVICES. SEO-breadth
+// keyword tags; kept in English for both locales.
+const SERVICES_TAGS: string[] = [
+  "WhatsApp Automation",
+  "AI Customer Service",
+  "Custom Automated Flows",
+  "Voice Agents",
+  "Lead Capture Automation",
+  "Appointment Booking AI",
+  "Multilingual Chatbots",
+  "CRM Integration",
+  "Financial Automation",
+  "Email Automation",
+  "24/7 AI Support",
+  "Sales Funnel Automation",
+  "eCommerce AI",
+  "Real Estate Lead Capture",
+  "Hospitality Automation",
+  "Healthcare Patient Intake",
+  "Legal Intake Automation",
+  "Restaurant Reservation AI",
+  "Beauty Salon Booking",
+  "After-Hours AI Support",
+  "Customer Journey Automation",
+  "WhatsApp Business API",
+  "AI Response Systems",
+  "Conversion Optimisation",
+  "Outbound AI Sequences",
+  "Booking & Scheduling AI",
+];
 
 // ─── EN ─────────────────────────────────────────────────────────────────────
 
@@ -155,13 +293,15 @@ const en: NewPageDict = {
 
   hero: {
     eyebrow: "The founder bottleneck",
-    headlineLines: [
-      "You're not losing deals because of your team.",
-      "You're losing them because you're the bottleneck —",
-      "and you can't be everywhere.",
-    ],
+    // Option A (live):
+    headlineLines: ["Your team isn't the bottleneck.", "You are."],
+    // Option B (kept for future A/B — not used):
+    //   headlineLines: ["You're the bottleneck.", "Let's find out what it costs."],
+    // Option C (kept for future A/B — not used):
+    //   headlineLines: ["You can't be everywhere.", "That's what it's costing you."],
     sub: "I find the one leak costing you the most — and plug it with AI that actually works. Or I tell you straight where AI isn't the answer.",
-    primaryCta: "Book the Bottleneck Map",
+    primaryCta: "Get your Bottleneck Score — 2 min, free",
+    secondaryCta: "Book the Bottleneck Map",
     guarantee: "10× the value or you don't pay — and you keep the map.",
     proofStrip: "3 systems live now · Amira · Elena Hotel & SPA · Voice AI",
     microcopy: "90 minutes. One-page map. No price talk yet — that's step two.",
@@ -177,6 +317,7 @@ const en: NewPageDict = {
       "You tried an AI tool once. It gave a real client hallucinated garbage. Never again.",
     ],
     punch: "If you got hit by a bus tomorrow, does the business survive past Friday?",
+    ctaLabel: "Find out what it's costing you — 2-min Bottleneck Score →",
   },
 
   reframe: {
@@ -197,12 +338,13 @@ const en: NewPageDict = {
         desc: "€2k/month in SaaS nobody logs into. You can't automate chaos — you have to fix it first.",
       },
     ],
+    ctaLabel: "Get your Bottleneck Score",
   },
 
   belief: {
     label: "Why I do this",
     headline: "Most founders build a prison and call it a business.",
-    body: "It only runs because they personally hold it together. And throwing AI at a messy business doesn't fix it — it just scales the mess. I learned that the hard way: I let go without the right systems, and nearly watched it crash. So now I help founders find the safest, highest-return first move — before they waste money building the wrong thing.",
+    body: "Throwing AI at a messy business doesn't fix it — it just scales the mess. I learned that the hard way, and nearly watched it crash. Now I help founders find the safest, highest-return first move — before they waste money building the wrong thing.",
     roleLine: "Operator, not consultant. I've been the trapped founder — this isn't theory for me.",
     signature: "— Maks Nedbailo, founder, Care Less",
   },
@@ -244,6 +386,7 @@ const en: NewPageDict = {
       bleedPayback: "Under 2 months",
       note: "Sample output — yours will be specific to your business.",
     },
+    ctaLabel: (rate) => `Book the Map — founding rate ${rate}`,
   },
 
   proof: {
@@ -268,13 +411,17 @@ const en: NewPageDict = {
         name: "Voice AI on Site",
         desc: "Voice agent answers site visitor questions in real time — no forms, no waiting.",
         tag: "Demo · Voice Agent",
-        href: "https://chasehughes.com/",
+        href: VOICE_DEMO_ANCHOR,
       },
     ],
-    slotLabel: "More case studies from first sessions — coming soon.",
-    videoLabel: "What it's like to work with me",
-    videoHeadline: "Hear it from people who've worked with me.",
-    videoSub: "Reliable, clear, and focused on the result — not the tooling.",
+    ctaLabel: "See your own numbers in 2 minutes →",
+  },
+
+  testimonials: {
+    label: "What it's like to work with me",
+    headline: "Hear it from people who've worked with me.",
+    sub: "Reliable, clear, and focused on the result — not the tooling.",
+    items: TESTIMONIAL_ITEMS,
   },
 
   whyMe: {
@@ -290,13 +437,23 @@ const en: NewPageDict = {
     ],
   },
 
+  services: {
+    label: "Got a different problem? We've probably solved one like it",
+    tags: SERVICES_TAGS,
+  },
+
   cta: {
     label: "Find your one leak",
     headline: "Find the leak. Fix it first. Or don't — your call.",
     sub: "90 minutes. One-page, ROI-ranked map of where your time, money, and founder-energy are leaking.",
     primaryCta: "Book the Bottleneck Map",
+    scoreCta: "Get your Bottleneck Score",
     guarantee: "10× the value, or you don't pay — and you keep the map either way.",
-    secondaryCta: "Message me first",
+    secondaryCta: "Quick question? WhatsApp me",
+    foundingRateLine: (slotsLeft, foundingRate, standardRate) =>
+      slotsLeft > 0
+        ? `Founding rate: first 5 sessions at ${foundingRate} (standard ${standardRate}) — fully credited toward your first build. ${slotsLeft} of 5 remaining.`
+        : `Standard rate: ${standardRate} — fully credited toward your first build.`,
     closing: "If there's no clear opportunity, I'll tell you. That's part of the work.",
   },
 
@@ -307,6 +464,10 @@ const en: NewPageDict = {
       {
         q: "Is this just a sales call?",
         a: "No. It's 90 minutes of real diagnostic work. You'll leave with a one-page map even if we never work together again. If there's no clear opportunity, I'll tell you straight — that's part of the deal.",
+      },
+      {
+        q: "What's the Bottleneck Score?",
+        a: "A free 2-minute self-assessment. It estimates what your founder-bottleneck is costing per month and shows your #1 leak category. No call, no obligation — the Map makes it exact.",
       },
       {
         q: "What if AI isn't the answer for my business?",
@@ -324,7 +485,52 @@ const en: NewPageDict = {
         q: "Who is this NOT for?",
         a: "Solopreneurs under €1M (no team to free up), and 100–1000-employee companies (committee decisions, 6-month cycles — a different process entirely). If that's you, this probably isn't the right fit yet.",
       },
+      {
+        q: "Will it sound like a robot?",
+        a: "No. It's trained on YOUR voice, YOUR answers, YOUR way of talking to customers. Most people can't tell the difference.",
+      },
+      {
+        q: "How much time and money can I realistically save?",
+        a: "Most clients recover 15–30 hours per month in manual follow-ups and missed-message handling. In revenue terms, capturing even 3–4 leads per month that would have gone unanswered typically pays for the entire system — often within the first week.",
+      },
+      {
+        q: "How long does it take to see real results?",
+        a: "Most clients see their first captured lead within 48 hours of going live. Measurable response-time improvements are visible from day one. ROI typically shows up within the first 2–4 weeks.",
+      },
+      {
+        q: "Will it work with the tools I already use?",
+        a: "Yes. It integrates with WhatsApp, your website, Google Calendar, and most booking systems. We map your existing tools before building anything — the goal is to plug into what you already have, not force you to switch.",
+      },
+      {
+        q: "What if it gives a wrong answer?",
+        a: "It only answers from information you approve. Anything it's unsure about gets sent straight to you. It never gives medical, legal, or professional advice — just handles bookings, hours, location, and common questions. You stay in control.",
+      },
+      {
+        q: "Is this just another expensive tool I'll have to manage myself?",
+        a: "No. You don't manage anything. We build it, monitor it, and maintain it. Your only job is to keep doing what you do — we handle the rest. And the monthly cost is less than a part-time employee's weekly wage.",
+      },
+      {
+        q: "Can I start small with just one process?",
+        a: "Absolutely. Most clients start with one channel — usually WhatsApp — and expand from there once they see results. You don't have to automate everything on day one.",
+      },
+      {
+        q: "How secure is my business data?",
+        a: "Your business data stays within systems you control. We don't store customer conversations on external servers. Everything is built with privacy-first principles, and we're happy to walk you through the technical setup before we start.",
+      },
+      {
+        q: "What does ongoing support look like after setup?",
+        a: "We're available via WhatsApp for any issues that come up. Most clients need very little support after setup — but if something breaks or needs updating, we handle it fast. No ticket systems, no waiting in queues.",
+      },
+      {
+        q: "I'm not techy. Will this be complicated for me?",
+        a: "You won't touch any technology. We set it up, configure it, and test it. You just keep doing what you're already doing.",
+      },
+      {
+        q: "What's the difference between cheap off-the-shelf AI tools and what you build?",
+        a: "Off-the-shelf tools are built for everyone, which means they work perfectly for no one. What we build is trained specifically on your business: your services, your tone, your most common questions. The result is an assistant that sounds like you — not a generic chatbot that frustrates customers.",
+      },
     ],
+    guarantee: "If I don't find at least €10,000/year in recoverable cost, the session is refunded and you keep the map.",
   },
 
   footer: {
@@ -335,205 +541,19 @@ const en: NewPageDict = {
   },
 };
 
-// ─── UK ─────────────────────────────────────────────────────────────────────
+// ─── ES ─────────────────────────────────────────────────────────────────────
+//
+// TODO: translate — every string below is the EN copy, used as a placeholder
+// so the EN/ES toggle is fully wired before Maks approves Spanish copy.
+// Positioning copy is locked; do not machine-translate it. Replace field by
+// field (or the whole object) with reviewed Spanish translations.
 
-const PILLAR_PAINS_UK: [[string, string], [string, string], [string, string]] = [
-  ["Затримка відповіді на ліди (>4 год)", "Ручне ведення нагадувань про бронювання"],
-  ["Знання зосереджені в голові засновника", "Нотатки з нарад та відстеження задач"],
-  ["Обробка рахунків та документів", "Щотижнева звітність для стейкхолдерів"],
-];
-
-const uk: NewPageDict = {
-  header: {
-    ctaLabel: "Забронювати Карту вузьких місць",
-    aiMapLabel: "AI Карта",
-    blogLabel: "Блог",
-  },
-
-  hero: {
-    eyebrow: "Вузьке місце — засновник",
-    headlineLines: [
-      "Ви втрачаєте угоди не через команду.",
-      "Ви втрачаєте їх, бо вузьке місце — це ви,",
-      "а бути всюди одразу неможливо.",
-    ],
-    sub: "Я знаходжу витік, який коштує вам найдорожче — і закриваю його за допомогою ШІ, що реально працює. Або чесно кажу, де ШІ не є рішенням.",
-    primaryCta: "Забронювати Карту вузьких місць",
-    guarantee: "10× віддачі — або ви не платите. Карта залишається у вас.",
-    proofStrip: "3 системи вже працюють · Amira · Elena Hotel & SPA · Голосовий ШІ",
-    microcopy: "90 хвилин. Карта на одну сторінку. Про ціну поки не йдеться — це наступний крок.",
-  },
-
-  pain: {
-    label: "Знайомо?",
-    headline: "Кожне рішення досі проходить через вас.",
-    lines: [
-      "Кожне рішення проходить через вас — навіть дрібні.",
-      "Три угоди по €20k зависли у воронці, бо цього тижня ви не встигли їх переглянути.",
-      "Ви перемагаєте, коли ви в кімнаті. Програєте, коли делегуєте. Але в чотирьох кімнатах одночасно бути не можна.",
-      "Ви вже пробували ШІ-інструмент. Він видав реальному клієнту нісенітницю. Більше ніколи.",
-    ],
-    punch: "Якщо завтра вас зіб'є автобус — бізнес переживе хоча б до п'ятниці?",
-  },
-
-  reframe: {
-    label: "Перш ніж говорити про ШІ",
-    headline: "Вам не потрібен ще один ШІ-інструмент.",
-    body: "Більшість порад про ШІ зараз — це хайп, а хаос автоматизувати не можна. Питання не «який інструмент ШІ?». Питання — «що насправді варто виправити першим?»",
-    enemies: [
-      {
-        title: "ШІ-хайп",
-        desc: "Гуру кричать про «ШІ-агентів», курси віддають вам чат-бота, який вигадує нісенітниці прямо перед вашими клієнтами.",
-      },
-      {
-        title: "Консультанти з презентаціями",
-        desc: "Ніколи не керували реальним бізнесом. Віддають баззворди, забирають оплату — і зникають.",
-      },
-      {
-        title: "Перевантаженість сервісами",
-        desc: "€2000/міс на SaaS, у які ніхто не заходить. Хаос автоматизувати не можна — спочатку його треба прибрати.",
-      },
-    ],
-  },
-
-  belief: {
-    label: "Чому я цим займаюсь",
-    headline: "Більшість засновників будують в'язницю і називають її бізнесом.",
-    body: "Він тримається лише тому, що вони особисто все утримують на собі. А накидати ШІ на хаотичний бізнес — це не вирішення, це лише масштабування хаосу. Я зрозумів це на власному досвіді: відпустив контроль без потрібних систем — і мало не побачив, як усе руйнується. Тому тепер я допомагаю засновникам знайти найбезпечніший крок із найбільшою віддачею — перш ніж вони витратять гроші на щось не те.",
-    roleLine: "Оператор, не консультант. Я сам був тим засновником-заручником — для мене це не теорія.",
-    signature: "— Макс Недбайло, засновник Care Less",
-  },
-
-  map: {
-    label: "Механізм",
-    headline: "Карта вузьких місць — 90 хвилин, пріоритет за ROI.",
-    body: "ROI-перш-за-все діагностика, а не інструменти. Спочатку процес, потім автоматизація — хаос автоматизувати не можна. За 90 хвилин ми знаходимо 3 напрями, де вузьке місце — це ви, скільки кожен з них вам коштує, і що насправді варто виправити.",
-    bullets: [
-      "3 напрями, де вузьке місце — це ви",
-      "Скільки кожен з них коштує — у часі, грошах або і тому, і тому",
-      "Що варто автоматизувати, делегувати, спростити або ігнорувати",
-      "Один фікс, з якого варто почати — за пріоритетом ROI",
-      "Людина + ШІ, ніколи ШІ-перш-за-все. Спочатку процес, потім автоматизація.",
-    ],
-    note: "Навіть Klarna спершу зробила ставку на ШІ, вперлась у стелю якості — і повернула людей. Ми починаємо там, де вони закінчили.",
-    sample: {
-      docTitle: "Карта вузьких місць",
-      clientLabel: "[Назва вашого бізнесу]",
-      sessionLabel: "РЕЗУЛЬТАТ 90-ХВ. СЕСІЇ",
-      studioName: "Care Less",
-      pillarLabels: ["Комунікація з клієнтами", "Внутрішні знання та операції", "Повторювані процеси"],
-      pillarPains: PILLAR_PAINS_UK,
-      pillarPrefix: (n, label) => `Напрям ${n} — ${label}`,
-      colPain: "Проблема",
-      colLosingNow: "Втрачаєте зараз",
-      colFeasibility: "Здійсненність ШІ",
-      colPriority: "Пріоритет",
-      phase1Heading: "Рекомендований перший крок",
-      phase1Rec: "#1 — Система реагування на ліди · WhatsApp + сайт · цілодобово",
-      phase1Timeline: "2–3 тижні",
-      phase1IfProceed: "якщо вирішите впроваджувати",
-      bleedLabel: "Приклад витоку",
-      bleedStat: "~€6,000/міс",
-      bleedAnnual: "(~€72k/рік)",
-      bleedDesc: (phase1Anchor) =>
-        `Цей бізнес втрачає ~€6,000/міс (~€72k/рік) — прямі витрати плюс згаяний час засновника (~21 год/тиждень). Перший крок закриває найбільший витік (#1 — затримка відповіді на ліди, ~€2,400/міс): ${phase1Anchor} одноразово. Окупність — менш ніж 2 місяці, і економія тільки зростає.`,
-      bleedPhase1Label: "Перший крок",
-      bleedPayback: "Менш ніж 2 місяці",
-      note: "Приклад результату — ваша карта буде специфічною під ваш бізнес.",
-    },
-  },
-
-  proof: {
-    label: "Докази",
-    headline: "Реальні системи, які працюють просто зараз.",
-    sub: "Програмне забезпечення в продакшені, реальні розмови щодня.",
-    liveBadge: "LIVE",
-    cases: [
-      {
-        name: "Amira for HC MedSpa",
-        desc: "ШІ-агент для обробки лідів. Відповідає за 9 секунд у WhatsApp та на сайті.",
-        tag: "UK Med Spa · Реагування на ліди",
-        href: "/automations/hcmedspa",
-      },
-      {
-        name: "Elena Hotel & SPA",
-        desc: "ШІ-агент обробляє запити на бронювання і відповідає на питання гостей — цілодобово у WhatsApp та на сайті.",
-        tag: "Готель · Бронювання та підтримка",
-        href: "https://bukovel-elena.com.ua/en/",
-      },
-      {
-        name: "Voice AI on Site",
-        desc: "Голосовий агент відповідає на запитання відвідувачів сайту в реальному часі — без форм, без очікування.",
-        tag: "Демо · Голосовий агент",
-        href: "https://chasehughes.com/",
-      },
-    ],
-    slotLabel: "Кейси з перших сесій — скоро.",
-    videoLabel: "Як це — працювати зі мною",
-    videoHeadline: "Послухайте тих, хто вже працював зі мною.",
-    videoSub: "Надійність, чіткість і фокус на результаті — а не на інструментах.",
-  },
-
-  whyMe: {
-    label: "Чому я",
-    headline: "Чому це не чергова пропозиція від агентства.",
-    colThem: "Інші",
-    colMe: "Care Less",
-    rows: [
-      ["Консультант з презентацією", "Оператор, який сам був засновником-заручником"],
-      ["«ШІ змінить все»", "Я покажу, де ШІ окупається — а де ні"],
-      ["Продає вам інструменти", "Продає ясність, а потім — один фікс, який варто будувати"],
-      ["Стверджує, що знає вашу галузь", "Не вдає цього — і йому це не потрібно"],
-    ],
-  },
-
-  cta: {
-    label: "Знайдіть свій витік",
-    headline: "Знайдіть витік. Виправте його першим. Або ні — рішення за вами.",
-    sub: "90 хвилин. Карта на одну сторінку, з пріоритетами за ROI: де саме витікають ваш час, гроші та енергія засновника.",
-    primaryCta: "Забронювати Карту вузьких місць",
-    guarantee: "10× віддачі — або ви не платите. Карта залишається у вас у будь-якому разі.",
-    secondaryCta: "Написати спочатку",
-    closing: "Якщо чіткої можливості немає — я так і скажу. Це теж частина роботи.",
-  },
-
-  faq: {
-    label: "FAQ",
-    headline: "Перш ніж забронювати",
-    items: [
-      {
-        q: "Це просто продажний дзвінок?",
-        a: "Ні. Це 90 хвилин реальної діагностичної роботи. Ви підете з картою на одну сторінку, навіть якщо ми більше ніколи не працюватимемо разом. Якщо чіткої можливості немає — я так і скажу, це частина угоди.",
-      },
-      {
-        q: "А якщо ШІ — не рішення для мого бізнесу?",
-        a: "Тоді я прямо це скажу. Іноді найвигідніший за ROI крок — це зміна процесу або найм людини, а не софт. Я краще втрачу продаж, ніж продам вам те, що вам не потрібне.",
-      },
-      {
-        q: "Що я отримаю в результаті?",
-        a: "Карту на одну сторінку з пріоритетами за ROI: 3 напрями, де вузьке місце — це ви, скільки коштує кожен з них, що варто автоматизувати / делегувати / спростити / ігнорувати, і один фікс, з якого варто почати.",
-      },
-      {
-        q: "Кому це підходить?",
-        a: "Власникам бізнесів із виручкою приблизно €3–10 млн, 20–50 співробітників, де засновник досі є операційною системою — кожне рішення проходить через вас, ви вирішуєте самостійно і маєте реальний бюджет.",
-      },
-      {
-        q: "Кому це НЕ підходить?",
-        a: "Соло-підприємцям з виручкою до €1 млн (немає команди, яку треба розвантажити) та компаніям зі 100–1000 співробітниками (рішення комітетом, цикли по 6 місяців — це зовсім інший процес). Якщо це про вас, поки що це, ймовірно, не той формат.",
-      },
-    ],
-  },
-
-  footer: {
-    credit: "care less AI automation",
-    location: "Сантандер, Іспанія",
-    tagline: "ROI-перш-за-все діагностика ШІ для бізнесів під керівництвом власника. Чесно про те, де ШІ допомагає — а де ні.",
-    waLabel: "Швидке питання? Напишіть мені у WhatsApp",
-  },
+const es: NewPageDict = {
+  ...en,
 };
 
 // ─── Accessor ───────────────────────────────────────────────────────────────
 
 export function getNewDict(locale: NewLocale): NewPageDict {
-  return locale === "uk" ? uk : en;
+  return locale === "es" ? es : en;
 }

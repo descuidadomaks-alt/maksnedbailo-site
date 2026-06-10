@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
+import { SCORE_TARGET } from "../lib/config";
 
 /**
  * Section 2 — SOUND FAMILIAR? (the pain, in their words)
@@ -53,6 +55,18 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
           >
             {d.pain.punch}
           </p>
+        </div>
+
+        {/* CTA — low-friction, routes to the Bottleneck Score */}
+        <div data-reveal className="text-center mt-8">
+          <Link
+            href={SCORE_TARGET}
+            className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent"
+            style={{ fontSize: "13px" }}
+          >
+            {d.pain.ctaLabel}
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+          </Link>
         </div>
 
       </div>

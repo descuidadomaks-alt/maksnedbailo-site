@@ -2,7 +2,7 @@
 
 /**
  * /new — minimal fixed header.
- * Logo (-> /new), AI Map link, EN/УК toggle, "Book the Bottleneck Map" CTA.
+ * Logo (-> /new), AI Map link, EN/ES toggle, "Book the Bottleneck Map" CTA.
  * Visual language ported from NavNew.tsx / DirectLocaleWrapper.tsx (frosted glass).
  */
 
@@ -58,7 +58,7 @@ export default function NewHeader() {
 
           {/* AI Map */}
           <Link
-            href={locale === "uk" ? "/ai-map?lang=uk" : "/ai-map"}
+            href={locale === "es" ? "/ai-map?lang=es" : "/ai-map"}
             className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
             style={GLASS}
             aria-label="AI Map"
@@ -67,7 +67,7 @@ export default function NewHeader() {
             <span className="hidden xs:inline">{d.header.aiMapLabel}</span>
           </Link>
 
-          {/* EN / УК switcher */}
+          {/* EN / ES switcher */}
           <div className="flex items-center gap-0.5 p-1" style={GLASS}>
             <button
               onClick={() => setLocale("en")}
@@ -80,14 +80,14 @@ export default function NewHeader() {
               EN
             </button>
             <button
-              onClick={() => setLocale("uk")}
+              onClick={() => setLocale("es")}
               className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
-                locale === "uk" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
+                locale === "es" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
               }`}
-              aria-pressed={locale === "uk"}
-              aria-label="Перемкнути на українську"
+              aria-pressed={locale === "es"}
+              aria-label="Cambiar a español"
             >
-              УК
+              ES
             </button>
           </div>
 

@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
+import { SCORE_TARGET } from "../lib/config";
 
 function XIcon() {
   return (
@@ -27,20 +29,20 @@ export default function Reframe({ d }: { d: NewPageDict }) {
 
       <div className="relative max-w-6xl mx-auto px-6">
 
-        <div className="max-w-2xl mb-12">
+        <div className="max-w-2xl mx-auto mb-12 text-center">
           <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.reframe.label}
           </p>
-          <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
+          <h2 data-reveal className="font-playfair font-normal text-fg mb-6 mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
             {d.reframe.headline}
           </h2>
-          <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85]" style={{ fontSize: "15px", maxWidth: "62ch" }}>
+          <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85] mx-auto" style={{ fontSize: "15px", maxWidth: "62ch" }}>
             {d.reframe.body}
           </p>
         </div>
 
         {/* The three enemies */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
           {d.reframe.enemies.map((enemy, i) => (
             <div
               key={i}
@@ -62,6 +64,18 @@ export default function Reframe({ d }: { d: NewPageDict }) {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* CTA — low-friction, routes to the Bottleneck Score */}
+        <div data-reveal className="text-center">
+          <Link
+            href={SCORE_TARGET}
+            className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
+            style={{ fontSize: "14px", padding: "15px 32px", minHeight: "52px", letterSpacing: "-0.01em" }}
+          >
+            {d.reframe.ctaLabel}
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+          </Link>
         </div>
 
       </div>
