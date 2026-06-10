@@ -17,13 +17,14 @@ function TelegramIcon() {
  */
 export default function FinalCTA({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-28">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
       <div
         aria-hidden
-        className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none"
+        className="absolute left-0 top-0 pointer-events-none"
         style={{ width: "600px", height: "400px", background: "radial-gradient(ellipse, rgba(212,255,43,0.055) 0%, transparent 68%)" }}
       />
-      <div className="relative max-w-lg mx-auto px-6 text-center">
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="max-w-2xl">
 
         <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.cta.label}
@@ -36,7 +37,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
           {d.cta.sub}
         </p>
 
-        <div data-reveal="d1" className="flex flex-col items-center gap-4">
+        <div data-reveal="d1" className="flex flex-col items-start gap-4">
           <a
             href={CTA_TARGET}
             target="_blank"
@@ -69,6 +70,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
           </p>
         </div>
 
+        </div>
       </div>
     </section>
   );

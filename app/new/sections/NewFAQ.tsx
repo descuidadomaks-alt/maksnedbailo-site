@@ -39,9 +39,16 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
   };
 
   return (
-    <section className="section-divider py-14 md:py-20">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 700px 420px at 4% 0%, rgba(212,255,43,0.035) 0%, transparent 70%)" }}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <div className="max-w-3xl mx-auto px-6">
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="max-w-3xl">
 
         <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.faq.label}
@@ -71,6 +78,7 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
           })}
         </div>
 
+        </div>
       </div>
     </section>
   );

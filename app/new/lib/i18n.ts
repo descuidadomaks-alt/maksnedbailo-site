@@ -56,6 +56,10 @@ export interface NewPageDict {
     headlineLines: string[];
     sub: string;
     primaryCta: string;
+    /** Risk-reversal line shown directly under the hero CTA */
+    guarantee: string;
+    /** Mono mini-proof strip shown in the hero, above the fold */
+    proofStrip: string;
     microcopy: string;
   };
 
@@ -150,7 +154,7 @@ const en: NewPageDict = {
   },
 
   hero: {
-    eyebrow: "For founders who are the bottleneck",
+    eyebrow: "The founder bottleneck",
     headlineLines: [
       "You're not losing deals because of your team.",
       "You're losing them because you're the bottleneck —",
@@ -158,6 +162,8 @@ const en: NewPageDict = {
     ],
     sub: "I find the one leak costing you the most — and plug it with AI that actually works. Or I tell you straight where AI isn't the answer.",
     primaryCta: "Book the Bottleneck Map",
+    guarantee: "10× the value or you don't pay — and you keep the map.",
+    proofStrip: "3 systems live now · Amira · Elena Hotel & SPA · Voice AI",
     microcopy: "90 minutes. One-page map. No price talk yet — that's step two.",
   },
 
@@ -345,7 +351,7 @@ const uk: NewPageDict = {
   },
 
   hero: {
-    eyebrow: "Для засновників, які самі є вузьким місцем",
+    eyebrow: "Вузьке місце — засновник",
     headlineLines: [
       "Ви втрачаєте угоди не через команду.",
       "Ви втрачаєте їх, бо вузьке місце — це ви,",
@@ -353,6 +359,8 @@ const uk: NewPageDict = {
     ],
     sub: "Я знаходжу витік, який коштує вам найдорожче — і закриваю його за допомогою ШІ, що реально працює. Або чесно кажу, де ШІ не є рішенням.",
     primaryCta: "Забронювати Карту вузьких місць",
+    guarantee: "10× віддачі — або ви не платите. Карта залишається у вас.",
+    proofStrip: "3 системи вже працюють · Amira · Elena Hotel & SPA · Голосовий ШІ",
     microcopy: "90 хвилин. Карта на одну сторінку. Про ціну поки не йдеться — це наступний крок.",
   },
 

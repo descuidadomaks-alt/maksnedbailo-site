@@ -97,38 +97,40 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
     <>
       {/* ── Mechanism intro — VoidSection (pure black, parallax dots) ── */}
       <VoidSection className="section-divider">
-        <div className="max-w-3xl mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-            {d.map.label}
-          </p>
-          <h2
-            data-reveal
-            className="font-playfair font-normal text-fg mb-6"
-            style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "24ch" }}
-          >
-            {d.map.headline}
-          </h2>
-          <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
-            {d.map.body}
-          </p>
+        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+          <div className="max-w-2xl flex flex-col items-start text-left">
+            <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+              {d.map.label}
+            </p>
+            <h2
+              data-reveal
+              className="font-playfair font-normal text-fg mb-6"
+              style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "24ch" }}
+            >
+              {d.map.headline}
+            </h2>
+            <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
+              {d.map.body}
+            </p>
 
-          <ul data-reveal className="flex flex-col gap-3 text-left mb-8 mx-auto" style={{ maxWidth: "52ch" }}>
-            {d.map.bullets.map((bullet, i) => (
-              <li key={i} className="flex items-start gap-3 font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "14px" }}>
-                <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full" style={{ background: "rgba(212,255,43,0.6)" }} aria-hidden />
-                {bullet}
-              </li>
-            ))}
-          </ul>
+            <ul data-reveal className="flex flex-col gap-3 mb-8" style={{ maxWidth: "52ch" }}>
+              {d.map.bullets.map((bullet, i) => (
+                <li key={i} className="flex items-start gap-3 font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "14px" }}>
+                  <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full" style={{ background: "rgba(212,255,43,0.6)" }} aria-hidden />
+                  {bullet}
+                </li>
+              ))}
+            </ul>
 
-          <p data-reveal className="font-sora font-light italic text-fg/30 leading-[1.7]" style={{ fontSize: "13px", maxWidth: "52ch" }}>
-            {d.map.note}
-          </p>
+            <p data-reveal className="font-sora font-light italic text-fg/30 leading-[1.7]" style={{ fontSize: "13px", maxWidth: "52ch" }}>
+              {d.map.note}
+            </p>
+          </div>
         </div>
       </VoidSection>
 
       {/* ── Sample map table — ported from SectionOfferGlance ── */}
-      <section className="py-14 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <p data-reveal className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>

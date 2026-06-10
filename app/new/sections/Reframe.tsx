@@ -17,18 +17,27 @@ function XIcon() {
  */
 export default function Reframe({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider py-16 md:py-24">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 760px 460px at 92% 100%, rgba(34,158,217,0.04) 0%, transparent 70%)" }}
+      />
 
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.reframe.label}
-        </p>
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
-          {d.reframe.headline}
-        </h2>
-        <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85] mb-12" style={{ fontSize: "15px", maxWidth: "62ch" }}>
-          {d.reframe.body}
-        </p>
+      <div className="relative max-w-6xl mx-auto px-6">
+
+        <div className="max-w-2xl mb-12">
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.reframe.label}
+          </p>
+          <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
+            {d.reframe.headline}
+          </h2>
+          <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85]" style={{ fontSize: "15px", maxWidth: "62ch" }}>
+            {d.reframe.body}
+          </p>
+        </div>
 
         {/* The three enemies */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

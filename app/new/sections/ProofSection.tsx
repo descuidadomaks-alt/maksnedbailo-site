@@ -6,8 +6,10 @@ import { content } from "@/lib/content";
 
 /**
  * Section 6 — PROOF, two kinds.
- *  a) "Real systems, live now" (capability) — 3 live case cards.
- *     Card layout ported from app/ai-map/sections/DirectProof.tsx.
+ *  a) "Real systems, live now" (capability) — 3 live case cards, each with
+ *     a small agent-UI mock (chat reply / booking confirmation / voice
+ *     waveform) so proof is visual, not text-only. Card layout ported from
+ *     app/ai-map/sections/DirectProof.tsx.
  *  b) "What it's like to work with me" (trust) — ported video testimonials.
  *     VideoEmbed ported from components/Proof.tsx; source data from
  *     lib/content.ts -> content.proof.videos (Garrett Williams, AJ).
@@ -20,6 +22,85 @@ function ArrowIcon() {
     </svg>
   );
 }
+
+/** Visual mock #1 — WhatsApp-style chat thread, 9-second reply (Amira). */
+function ChatMock() {
+  return (
+    <div className="rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+      <div className="px-3 py-2 flex items-center gap-2 border-b border-white/[0.05]">
+        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
+        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
+      </div>
+      <div className="p-3 flex flex-col gap-2">
+        <div className="self-start max-w-[82%] rounded-lg rounded-bl-sm px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.05)" }}>
+          <p className="font-sora text-fg/55" style={{ fontSize: "11px", lineHeight: 1.4 }}>
+            Hi, do you have availability for a consultation this week?
+          </p>
+        </div>
+        <div className="self-end max-w-[82%] rounded-lg rounded-br-sm px-2.5 py-1.5" style={{ background: "rgba(212,255,43,0.1)" }}>
+          <p className="font-sora text-fg/75" style={{ fontSize: "11px", lineHeight: 1.4 }}>
+            Yes! I have Tuesday 2pm or Thursday 10am — which works better for you?
+          </p>
+        </div>
+        <span className="font-label text-accent/55 self-end" style={{ fontSize: "9px", letterSpacing: "1px" }}>
+          replied in 9s
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Visual mock #2 — booking confirmation card (Elena Hotel & SPA). */
+function BookingMock() {
+  return (
+    <div className="rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+      <div className="px-3 py-2 flex items-center justify-between border-b border-white/[0.05]">
+        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>BOOKING CONFIRMED</span>
+        <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
+      </div>
+      <div className="p-3 flex flex-col gap-1.5">
+        <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room · 2 nights</p>
+        <p className="font-sora text-fg/38" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
+        <div className="flex items-center justify-between mt-1.5 pt-1.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
+          <span className="font-sora text-fg/28" style={{ fontSize: "10px" }}>Confirmed via WhatsApp</span>
+          <span className="font-numeral font-bold text-accent" style={{ fontSize: "12px" }}>#EH-2291</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Visual mock #3 — live voice agent waveform (Voice AI on Site). */
+const WAVEFORM_BARS = [35, 60, 28, 80, 50, 95, 42, 70, 30, 55, 88, 46, 28, 62, 92, 38, 52, 72, 40, 26];
+
+function VoiceMock() {
+  return (
+    <div className="rounded-xl overflow-hidden border border-white/[0.06] p-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+      <div className="flex items-center justify-between mb-2.5">
+        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
+        <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
+      </div>
+      <div className="flex items-end gap-[2px]" style={{ height: "36px" }} aria-hidden>
+        {WAVEFORM_BARS.map((h, i) => (
+          <span
+            key={i}
+            style={{
+              width: "3px",
+              height: `${h}%`,
+              background: i % 3 === 0 ? "rgba(212,255,43,0.55)" : "rgba(240,236,230,0.16)",
+              borderRadius: "2px",
+            }}
+          />
+        ))}
+      </div>
+      <p className="font-sora font-light italic text-fg/35 mt-2.5" style={{ fontSize: "11px", lineHeight: 1.4 }}>
+        &ldquo;Sure — let me check our availability for you.&rdquo;
+      </p>
+    </div>
+  );
+}
+
+const CASE_VISUALS = [ChatMock, BookingMock, VoiceMock];
 
 function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: string; company: string }) {
   return (
@@ -34,7 +115,7 @@ function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: str
           loading="lazy"
         />
       </div>
-      <div className="text-center">
+      <div className="text-left">
         <p className="font-sora text-[12px] font-semibold text-fg/65">{name}</p>
         <p className="font-sora text-[10px] text-fg/30 mt-0.5">{company}</p>
       </div>
@@ -44,46 +125,61 @@ function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: str
 
 export default function ProofSection({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider py-16 md:py-24">
-      <div className="max-w-5xl mx-auto px-6">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 800px 480px at 88% 0%, rgba(212,255,43,0.04) 0%, transparent 70%)" }}
+      />
+
+      <div className="relative max-w-6xl mx-auto px-6">
 
         {/* ── 6a: Real systems, live now ── */}
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.proof.label}
-        </p>
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-4" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>
-          {d.proof.headline}
-        </h2>
-        <p data-reveal className="font-sora font-light text-fg/35 mb-12" style={{ fontSize: "14px" }}>
-          {d.proof.sub}
-        </p>
+        <div className="max-w-2xl mb-12">
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.proof.label}
+          </p>
+          <h2 data-reveal className="font-playfair font-normal text-fg mb-4" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>
+            {d.proof.headline}
+          </h2>
+          <p data-reveal className="font-sora font-light text-fg/35" style={{ fontSize: "14px" }}>
+            {d.proof.sub}
+          </p>
+        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch mb-8">
-          {d.proof.cases.map((c, i) => (
-            <Link
-              key={i}
-              href={c.href}
-              target={c.href.startsWith("http") ? "_blank" : undefined}
-              rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              data-reveal={`d${i}`}
-              className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-3 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-playfair font-normal text-fg/75" style={{ fontSize: "clamp(14px, 1.3vw, 16px)", lineHeight: 1.3 }}>
-                  {c.name}
-                </h3>
-                <div className="shrink-0 flex items-center gap-2 mt-0.5">
-                  <div className="live-badge-pulse flex items-center gap-1" style={{ background: "rgba(74,222,128,0.07)", border: "1px solid rgba(74,222,128,0.2)", borderRadius: "999px", padding: "2px 7px" }}>
-                    <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: "rgb(74,222,128)" }} />
-                    <span className="font-sora font-semibold" style={{ fontSize: "8px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.75)" }}>{d.proof.liveBadge}</span>
+          {d.proof.cases.map((c, i) => {
+            const Visual = CASE_VISUALS[i];
+            return (
+              <Link
+                key={i}
+                href={c.href}
+                target={c.href.startsWith("http") ? "_blank" : undefined}
+                rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                data-reveal={`d${i}`}
+                className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-4 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
+              >
+                {Visual && <Visual />}
+                <div className="flex flex-col gap-3 flex-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-playfair font-normal text-fg/75" style={{ fontSize: "clamp(14px, 1.3vw, 16px)", lineHeight: 1.3 }}>
+                      {c.name}
+                    </h3>
+                    <div className="shrink-0 flex items-center gap-2 mt-0.5">
+                      <div className="live-badge-pulse flex items-center gap-1" style={{ background: "rgba(74,222,128,0.07)", border: "1px solid rgba(74,222,128,0.2)", borderRadius: "999px", padding: "2px 7px" }}>
+                        <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: "rgb(74,222,128)" }} />
+                        <span className="font-sora font-semibold" style={{ fontSize: "8px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.75)" }}>{d.proof.liveBadge}</span>
+                      </div>
+                      <span className="text-fg/20 group-hover:text-fg/40 transition-colors duration-200"><ArrowIcon /></span>
+                    </div>
                   </div>
-                  <span className="text-fg/20 group-hover:text-fg/40 transition-colors duration-200"><ArrowIcon /></span>
+                  <p className="font-sora font-light text-fg/38 leading-[1.65]" style={{ fontSize: "13px" }}>{c.desc}</p>
+                  <span className="font-sora text-fg/20 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>{c.tag}</span>
                 </div>
-              </div>
-              <p className="font-sora font-light text-fg/38 leading-[1.65]" style={{ fontSize: "13px" }}>{c.desc}</p>
-              <span className="font-sora text-fg/20 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>{c.tag}</span>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         <div data-reveal className="rounded-2xl border border-dashed border-white/[0.08] p-6 text-center mb-20" style={{ background: "rgba(255,255,255,0.008)" }}>
@@ -93,17 +189,19 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
         </div>
 
         {/* ── 6b: What it's like to work with me — ported video testimonials ── */}
-        <p data-reveal className="font-label text-fg/28 mb-5 text-center" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.proof.videoLabel}
-        </p>
-        <h3 data-reveal className="font-playfair font-normal text-fg mb-3 text-center" style={{ fontSize: "clamp(20px, 2.6vw, 32px)", lineHeight: 1.2, letterSpacing: "-0.02em" }}>
-          {d.proof.videoHeadline}
-        </h3>
-        <p data-reveal className="font-sora font-light text-fg/35 mb-10 text-center" style={{ fontSize: "14px" }}>
-          {d.proof.videoSub}
-        </p>
+        <div className="max-w-2xl mb-10">
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.proof.videoLabel}
+          </p>
+          <h3 data-reveal className="font-playfair font-normal text-fg mb-3" style={{ fontSize: "clamp(20px, 2.6vw, 32px)", lineHeight: 1.2, letterSpacing: "-0.02em" }}>
+            {d.proof.videoHeadline}
+          </h3>
+          <p data-reveal className="font-sora font-light text-fg/35" style={{ fontSize: "14px" }}>
+            {d.proof.videoSub}
+          </p>
+        </div>
 
-        <div data-reveal className="grid grid-cols-2 gap-4 sm:gap-6 max-w-[640px] mx-auto">
+        <div data-reveal className="grid grid-cols-2 gap-4 sm:gap-6" style={{ maxWidth: "640px" }}>
           {content.proof.videos.map((video, i) => (
             <VideoEmbed key={i} youtubeId={video.youtubeId} name={video.name} company={video.company} />
           ))}

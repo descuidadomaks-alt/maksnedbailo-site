@@ -8,34 +8,43 @@ import type { NewPageDict } from "../lib/i18n";
  */
 export default function SoundFamiliar({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider py-16 md:py-24">
-      <div className="max-w-3xl mx-auto px-6">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient — ties this section into the page-wide depth */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 700px 420px at 8% 0%, rgba(212,255,43,0.035) 0%, transparent 70%)" }}
+      />
 
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.pain.label}
-        </p>
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
-          {d.pain.headline}
-        </h2>
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="max-w-2xl">
 
-        {/* VoC lines */}
-        <ul className="flex flex-col gap-5 mb-14">
-          {d.pain.lines.map((line, i) => (
-            <li
-              key={i}
-              data-reveal={`d${i % 4}`}
-              className="font-sora font-light text-fg/55 leading-[1.7] pl-5"
-              style={{ fontSize: "15px", borderLeft: "2px solid rgba(212,255,43,0.18)" }}
-            >
-              &ldquo;{line}&rdquo;
-            </li>
-          ))}
-        </ul>
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.pain.label}
+          </p>
+          <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
+            {d.pain.headline}
+          </h2>
 
-        {/* Punch line — the bus test */}
+          {/* VoC lines */}
+          <ul className="flex flex-col gap-5 mb-14">
+            {d.pain.lines.map((line, i) => (
+              <li
+                key={i}
+                data-reveal={`d${i % 4}`}
+                className="font-sora font-light text-fg/55 leading-[1.7] pl-5"
+                style={{ fontSize: "15px", borderLeft: "2px solid rgba(212,255,43,0.18)" }}
+              >
+                &ldquo;{line}&rdquo;
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Punch line — the bus test. The one deliberate centered moment. */}
         <div
           data-reveal
-          className="rounded-2xl text-center"
+          className="max-w-2xl mx-auto rounded-2xl text-center"
           style={{ border: "1px solid rgba(212,255,43,0.18)", background: "rgba(212,255,43,0.04)", padding: "clamp(24px, 4vw, 40px)" }}
         >
           <p

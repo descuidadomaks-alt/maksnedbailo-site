@@ -22,3 +22,7 @@ export const PHASE1_ANCHOR = "€4,500";
 // Telegram handle — used for the secondary "message me first" link.
 export const TELEGRAM_HANDLE = "maksym_nedbailo";
 export const TELEGRAM_URL = `https://t.me/${TELEGRAM_HANDLE}`;
+
+// Hero visual anchor — founder photo, reused (larger) from the "Why I do
+// this" section. Swap this single value to drop in a better photo later.
+export const HERO_PHOTO_SRC = "/maks-photo.png";

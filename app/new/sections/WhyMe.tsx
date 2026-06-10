@@ -24,15 +24,24 @@ function CheckIcon() {
  */
 export default function WhyMe({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider py-16 md:py-24">
-      <div className="max-w-3xl mx-auto px-6">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 700px 420px at 6% 100%, rgba(212,255,43,0.035) 0%, transparent 70%)" }}
+      />
 
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-          {d.whyMe.label}
-        </p>
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "22ch" }}>
-          {d.whyMe.headline}
-        </h2>
+      <div className="relative max-w-5xl mx-auto px-6">
+
+        <div className="max-w-2xl">
+          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.whyMe.label}
+          </p>
+          <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "22ch" }}>
+            {d.whyMe.headline}
+          </h2>
+        </div>
 
         {/* Column headers — desktop only */}
         <div className="hidden sm:grid mb-3" style={{ gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>

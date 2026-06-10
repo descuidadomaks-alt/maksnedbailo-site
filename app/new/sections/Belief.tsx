@@ -9,8 +9,15 @@ import type { NewPageDict } from "../lib/i18n";
  */
 export default function Belief({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider py-16 md:py-24">
-      <div className="max-w-3xl mx-auto px-6">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+      {/* Soft section gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 760px 460px at 96% 0%, rgba(34,158,217,0.04) 0%, transparent 70%)" }}
+      />
+      <div className="relative max-w-6xl mx-auto px-6">
+        <div className="max-w-2xl">
 
         <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.belief.label}
@@ -47,6 +54,7 @@ export default function Belief({ d }: { d: NewPageDict }) {
           </div>
         </div>
 
+        </div>
       </div>
     </section>
   );
