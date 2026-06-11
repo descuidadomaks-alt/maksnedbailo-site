@@ -1,6 +1,5 @@
 "use client";
 
-import VoidSection from "@/components/VoidSection";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, PHASE1_ANCHOR } from "../lib/config";
 import { FOUNDING_RATE } from "../lib/site.config";
@@ -80,9 +79,12 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
 
   return (
     <>
-      {/* ── Mechanism intro — VoidSection (pure black, parallax dots) ── */}
-      <VoidSection className="section-divider">
-        <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+      {/* ── Mechanism intro — sits over the shared ElevatorField canvas ── */}
+      <section
+        className="section-divider relative"
+        style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "center", padding: "4rem 2rem" }}
+      >
+        <div className="w-full px-6 py-16 md:py-24">
           <div data-reveal className="map-content-panel max-w-2xl flex flex-col items-start text-left">
             <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.map.label}
@@ -122,7 +124,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             </div>
           </div>
         </div>
-      </VoidSection>
+      </section>
 
       {/* ── Sample map table — ported from SectionOfferGlance ── */}
       <section className="py-16 md:py-24">
@@ -165,7 +167,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
               {pillars.map((pillar, pi) => (
                 <div key={pi} className={pi < pillars.length - 1 ? "border-b border-white/[0.05]" : ""}>
                   <div className="px-6 py-2" style={{ background: "rgba(255,255,255,0.01)" }}>
-                    <span className="font-label text-accent/55" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>
+                    <span className="font-label text-accent/85" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>
                       {sm.pillarPrefix(pi + 1, pillar.label)}
                     </span>
                   </div>
@@ -175,10 +177,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                       className="grid px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.015] transition-colors duration-150 items-center"
                       style={{ gridTemplateColumns: COL_TEMPLATE, gap: "0.75rem" }}
                     >
-                      <p className="font-sora font-light text-fg/72" style={{ fontSize: "12px" }}>{item.pain}</p>
-                      <p className="font-numeral text-fg/65" style={{ fontSize: "12px" }}>{item.cost}</p>
+                      <p className="font-sora font-light text-fg/72" style={{ fontSize: "13px", lineHeight: 1.3 }}>{item.pain}</p>
+                      <p className="font-numeral font-semibold text-fg" style={{ fontSize: "12px" }}>{item.cost}</p>
                       <FeasibilityDots score={item.feasibility} />
-                      <p className="font-numeral text-fg/48 text-right" style={{ fontSize: "12px" }}>#{item.rank}</p>
+                      <p className="font-numeral font-semibold text-fg/75 text-right" style={{ fontSize: "12px" }}>#{item.rank}</p>
                     </div>
                   ))}
                 </div>
@@ -205,19 +207,19 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
               {pillars.map((pillar, pi) => (
                 <div key={pi} className={pi < pillars.length - 1 ? "border-b border-white/[0.06]" : ""}>
                   <div className="px-5 py-2.5" style={{ background: "rgba(255,255,255,0.01)" }}>
-                    <span className="font-label text-accent/55" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>
+                    <span className="font-label text-accent/85" style={{ fontSize: "9px", letterSpacing: "1.8px", textTransform: "uppercase" }}>
                       {sm.pillarPrefix(pi + 1, pillar.label)}
                     </span>
                   </div>
                   {pillar.items.map((item, ii) => (
                     <div key={ii} className="border-t border-white/[0.03] px-5 py-4">
-                      <p className="font-sora font-light text-fg/75 mb-2.5 leading-[1.5]" style={{ fontSize: "13px" }}>
+                      <p className="font-sora font-light text-fg/75 mb-2.5" style={{ fontSize: "14px", lineHeight: 1.3 }}>
                         {item.pain}
                       </p>
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="font-numeral text-fg/60" style={{ fontSize: "12px" }}>{item.cost}</span>
+                        <span className="font-numeral font-semibold text-fg" style={{ fontSize: "12px" }}>{item.cost}</span>
                         <FeasibilityDots score={item.feasibility} />
-                        <span className="font-numeral text-fg/45" style={{ fontSize: "11px" }}>#{item.rank}</span>
+                        <span className="font-numeral font-semibold text-fg/75" style={{ fontSize: "11px" }}>#{item.rank}</span>
                       </div>
                     </div>
                   ))}

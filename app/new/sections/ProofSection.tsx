@@ -147,9 +147,10 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
                 rel={c.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 data-reveal={`d${i}`}
                 className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-4 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
+                style={{ minHeight: "350px" }}
               >
                 {/* Fixed-height slot — keeps title/desc rows on the same baseline across cards */}
-                <div className="shrink-0 flex flex-col justify-center" style={{ minHeight: "150px" }}>
+                <div className="shrink-0 flex flex-col justify-center" style={{ minHeight: "171px" }}>
                   {Visual && <Visual />}
                 </div>
                 <div className="flex flex-col gap-3 flex-1">

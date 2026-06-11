@@ -26,7 +26,7 @@ export default function MobileCtaBar() {
       </p>
       <Link
         href={SCORE_TARGET}
-        className="btn-glass shrink-0 inline-flex items-center gap-1.5 font-sora font-semibold rounded-lg"
+        className="bg-accent text-bg shrink-0 inline-flex items-center gap-1.5 font-sora font-semibold rounded-lg transition-transform duration-200 hover:scale-[1.03]"
         style={{ fontSize: "12.5px", padding: "9px 16px", letterSpacing: "-0.01em" }}
       >
         Start

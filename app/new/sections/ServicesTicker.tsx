@@ -17,9 +17,11 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
 
   return (
     <div className="section-divider">
-      <p data-reveal className="font-label text-fg/22 text-center uppercase py-4" style={{ fontSize: "9px", letterSpacing: "2.5px", background: "#000000" }}>
-        {d.services.label}
-      </p>
+      <div className="text-center uppercase py-4 px-6" style={{ background: "#000000" }}>
+        <p data-reveal className="font-label text-fg/22 mx-auto" style={{ fontSize: "9px", letterSpacing: "2.5px", maxWidth: "240px" }}>
+          {d.services.label}
+        </p>
+      </div>
       <a
         href={CTA_TARGET}
         target="_blank"

@@ -78,9 +78,6 @@ export interface NewPageDict {
     secondaryCta: string;
     /** Risk-reversal line shown directly under the hero CTA */
     guarantee: string;
-    /** Mono mini-proof strip shown in the hero, above the fold */
-    proofStrip: string;
-    microcopy: string;
   };
 
   pain: {
@@ -147,8 +144,8 @@ export interface NewPageDict {
     }[];
     /** "founding" qualifier shown next to the founding rate on step 2 */
     foundingLabel: string;
-    /** Single sitewide source for the "X of 5 slots" capacity line. */
-    capacityLine: (slotsLeft: number, standardRate: string) => string;
+    /** Single sitewide source for the "X of 5 still open" capacity line. */
+    capacityLine: (slotsOpen: number) => string;
   };
 
   testimonials: {
@@ -201,6 +198,8 @@ export interface NewPageDict {
     location: string;
     tagline: string;
     waLabel: string;
+    navHome: string;
+    navScore: string;
   };
 }
 
@@ -317,7 +316,7 @@ const PILLAR_PAINS_EN: [[string, string], [string, string], [string, string]] = 
 
 const en: NewPageDict = {
   header: {
-    ctaLabel: "Book the Bottleneck Map",
+    ctaLabel: "Book the Map",
     aiMapLabel: "AI Map",
     blogLabel: "Blog",
   },
@@ -335,8 +334,6 @@ const en: NewPageDict = {
     primaryMicrocopy: "2 minutes · free · no call",
     secondaryCta: "Book the Bottleneck Map",
     guarantee: "10× the value or you don't pay — and you keep the map.",
-    proofStrip: "3 systems live now · Amira · Elena Hotel & SPA · Voice AI",
-    microcopy: "90 minutes. One-page map. No price talk yet — that's step two.",
   },
 
   pain: {
@@ -464,7 +461,7 @@ const en: NewPageDict = {
         tag: "Industry · in production",
       },
     ],
-    ctaLabel: "See your own numbers in 2 minutes →",
+    ctaLabel: "See your own numbers in 2 minutes",
   },
 
   path: {
@@ -488,16 +485,14 @@ const en: NewPageDict = {
       {
         number: "03",
         title: "First build",
-        badge: "from €4,500 · 2-3 weeks",
+        badge: "Scoped from your Map · 2–3 weeks",
         desc: "The fix the Map points to, built and live. Scoped, ROI-ranked, no scope creep.",
         note: "Unlocked by the Map.",
       },
     ],
     foundingLabel: "founding",
-    capacityLine: (slotsLeft, standardRate) =>
-      slotsLeft > 0
-        ? `I run every session myself — 5 slots at a time. ${slotsLeft} of 5 open.`
-        : `I run every session myself — 5 slots at a time. ${standardRate} · fully credited toward your first build.`,
+    capacityLine: (slotsOpen) =>
+      `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
 
   testimonials: {
@@ -623,6 +618,8 @@ const en: NewPageDict = {
     location: "Santander, Spain",
     tagline: "ROI-first AI diagnosis for owner-led businesses. Honest about where AI helps — and where it doesn't.",
     waLabel: "Quick question? Message me on WhatsApp",
+    navHome: "Home",
+    navScore: "Bottleneck Score",
   },
 };
 

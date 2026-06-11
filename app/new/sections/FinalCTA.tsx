@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, SCORE_TARGET, WA_BOTTLENECK_LINK } from "../lib/config";
-import { foundingSlotsLeft, STANDARD_RATE } from "../lib/site.config";
+import { slotsOpen } from "../lib/site.config";
 
 function WhatsAppIcon() {
   return (
@@ -76,7 +76,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
 
           {/* Capacity line — under the Map CTA, single sitewide source (see ThePath) */}
           <p className="font-sora font-light text-accent/65" style={{ fontSize: "12px" }}>
-            {d.path.capacityLine(foundingSlotsLeft, STANDARD_RATE)}
+            {d.path.capacityLine(slotsOpen)}
           </p>
 
           <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px" }}>

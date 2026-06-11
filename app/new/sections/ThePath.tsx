@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import GlassButton from "../components/GlassButton";
 import { CTA_TARGET, SCORE_TARGET } from "../lib/config";
-import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE } from "../lib/site.config";
+import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE, slotsOpen } from "../lib/site.config";
 
 /**
  * Section 7 — THE PATH (offer ladder).
@@ -88,7 +88,7 @@ export default function ThePath({ d }: { d: NewPageDict }) {
 
         {/* Capacity line — single sitewide source for "X of 5 slots" copy */}
         <p data-reveal className="font-sora font-light text-accent/65 text-center" style={{ fontSize: "12px" }}>
-          {d.path.capacityLine(foundingSlotsLeft, STANDARD_RATE)}
+          {d.path.capacityLine(slotsOpen)}
         </p>
 
       </div>

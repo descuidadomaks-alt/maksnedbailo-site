@@ -67,21 +67,44 @@ body::before {
   animation-play-state: paused;
 }
 
-/* ─── /new testimonials — review slider fade ────────────────────────────────
-   Single-card auto-advancing review slider (ReviewSlider in Testimonials.tsx).
-   Each new card is keyed by index, so React remounts it and this fade-in
-   animation replays — a soft crossfade between reviews.
+/* ─── /new testimonials — review slider ─────────────────────────────────────
+   TestimonialSlider in Testimonials.tsx: horizontal swipeable row of starred
+   review cards on mobile (scroll-snap-x), vertical slider on desktop
+   (scroll-snap-y, height matches the video column via items-stretch).
  ──────────────────────────────────────────────────────────────────────────── */
-@keyframes testimonial-fade-in {
-  0%   { opacity: 0; transform: translateY(4px); }
-  100% { opacity: 1; transform: translateY(0); }
+.testimonial-slider {
+  display: flex;
+  flex-direction: row;
+  gap: 0.875rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.testimonial-fade {
-  animation: testimonial-fade-in 0.5s ease-out;
+.testimonial-slider::-webkit-scrollbar {
+  display: none;
 }
-@media (prefers-reduced-motion: reduce) {
-  .testimonial-fade {
-    animation: none;
+.testimonial-slider > * {
+  flex: 0 0 auto;
+  width: min(85vw, 320px);
+  scroll-snap-align: start;
+}
+@media (min-width: 1024px) {
+  .testimonial-slider {
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    /* Caps the slider's max-content contribution to grid row sizing so the
+       row height is driven by the video column (~590px), not by all 13
+       stacked cards — the slider then scrolls within that height. */
+    max-height: 590px;
+  }
+  .testimonial-slider > * {
+    width: 100%;
+    flex: none;
+    scroll-snap-align: start;
   }
 }
 
@@ -431,15 +454,16 @@ h1.font-playfair, h2.font-playfair {
   animation: orb-drift 14s ease-in-out infinite;
 }
 
-/* ─── /new "Why I do this" — client dashboard screenshot frame ──────────────
-   Wide (16:9-ish) browser screenshot, framed to match the hero photo's
-   treatment (border, shadow, drifting glow via .hero-photo-glow).
+/* ─── /new "Why I do this" — portrait visual frame ──────────────────────────
+   Portrait (1536x2752) photo, framed to match the hero photo's treatment
+   (border, shadow, drifting glow via .hero-photo-glow).
  ──────────────────────────────────────────────────────────────────────────── */
 .belief-screenshot-frame {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  aspect-ratio: 1936 / 1056;
+  max-width: 320px;
+  margin: 0 auto;
+  aspect-ratio: 1536 / 2752;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(212, 255, 43, 0.14);
@@ -448,8 +472,17 @@ h1.font-playfair, h2.font-playfair {
 .belief-screenshot-frame img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+}
+@media (min-width: 1024px) {
+  .belief-screenshot-frame {
+    width: auto;
+    max-width: none;
+    height: 70vh;
+    max-height: 600px;
+    margin: 0;
+  }
 }
 
 /* ─── Bottleneck Map — glass content panel ──────────────────────────────────
@@ -457,12 +490,12 @@ h1.font-playfair, h2.font-playfair {
    VoidSection's particle field without hiding the dots entirely.
  ──────────────────────────────────────────────────────────────────────────── */
 .map-content-panel {
-  background: rgba(6, 6, 8, 0.42);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(6, 6, 8, 0.32);
+  backdrop-filter: blur(20px) saturate(160%) brightness(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(1.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 16px 48px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 48px rgba(0, 0, 0, 0.3);
   padding: 28px;
 }
 @media (min-width: 768px) {
@@ -557,108 +590,76 @@ h1.font-playfair, h2.font-playfair {
   }
 }
 
-/* ─── /new hero — scroll-linked photo band ──────────────────────────────────
-   Mobile: stage photo full-bleed behind the whole hero, dark gradient
-   overlay, copy stacked at the bottom.
-   Desktop (≥768px): photo becomes a ~50vh band under the header, copy sits
-   below it in a 2-col grid (copy left ~55%, CTA stack right ~45%).
-   In both cases the photo is rendered at 125% width and panned horizontally
-   via translateX (see useHeroPan in Hero.tsx) — fully revealed across
-   ~PAN_MAX_PERCENT of scroll.
+/* ─── /new hero — copy stacked above a bottom photo band ────────────────────
+   Both breakpoints: kicker -> headline -> sub -> CTAs stacked on the page
+   background, with a wide photo band at the bottom of the section. The band
+   image is rendered slightly wider than its box and panned horizontally on
+   scroll (see useHeroPan in Hero.tsx) for a subtle parallax feel. A short
+   top-edge fade dissolves the band into the page background above it.
  ──────────────────────────────────────────────────────────────────────────── */
 .new-hero-section {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100svh;
-  overflow: hidden;
-}
-
-.new-hero-photo-wrap {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
-
-.new-hero-photo {
-  position: absolute;
-  inset: 0;
-  width: 125%;
-  max-width: none;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform;
-}
-
-.new-hero-overlay-mobile {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(6,6,8,0.96) 8%, rgba(6,6,8,0.6) 48%, rgba(6,6,8,0.18) 100%);
-}
-
-.new-hero-fade-desktop {
-  display: none;
+  background: var(--bg);
 }
 
 .new-hero-content {
   position: relative;
   z-index: 1;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-top: 120px;
+  padding-top: 84px;
 }
 
 .new-hero-content-inner {
-  max-width: 1240px;
+  max-width: 720px;
   margin: 0 auto;
   width: 100%;
   padding: 0 24px 40px;
 }
 
-.new-hero-bottom-strip {
-  margin-top: 32px;
-  /* Keep text clear of the fixed WhatsApp FAB (52px + 24px offset) on mobile */
-  padding-right: 76px;
+.new-hero-photo-band {
+  position: relative;
+  width: 110%;
+  margin-left: -5%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.new-hero-photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.new-hero-photo-fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: linear-gradient(to bottom, #060608 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 @media (min-width: 768px) {
-  .new-hero-photo-wrap {
-    position: relative;
-    inset: auto;
-    height: 50vh;
-    flex-shrink: 0;
-  }
-  .new-hero-overlay-mobile {
-    display: none;
-  }
-  .new-hero-fade-desktop {
-    display: block;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 45%;
-    background: linear-gradient(to top, #060608 0%, transparent 100%);
-    pointer-events: none;
-  }
   .new-hero-content {
-    justify-content: center;
-    padding-top: 0;
+    padding-top: 116px;
   }
   .new-hero-content-inner {
-    display: grid;
-    grid-template-columns: 55% 45%;
-    gap: 48px;
-    align-items: center;
-    padding: 56px 24px;
+    max-width: 760px;
+    padding: 0 24px 56px;
   }
-  .new-hero-bottom-strip {
-    grid-column: 1 / -1;
-    margin-top: 8px;
-    padding-right: 0;
+  .new-hero-photo-band {
+    height: 30vh;
+  }
+  .new-hero-photo {
+    height: 100%;
+  }
+  .new-hero-photo-fade {
+    height: 140px;
   }
 }
 
@@ -666,26 +667,6 @@ h1.font-playfair, h2.font-playfair {
   .new-hero-photo {
     transform: none !important;
   }
-}
-
-/* ─── /new header — scrolled state ──────────────────────────────────────────
-   After scrolling past 40px, a full-width frosted bar fades in behind the
-   header row so the floating pills read as a bar instead of colliding with
-   page content.
- ──────────────────────────────────────────────────────────────────────────── */
-.new-header-bar {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  opacity: 0;
-  background: rgba(6,6,8,0.6);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  transition: opacity 0.3s ease;
-}
-.new-header-bar.is-visible {
-  opacity: 1;
 }
 
 /* ─── /new — sticky mobile bottom CTA bar ───────────────────────────────────

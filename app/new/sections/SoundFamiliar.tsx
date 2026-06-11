@@ -64,11 +64,14 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
             <div data-reveal className="text-center mt-6">
               <Link
                 href={SCORE_TARGET}
-                className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent"
+                className="group inline-flex flex-col items-center sm:flex-row sm:items-center gap-x-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent text-center"
                 style={{ fontSize: "13px" }}
               >
-                {d.pain.ctaLabel}
-                <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+                <span>{d.pain.ctaLabel.split(" — ")[0]} —</span>
+                <span className="inline-flex items-center gap-1.5">
+                  {d.pain.ctaLabel.split(" — ")[1]}
+                  <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+                </span>
               </Link>
             </div>
           </div>

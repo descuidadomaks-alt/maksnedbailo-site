@@ -43,10 +43,8 @@ export const STAGE_PHOTO_SRC = "/maks-stage.jpg";
 // page" rule, the stage photo lives in the hero.
 export const HERO_PHOTO_SRC = "/maks-photo.png";
 
-// "Why I do this" (Belief) section visual — a real client dashboard
-// screenshot, grounding the "messy systems" story in an actual interface
-// rather than a founder portrait.
-export const CRM_SCREENSHOT_SRC = "/automations/drpaul/pw_full.png";
+// "Why I do this" (Belief) section visual. Portrait, ~1536x2752.
+export const CRM_SCREENSHOT_SRC = "/hero-image.png";
 
 // Anchor id for the Voice AI proof card (ProofSection) — replaces the old
 // off-site chasehughes.com demo link with an on-page anchor.

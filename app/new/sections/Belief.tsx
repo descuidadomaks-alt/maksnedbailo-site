@@ -24,7 +24,7 @@ export default function Belief({ d }: { d: NewPageDict }) {
         <div className="grid grid-cols-1 lg:grid-cols-[55fr_45fr] gap-10 lg:gap-16 items-center">
 
           {/* ── Copy column ── */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1">
             <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.belief.label}
             </p>
@@ -51,12 +51,12 @@ export default function Belief({ d }: { d: NewPageDict }) {
             </div>
           </div>
 
-          {/* ── Client dashboard screenshot ── */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+          {/* ── Portrait visual ── */}
+          <div className="order-2 flex justify-center lg:justify-end">
             <div data-reveal className="belief-screenshot-frame">
               <span className="hero-photo-glow" aria-hidden />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={CRM_SCREENSHOT_SRC} alt="A client's automation dashboard, built and deployed" />
+              <img src={CRM_SCREENSHOT_SRC} alt="Maks Nedbailo" />
             </div>
           </div>
 

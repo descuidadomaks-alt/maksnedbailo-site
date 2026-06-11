@@ -32,6 +32,7 @@ import FinalCTA from "./sections/FinalCTA";
 import NewFAQ from "./sections/NewFAQ";
 import NewFooter from "./sections/NewFooter";
 import MobileCtaBar from "./components/MobileCtaBar";
+import ElevatorField from "./components/ElevatorField";
 
 export default function NewHomePage() {
   const { locale } = useNewLocale();
@@ -43,8 +44,10 @@ export default function NewHomePage() {
         <Hero d={d} />
         <SoundFamiliar d={d} />
         <Reframe d={d} />
-        <Belief d={d} />
-        <BottleneckMap d={d} />
+        <ElevatorField>
+          <Belief d={d} />
+          <BottleneckMap d={d} />
+        </ElevatorField>
         <ProofSection d={d} />
         <ThePath d={d} />
         <Testimonials d={d} />
