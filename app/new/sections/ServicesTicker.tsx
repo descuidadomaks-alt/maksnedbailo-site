@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET } from "../lib/config";
 
@@ -22,10 +23,8 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
           {d.services.label}
         </p>
       </div>
-      <a
+      <Link
         href={CTA_TARGET}
-        target="_blank"
-        rel="noopener noreferrer"
         aria-label={d.services.hoverCta}
         className="group relative w-full overflow-hidden flex items-center"
         style={{ height: "40px", background: "#000000" }}
@@ -45,7 +44,7 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
         >
           → {d.services.hoverCta}
         </span>
-      </a>
+      </Link>
     </div>
   );
 }

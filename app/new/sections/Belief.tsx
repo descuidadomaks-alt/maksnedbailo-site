@@ -13,7 +13,10 @@ import { CRM_SCREENSHOT_SRC } from "../lib/config";
  */
 export default function Belief({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+    // Solid fill — sits over the shared ElevatorField canvas; the dot shaft
+    // runs behind this section but must only be visible in the Mechanism
+    // section below.
+    <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       {/* Soft section gradient */}
       <div
         aria-hidden

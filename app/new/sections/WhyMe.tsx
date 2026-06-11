@@ -54,7 +54,7 @@ export default function WhyMe({ d }: { d: NewPageDict }) {
               {d.whyMe.rows.map(([them], i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="text-fg/22 mt-0.5"><XIcon /></span>
-                  <p className="font-sora font-light text-fg/32 line-through decoration-fg/15 leading-[1.6]" style={{ fontSize: "14px" }}>{them}</p>
+                  <p className="font-sora font-light text-fg/32 line-through decoration-fg/45 leading-[1.6]" style={{ fontSize: "14px" }}>{them}</p>
                 </li>
               ))}
             </ul>

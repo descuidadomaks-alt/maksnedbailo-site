@@ -32,12 +32,12 @@ function ArrowIcon() {
 /** Visual mock #1 — WhatsApp-style chat thread, 9-second reply (Amira). */
 function ChatMock() {
   return (
-    <div className="rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="px-3 py-2 flex items-center gap-2 border-b border-white/[0.05]">
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
       </div>
-      <div className="p-3 flex flex-col gap-2">
+      <div className="p-3 flex flex-col gap-2 flex-1 justify-center">
         <div className="self-start max-w-[82%] rounded-lg rounded-bl-sm px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.05)" }}>
           <p className="font-sora text-fg/55" style={{ fontSize: "11px", lineHeight: 1.4 }}>
             Hi, do you have availability for a consultation this week?
@@ -59,12 +59,12 @@ function ChatMock() {
 /** Visual mock #2 — booking confirmation card (Elena Hotel & SPA). */
 function BookingMock() {
   return (
-    <div className="rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="px-3 py-2 flex items-center justify-between border-b border-white/[0.05]">
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>BOOKING CONFIRMED</span>
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
-      <div className="p-3 flex flex-col gap-1.5">
+      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-center">
         <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room · 2 nights</p>
         <p className="font-sora text-fg/38" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
         <div className="flex items-center justify-between mt-1.5 pt-1.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
@@ -81,27 +81,29 @@ const WAVEFORM_BARS = [35, 60, 28, 80, 50, 95, 42, 70, 30, 55, 88, 46, 28, 62, 9
 
 function VoiceMock() {
   return (
-    <div className="rounded-xl overflow-hidden border border-white/[0.06] p-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06] p-3" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="flex items-center justify-between mb-2.5">
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
         <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
-      <div className="flex items-end gap-[2px]" style={{ height: "36px" }} aria-hidden>
-        {WAVEFORM_BARS.map((h, i) => (
-          <span
-            key={i}
-            style={{
-              width: "3px",
-              height: `${h}%`,
-              background: i % 3 === 0 ? "rgba(212,255,43,0.55)" : "rgba(240,236,230,0.16)",
-              borderRadius: "2px",
-            }}
-          />
-        ))}
+      <div className="flex-1 flex flex-col justify-center gap-2.5">
+        <div className="flex items-end gap-[2px]" style={{ height: "36px" }} aria-hidden>
+          {WAVEFORM_BARS.map((h, i) => (
+            <span
+              key={i}
+              style={{
+                width: "3px",
+                height: `${h}%`,
+                background: i % 3 === 0 ? "rgba(212,255,43,0.55)" : "rgba(240,236,230,0.16)",
+                borderRadius: "2px",
+              }}
+            />
+          ))}
+        </div>
+        <p className="font-sora font-light italic text-fg/35" style={{ fontSize: "11px", lineHeight: 1.4 }}>
+          &ldquo;Sure — let me check our availability for you.&rdquo;
+        </p>
       </div>
-      <p className="font-sora font-light italic text-fg/35 mt-2.5" style={{ fontSize: "11px", lineHeight: 1.4 }}>
-        &ldquo;Sure — let me check our availability for you.&rdquo;
-      </p>
     </div>
   );
 }
@@ -149,8 +151,9 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
                 className="group h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-4 hover:border-white/[0.1] hover:bg-white/[0.022] hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all duration-300"
                 style={{ minHeight: "350px" }}
               >
-                {/* Fixed-height slot — keeps title/desc rows on the same baseline across cards */}
-                <div className="shrink-0 flex flex-col justify-center" style={{ minHeight: "171px" }}>
+                {/* Fixed-height slot — every mock stretches to fill it (h-full),
+                    so all three previews render at exactly the same size */}
+                <div className="shrink-0" style={{ height: "171px" }}>
                   {Visual && <Visual />}
                 </div>
                 <div className="flex flex-col gap-3 flex-1">

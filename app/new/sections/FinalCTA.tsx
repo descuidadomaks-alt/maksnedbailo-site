@@ -58,16 +58,14 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
         <div data-reveal="d1" className="flex flex-col items-center gap-5">
           {/* Dual CTA — Map primary on desktop, Score primary on mobile */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-            <a
+            <Link
               href={CTA_TARGET}
-              target="_blank"
-              rel="noopener noreferrer"
               data-primary-cta
               className="dual-cta cta-map font-sora order-1 sm:order-1"
             >
               {d.cta.primaryCta}
               <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
-            </a>
+            </Link>
             <Link href={SCORE_TARGET} className="dual-cta cta-score font-sora order-2 sm:order-2">
               {d.cta.scoreCta}
               <span className="transition-transform duration-200 inline-block" aria-hidden>→</span>

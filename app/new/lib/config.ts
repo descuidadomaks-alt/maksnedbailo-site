@@ -34,17 +34,19 @@ export const WA_BOTTLENECK_LINK =
   `https://wa.me/${WA_NUMBER}?text=` +
   encodeURIComponent("Hi Maks, saw the Bottleneck Map — quick question");
 
-// Hero visual anchor (Hero v2) — full-bleed stage photo behind the headline,
-// dark gradient overlay applied in Hero.tsx. ~4:1, public/maks-stage.jpg.
-export const STAGE_PHOTO_SRC = "/maks-stage.jpg";
+// Hero visual anchor — bottom photo band under the hero copy. 1400x450
+// (taller crop than the old maks-stage.jpg so the head isn't cut off).
+export const STAGE_PHOTO_SRC = "/maks-stage2.jpg";
 
 // Founder portrait — kept for reference, no longer used in Belief (see
 // CRM_SCREENSHOT_SRC below). Per the "never the same image twice on one
 // page" rule, the stage photo lives in the hero.
 export const HERO_PHOTO_SRC = "/maks-photo.png";
 
-// "Why I do this" (Belief) section visual. Portrait, ~1536x2752.
-export const CRM_SCREENSHOT_SRC = "/hero-image.png";
+// "Why I do this" (Belief) section visual. Portrait, 1536x2752 — JPEG
+// re-encode of hero-image.png (7.4MB -> ~460KB; the PNG's decode cost was a
+// visible scroll-jank contributor).
+export const CRM_SCREENSHOT_SRC = "/hero-image.jpg";
 
 // Anchor id for the Voice AI proof card (ProofSection) — replaces the old
 // off-site chasehughes.com demo link with an on-page anchor.

@@ -93,15 +93,13 @@ export default function NewHeader() {
           </div>
 
           {/* Primary CTA */}
-          <a
+          <Link
             href={CTA_TARGET}
-            target="_blank"
-            rel="noopener noreferrer"
             className="flex items-center px-3 xs:px-4 sm:px-5 py-2.5 font-sora text-[12px] xs:text-[13px] font-semibold text-fg hover:opacity-90 transition-all duration-200 whitespace-nowrap min-h-[44px]"
             style={CTA_GLASS}
           >
             {d.header.ctaLabel}
-          </a>
+          </Link>
         </div>
       </div>
       </div>

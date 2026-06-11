@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import type { NewPageDict, TestimonialItem } from "../lib/i18n";
 
 /**
@@ -84,40 +84,46 @@ function ChevronIcon({ dir }: { dir: "prev" | "next" }) {
 
 /**
  * Vertical slider on desktop (lg+, scroll-snap-y, matches video column
- * height), horizontal swipe row on mobile (scroll-snap-x). Prev/next
- * buttons scroll one "page" in whichever axis is active.
+ * height), horizontal swipe row on mobile (scroll-snap-x, pages exactly one
+ * card per step — same paging as the live homepage carousel). Loops:
+ * stepping past the last card wraps back to the first and vice versa, so
+ * the controls are never disabled.
  */
 function TestimonialSlider({ items }: { items: TestimonialItem[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(true);
 
-  const handleScroll = useCallback(() => {
+  const scrollByStep = useCallback((dir: "prev" | "next") => {
     const el = scrollRef.current;
     if (!el) return;
     const isVertical = window.matchMedia("(min-width: 1024px)").matches;
     const pos = isVertical ? el.scrollTop : el.scrollLeft;
     const max = isVertical ? el.scrollHeight - el.clientHeight : el.scrollWidth - el.clientWidth;
-    setCanPrev(pos > 4);
-    setCanNext(pos < max - 4);
-  }, []);
 
-  const scrollByStep = (dir: "prev" | "next") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const isVertical = window.matchMedia("(min-width: 1024px)").matches;
+    // Loop at the ends
+    if (dir === "next" && pos >= max - 4) {
+      el.scrollTo(isVertical ? { top: 0, behavior: "smooth" } : { left: 0, behavior: "smooth" });
+      return;
+    }
+    if (dir === "prev" && pos <= 4) {
+      el.scrollTo(isVertical ? { top: max, behavior: "smooth" } : { left: max, behavior: "smooth" });
+      return;
+    }
+
     if (isVertical) {
       const amount = el.clientHeight * 0.9;
       el.scrollBy({ top: dir === "next" ? amount : -amount, behavior: "smooth" });
     } else {
-      const amount = el.clientWidth * 0.9;
+      // One full card per step (card width + flex gap), like the old carousel
+      const card = el.firstElementChild as HTMLElement | null;
+      const gap = parseFloat(getComputedStyle(el).columnGap || "14") || 14;
+      const amount = (card ? card.getBoundingClientRect().width : el.clientWidth * 0.85) + gap;
       el.scrollBy({ left: dir === "next" ? amount : -amount, behavior: "smooth" });
     }
-  };
+  }, []);
 
   return (
     <div className="testimonial-slider-wrap h-full min-h-0 flex flex-col">
-      <div ref={scrollRef} onScroll={handleScroll} className="testimonial-slider flex-1 min-h-0">
+      <div ref={scrollRef} className="testimonial-slider flex-1 min-h-0">
         {items.map((item, i) => (
           <QuoteCard key={i} item={item} accent={i === 0} />
         ))}
@@ -126,9 +132,8 @@ function TestimonialSlider({ items }: { items: TestimonialItem[] }) {
         <button
           type="button"
           onClick={() => scrollByStep("prev")}
-          disabled={!canPrev}
           aria-label="Previous reviews"
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 hover:border-white/30"
           style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
         >
           <ChevronIcon dir="prev" />
@@ -136,9 +141,8 @@ function TestimonialSlider({ items }: { items: TestimonialItem[] }) {
         <button
           type="button"
           onClick={() => scrollByStep("next")}
-          disabled={!canNext}
           aria-label="Next reviews"
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-20"
+          className="w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 hover:border-white/30"
           style={{ border: "1px solid rgba(255,255,255,0.12)", background: "rgba(255,255,255,0.04)" }}
         >
           <ChevronIcon dir="next" />

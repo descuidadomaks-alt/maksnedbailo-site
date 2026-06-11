@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, PHASE1_ANCHOR } from "../lib/config";
 import { FOUNDING_RATE } from "../lib/site.config";
@@ -79,13 +80,26 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
 
   return (
     <>
-      {/* ── Mechanism intro — sits over the shared ElevatorField canvas ── */}
+      {/* ── Mechanism intro — the only section where the ElevatorField dots
+             show through. Taller (100vh min) so the scroll-through reads as a
+             real descent; top/bottom fades dissolve the dots in and out at
+             the borders with the solid neighbour sections. ── */}
       <section
         className="section-divider relative"
-        style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "center", padding: "4rem 2rem" }}
+        style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}
       >
+        <div
+          aria-hidden
+          className="absolute top-0 left-0 right-0 pointer-events-none"
+          style={{ height: "120px", background: "linear-gradient(to bottom, var(--bg) 0%, transparent 100%)" }}
+        />
+        <div
+          aria-hidden
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{ height: "120px", background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)" }}
+        />
         <div className="w-full px-6 py-16 md:py-24">
-          <div data-reveal className="map-content-panel max-w-2xl flex flex-col items-start text-left">
+          <div data-reveal className="map-content-panel w-full max-w-2xl mx-auto flex flex-col items-start text-left">
             <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.map.label}
             </p>
@@ -96,7 +110,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
               {headlineParts.length === 2 ? (
                 <>
                   {headlineParts[0]}
-                  <span className="whitespace-nowrap text-accent">{HEADLINE_HIGHLIGHT}</span>
+                  {/* nowrap only from md up — on phones the panel is narrower
+                      than the full phrase and nowrap made it overflow the
+                      panel. Non-breaking hyphen keeps "ROI-ranked" whole. */}
+                  <span className="md:whitespace-nowrap text-accent">{HEADLINE_HIGHLIGHT.replace("ROI-", "ROI‑")}</span>
                   {headlineParts[1]}
                 </>
               ) : (
@@ -126,8 +143,8 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
         </div>
       </section>
 
-      {/* ── Sample map table — ported from SectionOfferGlance ── */}
-      <section className="py-16 md:py-24">
+      {/* ── Sample map table — solid fill over the shared dot canvas ── */}
+      <section className="relative py-16 md:py-24" style={{ background: "var(--bg)" }}>
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <p data-reveal className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
@@ -282,16 +299,14 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
 
           {/* CTA — high-friction, books the real Bottleneck Map session */}
           <div data-reveal className="text-center mt-10">
-            <a
+            <Link
               href={CTA_TARGET}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
               style={{ fontSize: "14px", padding: "15px 32px", minHeight: "52px", letterSpacing: "-0.01em" }}
             >
               {d.map.ctaLabel(FOUNDING_RATE)}
               <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

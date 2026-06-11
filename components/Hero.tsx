@@ -143,7 +143,7 @@ export default function Hero() {
         transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       >
         <Image
-          src="/hero-image.png"
+          src="/hero-image.jpg"
           alt="Maks Nedbailo"
           fill
           className="object-cover object-center"
@@ -246,7 +246,7 @@ export default function Hero() {
                 style={{ y: parallaxY }}
               >
                 <Image
-                  src="/hero-image.png"
+                  src="/hero-image.jpg"
                   alt="Maks Nedbailo"
                   fill
                   className="object-contain object-bottom"

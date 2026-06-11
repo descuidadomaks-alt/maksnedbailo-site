@@ -27,9 +27,9 @@ export default function NewFooter({ d }: { d: NewPageDict }) {
           <Link href="/new" className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
             {d.footer.navHome}
           </Link>
-          <a href={CTA_TARGET} target="_blank" rel="noopener noreferrer" className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
+          <Link href={CTA_TARGET} className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
             {d.header.aiMapLabel}
-          </a>
+          </Link>
           <Link href={SCORE_TARGET} className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
             {d.footer.navScore}
           </Link>

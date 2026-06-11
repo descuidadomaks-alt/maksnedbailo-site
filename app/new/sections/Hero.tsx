@@ -1,34 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, SCORE_TARGET, STAGE_PHOTO_SRC } from "../lib/config";
 
-// Photo band is rendered at 110% width — this is how far (in % of its own
-// width) it pans across the full scroll-through of the hero.
-const PAN_MAX_PERCENT = 10;
+// How far the photo pans on scroll, in % of its own width. The image is
+// rendered wider than its clipping band (115% desktop / 150% mobile — see
+// .new-hero-photo in globals.css), so this must stay below the overflow
+// (15/115 ≈ 13%) or the right edge of the image slides into view.
+const PAN_MAX_PERCENT = 8;
 
 /**
  * Scroll-linked horizontal pan for the hero photo band. Progress runs 0 -> 1
- * as the section scrolls from fully in view to fully scrolled past, driving
- * a subtle translateX of up to PAN_MAX_PERCENT. Disabled under
+ * as the section scrolls from fully in view to fully scrolled past. Writes
+ * the transform straight to the <img> inside rAF — no React state, so
+ * scrolling never re-renders the section. Disabled under
  * prefers-reduced-motion (CSS also forces transform: none as a backstop).
  */
-function useHeroPan(ref: React.RefObject<HTMLElement | null>) {
-  const [pan, setPan] = useState(0);
-
+function useHeroPan(sectionRef: React.RefObject<HTMLElement | null>, imgRef: React.RefObject<HTMLImageElement | null>) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let raf = 0;
     const update = () => {
-      const el = ref.current;
-      if (!el) return;
+      const el = sectionRef.current;
+      const img = imgRef.current;
+      if (!el || !img) return;
       const rect = el.getBoundingClientRect();
       const progress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
-      setPan(progress * PAN_MAX_PERCENT);
+      img.style.transform = `translateX(-${(progress * PAN_MAX_PERCENT).toFixed(3)}%)`;
     };
     const onScroll = () => {
       cancelAnimationFrame(raf);
@@ -43,9 +45,7 @@ function useHeroPan(ref: React.RefObject<HTMLElement | null>) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [ref]);
-
-  return pan;
+  }, [sectionRef, imgRef]);
 }
 
 /**
@@ -70,24 +70,16 @@ function HeroCTAs({ d }: { d: NewPageDict }) {
       </div>
 
       <div>
-        <a
+        {/* Liquid-glass secondary — the photo band rises behind it on mobile,
+            so the button has to read as glass over the image. */}
+        <Link
           href={CTA_TARGET}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center justify-center gap-2.5 font-sora font-semibold rounded-xl transition-all duration-300 hover:border-white/30 hover:bg-white/[0.04]"
-          style={{
-            fontSize: "15px",
-            padding: "17px 32px",
-            minHeight: "60px",
-            letterSpacing: "-0.01em",
-            border: "1px solid rgba(255,255,255,0.16)",
-            color: "rgba(240,236,230,0.85)",
-            background: "rgba(255,255,255,0.02)",
-          }}
+          className="btn-glass-dark group inline-flex items-center justify-center gap-2.5 font-sora font-semibold rounded-xl"
+          style={{ fontSize: "15px", padding: "17px 32px", minHeight: "60px", letterSpacing: "-0.01em" }}
         >
           {d.hero.secondaryCta}
           <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
-        </a>
+        </Link>
         <p className="font-sora font-light text-fg/45 mt-2.5" style={{ fontSize: "12px" }}>
           {d.hero.guarantee}
         </p>
@@ -106,7 +98,8 @@ function HeroCTAs({ d }: { d: NewPageDict }) {
  */
 export default function Hero({ d }: { d: NewPageDict }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const pan = useHeroPan(sectionRef);
+  const photoRef = useRef<HTMLImageElement>(null);
+  useHeroPan(sectionRef, photoRef);
 
   return (
     <section ref={sectionRef} className="new-hero-section">
@@ -167,10 +160,11 @@ export default function Hero({ d }: { d: NewPageDict }) {
       <div className="new-hero-photo-band">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          ref={photoRef}
           src={STAGE_PHOTO_SRC}
           alt="Maks Nedbailo speaking on stage"
           className="new-hero-photo"
-          style={{ transform: `translateX(-${pan}%)`, objectPosition: "center 38%", filter: "grayscale(0.1) contrast(1.05)" }}
+          style={{ filter: "grayscale(0.1) contrast(1.05)" }}
         />
         <div className="new-hero-photo-fade" aria-hidden />
       </div>

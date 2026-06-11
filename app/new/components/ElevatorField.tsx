@@ -28,6 +28,11 @@ const PLANES_Y = Array.from({ length: 12 }, (_, i) => 40 + i * 100);
 const X_COLS    = 13;
 const X_SPACING = 175;
 const X_JITTER  = 14;
+// Shift the whole grid half a column off the camera axis: instead of looking
+// straight down a dot column (a "wall" of stacked dots dead-center), the
+// vanishing axis falls BETWEEN two columns — two parallel dot lines flank the
+// center and the field reads as a tunnel you're inside of, not a face-on grid.
+const X_OFFSET  = X_SPACING / 2;
 
 // ~2.7x the depth layers of the single-section field (11 -> 30), geometric
 // progression so near layers stay sparse and far layers stay dense.
@@ -68,7 +73,7 @@ function generateDots(): Dot[] {
       for (let col = 0; col < X_COLS; col++) {
         const ix = col - Math.floor(X_COLS / 2);
         dots.push({
-          x: ix * X_SPACING + (rng() - 0.5) * X_JITTER,
+          x: ix * X_SPACING + X_OFFSET + (rng() - 0.5) * X_JITTER,
           y: planeY + (rng() - 0.5) * 4,
           z: z * (1 + Z_JITTER * (rng() - 0.5)),
         });
@@ -230,9 +235,13 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
     };
   }, []);
 
+  // Matches the page background — the Belief and sample-map sections inside
+  // paint solid var(--bg) over the canvas, so the dots only show through the
+  // (transparent) Mechanism section in between. The dots still exist behind
+  // the solid sections — the shaft is continuous, just occluded.
   const wrapperStyle: CSSProperties = {
     position: "relative",
-    background: "#000000",
+    background: "var(--bg)",
   };
 
   const canvasStyle: CSSProperties = {
