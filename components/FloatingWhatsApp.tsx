@@ -30,7 +30,7 @@ export default function FloatingWhatsApp() {
       transition={{ delay: 1.5, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 z-50 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30"
+      className="floating-whatsapp fixed bottom-6 right-6 z-50 rounded-full flex items-center justify-center shadow-lg shadow-green-500/30"
       style={{ backgroundColor: "#25D366", width: "52px", height: "52px" }}
     >
       <WhatsAppIcon />

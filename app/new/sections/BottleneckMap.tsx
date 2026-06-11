@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import VoidSection from "@/components/VoidSection";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, PHASE1_ANCHOR } from "../lib/config";
 import { FOUNDING_RATE } from "../lib/site.config";
+import { KlarnaWordmark } from "../components/BrandWordmarks";
 
 /**
  * Section 5 — THE BOTTLENECK MAP (mechanism).
@@ -15,8 +15,6 @@ import { FOUNDING_RATE } from "../lib/site.config";
  * app/partners/[slug]/short/SectionOfferGlance.tsx (COL_TEMPLATE grid,
  * FeasibilityDots, pillar rows, phase-1 footer, cost-of-inaction strip).
  */
-
-const SCROLL_HINT_KEY = "new_map_scroll_hinted";
 
 // Same sample stats as SectionOfferGlance — generic, illustrative numbers.
 const PILLARS_BASE = [
@@ -50,25 +48,11 @@ function FeasibilityDots({ score }: { score: number }) {
 
 export default function BottleneckMap({ d }: { d: NewPageDict }) {
   const sm = d.map.sample;
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [showHint, setShowHint] = useState(false);
 
-  useEffect(() => {
-    if (typeof localStorage !== "undefined" && !localStorage.getItem(SCROLL_HINT_KEY)) {
-      setShowHint(true);
-    }
-    const el = scrollRef.current;
-    if (!el) return;
-    const onScroll = () => {
-      if (el.scrollLeft > 10) {
-        setShowHint(false);
-        if (typeof localStorage !== "undefined") localStorage.setItem(SCROLL_HINT_KEY, "1");
-        el.removeEventListener("scroll", onScroll);
-      }
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
+  // Split the headline so "90 minutes, ROI-ranked" can be styled as a single
+  // accent-coloured, non-wrapping unit (it was breaking awkwardly on mobile).
+  const HEADLINE_HIGHLIGHT = "90 minutes, ROI-ranked";
+  const headlineParts = d.map.headline.split(HEADLINE_HIGHLIGHT);
 
   const pillars = [
     {
@@ -99,33 +83,43 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
       {/* ── Mechanism intro — VoidSection (pure black, parallax dots) ── */}
       <VoidSection className="section-divider">
         <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
-          <div className="max-w-2xl flex flex-col items-start text-left">
-            <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <div data-reveal className="map-content-panel max-w-2xl flex flex-col items-start text-left">
+            <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.map.label}
             </p>
             <h2
-              data-reveal
               className="font-playfair font-normal text-fg mb-6"
               style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "24ch" }}
             >
-              {d.map.headline}
+              {headlineParts.length === 2 ? (
+                <>
+                  {headlineParts[0]}
+                  <span className="whitespace-nowrap text-accent">{HEADLINE_HIGHLIGHT}</span>
+                  {headlineParts[1]}
+                </>
+              ) : (
+                d.map.headline
+              )}
             </h2>
-            <p data-reveal className="font-sora font-light text-fg/55 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
+            <p className="font-sora font-light text-fg/55 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
               {d.map.body}
             </p>
 
-            <ul data-reveal className="flex flex-col gap-3 mb-8" style={{ maxWidth: "52ch" }}>
+            <ul className="flex flex-col gap-3 mb-8" style={{ maxWidth: "52ch" }}>
               {d.map.bullets.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-3 font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "14px" }}>
-                  <span className="shrink-0 mt-2 w-1.5 h-1.5 rounded-full" style={{ background: "rgba(212,255,43,0.6)" }} aria-hidden />
+                  <span className="shrink-0 mt-[10px] w-3 h-[3px] rounded-sm" style={{ background: "rgba(212,255,43,0.6)" }} aria-hidden />
                   {bullet}
                 </li>
               ))}
             </ul>
 
-            <p data-reveal className="font-sora font-light italic text-fg/30 leading-[1.7]" style={{ fontSize: "13px", maxWidth: "52ch" }}>
-              {d.map.note}
-            </p>
+            <div className="flex items-center gap-3" style={{ maxWidth: "52ch" }}>
+              <KlarnaWordmark className="h-4 w-auto shrink-0 opacity-60" />
+              <p className="font-sora font-light italic text-fg/30 leading-[1.7]" style={{ fontSize: "13px" }}>
+                {d.map.note}
+              </p>
+            </div>
           </div>
         </div>
       </VoidSection>
@@ -137,11 +131,6 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             <p data-reveal className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
               {sm.docTitle}
             </p>
-            {showHint && (
-              <p className="md:hidden font-sora text-fg/22 italic" style={{ fontSize: "10px" }}>
-                ← swipe →
-              </p>
-            )}
           </div>
 
           {/* Doc frame */}
@@ -167,10 +156,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             {/* DESKTOP TABLE */}
             <div className="hidden md:block">
               <div className="grid px-6 py-2.5 border-b border-white/[0.04]" style={{ gridTemplateColumns: COL_TEMPLATE }}>
-                <span className="font-label text-fg/38" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPain}</span>
-                <span className="font-label text-fg/38" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colLosingNow}</span>
-                <span className="font-label text-fg/38" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colFeasibility}</span>
-                <span className="font-label text-fg/38 text-right" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPriority}</span>
+                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPain}</span>
+                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colLosingNow}</span>
+                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colFeasibility}</span>
+                <span className="font-label text-fg/48 text-right" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPriority}</span>
               </div>
 
               {pillars.map((pillar, pi) => (
@@ -186,10 +175,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                       className="grid px-6 py-3 border-t border-white/[0.03] hover:bg-white/[0.015] transition-colors duration-150 items-center"
                       style={{ gridTemplateColumns: COL_TEMPLATE, gap: "0.75rem" }}
                     >
-                      <p className="font-sora font-light text-fg/62" style={{ fontSize: "12px" }}>{item.pain}</p>
-                      <p className="font-numeral text-fg/55" style={{ fontSize: "12px" }}>{item.cost}</p>
+                      <p className="font-sora font-light text-fg/72" style={{ fontSize: "12px" }}>{item.pain}</p>
+                      <p className="font-numeral text-fg/65" style={{ fontSize: "12px" }}>{item.cost}</p>
                       <FeasibilityDots score={item.feasibility} />
-                      <p className="font-numeral text-fg/38 text-right" style={{ fontSize: "12px" }}>#{item.rank}</p>
+                      <p className="font-numeral text-fg/48 text-right" style={{ fontSize: "12px" }}>#{item.rank}</p>
                     </div>
                   ))}
                 </div>
@@ -201,11 +190,11 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                   {sm.phase1Heading}
                 </p>
                 <div className="flex items-start justify-between gap-4">
-                  <p className="font-sora font-light text-fg/62 flex-1" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
+                  <p className="font-sora font-light text-fg/72 flex-1" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
                   <div className="text-right shrink-0">
-                    <p className="font-sora text-fg/35" style={{ fontSize: "10px" }}>{sm.phase1Timeline}</p>
+                    <p className="font-sora text-fg/45" style={{ fontSize: "10px" }}>{sm.phase1Timeline}</p>
                     <p className="font-numeral font-bold text-accent" style={{ fontSize: "17px", lineHeight: 1.2 }}>{PHASE1_ANCHOR}</p>
-                    <p className="font-sora text-fg/22" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
+                    <p className="font-sora text-fg/30" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
                   </div>
                 </div>
               </div>
@@ -222,13 +211,13 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                   </div>
                   {pillar.items.map((item, ii) => (
                     <div key={ii} className="border-t border-white/[0.03] px-5 py-4">
-                      <p className="font-sora font-light text-fg/65 mb-2.5 leading-[1.5]" style={{ fontSize: "13px" }}>
+                      <p className="font-sora font-light text-fg/75 mb-2.5 leading-[1.5]" style={{ fontSize: "13px" }}>
                         {item.pain}
                       </p>
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="font-numeral text-fg/50" style={{ fontSize: "12px" }}>{item.cost}</span>
+                        <span className="font-numeral text-fg/60" style={{ fontSize: "12px" }}>{item.cost}</span>
                         <FeasibilityDots score={item.feasibility} />
-                        <span className="font-numeral text-fg/35" style={{ fontSize: "11px" }}>#{item.rank}</span>
+                        <span className="font-numeral text-fg/45" style={{ fontSize: "11px" }}>#{item.rank}</span>
                       </div>
                     </div>
                   ))}
@@ -240,12 +229,12 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                 <p className="font-label text-accent/65 mb-2" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
                   {sm.phase1Heading}
                 </p>
-                <p className="font-sora font-light text-fg/62 mb-3" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
+                <p className="font-sora font-light text-fg/72 mb-3" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
                 <div className="flex items-center justify-between">
-                  <span className="font-sora text-fg/35" style={{ fontSize: "11px" }}>{sm.phase1Timeline}</span>
+                  <span className="font-sora text-fg/45" style={{ fontSize: "11px" }}>{sm.phase1Timeline}</span>
                   <div className="text-right">
                     <span className="font-numeral font-bold text-accent" style={{ fontSize: "16px" }}>{PHASE1_ANCHOR}</span>
-                    <p className="font-sora text-fg/22" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
+                    <p className="font-sora text-fg/30" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
                   </div>
                 </div>
               </div>

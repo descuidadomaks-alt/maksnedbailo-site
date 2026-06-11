@@ -46,6 +46,12 @@ export interface ProofCase {
   href: string;
 }
 
+export interface IndustryCase {
+  name: string;
+  desc: string;
+  tag: string;
+}
+
 export interface TestimonialItem {
   quote: string;
   author: string;
@@ -66,6 +72,8 @@ export interface NewPageDict {
     sub: string;
     /** Primary CTA -> /score (Bottleneck Score quiz) */
     primaryCta: string;
+    /** Shown under the primary CTA */
+    primaryMicrocopy: string;
     /** Secondary ghost CTA -> CTA_TARGET (Bottleneck Map booking) */
     secondaryCta: string;
     /** Risk-reversal line shown directly under the hero CTA */
@@ -118,8 +126,29 @@ export interface NewPageDict {
     sub: string;
     liveBadge: string;
     cases: ProofCase[];
+    /** "The same pattern, at scale" — Klarna/IKEA/Octopus industry strip. */
+    industryLabel: string;
+    industry: IndustryCase[];
     /** Link after this section -> /score */
     ctaLabel: string;
+  };
+
+  path: {
+    label: string;
+    headline: string;
+    steps: {
+      number: string;
+      title: string;
+      badge?: string;
+      desc: string;
+      ctaLabel?: string;
+      microcopy?: string;
+      note?: string;
+    }[];
+    /** "founding" qualifier shown next to the founding rate on step 2 */
+    foundingLabel: string;
+    /** Single sitewide source for the "X of 5 slots" capacity line. */
+    capacityLine: (slotsLeft: number, standardRate: string) => string;
   };
 
   testimonials: {
@@ -140,6 +169,8 @@ export interface NewPageDict {
   services: {
     label: string;
     tags: string[];
+    /** Hover/tap chip on the services ticker — links to CTA_TARGET. */
+    hoverCta: string;
   };
 
   cta: {
@@ -152,8 +183,6 @@ export interface NewPageDict {
     guarantee: string;
     /** WhatsApp secondary CTA (replaces the old Telegram link) */
     secondaryCta: string;
-    /** Founding-rate microcopy under the Map CTA. */
-    foundingRateLine: (slotsLeft: number, foundingRate: string, standardRate: string) => string;
     closing: string;
   };
 
@@ -161,8 +190,10 @@ export interface NewPageDict {
     label: string;
     headline: string;
     items: { q: string; a: string }[];
-    /** Explicit guarantee, shown near the FAQ */
+    /** Explicit guarantee, shown near the FAQ as a banner card */
     guarantee: string;
+    /** Closing WhatsApp line shown after the FAQ accordion */
+    closingCta: string;
   };
 
   footer: {
@@ -300,7 +331,8 @@ const en: NewPageDict = {
     // Option C (kept for future A/B — not used):
     //   headlineLines: ["You can't be everywhere.", "That's what it's costing you."],
     sub: "I find the one leak costing you the most — and plug it with AI that actually works. Or I tell you straight where AI isn't the answer.",
-    primaryCta: "Get your Bottleneck Score — 2 min, free",
+    primaryCta: "Get your Bottleneck Score",
+    primaryMicrocopy: "2 minutes · free · no call",
     secondaryCta: "Book the Bottleneck Map",
     guarantee: "10× the value or you don't pay — and you keep the map.",
     proofStrip: "3 systems live now · Amira · Elena Hotel & SPA · Voice AI",
@@ -317,7 +349,7 @@ const en: NewPageDict = {
       "You tried an AI tool once. It gave a real client hallucinated garbage. Never again.",
     ],
     punch: "If you got hit by a bus tomorrow, does the business survive past Friday?",
-    ctaLabel: "Find out what it's costing you — 2-min Bottleneck Score →",
+    ctaLabel: "Find out what it's costing you — 2-min Bottleneck Score",
   },
 
   reframe: {
@@ -414,7 +446,58 @@ const en: NewPageDict = {
         href: VOICE_DEMO_ANCHOR,
       },
     ],
+    industryLabel: "The same pattern, at scale",
+    industry: [
+      {
+        name: "Klarna",
+        desc: "Built an AI assistant that did the work of hundreds of agents — then rehired humans for the conversations that needed one.",
+        tag: "Industry · in production",
+      },
+      {
+        name: "IKEA",
+        desc: "Automated routine customer questions, then retrained call-centre staff into higher-value advisory roles.",
+        tag: "Industry · in production",
+      },
+      {
+        name: "Octopus Energy",
+        desc: "AI drafts replies in the company's own voice; human agents review and send. Speed of automation, judgment of a person.",
+        tag: "Industry · in production",
+      },
+    ],
     ctaLabel: "See your own numbers in 2 minutes →",
+  },
+
+  path: {
+    label: "How this works",
+    headline: "Three steps. You can stop after any of them.",
+    steps: [
+      {
+        number: "01",
+        title: "Bottleneck Score",
+        badge: "Free · 2 minutes",
+        desc: "A self-assessment. Estimates what your founder-bottleneck is costing you per month, and shows your #1 leak category.",
+        ctaLabel: "Take it",
+      },
+      {
+        number: "02",
+        title: "Bottleneck Map",
+        desc: "90 minutes, ROI-ranked. The exact map of where you're the bottleneck, what it's costing you, and what's worth fixing first.",
+        ctaLabel: "Book",
+        microcopy: "If I don't find €10,000+/year recoverable — refunded, and you keep the map.",
+      },
+      {
+        number: "03",
+        title: "First build",
+        badge: "from €4,500 · 2-3 weeks",
+        desc: "The fix the Map points to, built and live. Scoped, ROI-ranked, no scope creep.",
+        note: "Unlocked by the Map.",
+      },
+    ],
+    foundingLabel: "founding",
+    capacityLine: (slotsLeft, standardRate) =>
+      slotsLeft > 0
+        ? `I run every session myself — 5 slots at a time. ${slotsLeft} of 5 open.`
+        : `I run every session myself — 5 slots at a time. ${standardRate} · fully credited toward your first build.`,
   },
 
   testimonials: {
@@ -440,6 +523,7 @@ const en: NewPageDict = {
   services: {
     label: "Got a different problem? We've probably solved one like it",
     tags: SERVICES_TAGS,
+    hoverCta: "Book the Map",
   },
 
   cta: {
@@ -450,10 +534,6 @@ const en: NewPageDict = {
     scoreCta: "Get your Bottleneck Score",
     guarantee: "10× the value, or you don't pay — and you keep the map either way.",
     secondaryCta: "Quick question? WhatsApp me",
-    foundingRateLine: (slotsLeft, foundingRate, standardRate) =>
-      slotsLeft > 0
-        ? `Founding rate: first 5 sessions at ${foundingRate} (standard ${standardRate}) — fully credited toward your first build. ${slotsLeft} of 5 remaining.`
-        : `Standard rate: ${standardRate} — fully credited toward your first build.`,
     closing: "If there's no clear opportunity, I'll tell you. That's part of the work.",
   },
 
@@ -464,6 +544,10 @@ const en: NewPageDict = {
       {
         q: "Is this just a sales call?",
         a: "No. It's 90 minutes of real diagnostic work. You'll leave with a one-page map even if we never work together again. If there's no clear opportunity, I'll tell you straight — that's part of the deal.",
+      },
+      {
+        q: "Why isn't this free?",
+        a: "Because it's 90 minutes of focused, one-on-one diagnostic work — not a generic quiz or a sales script. Free things get a template; paid things get my full attention on your numbers. And the risk sits with me: if I don't find at least €10,000/year in recoverable cost, the session is refunded and you keep the map anyway.",
       },
       {
         q: "What's the Bottleneck Score?",
@@ -531,6 +615,7 @@ const en: NewPageDict = {
       },
     ],
     guarantee: "If I don't find at least €10,000/year in recoverable cost, the session is refunded and you keep the map.",
+    closingCta: "Still not sure? Message me on WhatsApp",
   },
 
   footer: {

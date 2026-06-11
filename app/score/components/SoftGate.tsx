@@ -11,6 +11,7 @@ import {
   LEAK_CATEGORY_LABELS,
   TIER_INTRO,
 } from "../lib/quiz";
+import TierGauge from "./TierGauge";
 
 declare global {
   interface Window {
@@ -98,11 +99,13 @@ export default function SoftGate({
         Result ready
       </p>
       <h2
-        className="font-playfair font-normal text-fg mb-8"
+        className="font-playfair font-normal text-fg mb-6"
         style={{ fontSize: "clamp(24px, 4vw, 38px)", lineHeight: 1.15, letterSpacing: "-0.018em" }}
       >
         {TIER_INTRO[tier]}
       </h2>
+
+      <TierGauge score={score} tier={tier} />
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 text-left">
         <input

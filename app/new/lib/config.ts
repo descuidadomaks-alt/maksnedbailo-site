@@ -4,17 +4,13 @@
  */
 
 /**
- * CTA_TARGET — primary CTA destination across /new.
+ * CTA_TARGET — primary CTA destination across /new and /score.
  *
- * Two reasonable choices:
- *  - The /ai-map offer page (lets visitors read the full offer + FAQ first)
- *  - The zcal booking link directly (one click to book)
- *
- * Currently set to the zcal booking link, matching the rest of the site's
- * "Book the Bottleneck Map" CTAs (/ai-map, /partners). Swap to "/ai-map" if
- * Maks wants the homepage CTA to land on the offer page first.
+ * Routes to the /ai-map offer page (full pricing, guarantee, FAQ, then the
+ * zcal booking CTA). zcal itself is only linked from /ai-map — every other
+ * "Book the Bottleneck Map" CTA on the site routes here first.
  */
-export const CTA_TARGET = "https://zcal.co/carelessmaks/ai-map";
+export const CTA_TARGET = "/ai-map";
 
 // Bottleneck Score quiz — primary lead-magnet CTA, referenced from the hero,
 // CTA-density bands, and the final section.
@@ -42,10 +38,15 @@ export const WA_BOTTLENECK_LINK =
 // dark gradient overlay applied in Hero.tsx. ~4:1, public/maks-stage.jpg.
 export const STAGE_PHOTO_SRC = "/maks-stage.jpg";
 
-// Founder portrait — used in the "Why I do this" (Belief) section. Per the
-// "never the same image twice on one page" rule, the stage photo lives in
-// the hero, so Belief keeps this portrait.
+// Founder portrait — kept for reference, no longer used in Belief (see
+// CRM_SCREENSHOT_SRC below). Per the "never the same image twice on one
+// page" rule, the stage photo lives in the hero.
 export const HERO_PHOTO_SRC = "/maks-photo.png";
+
+// "Why I do this" (Belief) section visual — a real client dashboard
+// screenshot, grounding the "messy systems" story in an actual interface
+// rather than a founder portrait.
+export const CRM_SCREENSHOT_SRC = "/automations/drpaul/pw_full.png";
 
 // Anchor id for the Voice AI proof card (ProofSection) — replaces the old
 // off-site chasehughes.com demo link with an on-page anchor.

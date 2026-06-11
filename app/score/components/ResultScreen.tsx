@@ -13,6 +13,7 @@ import {
 } from "../lib/quiz";
 import { CTA_TARGET, WA_NUMBER } from "@/app/new/lib/config";
 import { FOUNDING_RATE } from "@/app/new/lib/site.config";
+import TierGauge from "./TierGauge";
 
 function WhatsAppIcon() {
   return (
@@ -45,11 +46,13 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
   return (
     <div className="quiz-step max-w-xl w-full mx-auto text-center">
       <p
-        className="font-label text-accent/70 mb-5"
+        className="font-label text-accent/70 mb-4"
         style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
       >
         {tier} zone
       </p>
+
+      <TierGauge score={score} tier={tier} />
 
       <h1
         className="font-numeral font-semibold text-fg mb-2"
@@ -63,11 +66,11 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
       <p className="font-sora font-light text-fg/45 mb-1.5" style={{ fontSize: "15px" }}>
         Estimated monthly cost of the founder bottleneck
       </p>
-      <p className="font-numeral text-fg/28 mb-10" style={{ fontSize: "13px" }}>
+      <p className="font-numeral text-fg/28 mb-6" style={{ fontSize: "13px" }}>
         (~{formatEUR(annualLow)}–{formatEUR(annualHigh)}/year)
       </p>
 
-      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.015] p-6 mb-8 text-left">
+      <div className="rounded-2xl border border-white/[0.07] bg-white/[0.015] p-5 mb-6 text-left">
         <p
           className="font-label text-accent/65 mb-2.5"
           style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}
@@ -80,7 +83,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
       </div>
 
       <p
-        className="font-sora font-light italic text-fg/35 mb-10 mx-auto"
+        className="font-sora font-light italic text-fg/35 mb-6 mx-auto"
         style={{ fontSize: "13px", lineHeight: 1.6, maxWidth: "44ch" }}
       >
         This is an estimate from 8 questions. The Bottleneck Map makes it exact — 90
@@ -106,12 +109,12 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
           </a>
         </div>
       ) : isUnderOneMillion ? (
-        <div className="flex flex-col items-center gap-4">
-          <p className="font-sora font-light text-fg/55 mx-auto" style={{ fontSize: "14px", lineHeight: 1.6, maxWidth: "44ch" }}>
+        <div className="flex flex-col items-center gap-3">
+          <p className="font-sora font-light text-fg/55 mx-auto" style={{ fontSize: "13px", lineHeight: 1.6, maxWidth: "44ch" }}>
             At your stage the Map usually isn&apos;t worth the fee yet — here&apos;s the
             one thing to fix first:
           </p>
-          <p className="font-sora font-light text-fg/65 leading-[1.65] mx-auto" style={{ fontSize: "14px", maxWidth: "44ch" }}>
+          <p className="font-sora font-light text-fg/65 leading-[1.6] mx-auto" style={{ fontSize: "13.5px", maxWidth: "44ch" }}>
             {LEAK_CATEGORY_TIPS[leakCategory]}
           </p>
           <a
@@ -154,7 +157,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
 
       <Link
         href="/score"
-        className="inline-block font-sora font-light text-fg/22 hover:text-fg/45 transition-colors duration-200 mt-12"
+        className="inline-block font-sora font-light text-fg/22 hover:text-fg/45 transition-colors duration-200 mt-8"
         style={{ fontSize: "12px" }}
       >
         Take the score again

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, SCORE_TARGET, WA_BOTTLENECK_LINK } from "../lib/config";
-import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE } from "../lib/site.config";
+import { foundingSlotsLeft, STANDARD_RATE } from "../lib/site.config";
 
 function WhatsAppIcon() {
   return (
@@ -14,6 +14,10 @@ function WhatsAppIcon() {
   );
 }
 
+// "Or don't — your call." is styled as an accent-coloured aside on the
+// final headline — the deadpan punchline that closes the page's argument.
+const HEADLINE_ACCENT = "Or don't — your call.";
+
 /**
  * Section 8 — CTA / OFFER.
  * Centered. Dual CTA — Map is primary on desktop, Score is primary on
@@ -22,6 +26,8 @@ function WhatsAppIcon() {
  * WhatsApp-styled secondary button (channel cleanup pass).
  */
 export default function FinalCTA({ d }: { d: NewPageDict }) {
+  const headlineParts = d.cta.headline.split(HEADLINE_ACCENT);
+
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
       <div
@@ -35,8 +41,15 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
           {d.cta.label}
         </p>
 
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-4 mx-auto" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>
-          {d.cta.headline}
+        <h2 data-reveal className="font-playfair font-normal text-fg mb-4 mx-auto" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em", maxWidth: "20ch" }}>
+          {headlineParts.length === 2 ? (
+            <>
+              {headlineParts[0]}
+              <span className="text-accent">{HEADLINE_ACCENT}</span>
+            </>
+          ) : (
+            d.cta.headline
+          )}
         </h2>
         <p data-reveal className="font-sora font-light text-fg/45 mb-12 mx-auto" style={{ fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.55, maxWidth: "48ch" }}>
           {d.cta.sub}
@@ -61,9 +74,9 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
             </Link>
           </div>
 
-          {/* Founding-rate microcopy — under the Map CTA */}
+          {/* Capacity line — under the Map CTA, single sitewide source (see ThePath) */}
           <p className="font-sora font-light text-accent/65" style={{ fontSize: "12px" }}>
-            {d.cta.foundingRateLine(foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE)}
+            {d.path.capacityLine(foundingSlotsLeft, STANDARD_RATE)}
           </p>
 
           <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px" }}>
@@ -82,7 +95,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
             {d.cta.secondaryCta}
           </a>
 
-          <p className="font-sora font-light italic text-fg/22 mt-2 mx-auto" style={{ fontSize: "12px", maxWidth: "40ch" }}>
+          <p className="font-sora font-light italic text-fg/16 mt-2 mx-auto" style={{ fontSize: "11px", maxWidth: "40ch" }}>
             {d.cta.closing}
           </p>
         </div>

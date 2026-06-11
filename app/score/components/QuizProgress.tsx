@@ -1,14 +1,12 @@
 "use client";
 
-/** Fixed progress bar + back button + step counter — shown during Q1–Q8. */
+/** Minimal fixed header — thin progress bar + step counter. Shown during Q1–Q8. */
 export default function QuizProgress({
   current,
   total,
-  onBack,
 }: {
   current: number;
   total: number;
-  onBack: () => void;
 }) {
   const pct = ((current + 1) / total) * 100;
 
@@ -20,18 +18,7 @@ export default function QuizProgress({
           style={{ width: `${pct}%` }}
         />
       </div>
-      <div className="max-w-xl mx-auto px-6 pt-5 flex items-center justify-between">
-        {current > 0 ? (
-          <button
-            onClick={onBack}
-            className="font-sora text-fg/35 hover:text-fg/70 transition-colors duration-200"
-            style={{ fontSize: "13px" }}
-          >
-            ← Back
-          </button>
-        ) : (
-          <span aria-hidden />
-        )}
+      <div className="max-w-xl mx-auto px-6 pt-4 flex items-center justify-end">
         <span className="font-label text-fg/30" style={{ fontSize: "11px", letterSpacing: "2px" }}>
           {current + 1} / {total}
         </span>

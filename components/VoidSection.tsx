@@ -29,9 +29,9 @@ const FOCAL        = 380;
 const BASE_RADIUS  = 1.8;  // radius at z=FOCAL; slightly larger for readability
 const NEAR_CLIP    = 40;
 
-// Five horizontal floor planes — 130 world-units apart
-// Max gap between passes: 20% of scroll → near dots always on screen
-const PLANES_Y = [50, 180, 310, 440, 570];
+// Seven horizontal floor planes — ~87 world-units apart (was 5 @ 130 apart).
+// Denser Y-passes → near dots cross the screen more often during scroll.
+const PLANES_Y = [50, 137, 224, 311, 397, 484, 570];
 
 // Grid within each plane
 const X_COLS    = 13;    // -6 to +6
@@ -64,19 +64,36 @@ interface VisibleDot {
   opacity: number;
 }
 
+// ── seeded RNG ────────────────────────────────────────────────────────────────
+// Fixed-seed PRNG so generateDots() always returns the same field. Previously
+// Math.random() meant every resize (incl. mobile address-bar show/hide, which
+// fires `resize` purely from a viewport-height change) silently reshuffled the
+// whole dot grid — visible as a jarring "jump" mid-scroll on mobile.
+
+function mulberry32(seed: number) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 // ── generateDots ──────────────────────────────────────────────────────────────
-// Two flat planes × 9 z-depths × 13 x-columns = 234 fixed dots.
+// Seven planes × 11 z-depths × 13 x-columns = 1,001 fixed dots, generated once.
 
 function generateDots(): Dot[] {
+  const rng = mulberry32(0x5eed1e55);
   const dots: Dot[] = [];
   for (const planeY of PLANES_Y) {
     for (const z of Z_DEPTHS) {
       for (let col = 0; col < X_COLS; col++) {
         const ix = col - Math.floor(X_COLS / 2); // -6 … +6
         dots.push({
-          x: ix * X_SPACING + (Math.random() - 0.5) * X_JITTER,
-          y: planeY + (Math.random() - 0.5) * 4,        // tiny Y jitter — plane stays flat
-          z: z * (1 + Z_JITTER * (Math.random() - 0.5)), // ≤7% z jitter
+          x: ix * X_SPACING + (rng() - 0.5) * X_JITTER,
+          y: planeY + (rng() - 0.5) * 4,        // tiny Y jitter — plane stays flat
+          z: z * (1 + Z_JITTER * (rng() - 0.5)), // ≤7% z jitter
         });
       }
     }
@@ -177,13 +194,18 @@ export default function VoidSection({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // ── Init: size canvas + generate fixed dot grid ──────────────────────────
-    const init = () => {
+    // ── Init: size canvas, generate fixed dot grid once ──────────────────────
+    // The dot field is seeded (deterministic) and independent of canvas size,
+    // so resizes (incl. mobile 100dvh address-bar changes) only ever resize
+    // the canvas — they never regenerate/reshuffle the dots.
+    const resizeCanvas = () => {
       canvas.width  = section.offsetWidth;
       canvas.height = section.offsetHeight;
-      dotsRef.current = generateDots();
     };
-    init();
+    resizeCanvas();
+    if (dotsRef.current.length === 0) {
+      dotsRef.current = generateDots();
+    }
 
     // ── Idle ambient drift ────────────────────────────────────────────────────
     // A slow sine wave nudges the camera even when the user isn't scrolling, so
@@ -230,10 +252,14 @@ export default function VoidSection({
     const onScroll = () => { dirty = true; scheduleRender(); };
 
     const onResize = () => {
-      init();
+      resizeCanvas();
       dirty = true;
       scheduleRender();
     };
+
+    // Pre-render synchronously so the field is visible on first paint —
+    // don't wait for a scroll or rAF tick to draw the initial frame.
+    render();
 
     // Initial render at current scroll position
     dirty = true;
@@ -282,6 +308,11 @@ export default function VoidSection({
           width: "100%", height: "100%",
           pointerEvents: "none",
           zIndex: 0,
+          // Alpha-gradient peek-through: dots near the section's hard top/bottom
+          // edges fade out, so the field reads as continuing past the cut
+          // rather than stopping abruptly.
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)",
         }}
       />
       <div

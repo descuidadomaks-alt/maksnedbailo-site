@@ -1,16 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { NewPageDict, TestimonialItem } from "../lib/i18n";
 
 /**
  * Section 6b — TESTIMONIALS (trust).
- * Desktop: video testimonials left (~2/3), vertical auto-scroll quote
- * marquee right (~1/3). Mobile: videos stack on top, quotes become a
- * horizontal swipeable row (scroll-snap, animation disabled — see
- * .testimonial-marquee in globals.css). Quotes ported from the old
- * components/Proof.tsx CARDS via lib/i18n.ts TESTIMONIAL_ITEMS,
- * Corinna C. first.
+ * Desktop: video testimonials left (~2/3), auto-advancing starred review
+ * card right (~1/3). Mobile: videos stack on top, review card below.
+ * Quotes ported from the old components/Proof.tsx CARDS via
+ * lib/i18n.ts TESTIMONIAL_ITEMS, Corinna C. first (lime accent treatment,
+ * matching the old AccentCard).
  */
+
+const AUTO_ADVANCE_MS = 5000;
 
 const VIDEOS = [
   { name: "Garrett Williams", company: "Econocraft Materials · USA", youtubeId: "3Gzbg1rI5Tg" },
@@ -38,15 +40,67 @@ function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: str
   );
 }
 
-function QuoteCard({ item }: { item: TestimonialItem }) {
+function StarRow() {
   return (
-    <div className="rounded-xl border border-white/[0.05] bg-white/[0.014] p-4 flex flex-col gap-3">
-      <p className="font-sora font-light text-fg/55 leading-[1.65]" style={{ fontSize: "12.5px" }}>
-        &ldquo;{item.quote}&rdquo;
-      </p>
-      <div>
-        <p className="font-sora text-fg/65 font-semibold" style={{ fontSize: "11px" }}>{item.author}</p>
-        <p className="font-sora text-fg/28" style={{ fontSize: "10px" }}>{item.role}</p>
+    <div className="flex gap-0.5 mb-3" aria-hidden>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} width="12" height="12" viewBox="0 0 24 24" fill="#D4FF2B">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+        </svg>
+      ))}
+    </div>
+  );
+}
+
+function ReviewSlider({ items }: { items: TestimonialItem[] }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setIndex((i) => (i + 1) % items.length), AUTO_ADVANCE_MS);
+    return () => clearInterval(id);
+  }, [items.length]);
+
+  const item = items[index];
+  const isAccent = index === 0;
+
+  return (
+    <div
+      className="rounded-2xl p-6 md:p-8 flex flex-col justify-between h-full transition-colors duration-500"
+      style={
+        isAccent
+          ? { background: "rgba(212,255,43,0.05)", border: "1px solid rgba(212,255,43,0.18)" }
+          : { background: "rgba(255,255,255,0.014)", border: "1px solid rgba(255,255,255,0.05)" }
+      }
+    >
+      <div key={index} className="testimonial-fade">
+        <StarRow />
+        <p className="font-sora font-light text-fg/65 leading-[1.7]" style={{ fontSize: "13.5px" }}>
+          &ldquo;{item.quote}&rdquo;
+        </p>
+      </div>
+
+      <div className="mt-6">
+        <p className="font-sora text-fg/75 font-semibold" style={{ fontSize: "12px" }}>{item.author}</p>
+        <p className="font-sora text-fg/30 mt-0.5" style={{ fontSize: "10px" }}>{item.role}</p>
+        <div className="flex gap-1.5 mt-5" role="tablist" aria-label="Reviews">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              role="tab"
+              aria-selected={i === index}
+              aria-label={`Show review ${i + 1} of ${items.length}`}
+              onClick={() => setIndex(i)}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === index ? "18px" : "5px",
+                height: "5px",
+                background: i === index ? "rgba(212,255,43,0.7)" : "rgba(255,255,255,0.15)",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -87,13 +141,9 @@ export default function Testimonials({ d }: { d: NewPageDict }) {
             ))}
           </div>
 
-          {/* Quote marquee — ~1/3 on desktop, vertical auto-scroll; horizontal swipe on mobile */}
-          <div data-reveal="d1" className="testimonial-marquee-wrap rounded-2xl border border-white/[0.05]" style={{ background: "rgba(255,255,255,0.008)" }}>
-            <div className="testimonial-marquee">
-              {[...items, ...items].map((item, i) => (
-                <QuoteCard key={i} item={item} />
-              ))}
-            </div>
+          {/* Review slider — ~1/3 on desktop, auto-advances every ~5s, Corinna first */}
+          <div data-reveal="d1">
+            <ReviewSlider items={items} />
           </div>
 
         </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { SCORE_TARGET } from "../lib/config";
+import { KlarnaWordmark, IkeaWordmark, OctopusWordmark } from "../components/BrandWordmarks";
 
 /**
  * Section 6 — PROOF (capability): "Real systems, live now".
@@ -107,6 +108,8 @@ function VoiceMock() {
 
 const CASE_VISUALS = [ChatMock, BookingMock, VoiceMock];
 
+const INDUSTRY_WORDMARKS = [KlarnaWordmark, IkeaWordmark, OctopusWordmark];
+
 export default function ProofSection({ d }: { d: NewPageDict }) {
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
@@ -168,6 +171,33 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
               </Link>
             );
           })}
+        </div>
+
+        {/* ── 6b: Industry strip — same pattern proven at scale ── */}
+        <div className="mb-12">
+          <p data-reveal className="font-label text-fg/22 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            {d.proof.industryLabel}
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-stretch">
+            {d.proof.industry.map((item, i) => {
+              const Wordmark = INDUSTRY_WORDMARKS[i];
+              return (
+                <div
+                  key={i}
+                  data-reveal={`d${i}`}
+                  className="h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-3"
+                >
+                  {Wordmark && <Wordmark className="h-5 w-auto self-start" />}
+                  <p className="font-sora font-light text-fg/45 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>
+                    {item.desc}
+                  </p>
+                  <span className="font-sora text-fg/20 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                    {item.tag}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* CTA — low-friction, routes to the Bottleneck Score */}

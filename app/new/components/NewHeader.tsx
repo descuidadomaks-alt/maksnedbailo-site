@@ -7,6 +7,7 @@
  */
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useNewLocale } from "../lib/locale";
 import { getNewDict } from "../lib/i18n";
 import { CTA_TARGET } from "../lib/config";
@@ -42,9 +43,19 @@ function MapIcon() {
 export default function NewHeader() {
   const { locale, setLocale } = useNewLocale();
   const d = getNewDict(locale);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed left-0 right-0 z-50 pointer-events-none" style={{ top: "20px" }}>
+    <header className="fixed left-0 right-0 top-0 z-50">
+      <div className={`new-header-bar ${scrolled ? "is-visible" : ""}`} aria-hidden />
+      <div className="pointer-events-none" style={{ paddingTop: "20px", paddingBottom: "10px" }}>
       <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
 
         {/* Logo */}
@@ -102,6 +113,7 @@ export default function NewHeader() {
             {d.header.ctaLabel}
           </a>
         </div>
+      </div>
       </div>
     </header>
   );

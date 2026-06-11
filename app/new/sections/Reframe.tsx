@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { SCORE_TARGET } from "../lib/config";
+import FractureSVG from "../components/FractureSVG";
 
 function XIcon() {
   return (
@@ -47,8 +48,9 @@ export default function Reframe({ d }: { d: NewPageDict }) {
             <div
               key={i}
               data-reveal={`d${i}`}
-              className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-3"
+              className="relative overflow-hidden rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-3"
             >
+              <FractureSVG variant={i} />
               <span
                 className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-fg/30"
                 style={{ border: "1px solid rgba(255,255,255,0.1)" }}

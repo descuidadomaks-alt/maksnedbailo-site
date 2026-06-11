@@ -24,12 +24,14 @@ import Reframe from "./sections/Reframe";
 import Belief from "./sections/Belief";
 import BottleneckMap from "./sections/BottleneckMap";
 import ProofSection from "./sections/ProofSection";
+import ThePath from "./sections/ThePath";
 import Testimonials from "./sections/Testimonials";
 import WhyMe from "./sections/WhyMe";
 import ServicesTicker from "./sections/ServicesTicker";
 import FinalCTA from "./sections/FinalCTA";
 import NewFAQ from "./sections/NewFAQ";
 import NewFooter from "./sections/NewFooter";
+import MobileCtaBar from "./components/MobileCtaBar";
 
 export default function NewHomePage() {
   const { locale } = useNewLocale();
@@ -44,6 +46,7 @@ export default function NewHomePage() {
         <Belief d={d} />
         <BottleneckMap d={d} />
         <ProofSection d={d} />
+        <ThePath d={d} />
         <Testimonials d={d} />
         <WhyMe d={d} />
         <ServicesTicker d={d} />
@@ -51,6 +54,7 @@ export default function NewHomePage() {
         <NewFAQ d={d} />
       </main>
       <NewFooter d={d} />
+      <MobileCtaBar />
       <FloatingWhatsApp />
     </>
   );

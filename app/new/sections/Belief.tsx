@@ -1,15 +1,15 @@
 "use client";
 
 import type { NewPageDict } from "../lib/i18n";
-import { HERO_PHOTO_SRC } from "../lib/config";
+import { CRM_SCREENSHOT_SRC } from "../lib/config";
 
 /**
  * Section 4 — THE BELIEF + WHO I AM (Sinek "Why" + founder story).
  * Trimmed ~40% (see lib/i18n.ts belief.body) to keep only: the prison line
  * (headline), "scales the mess", "learned it the hard way", and the offer of
- * the safest first move. Two-column: copy left, founder portrait right —
- * the stage photo is used in the hero, so this section uses the portrait
- * (never the same image twice on one page).
+ * the safest first move. Two-column: copy left, a real client dashboard
+ * screenshot right — grounds the "messy systems" story in an actual
+ * interface instead of a founder portrait.
  */
 export default function Belief({ d }: { d: NewPageDict }) {
   return (
@@ -51,12 +51,12 @@ export default function Belief({ d }: { d: NewPageDict }) {
             </div>
           </div>
 
-          {/* ── Founder portrait ── */}
+          {/* ── Client dashboard screenshot ── */}
           <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-            <div data-reveal className="hero-photo-frame">
+            <div data-reveal className="belief-screenshot-frame">
               <span className="hero-photo-glow" aria-hidden />
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={HERO_PHOTO_SRC} alt="Maks Nedbailo, founder of Care Less" />
+              <img src={CRM_SCREENSHOT_SRC} alt="A client's automation dashboard, built and deployed" />
             </div>
           </div>
 

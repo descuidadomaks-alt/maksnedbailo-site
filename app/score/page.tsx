@@ -64,14 +64,14 @@ export default function ScorePage() {
   }
 
   return (
-    <main data-short-page className="min-h-screen flex flex-col bg-bg">
+    <main data-short-page className="flex flex-col bg-bg" style={{ minHeight: "100dvh" }}>
       {typeof step === "number" && (
-        <QuizProgress current={step} total={QUESTIONS.length} onBack={goBack} />
+        <QuizProgress current={step} total={QUESTIONS.length} />
       )}
-      <div className="flex-1 flex items-center justify-center px-6 py-24">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 md:py-24">
         {step === "intro" && <Intro onStart={() => setStep(0)} />}
         {typeof step === "number" && (
-          <QuestionScreen key={step} index={step} onSelect={selectAnswer} />
+          <QuestionScreen key={step} index={step} onSelect={selectAnswer} onBack={goBack} />
         )}
         {step === "gate" && <SoftGate key="gate" answers={answers} onSuccess={handleGateSuccess} />}
         {step === "result" && <ResultScreen key="result" answers={answers} />}
