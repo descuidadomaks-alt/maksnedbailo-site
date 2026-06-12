@@ -16,9 +16,20 @@ const LanguageContext = createContext<LanguageContextValue>({
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("en");
 
-  // Restore from localStorage on mount (SSR-safe)
+  // Resolve initial lang on mount (SSR-safe): locale-prefixed routes
+  // (/en/* or /es/*) win, since their content is fixed to that language;
+  // otherwise fall back to the saved preference.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    const path = window.location.pathname;
+    if (path.startsWith("/es/")) {
+      setLangState("es");
+      return;
+    }
+    if (path.startsWith("/en/")) {
+      setLangState("en");
+      return;
+    }
     const saved = localStorage.getItem("preferredLang");
     if (saved === "en" || saved === "es") {
       setLangState(saved);

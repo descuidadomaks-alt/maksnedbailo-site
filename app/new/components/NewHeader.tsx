@@ -1,14 +1,22 @@
 "use client";
 
 /**
- * /new — minimal fixed header.
- * Logo (-> /new), AI Map link, EN/ES toggle, "Book the Bottleneck Map" CTA.
+ * Shared site header — ticker + collapsible glass header.
+ * Logo, Blog link, AI Map link, EN/ES toggle, primary CTA.
  * Visual language ported from NavNew.tsx / DirectLocaleWrapper.tsx (frosted glass).
+ *
+ * Reused across /, /new, /ai-map, /blog and the city pages — each of which
+ * runs its own locale system. By default this reads NewLocaleProvider
+ * (useNewLocale/useCtaTarget), but callers outside that provider pass
+ * `locale`/`setLocale`/`ctaHref`/`ctaLabel` explicitly so the shared chrome
+ * stays in sync with that page's own locale state.
  */
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useNewLocale, useCtaTarget } from "../lib/locale";
+import { useNewLocale, type NewLocale } from "../lib/locale";
 import { getNewDict } from "../lib/i18n";
+import GlobalTicker from "./GlobalTicker";
 
 const GLASS: React.CSSProperties = {
   background: "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(20,20,20,0.24) 55%)",
@@ -27,6 +35,10 @@ const CTA_GLASS: React.CSSProperties = {
   borderRadius: "999px",
   boxShadow: "0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(212,255,43,0.15)",
 };
+
+// Ticker bar height (see GlobalTicker) — header rests just below it until the
+// page scrolls past, then collapses up to a fixed 8px gap (NavNew pattern).
+const BAR_HEIGHT = 28;
 
 function MapIcon({ className = "" }: { className?: string }) {
   return (
@@ -47,82 +59,114 @@ function BookIcon() {
   );
 }
 
-export default function NewHeader() {
-  const { locale, setLocale } = useNewLocale();
-  const ctaTarget = useCtaTarget();
+interface NewHeaderProps {
+  /** Locale driving labels + the EN/ES toggle. Defaults to NewLocaleProvider. */
+  locale?: NewLocale;
+  /** Called when the user picks EN/ES. Defaults to NewLocaleProvider's setter. */
+  setLocale?: (l: NewLocale) => void;
+  /** Primary CTA destination. Defaults to /ai-map (locale-aware). */
+  ctaHref?: string;
+  /** Primary CTA label. Defaults to the locale dict's header.ctaLabel. */
+  ctaLabel?: string;
+  /** Set false to hide the GlobalTicker (header still renders). */
+  showTicker?: boolean;
+}
+
+export default function NewHeader({ locale: localeProp, setLocale: setLocaleProp, ctaHref, ctaLabel, showTicker = true }: NewHeaderProps = {}) {
+  const newLocaleCtx = useNewLocale();
+  const locale = localeProp ?? newLocaleCtx.locale;
+  const setLocale = setLocaleProp ?? newLocaleCtx.setLocale;
   const d = getNewDict(locale);
 
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > BAR_HEIGHT);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const topOffset = scrolled ? 8 : BAR_HEIGHT + 8;
+  const logoHref = locale === "es" ? "/?lang=es" : "/";
+  const aiMapHref = locale === "es" ? "/ai-map?lang=es" : "/ai-map";
+  const finalCtaHref = ctaHref ?? aiMapHref;
+  const finalCtaLabel = ctaLabel ?? d.header.ctaLabel;
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-50">
-      <div className="pointer-events-none" style={{ paddingTop: "20px", paddingBottom: "10px" }}>
-      <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
+    <>
+      {showTicker && <GlobalTicker locale={locale} />}
 
-        {/* Logo */}
-        <Link href="/" className="pointer-events-auto flex items-center" aria-label="Care Less home">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="Care Less" className="w-auto shrink-0" style={{ height: "36px" }} />
-        </Link>
+      <header className="fixed left-0 right-0 z-50" style={{ top: `${topOffset}px`, transition: "top 0.35s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+        <div className="pointer-events-none" style={{ paddingBottom: "10px" }}>
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
 
-        {/* Right islands */}
-        <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
-
-          {/* Blog */}
-          <Link
-            href="/blog"
-            className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
-            style={GLASS}
-            aria-label="Blog"
-          >
-            <BookIcon />
-            <span className="hidden xs:inline">{d.header.blogLabel}</span>
+          {/* Logo */}
+          <Link href={logoHref} className="pointer-events-auto flex items-center" aria-label="Care Less home">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.svg" alt="Care Less" className="w-auto shrink-0" style={{ height: "36px" }} />
           </Link>
 
-          {/* AI Map */}
-          <Link
-            href={locale === "es" ? "/ai-map?lang=es" : "/ai-map"}
-            className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
-            style={GLASS}
-            aria-label="AI Map"
-          >
-            <MapIcon className="text-accent" />
-            <span className="hidden xs:inline">{d.header.aiMapLabel}</span>
-          </Link>
+          {/* Right islands */}
+          <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
 
-          {/* EN / ES switcher */}
-          <div className="flex items-center gap-0.5 p-1" style={GLASS}>
-            <button
-              onClick={() => setLocale("en")}
-              className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
-                locale === "en" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
-              }`}
-              aria-pressed={locale === "en"}
-              aria-label="Switch to English"
+            {/* Blog */}
+            <Link
+              href="/blog"
+              className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
+              style={GLASS}
+              aria-label="Blog"
             >
-              EN
-            </button>
-            <button
-              onClick={() => setLocale("es")}
-              className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
-                locale === "es" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
-              }`}
-              aria-pressed={locale === "es"}
-              aria-label="Cambiar a español"
+              <BookIcon />
+              <span className="hidden xs:inline">{d.header.blogLabel}</span>
+            </Link>
+
+            {/* AI Map */}
+            <Link
+              href={aiMapHref}
+              className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
+              style={GLASS}
+              aria-label="AI Map"
             >
-              ES
-            </button>
+              <MapIcon className="text-accent" />
+              <span className="hidden xs:inline">{d.header.aiMapLabel}</span>
+            </Link>
+
+            {/* EN / ES switcher */}
+            <div className="flex items-center gap-0.5 p-1" style={GLASS}>
+              <button
+                onClick={() => setLocale("en")}
+                className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
+                  locale === "en" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
+                }`}
+                aria-pressed={locale === "en"}
+                aria-label="Switch to English"
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLocale("es")}
+                className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
+                  locale === "es" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
+                }`}
+                aria-pressed={locale === "es"}
+                aria-label="Cambiar a español"
+              >
+                ES
+              </button>
+            </div>
+
+            {/* Primary CTA */}
+            <Link
+              href={finalCtaHref}
+              className="flex items-center px-3 xs:px-4 sm:px-5 py-2.5 font-sora text-[12px] xs:text-[13px] font-semibold text-fg hover:opacity-90 transition-all duration-200 whitespace-nowrap min-h-[44px]"
+              style={CTA_GLASS}
+            >
+              {finalCtaLabel}
+            </Link>
           </div>
-
-          {/* Primary CTA */}
-          <Link
-            href={ctaTarget}
-            className="flex items-center px-3 xs:px-4 sm:px-5 py-2.5 font-sora text-[12px] xs:text-[13px] font-semibold text-fg hover:opacity-90 transition-all duration-200 whitespace-nowrap min-h-[44px]"
-            style={CTA_GLASS}
-          >
-            {d.header.ctaLabel}
-          </Link>
         </div>
-      </div>
-      </div>
-    </header>
+        </div>
+      </header>
+    </>
   );
 }

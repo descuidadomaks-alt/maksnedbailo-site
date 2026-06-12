@@ -279,7 +279,7 @@ const en: DirectPageDict = {
     headline: "Get your map. Know your number.",
     sub: `Founding rate ${PRICE_CURRENT} (was ${PRICE_ANCHOR}) until ${OFFER_DEADLINE}. 90 minutes. No pitch.`,
     cta: "Book your Strategic AI Map",
-    messengerLabel: "Message on Telegram first",
+    messengerLabel: "Message on WhatsApp first",
     guarantee: "10× guarantee: find €10k+/yr — or owe nothing.",
   },
 
@@ -495,7 +495,7 @@ const es: DirectPageDict = {
     headline: "Obtén tu mapa. Conoce tu número.",
     sub: `Tarifa fundacional ${PRICE_CURRENT} (antes ${PRICE_ANCHOR}) hasta el 30 de junio. 90 minutos. Sin venta.`,
     cta: "Reserva tu Mapa Estratégico de IA",
-    messengerLabel: "Escribe primero por Telegram",
+    messengerLabel: "Escribe primero por WhatsApp",
     guarantee: "Garantía 10×: €10k+/año — o no debes nada.",
   },
 
@@ -715,7 +715,7 @@ const uk: DirectPageDict = {
     headline: "Отримайте карту. Дізнайтеся свої цифри.",
     sub: `Стартова ціна ${PRICE_CURRENT} (було ${PRICE_ANCHOR}) до 30 червня. 90 хвилин. Без продажу.`,
     cta: "Забронювати Стратегічну карту ШІ",
-    messengerLabel: "Спочатку написати в Telegram",
+    messengerLabel: "Спочатку написати в WhatsApp",
     guarantee: "Гарантія 10×: €10k+/рік — або ви нічого не платите.",
   },
 

@@ -17,10 +17,6 @@ const fadeUp = {
   }),
 };
 
-const NAV_H = 64;
-const BAR_H = 28;
-const TOP_OFFSET = NAV_H;
-
 // ── Icons ──────────────────────────────────────────────────────────────────
 
 function WhatsAppIcon({ size = 16 }: { size?: number }) {
@@ -188,7 +184,6 @@ export default function CityPageClient({
       <section
         ref={heroRef}
         className="relative overflow-hidden"
-        style={{ paddingTop: `${TOP_OFFSET + BAR_H - 15}px` }}
       >
         {/* Ambient glow */}
         <div

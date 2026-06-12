@@ -1,5 +1,5 @@
 import { getAllPosts } from "@/lib/blog";
-import Footer from "@/components/Footer";
+import SiteFooter from "../SiteFooter";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import BlogListingClient from "@/components/BlogListingClient";
 
@@ -13,10 +13,10 @@ export default function BlogPage() {
 
   return (
     <>
-      <main className="min-h-screen" style={{ paddingTop: "100px" }}>
+      <main className="min-h-screen">
         <BlogListingClient posts={posts} />
       </main>
-      <Footer />
+      <SiteFooter />
       <FloatingWhatsApp />
     </>
   );

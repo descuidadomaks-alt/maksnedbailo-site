@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
-import Footer from "@/components/Footer";
+import SiteFooter from "../../SiteFooter";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import BlogArticleClient from "@/components/BlogArticleClient";
-import { BOOKING_LINK } from "@/lib/content";
+import BlogBottomCta from "@/components/BlogBottomCta";
 
 const BASE = "https://maksnedbailo.site";
 
@@ -60,10 +60,7 @@ export default async function ArticlePage({
 
   if (!post) {
     return (
-      <main
-        className="min-h-screen flex items-center justify-center"
-        style={{ paddingTop: "100px" }}
-      >
+      <main className="min-h-screen flex items-center justify-center">
         <p className="font-sora text-fg/40">Article not found.</p>
       </main>
     );
@@ -110,7 +107,7 @@ export default async function ArticlePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="min-h-screen" style={{ paddingTop: "100px" }}>
+      <main className="min-h-screen">
         {/* Header */}
         <section className="py-14 md:py-20 border-b border-white/[0.04]">
           <div className="max-w-3xl mx-auto px-6">
@@ -157,23 +154,9 @@ export default async function ArticlePage({
         />
 
         {/* Bottom CTA */}
-        <section className="border-t border-white/[0.04] py-16">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <p className="font-playfair text-2xl font-normal text-fg/70 mb-6">
-              Want to see if this applies to your business?
-            </p>
-            <a
-              href={BOOKING_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-accent text-bg font-bold px-8 py-4 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200"
-            >
-              Book a Free Audit →
-            </a>
-          </div>
-        </section>
+        <BlogBottomCta />
       </main>
-      <Footer />
+      <SiteFooter />
       <FloatingWhatsApp />
     </>
   );

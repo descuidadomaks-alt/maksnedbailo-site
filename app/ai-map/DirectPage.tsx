@@ -14,6 +14,7 @@ import DirectProcess from "./sections/DirectProcess";
 import DirectFAQ from "./sections/DirectFAQ";
 import DirectFinalCTA from "./sections/DirectFinalCTA";
 import DirectStickyCTA from "./sections/DirectStickyCTA";
+import NewFooter from "@/app/new/sections/NewFooter";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 
 /**
@@ -34,6 +35,9 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 export default function DirectPage() {
   const { locale } = useDirectLocale();
   const d = getDirectDict(locale);
+  const newLocale = locale === "es" ? "es" : "en";
+  const newD = getNewDict(newLocale);
+  const ctaTarget = newLocale === "es" ? "/ai-map?lang=es" : "/ai-map";
 
   return (
     <>
@@ -47,21 +51,15 @@ export default function DirectPage() {
         <DirectIndustry d={d} />
         {/* Newer proof section (visual previews + industry strip) shared with
             the homepage — replaces the old text-only DirectProof. */}
-        <ProofSection d={getNewDict(locale === "es" ? "es" : "en")} />
+        <ProofSection d={newD} />
         <DirectProcess d={d} />
         <DirectGuarantee d={d} />
         <DirectClose d={d} />
         <DirectFAQ d={d} />
         <DirectFinalCTA d={d} />
-
-        <footer className="border-t px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: "rgba(255,255,255,0.04)" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt={d.footer.credit} style={{ height: "20px", opacity: 0.35 }} />
-          <p className="font-sora font-light text-fg/20" style={{ fontSize: "11px", letterSpacing: "0.5px" }}>
-            {d.footer.credit} · {d.footer.location}
-          </p>
-        </footer>
       </main>
+
+      <NewFooter d={newD} locale={newLocale} ctaTarget={ctaTarget} />
       <FloatingWhatsApp />
     </>
   );

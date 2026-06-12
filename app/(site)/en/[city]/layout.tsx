@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import SiteFooter from "../../SiteFooter";
 
 type Props = { params: { city: string }; children: React.ReactNode };
 
@@ -47,6 +48,7 @@ export default function CityEnLayout({ params, children }: Props) {
     <>
       <LocalBusinessSchema city={city} />
       {children}
+      <SiteFooter />
       <FloatingWhatsApp />
     </>
   );

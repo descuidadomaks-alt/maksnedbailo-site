@@ -4,16 +4,34 @@ import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { WA_LINK } from "@/lib/content";
 import { SCORE_TARGET } from "../lib/config";
-import { useCtaTarget } from "../lib/locale";
+import { useCtaTarget, useNewLocale, type NewLocale } from "../lib/locale";
 
 const YEAR = new Date().getFullYear();
 
+const CITIES = [
+  { name: "Santander", slug: "santander" },
+  { name: "Madrid", slug: "madrid" },
+  { name: "Barcelona", slug: "barcelona" },
+  { name: "Valencia", slug: "valencia" },
+];
+
+interface NewFooterProps {
+  d: NewPageDict;
+  /** Defaults to NewLocaleProvider — pass explicitly outside it (e.g. /ai-map, /blog, city pages). */
+  locale?: NewLocale;
+  /** Defaults to NewLocaleProvider's useCtaTarget() — pass explicitly outside it. */
+  ctaTarget?: string;
+}
+
 /**
  * Section 10 — FOOTER. Adapted from components/Footer.tsx with /new copy.
- * Compact: wordmark + tagline, nav links, copyright line.
+ * Compact: wordmark + tagline, nav links, locations row, copyright line.
  */
-export default function NewFooter({ d }: { d: NewPageDict }) {
-  const ctaTarget = useCtaTarget();
+export default function NewFooter({ d, locale: localeProp, ctaTarget: ctaTargetProp }: NewFooterProps) {
+  const newLocaleCtx = useNewLocale();
+  const ctaTargetCtx = useCtaTarget();
+  const locale = localeProp ?? newLocaleCtx.locale;
+  const ctaTarget = ctaTargetProp ?? ctaTargetCtx;
   return (
     <footer className="section-divider pt-20 pb-32 md:pt-24 md:pb-16" style={{ background: "var(--bg)" }}>
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
@@ -48,6 +66,24 @@ export default function NewFooter({ d }: { d: NewPageDict }) {
             {d.footer.waLabel}
           </a>
         </nav>
+
+        {/* Locations */}
+        <div className="flex flex-col items-center gap-2">
+          <p className="font-sora text-[9px] uppercase tracking-[2.5px] text-fg/20">
+            {d.footer.locationsLabel}
+          </p>
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+            {CITIES.map((city) => (
+              <Link
+                key={city.slug}
+                href={`/${locale}/${city.slug}`}
+                className="font-sora text-[11px] text-fg/25 hover:text-fg/55 transition-colors"
+              >
+                {city.name}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <p className="font-sora text-[11px] text-fg/10">
           © {YEAR} {d.footer.credit} · {d.footer.location}

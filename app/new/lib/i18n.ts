@@ -209,6 +209,7 @@ export interface NewPageDict {
     waLabel: string;
     navHome: string;
     navScore: string;
+    locationsLabel: string;
   };
 }
 
@@ -634,6 +635,7 @@ const en: NewPageDict = {
     waLabel: "Quick question? Message me on WhatsApp",
     navHome: "Home",
     navScore: "Bottleneck Score",
+    locationsLabel: "Locations",
   },
 };
 
@@ -959,6 +961,7 @@ const es: NewPageDict = {
     waLabel: "¿Una duda rápida? Escríbeme por WhatsApp",
     navHome: "Inicio",
     navScore: "Bottleneck Score",
+    locationsLabel: "Ciudades",
   },
 };
 
