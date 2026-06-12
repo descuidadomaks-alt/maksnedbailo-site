@@ -29,12 +29,21 @@ const CTA_GLASS: React.CSSProperties = {
   boxShadow: "0 8px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(212,255,43,0.15)",
 };
 
-function MapIcon() {
+function MapIcon({ className = "" }: { className?: string }) {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className={`shrink-0 ${className}`} aria-hidden>
       <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
       <line x1="9" y1="3" x2="9" y2="18" />
       <line x1="15" y1="6" x2="15" y2="21" />
+    </svg>
+  );
+}
+
+function BookIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="shrink-0" aria-hidden>
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
     </svg>
   );
 }
@@ -57,6 +66,17 @@ export default function NewHeader() {
         {/* Right islands */}
         <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
 
+          {/* Blog */}
+          <Link
+            href="/blog"
+            className="flex items-center justify-center gap-1.5 px-2.5 xs:px-4 py-2.5 font-sora text-[13px] text-fg/55 hover:text-fg/90 transition-colors duration-200 min-h-[44px]"
+            style={GLASS}
+            aria-label="Blog"
+          >
+            <BookIcon />
+            <span className="hidden xs:inline">{d.header.blogLabel}</span>
+          </Link>
+
           {/* AI Map */}
           <Link
             href={locale === "es" ? "/ai-map?lang=es" : "/ai-map"}
@@ -64,7 +84,7 @@ export default function NewHeader() {
             style={GLASS}
             aria-label="AI Map"
           >
-            <MapIcon />
+            <MapIcon className="text-accent" />
             <span className="hidden xs:inline">{d.header.aiMapLabel}</span>
           </Link>
 

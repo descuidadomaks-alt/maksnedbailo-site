@@ -13,9 +13,10 @@ import { CRM_SCREENSHOT_SRC } from "../lib/config";
  */
 export default function Belief({ d }: { d: NewPageDict }) {
   return (
-    // Solid fill — sits over the shared ElevatorField canvas; the dot shaft
-    // runs behind this section but must only be visible in the Mechanism
-    // section below.
+    // Solid var(--bg) — the shared ElevatorField dot shaft runs behind the
+    // whole wrapper, but the dots should only show through the (transparent)
+    // Mechanism section below the divider. The shaft stays continuous behind
+    // this fill, so scrolling into Mechanism still reveals the layers above.
     <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       {/* Soft section gradient */}
       <div

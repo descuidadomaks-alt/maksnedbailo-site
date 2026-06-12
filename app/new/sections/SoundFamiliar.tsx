@@ -77,6 +77,10 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
           </div>
 
         </div>
+
+        <p data-reveal className="font-sora font-light italic text-fg/30 text-center mt-12" style={{ fontSize: "13px" }}>
+          {d.pain.closingLine}
+        </p>
       </div>
     </section>
   );

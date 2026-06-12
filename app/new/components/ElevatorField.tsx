@@ -36,8 +36,14 @@ const X_OFFSET  = X_SPACING / 2;
 
 // ~2.7x the depth layers of the single-section field (11 -> 30), geometric
 // progression so near layers stay sparse and far layers stay dense.
-const Z_DEPTHS = Array.from({ length: 30 }, (_, i) => 90 * Math.pow(2300 / 90, i / 29));
+const Z_DEPTHS_DESKTOP = Array.from({ length: 30 }, (_, i) => 90 * Math.pow(2300 / 90, i / 29));
+// Mobile gets ~47% of the desktop depth layers (same near/far bounds, fewer
+// steps between) — keeps the field readable without the per-frame cost of
+// 30 layers x 13 columns x 12 planes on phone GPUs.
+const Z_DEPTHS_MOBILE = Array.from({ length: 14 }, (_, i) => 90 * Math.pow(2300 / 90, i / 13));
 const Z_JITTER = 0.07;
+
+const MOBILE_BREAKPOINT = 768;
 
 const CAMERA_Y_START = PLANES_Y[0] - 60;
 const CAMERA_Y_END   = PLANES_Y[PLANES_Y.length - 1] + 60;
@@ -65,11 +71,12 @@ function mulberry32(seed: number) {
   };
 }
 
-function generateDots(): Dot[] {
+function generateDots(mobile: boolean): Dot[] {
   const rng = mulberry32(0x5eed1e55);
   const dots: Dot[] = [];
+  const depths = mobile ? Z_DEPTHS_MOBILE : Z_DEPTHS_DESKTOP;
   for (const planeY of PLANES_Y) {
-    for (const z of Z_DEPTHS) {
+    for (const z of depths) {
       for (let col = 0; col < X_COLS; col++) {
         const ix = col - Math.floor(X_COLS / 2);
         dots.push({
@@ -165,7 +172,7 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
     };
     resizeCanvas();
     if (dotsRef.current.length === 0) {
-      dotsRef.current = generateDots();
+      dotsRef.current = generateDots(window.innerWidth < MOBILE_BREAKPOINT);
     }
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -203,7 +210,13 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
 
     const onScroll = () => { dirty = true; scheduleRender(); };
 
+    // Mobile browsers fire `resize` when the URL bar shows/hides (height
+    // only) — re-measuring then is wasted work and can cause a visible
+    // jump. Only react when the width actually changes.
+    let lastWidth = window.innerWidth;
     const onResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
       resizeCanvas();
       dirty = true;
       scheduleRender();
@@ -250,15 +263,13 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
     top: 0,
     left: 0,
     width: "100%",
-    height: "100vh",
     pointerEvents: "none",
     zIndex: 0,
-    marginBottom: "-100vh",
   };
 
   return (
     <div ref={wrapperRef} className={className} style={wrapperStyle}>
-      <canvas ref={canvasRef} aria-hidden style={canvasStyle} />
+      <canvas ref={canvasRef} aria-hidden className="elevator-canvas" style={canvasStyle} />
       <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
     </div>
   );

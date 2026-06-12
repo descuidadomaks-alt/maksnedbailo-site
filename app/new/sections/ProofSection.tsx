@@ -37,7 +37,7 @@ function ChatMock() {
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
       </div>
-      <div className="p-3 flex flex-col gap-2 flex-1 justify-center">
+      <div className="px-3 pt-3 pb-4 flex flex-col gap-1.5 flex-1 justify-end">
         <div className="self-start max-w-[82%] rounded-lg rounded-bl-sm px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.05)" }}>
           <p className="font-sora text-fg/55" style={{ fontSize: "11px", lineHeight: 1.4 }}>
             Hi, do you have availability for a consultation this week?
@@ -64,10 +64,10 @@ function BookingMock() {
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>BOOKING CONFIRMED</span>
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
-      <div className="p-3 flex flex-col gap-1.5 flex-1 justify-center">
+      <div className="px-3 pt-3 pb-4 flex flex-col gap-2.5 flex-1 justify-end">
         <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room · 2 nights</p>
         <p className="font-sora text-fg/38" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
-        <div className="flex items-center justify-between mt-1.5 pt-1.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
+        <div className="flex items-center justify-between pt-2.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
           <span className="font-sora text-fg/28" style={{ fontSize: "10px" }}>Confirmed via WhatsApp</span>
           <span className="font-numeral font-bold text-accent" style={{ fontSize: "12px" }}>#EH-2291</span>
         </div>
@@ -81,12 +81,12 @@ const WAVEFORM_BARS = [35, 60, 28, 80, 50, 95, 42, 70, 30, 55, 88, 46, 28, 62, 9
 
 function VoiceMock() {
   return (
-    <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06] p-3" style={{ background: "rgba(255,255,255,0.02)" }}>
+    <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06] px-3 pt-3 pb-4" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="flex items-center justify-between mb-2.5">
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
         <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
-      <div className="flex-1 flex flex-col justify-center gap-2.5">
+      <div className="flex-1 flex flex-col justify-end gap-2.5">
         <div className="flex items-end gap-[2px]" style={{ height: "36px" }} aria-hidden>
           {WAVEFORM_BARS.map((h, i) => (
             <span

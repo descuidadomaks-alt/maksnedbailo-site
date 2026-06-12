@@ -54,6 +54,13 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
 
       <TierGauge score={score} tier={tier} />
 
+      <p
+        className="font-label text-accent/70 mb-3"
+        style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
+      >
+        Your bottleneck snapshot
+      </p>
+
       <h1
         className="font-numeral font-semibold text-fg mb-2"
         style={{ fontSize: "clamp(36px, 7vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}

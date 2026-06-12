@@ -16,6 +16,11 @@ import { CTA_TARGET } from "../lib/config";
 export default function ServicesTicker({ d }: { d: NewPageDict }) {
   const doubled = [...d.services.tags, ...d.services.tags];
 
+  // Repeated enough times that even doubled it overflows the widest
+  // viewport — keeps the hover track's translateX(-50%) loop seamless.
+  const bookTheMap = Array.from({ length: 16 }, () => d.services.hoverCta.toUpperCase());
+  const doubledBookTheMap = [...bookTheMap, ...bookTheMap];
+
   return (
     <div className="section-divider">
       <div className="text-center uppercase py-4 px-6" style={{ background: "#000000" }}>
@@ -29,7 +34,9 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
         className="group relative w-full overflow-hidden flex items-center"
         style={{ height: "40px", background: "#000000" }}
       >
-        <div className="ticker-track-services whitespace-nowrap flex transition-opacity duration-300 group-hover:opacity-10">
+        {/* Services keywords — same animated track keeps running on hover,
+            just fades out so the "Book the Map" track shows through. */}
+        <div className="services-ticker-track absolute inset-0 flex items-center whitespace-nowrap transition-opacity duration-300 group-hover:opacity-0">
           {doubled.map((service, i) => (
             <span key={i} className="font-sora text-[10px] font-light tracking-widest" style={{ color: "rgba(255,255,255,0.4)" }}>
               {service}
@@ -37,13 +44,16 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
             </span>
           ))}
         </div>
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 flex items-center justify-center font-sora font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{ fontSize: "11px", letterSpacing: "2px", color: "#D4FF2B" }}
-        >
-          → {d.services.hoverCta}
-        </span>
+        {/* "Book the Map" track — mounted (and animating) the whole time so
+            the crossfade never restarts or jumps; just hidden until hover. */}
+        <div aria-hidden className="services-ticker-track absolute inset-0 flex items-center whitespace-nowrap opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          {doubledBookTheMap.map((label, i) => (
+            <span key={i} className="font-sora text-[10px] font-semibold tracking-widest" style={{ color: "#D4FF2B" }}>
+              {label}
+              <span style={{ color: "rgba(255,255,255,0.4)", margin: "0 20px" }}>·</span>
+            </span>
+          ))}
+        </div>
       </Link>
     </div>
   );

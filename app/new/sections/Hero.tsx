@@ -6,7 +6,7 @@ import type { NewPageDict } from "../lib/i18n";
 import { CTA_TARGET, SCORE_TARGET, STAGE_PHOTO_SRC } from "../lib/config";
 
 // How far the photo pans on scroll, in % of its own width. The image is
-// rendered wider than its clipping band (115% desktop / 150% mobile — see
+// rendered wider than its clipping band (115% desktop / 220% mobile — see
 // .new-hero-photo in globals.css), so this must stay below the overflow
 // (15/115 ≈ 13%) or the right edge of the image slides into view.
 const PAN_MAX_PERCENT = 8;
@@ -164,7 +164,7 @@ export default function Hero({ d }: { d: NewPageDict }) {
           src={STAGE_PHOTO_SRC}
           alt="Maks Nedbailo speaking on stage"
           className="new-hero-photo"
-          style={{ filter: "grayscale(0.1) contrast(1.05)" }}
+          style={{ filter: "grayscale(0.3) contrast(1.02) brightness(0.92)", opacity: 0.82 }}
         />
         <div className="new-hero-photo-fade" aria-hidden />
       </div>

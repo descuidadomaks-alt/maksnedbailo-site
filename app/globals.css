@@ -16,8 +16,12 @@
 
 /* No CSS scroll-behavior: smooth here — Lenis (LenisProvider) owns scroll
    smoothing; stacking both makes programmatic/anchor scrolls fight and lag. */
+/* overflow-x: clip (not hidden) — `hidden` makes overflow-y compute to `auto`,
+   turning html/body into a scroll container that breaks `position: sticky`
+   for any descendant (incl. ElevatorField's canvas) relative to the viewport.
+   `clip` still prevents the horizontal scrollbar without that side effect. */
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -26,7 +30,7 @@ body {
   color: #F0ECE6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -66,6 +70,13 @@ body::before {
 }
 .ticker-track-services:hover {
   animation-play-state: paused;
+}
+
+/* /new ServicesTicker — two stacked tracks crossfade on hover, so the
+   marquee must keep running underneath (no pause-on-hover). */
+.services-ticker-track {
+  animation: ticker 80s linear infinite;
+  will-change: transform;
 }
 
 /* ─── /new testimonials — review slider ─────────────────────────────────────
@@ -486,15 +497,28 @@ h1.font-playfair, h2.font-playfair {
   }
 }
 
+/* ElevatorField sticky canvas — 100dvh keeps the field full-height on mobile
+   as the URL bar shows/hides, without the jump 100vh causes there. */
+.elevator-canvas {
+  height: 100vh;
+  margin-bottom: -100vh;
+}
+@supports (height: 100dvh) {
+  .elevator-canvas {
+    height: 100dvh;
+    margin-bottom: -100dvh;
+  }
+}
+
 /* ─── Bottleneck Map — glass content panel ──────────────────────────────────
    Frosted panel behind the mechanism intro copy, so it stays readable over
    VoidSection's particle field without hiding the dots entirely.
  ──────────────────────────────────────────────────────────────────────────── */
 .map-content-panel {
-  background: rgba(6, 6, 8, 0.32);
-  backdrop-filter: blur(20px) saturate(160%) brightness(1.25);
-  -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(1.25);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 48px rgba(0, 0, 0, 0.3);
   padding: 28px;
@@ -630,11 +654,16 @@ h1.font-playfair, h2.font-playfair {
 }
 
 /* ─── /new hero — copy stacked above a bottom photo band ────────────────────
-   Both breakpoints: kicker -> headline -> sub -> CTAs stacked on the page
-   background, with a wide photo band at the bottom of the section. The band
-   image is rendered slightly wider than its box and panned horizontally on
-   scroll (see useHeroPan in Hero.tsx) for a subtle parallax feel. A short
-   top-edge fade dissolves the band into the page background above it.
+   Document-flow column: kicker -> headline -> sub -> CTAs -> photo band, all
+   normal siblings (no absolute positioning — overlap is structurally
+   impossible). The band's height is derived from the source image's natural
+   ratio (1400x450 = 1400/450) via `aspect-ratio`, so object-fit: cover only
+   ever crops horizontally — the full scene (incl. Maks on the left) is
+   always visible, never cropped top/bottom. The band is pulled up under the
+   CTA stack with a negative margin + top fade so the photo dissolves in
+   right around the Map CTA, while content keeps a higher z-index so the
+   photo never visually covers the buttons/text. A subtle scroll-linked pan
+   (useHeroPan in Hero.tsx) reveals more of the audience on scroll.
  ──────────────────────────────────────────────────────────────────────────── */
 .new-hero-section {
   position: relative;
@@ -645,7 +674,7 @@ h1.font-playfair, h2.font-playfair {
 
 .new-hero-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-top: 84px;
 }
 
@@ -653,32 +682,38 @@ h1.font-playfair, h2.font-playfair {
   max-width: 720px;
   margin: 0 auto;
   width: 100%;
-  padding: 0 24px 40px;
+  padding: 0 24px 24px;
 }
 
 /* The band clips an image rendered WIDER than itself (overscan), and the
    scroll pan (useHeroPan) translates the image within that overflow — so
    neither image edge can ever slide into view. Pan max (8% of image width)
-   must stay below the overscan: 50/150 mobile, 15/115 desktop.
-   Mobile: taller band pulled up under the CTA stack (negative margin), the
-   image starts left-aligned, and a thick top fade dissolves it into the
-   page so the copy + glass Map button float over the photo. */
+   must stay below the overscan slack: (220-100)/220 mobile, (115-100)/115
+   desktop. object-position: left keeps Maks (left third of the photo) in
+   the initial frame on both breakpoints.
+
+   The negative margin pulls the band up so the photo's top edge sits right
+   BEFORE the CTA stack (~200px of buttons + microcopy + the inner padding),
+   dissolving in under the buttons via the tall multi-stop fade below. Mobile
+   gets a taller band (aspect 1400/950 vs the image's natural 1400/450) so
+   there's still clearly visible photo left under the overlap. */
 .new-hero-photo-band {
   position: relative;
+  z-index: 1;
   width: 100%;
+  aspect-ratio: 1400 / 950;
   overflow: hidden;
   line-height: 0;
-  height: 36vh;
-  margin-top: -96px;
+  margin-top: -220px;
 }
 
 .new-hero-photo {
   display: block;
-  width: 150%;
+  width: 220%;
   max-width: none; /* overrides Tailwind preflight's img { max-width: 100% } */
   height: 100%;
   object-fit: cover;
-  object-position: left 30%;
+  object-position: left center;
   will-change: transform;
 }
 
@@ -687,31 +722,35 @@ h1.font-playfair, h2.font-playfair {
   top: 0;
   left: 0;
   right: 0;
-  height: 150px;
-  background: linear-gradient(to bottom, #060608 0%, rgba(6,6,8,0.72) 50%, transparent 100%);
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    #060608 0%,
+    rgba(6, 6, 8, 0.92) 30%,
+    rgba(6, 6, 8, 0.65) 58%,
+    rgba(6, 6, 8, 0.3) 82%,
+    transparent 100%
+  );
   pointer-events: none;
-  z-index: 1;
 }
 
 @media (min-width: 768px) {
   .new-hero-content {
-    padding-top: 116px;
+    padding-top: 100px;
   }
   .new-hero-content-inner {
     max-width: 760px;
-    padding: 0 24px 56px;
+    padding: 0 24px 32px;
   }
   .new-hero-photo-band {
-    height: 30vh;
-    margin-top: 0;
+    aspect-ratio: 1400 / 450;
+    margin-top: -240px;
   }
   .new-hero-photo {
     width: 115%;
-    object-position: center 30%;
   }
   .new-hero-photo-fade {
-    height: 140px;
-    background: linear-gradient(to bottom, #060608 0%, transparent 100%);
+    height: 300px;
   }
 }
 

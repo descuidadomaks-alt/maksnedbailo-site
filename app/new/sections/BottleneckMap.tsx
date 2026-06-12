@@ -80,24 +80,14 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
 
   return (
     <>
-      {/* ── Mechanism intro — the only section where the ElevatorField dots
-             show through. Taller (100vh min) so the scroll-through reads as a
-             real descent; top/bottom fades dissolve the dots in and out at
-             the borders with the solid neighbour sections. ── */}
+      {/* ── Mechanism intro — dots run continuously behind this section, the
+             Belief section above, and the sample-map section below (only the
+             outer edges of the whole wrapper fade to var(--bg)). Taller
+             (100vh min) so the scroll-through reads as a real descent. ── */}
       <section
         className="section-divider relative"
         style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center" }}
       >
-        <div
-          aria-hidden
-          className="absolute top-0 left-0 right-0 pointer-events-none"
-          style={{ height: "120px", background: "linear-gradient(to bottom, var(--bg) 0%, transparent 100%)" }}
-        />
-        <div
-          aria-hidden
-          className="absolute bottom-0 left-0 right-0 pointer-events-none"
-          style={{ height: "120px", background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)" }}
-        />
         <div className="w-full px-6 py-16 md:py-24">
           <div data-reveal className="map-content-panel w-full max-w-2xl mx-auto flex flex-col items-start text-left">
             <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
@@ -143,8 +133,14 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
         </div>
       </section>
 
-      {/* ── Sample map table — solid fill over the shared dot canvas ── */}
-      <section className="relative py-16 md:py-24" style={{ background: "var(--bg)" }}>
+      {/* ── Sample map table — solid var(--bg) fill so the table never sits
+             on the dot field. Only the top ~140px dissolves from transparent,
+             so the bottom layers of the shaft stay visible right up to where
+             this section starts, then the field cuts to solid. ── */}
+      <section
+        className="relative py-16 md:py-24"
+        style={{ background: "linear-gradient(to bottom, transparent 0px, var(--bg) 100px)" }}
+      >
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
             <p data-reveal className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>

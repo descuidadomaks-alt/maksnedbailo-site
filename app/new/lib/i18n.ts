@@ -87,6 +87,8 @@ export interface NewPageDict {
     punch: string;
     /** Inline link after this section -> /score */
     ctaLabel: string;
+    /** Small, muted, italic closing line under the quotes/bus card */
+    closingLine: string;
   };
 
   reframe: {
@@ -347,6 +349,7 @@ const en: NewPageDict = {
     ],
     punch: "If you got hit by a bus tomorrow, does the business survive past Friday?",
     ctaLabel: "Find out what it's costing you — 2-min Bottleneck Score",
+    closingLine: "None of this means you built it wrong. It means you built it — and now it needs you less.",
   },
 
   reframe: {
@@ -381,9 +384,9 @@ const en: NewPageDict = {
   map: {
     label: "The mechanism",
     headline: "The Bottleneck Map — 90 minutes, ROI-ranked.",
-    body: "ROI-first diagnosis, not tools. Process before automation — you can't automate chaos. We spend 90 minutes finding the 3 areas where you're the bottleneck, what each one is costing you, and what's actually worth fixing.",
+    body: "ROI-first diagnosis, not tools. Process before automation — you can't automate chaos. We spend 90 minutes mapping the 3 places where the business still runs through you — what each one costs, and what's actually worth fixing.",
     bullets: [
-      "The 3 areas where you're the bottleneck",
+      "The 3 places everything still routes through you",
       "What each one is costing you — in time, money, or both",
       "What's worth automating, delegating, simplifying, or ignoring",
       "The one fix to start with — ranked by ROI",
