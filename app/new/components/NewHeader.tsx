@@ -7,9 +7,8 @@
  */
 
 import Link from "next/link";
-import { useNewLocale } from "../lib/locale";
+import { useNewLocale, useCtaTarget } from "../lib/locale";
 import { getNewDict } from "../lib/i18n";
-import { CTA_TARGET } from "../lib/config";
 
 const GLASS: React.CSSProperties = {
   background: "linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(20,20,20,0.24) 55%)",
@@ -50,6 +49,7 @@ function BookIcon() {
 
 export default function NewHeader() {
   const { locale, setLocale } = useNewLocale();
+  const ctaTarget = useCtaTarget();
   const d = getNewDict(locale);
 
   return (
@@ -58,7 +58,7 @@ export default function NewHeader() {
       <div className="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between gap-2">
 
         {/* Logo */}
-        <Link href="/new" className="pointer-events-auto flex items-center" aria-label="Care Less home">
+        <Link href="/" className="pointer-events-auto flex items-center" aria-label="Care Less home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Care Less" className="w-auto shrink-0" style={{ height: "36px" }} />
         </Link>
@@ -114,7 +114,7 @@ export default function NewHeader() {
 
           {/* Primary CTA */}
           <Link
-            href={CTA_TARGET}
+            href={ctaTarget}
             className="flex items-center px-3 xs:px-4 sm:px-5 py-2.5 font-sora text-[12px] xs:text-[13px] font-semibold text-fg hover:opacity-90 transition-all duration-200 whitespace-nowrap min-h-[44px]"
             style={CTA_GLASS}
           >

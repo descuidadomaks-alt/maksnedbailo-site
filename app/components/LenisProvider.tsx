@@ -26,7 +26,7 @@ export default function LenisProvider() {
     // Dynamically import Lenis so it's never bundled server-side
     import("lenis").then(({ default: Lenis }) => {
       const lenis = new Lenis({
-        lerp: 0.09,          // silkiness; lower = slower but smoother
+        lerp: 0.07,          // silkiness; lower = slower but smoother (premium glide)
         smoothWheel: true,
         touchMultiplier: 1.8,
         infinite: false,

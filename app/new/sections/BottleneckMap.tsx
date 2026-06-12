@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
-import { CTA_TARGET, PHASE1_ANCHOR } from "../lib/config";
-import { FOUNDING_RATE } from "../lib/site.config";
+import { PHASE1_ANCHOR } from "../lib/config";
+import { FOUNDING_RATE, STANDARD_RATE } from "../lib/site.config";
+import { useCtaTarget } from "../lib/locale";
 import { KlarnaWordmark } from "../components/BrandWordmarks";
 
 /**
@@ -48,11 +49,12 @@ function FeasibilityDots({ score }: { score: number }) {
 
 export default function BottleneckMap({ d }: { d: NewPageDict }) {
   const sm = d.map.sample;
+  const ctaTarget = useCtaTarget();
 
-  // Split the headline so "90 minutes, ROI-ranked" can be styled as a single
-  // accent-coloured, non-wrapping unit (it was breaking awkwardly on mobile).
-  const HEADLINE_HIGHLIGHT = "90 minutes, ROI-ranked";
-  const headlineParts = d.map.headline.split(HEADLINE_HIGHLIGHT);
+  // Split the headline so the highlight ("90 minutes, ROI-ranked") can be
+  // styled as a single accent-coloured, non-wrapping unit (it was breaking
+  // awkwardly on mobile). The highlight substring is locale-specific.
+  const headlineParts = d.map.headline.split(d.map.headlineHighlight);
 
   const pillars = [
     {
@@ -90,7 +92,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
       >
         <div className="w-full px-6 py-16 md:py-24">
           <div data-reveal className="map-content-panel w-full max-w-2xl mx-auto flex flex-col items-start text-left">
-            <p className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            <p className="font-label text-fg/50 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.map.label}
             </p>
             <h2
@@ -103,20 +105,20 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                   {/* nowrap only from md up — on phones the panel is narrower
                       than the full phrase and nowrap made it overflow the
                       panel. Non-breaking hyphen keeps "ROI-ranked" whole. */}
-                  <span className="md:whitespace-nowrap text-accent">{HEADLINE_HIGHLIGHT.replace("ROI-", "ROI‑")}</span>
+                  <span className="md:whitespace-nowrap text-accent">{d.map.headlineHighlight.replace("ROI-", "ROI‑")}</span>
                   {headlineParts[1]}
                 </>
               ) : (
                 d.map.headline
               )}
             </h2>
-            <p className="font-sora font-light text-fg/55 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
+            <p className="font-sora font-light text-fg/82 leading-[1.85] mb-10" style={{ fontSize: "15px", maxWidth: "60ch" }}>
               {d.map.body}
             </p>
 
             <ul className="flex flex-col gap-3 mb-8" style={{ maxWidth: "52ch" }}>
               {d.map.bullets.map((bullet, i) => (
-                <li key={i} className="flex items-start gap-3 font-sora font-light text-fg/55 leading-[1.6]" style={{ fontSize: "14px" }}>
+                <li key={i} className="flex items-start gap-3 font-sora font-light text-fg/82 leading-[1.6]" style={{ fontSize: "14px" }}>
                   <span className="shrink-0 mt-[10px] w-3 h-[3px] rounded-sm" style={{ background: "rgba(212,255,43,0.6)" }} aria-hidden />
                   {bullet}
                 </li>
@@ -124,8 +126,8 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             </ul>
 
             <div className="flex items-center gap-3" style={{ maxWidth: "52ch" }}>
-              <KlarnaWordmark className="h-4 w-auto shrink-0 opacity-60" />
-              <p className="font-sora font-light italic text-fg/30 leading-[1.7]" style={{ fontSize: "13px" }}>
+              <KlarnaWordmark className="h-4 w-auto shrink-0 opacity-75" />
+              <p className="font-sora font-light italic text-fg/55 leading-[1.7]" style={{ fontSize: "13px" }}>
                 {d.map.note}
               </p>
             </div>
@@ -133,13 +135,13 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
         </div>
       </section>
 
-      {/* ── Sample map table — solid var(--bg) fill so the table never sits
-             on the dot field. Only the top ~140px dissolves from transparent,
-             so the bottom layers of the shaft stay visible right up to where
-             this section starts, then the field cuts to solid. ── */}
+      {/* ── Sample map table — solid var(--bg) with the same thin divider as
+             the Belief -> Mechanism boundary: the dot field ends cleanly at
+             the line and this section opens a new solid chapter (mirrors how
+             the wrapper is entered at the top). ── */}
       <section
-        className="relative py-16 md:py-24"
-        style={{ background: "linear-gradient(to bottom, transparent 0px, var(--bg) 100px)" }}
+        className="section-divider relative pt-24 pb-16 md:pt-32 md:pb-24"
+        style={{ background: "var(--bg)" }}
       >
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -293,16 +295,22 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
 
           <p className="font-sora text-fg/[0.14] mt-4 text-center italic" style={{ fontSize: "10px" }}>{sm.note}</p>
 
-          {/* CTA — high-friction, books the real Bottleneck Map session */}
+          {/* CTA — high-friction, books the real Bottleneck Map session.
+              Standard rate struck through next to the live founding rate. */}
           <div data-reveal className="text-center mt-10">
             <Link
-              href={CTA_TARGET}
-              className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
+              href={ctaTarget}
+              className="group inline-flex items-center justify-center gap-2 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)]"
               style={{ fontSize: "14px", padding: "15px 32px", minHeight: "52px", letterSpacing: "-0.01em" }}
             >
-              {d.map.ctaLabel(FOUNDING_RATE)}
+              {d.map.ctaLabel}
+              <span className="line-through opacity-45 font-normal">{STANDARD_RATE}</span>
+              <span>{FOUNDING_RATE}</span>
               <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
             </Link>
+            <p className="font-sora font-light text-fg/35 mt-2.5" style={{ fontSize: "12px" }}>
+              {d.map.ctaDeadline}
+            </p>
           </div>
         </div>
       </section>

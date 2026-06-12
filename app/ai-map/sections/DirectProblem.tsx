@@ -1,14 +1,17 @@
-import VoidSection from "@/components/VoidSection";
+import ElevatorField from "@/app/new/components/ElevatorField";
 import type { DirectPageDict } from "../lib/directi18n";
 
 /**
  * DirectProblem — "Your operation is leaking money" section.
- * Wrapped in VoidSection for the pure-black background + parallax dot field.
- * Text is center-aligned per spec. Hard-cut top + bottom edges (no border-radius).
+ * Wrapped in the homepage's ElevatorField for the tunnel-depth dot shaft
+ * (same look as the Mechanism section on the homepage). `clip` keeps the
+ * canvas inside this section so the neighbouring solid sections and their
+ * thin dividers stay untouched; cameraOffset starts the camera mid-shaft so
+ * floors are visible above AND below.
  */
 export default function DirectProblem({ d }: { d: DirectPageDict }) {
   return (
-    <VoidSection className="section-divider">
+    <ElevatorField className="section-divider" clip cameraSpan={0.1} cameraOffset={0.42}>
       <div className="max-w-3xl mx-auto px-6 py-16 md:py-24 flex flex-col items-center text-center">
         <p
           data-reveal
@@ -32,6 +35,6 @@ export default function DirectProblem({ d }: { d: DirectPageDict }) {
           {d.problem.body}
         </p>
       </div>
-    </VoidSection>
+    </ElevatorField>
   );
 }

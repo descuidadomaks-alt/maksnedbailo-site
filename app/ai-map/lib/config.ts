@@ -2,15 +2,17 @@
  *  Change a single value here to update pricing/deadlines everywhere on /ai-map.
  */
 
-// ── Complimentary phase (active until COMP_DEADLINE) ───────────────────────
-export const COMP_DEADLINE     = "June 15, 2026";
-export const COMP_DEADLINE_ISO = "2026-06-15T23:59:59";
+// ── Founding-rate phase (active until OFFER_DEADLINE) ──────────────────────
+// Matches the homepage: €1,500 struck through -> €297 founding rate.
+export const PRICE_CURRENT      = "€297";
+export const PRICE_ANCHOR       = "€1,500";
+export const OFFER_DEADLINE     = "June 30, 2026";
+export const OFFER_DEADLINE_ISO = "2026-06-30T23:59:59";
 
-// ── Paid phase constants (commented out — restore after June 15) ───────────
-// export const PRICE_CURRENT      = "€997";
-// export const PRICE_ANCHOR       = "€1,500";
-// export const OFFER_DEADLINE     = "June 30, 2026";
-// export const OFFER_DEADLINE_ISO = "2026-06-30T23:59:59";
+// Legacy aliases — the complimentary phase ended June 15; countdown components
+// keep working against the new deadline.
+export const COMP_DEADLINE     = OFFER_DEADLINE;
+export const COMP_DEADLINE_ISO = OFFER_DEADLINE_ISO;
 
 // ── Shared ─────────────────────────────────────────────────────────────────
 export const PHASE1_ANCHOR  = "€4,500";

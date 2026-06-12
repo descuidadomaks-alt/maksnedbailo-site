@@ -3,7 +3,8 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { WA_LINK } from "@/lib/content";
-import { CTA_TARGET, SCORE_TARGET } from "../lib/config";
+import { SCORE_TARGET } from "../lib/config";
+import { useCtaTarget } from "../lib/locale";
 
 const YEAR = new Date().getFullYear();
 
@@ -12,8 +13,11 @@ const YEAR = new Date().getFullYear();
  * Compact: wordmark + tagline, nav links, copyright line.
  */
 export default function NewFooter({ d }: { d: NewPageDict }) {
+  const ctaTarget = useCtaTarget();
   return (
-    <footer className="section-divider pt-12 pb-28 md:pb-12">
+    // Transparent — the FAQ -> footer ElevatorField's dot shaft shows
+    // through, so the footer reads as sitting over the 3D space underneath.
+    <footer className="section-divider pt-20 pb-32 md:pt-24 md:pb-16">
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -24,10 +28,10 @@ export default function NewFooter({ d }: { d: NewPageDict }) {
         </p>
 
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-          <Link href="/new" className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
+          <Link href="/" className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
             {d.footer.navHome}
           </Link>
-          <Link href={CTA_TARGET} className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
+          <Link href={ctaTarget} className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">
             {d.header.aiMapLabel}
           </Link>
           <Link href={SCORE_TARGET} className="font-sora text-[12px] text-fg/35 hover:text-fg/70 transition-colors">

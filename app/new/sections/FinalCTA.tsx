@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
-import { CTA_TARGET, SCORE_TARGET, WA_BOTTLENECK_LINK } from "../lib/config";
+import { SCORE_TARGET, WA_BOTTLENECK_LINK } from "../lib/config";
 import { slotsOpen } from "../lib/site.config";
+import { useCtaTarget } from "../lib/locale";
 
 function WhatsAppIcon() {
   return (
@@ -14,9 +15,9 @@ function WhatsAppIcon() {
   );
 }
 
-// "Or don't — your call." is styled as an accent-coloured aside on the
-// final headline — the deadpan punchline that closes the page's argument.
-const HEADLINE_ACCENT = "Or don't — your call.";
+// The deadpan punchline ("Or don't — your call.") is styled as an
+// accent-coloured aside on the final headline — the accent substring is
+// locale-specific, so it lives in the dict (d.cta.headlineAccent).
 
 /**
  * Section 8 — CTA / OFFER.
@@ -26,7 +27,8 @@ const HEADLINE_ACCENT = "Or don't — your call.";
  * WhatsApp-styled secondary button (channel cleanup pass).
  */
 export default function FinalCTA({ d }: { d: NewPageDict }) {
-  const headlineParts = d.cta.headline.split(HEADLINE_ACCENT);
+  const ctaTarget = useCtaTarget();
+  const headlineParts = d.cta.headline.split(d.cta.headlineAccent);
 
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
@@ -45,7 +47,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
           {headlineParts.length === 2 ? (
             <>
               {headlineParts[0]}
-              <span className="text-accent">{HEADLINE_ACCENT}</span>
+              <span className="text-accent">{d.cta.headlineAccent}</span>
             </>
           ) : (
             d.cta.headline
@@ -59,7 +61,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
           {/* Dual CTA — Map primary on desktop, Score primary on mobile */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <Link
-              href={CTA_TARGET}
+              href={ctaTarget}
               data-primary-cta
               className="dual-cta cta-map font-sora order-1 sm:order-1"
             >

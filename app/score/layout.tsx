@@ -55,7 +55,7 @@ export const metadata: Metadata = {
 export default function ScoreLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <Link href="/new" className="fixed left-5 top-5 z-[60]" aria-label="Care Less home">
+      <Link href="/" className="fixed left-5 top-5 z-[60]" aria-label="Care Less home">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.svg" alt="Care Less" className="w-auto" style={{ height: "26px" }} />
       </Link>

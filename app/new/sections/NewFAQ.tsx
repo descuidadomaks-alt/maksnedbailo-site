@@ -58,7 +58,9 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
   };
 
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+    // Solid var(--bg) — this section sits inside the FAQ -> footer
+    // ElevatorField; the dots should only show through the footer below.
+    <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       {/* Soft section gradient */}
       <div
         aria-hidden

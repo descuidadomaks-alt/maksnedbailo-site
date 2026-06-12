@@ -515,7 +515,7 @@ h1.font-playfair, h2.font-playfair {
    VoidSection's particle field without hiding the dots entirely.
  ──────────────────────────────────────────────────────────────────────────── */
 .map-content-panel {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.1);

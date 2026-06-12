@@ -3,8 +3,9 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import GlassButton from "../components/GlassButton";
-import { CTA_TARGET, SCORE_TARGET } from "../lib/config";
+import { SCORE_TARGET } from "../lib/config";
 import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE, slotsOpen } from "../lib/site.config";
+import { useCtaTarget } from "../lib/locale";
 
 /**
  * Section 7 — THE PATH (offer ladder).
@@ -15,6 +16,7 @@ import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE, slotsOpen } from "../l
  */
 export default function ThePath({ d }: { d: NewPageDict }) {
   const [score, map, build] = d.path.steps;
+  const ctaTarget = useCtaTarget();
 
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
@@ -66,7 +68,7 @@ export default function ThePath({ d }: { d: NewPageDict }) {
               </span>
             </div>
             <p className="font-sora font-light text-fg/45 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{map.desc}</p>
-            <GlassButton href={CTA_TARGET} className="self-start" style={{ fontSize: "13px", padding: "12px 24px", minHeight: "44px" }}>
+            <GlassButton href={ctaTarget} className="self-start" style={{ fontSize: "13px", padding: "12px 24px", minHeight: "44px" }}>
               {map.ctaLabel}
               <span aria-hidden>→</span>
             </GlassButton>

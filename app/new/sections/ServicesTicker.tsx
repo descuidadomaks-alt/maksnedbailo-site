@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
-import { CTA_TARGET } from "../lib/config";
+import { useCtaTarget } from "../lib/locale";
 
 /**
  * Services ticker — restored from components/GotAProblem.tsx (SERVICES list,
@@ -14,6 +14,7 @@ import { CTA_TARGET } from "../lib/config";
  * a low-key CTA.
  */
 export default function ServicesTicker({ d }: { d: NewPageDict }) {
+  const ctaTarget = useCtaTarget();
   const doubled = [...d.services.tags, ...d.services.tags];
 
   // Repeated enough times that even doubled it overflows the widest
@@ -29,7 +30,7 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
         </p>
       </div>
       <Link
-        href={CTA_TARGET}
+        href={ctaTarget}
         aria-label={d.services.hoverCta}
         className="group relative w-full overflow-hidden flex items-center"
         style={{ height: "40px", background: "#000000" }}

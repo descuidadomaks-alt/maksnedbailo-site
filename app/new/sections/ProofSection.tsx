@@ -86,13 +86,15 @@ function VoiceMock() {
         <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
         <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
-      <div className="flex-1 flex flex-col justify-end gap-2.5">
-        <div className="flex items-end gap-[2px]" style={{ height: "36px" }} aria-hidden>
+      <div className="flex-1 flex flex-col justify-end gap-3">
+        {/* Bars flex-grow to span the full preview width so the waveform's
+            visual scale matches the chat/booking mocks' content. */}
+        <div className="flex items-end w-full gap-[3px]" style={{ height: "64px" }} aria-hidden>
           {WAVEFORM_BARS.map((h, i) => (
             <span
               key={i}
+              className="flex-1"
               style={{
-                width: "3px",
                 height: `${h}%`,
                 background: i % 3 === 0 ? "rgba(212,255,43,0.55)" : "rgba(240,236,230,0.16)",
                 borderRadius: "2px",
@@ -100,7 +102,7 @@ function VoiceMock() {
             />
           ))}
         </div>
-        <p className="font-sora font-light italic text-fg/35" style={{ fontSize: "11px", lineHeight: 1.4 }}>
+        <p className="font-sora font-light italic text-fg/40" style={{ fontSize: "12px", lineHeight: 1.4 }}>
           &ldquo;Sure — let me check our availability for you.&rdquo;
         </p>
       </div>

@@ -65,3 +65,12 @@ export function NewLocaleProvider({ children }: { children: ReactNode }) {
 export function useNewLocale() {
   return useContext(NewLocaleContext);
 }
+
+/**
+ * Locale-aware primary CTA href — /ai-map reads ?lang=es, so Spanish
+ * visitors keep their language when clicking through to the offer page.
+ */
+export function useCtaTarget(): string {
+  const { locale } = useNewLocale();
+  return locale === "es" ? "/ai-map?lang=es" : "/ai-map";
+}

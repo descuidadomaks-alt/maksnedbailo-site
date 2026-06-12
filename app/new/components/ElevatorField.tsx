@@ -92,13 +92,15 @@ function generateDots(mobile: boolean): Dot[] {
 
 // getCameraY — progress is how far the wrapper has scrolled through its
 // sticky range: 0 when its top reaches the viewport top, 1 when its bottom
-// reaches the viewport bottom.
-function getCameraY(wrapperEl: HTMLElement): number {
+// reaches the viewport bottom. cameraSpan scales how much of the full
+// camera travel that progress maps to — short wrappers (e.g. the FAQ ->
+// footer field) use a small span so the dots drift instead of racing.
+function getCameraY(wrapperEl: HTMLElement, cameraSpan: number, cameraOffset: number): number {
   const rect = wrapperEl.getBoundingClientRect();
   const windowH = window.innerHeight;
   const scrollable = rect.height - windowH;
   const progress = scrollable > 0 ? Math.max(0, Math.min(1, -rect.top / scrollable)) : 0;
-  return CAMERA_Y_START + progress * (CAMERA_Y_END - CAMERA_Y_START);
+  return CAMERA_Y_START + (cameraOffset + progress * cameraSpan) * (CAMERA_Y_END - CAMERA_Y_START);
 }
 
 function renderFrame(
@@ -150,9 +152,24 @@ function renderFrame(
 interface ElevatorFieldProps {
   children: ReactNode;
   className?: string;
+  /** Fraction of the full camera travel mapped to this wrapper's scroll
+   *  range (default 1). Use a small value for short wrappers. */
+  cameraSpan?: number;
+  /** Where in the shaft the camera starts, as a fraction of the full travel
+   *  (default 0 = top). ~0.45 starts mid-shaft with floors above AND below. */
+  cameraOffset?: number;
+  /** Clip the 100vh sticky canvas to the wrapper's own bounds — use for
+   *  single-section fields so dots never bleed into neighbouring sections. */
+  clip?: boolean;
 }
 
-export default function ElevatorField({ children, className = "" }: ElevatorFieldProps) {
+export default function ElevatorField({
+  children,
+  className = "",
+  cameraSpan = 1,
+  cameraOffset = 0,
+  clip = false,
+}: ElevatorFieldProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef  = useRef<HTMLCanvasElement>(null);
   const dotsRef    = useRef<Dot[]>([]);
@@ -181,7 +198,7 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
     const startTime = performance.now();
 
     const computeCameraY = () => {
-      const cameraY = getCameraY(wrapper);
+      const cameraY = getCameraY(wrapper, cameraSpan, cameraOffset);
       if (prefersReducedMotion) return cameraY;
       const t = performance.now() - startTime;
       return cameraY + Math.sin((t / AMBIENT_PERIOD) * Math.PI * 2) * AMBIENT_AMPLITUDE;
@@ -246,7 +263,7 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
       window.removeEventListener("resize", onResize);
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [cameraSpan, cameraOffset]);
 
   // Matches the page background — the Belief and sample-map sections inside
   // paint solid var(--bg) over the canvas, so the dots only show through the
@@ -255,6 +272,7 @@ export default function ElevatorField({ children, className = "" }: ElevatorFiel
   const wrapperStyle: CSSProperties = {
     position: "relative",
     background: "var(--bg)",
+    ...(clip ? { overflow: "hidden" } : null),
   };
 
   const canvasStyle: CSSProperties = {

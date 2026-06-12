@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
-import { CTA_TARGET, SCORE_TARGET, STAGE_PHOTO_SRC } from "../lib/config";
+import { SCORE_TARGET, STAGE_PHOTO_SRC } from "../lib/config";
+import { useCtaTarget } from "../lib/locale";
 
 // How far the photo pans on scroll, in % of its own width. The image is
 // rendered wider than its clipping band (115% desktop / 220% mobile — see
@@ -53,6 +54,7 @@ function useHeroPan(sectionRef: React.RefObject<HTMLElement | null>, imgRef: Rea
  * outline), each with its own microcopy directly below it.
  */
 function HeroCTAs({ d }: { d: NewPageDict }) {
+  const ctaTarget = useCtaTarget();
   return (
     <div data-reveal="d3" className="flex flex-col items-start gap-5">
       <div>
@@ -73,14 +75,30 @@ function HeroCTAs({ d }: { d: NewPageDict }) {
         {/* Liquid-glass secondary — the photo band rises behind it on mobile,
             so the button has to read as glass over the image. */}
         <Link
-          href={CTA_TARGET}
+          href={ctaTarget}
           className="btn-glass-dark group inline-flex items-center justify-center gap-2.5 font-sora font-semibold rounded-xl"
           style={{ fontSize: "15px", padding: "17px 32px", minHeight: "60px", letterSpacing: "-0.01em" }}
         >
           {d.hero.secondaryCta}
           <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
         </Link>
-        <p className="font-sora font-light text-fg/45 mt-2.5" style={{ fontSize: "12px" }}>
+        {/* Sticker-style guarantee chip — the photo band rises behind this on
+            both breakpoints, so it needs its own solid-ish surface to stay
+            readable (a bare text line over the image wasn't). */}
+        <p
+          className="flex w-fit items-center gap-1.5 font-sora mt-2.5"
+          style={{
+            fontSize: "11px",
+            padding: "5px 12px",
+            borderRadius: "999px",
+            background: "rgba(6,6,8,0.72)",
+            border: "1px solid rgba(212,255,43,0.22)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            color: "rgba(240,236,230,0.7)",
+          }}
+        >
+          <span className="font-semibold text-accent">10×</span>
           {d.hero.guarantee}
         </p>
       </div>
@@ -135,7 +153,9 @@ export default function Hero({ d }: { d: NewPageDict }) {
               style={{ fontSize: "clamp(32px, 5vw, 58px)", lineHeight: 1.1, letterSpacing: "-0.025em", marginBottom: "clamp(18px, 2.4vw, 28px)" }}
             >
               {d.hero.headlineLines.map((line, i) => (
-                <span key={i} className="block">
+                // Last line ("You are.") in accent — the punch reads as
+                // branded confidence instead of an accusation.
+                <span key={i} className={`block ${i === d.hero.headlineLines.length - 1 ? "text-accent" : ""}`}>
                   {line}
                 </span>
               ))}

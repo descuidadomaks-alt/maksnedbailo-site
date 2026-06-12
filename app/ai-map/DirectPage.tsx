@@ -7,7 +7,8 @@ import DirectProblem from "./sections/DirectProblem";
 import DirectOffer from "./sections/DirectOffer";
 import DirectGuarantee from "./sections/DirectGuarantee";
 import DirectIndustry from "./sections/DirectIndustry";
-import DirectProof from "./sections/DirectProof";
+import ProofSection from "@/app/new/sections/ProofSection";
+import { getNewDict } from "@/app/new/lib/i18n";
 import DirectClose from "./sections/DirectClose";
 import DirectProcess from "./sections/DirectProcess";
 import DirectFAQ from "./sections/DirectFAQ";
@@ -44,7 +45,9 @@ export default function DirectPage() {
         {/* DirectOffer receives locale for ES pillar pain labels */}
         <DirectOffer d={d} locale={locale} />
         <DirectIndustry d={d} />
-        <DirectProof d={d} />
+        {/* Newer proof section (visual previews + industry strip) shared with
+            the homepage — replaces the old text-only DirectProof. */}
+        <ProofSection d={getNewDict(locale === "es" ? "es" : "en")} />
         <DirectProcess d={d} />
         <DirectGuarantee d={d} />
         <DirectClose d={d} />

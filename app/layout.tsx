@@ -111,7 +111,7 @@ const jsonLd = {
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
-        "Helping business owners respond to every customer in seconds. 500+ businesses across 34 countries, 16 years of experience.",
+        "Operator, not consultant. ROI-first AI diagnosis for owner-led businesses — honest about where AI helps and where it doesn't.",
       knowsLanguage: ["en", "es", "ru"],
       knowsAbout: [
         "AI automation",
@@ -136,7 +136,7 @@ const jsonLd = {
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
-        "Custom AI assistants for WhatsApp and websites that respond to customers in seconds. Free audit. 30-day money-back guarantee.",
+        "The Bottleneck Map: a 90-minute, ROI-ranked diagnosis of where an owner-led business is leaking time and money — and what's actually worth fixing first.",
       priceRange: "$$",
       currenciesAccepted: "EUR, GBP, USD",
       areaServed: [
@@ -152,9 +152,9 @@ const jsonLd = {
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",
-              name: "Free Business Audit",
+              name: "Bottleneck Map",
               description:
-                "48-hour audit that shows exactly where your business is losing leads and what it's costing you.",
+                "90-minute working session producing a one-page, ROI-ranked map of where the business still runs through the founder — and the one fix to start with.",
             },
           },
           {

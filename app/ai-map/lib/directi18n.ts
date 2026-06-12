@@ -2,13 +2,13 @@
  * Direct sales page i18n — /ai-map
  * Locales: EN (default) · ES · УК
  *
- * PRICING STATE: complimentary until June 15.
- * Paid pricing strings are commented out with "// PAID:" prefix — restore after June 15.
+ * PRICING STATE: founding rate €297 (was €1,500) until June 30 — matches the
+ * homepage's founding-rate mechanic. The complimentary phase ended June 15.
  */
 
 import type { DirectLocale } from "./locale";
 import type { IndustryTab } from "@/app/partners/[slug]/lib/i18n";
-import { PHASE1_ANCHOR, COMP_DEADLINE } from "./config";
+import { PHASE1_ANCHOR, PRICE_CURRENT, PRICE_ANCHOR, OFFER_DEADLINE } from "./config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -128,9 +128,8 @@ const en: DirectPageDict = {
       "A 90-minute working session that maps every AI opportunity in your business, ranked by ROI. Delivered as a one-page document within 48 hours.",
     cta: "Book your Strategic AI Map",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
-    offerCloses: `offer closes ${COMP_DEADLINE}`,
-    compChip: `Complimentary until ${COMP_DEADLINE}`,
-    // PAID: priceChip: "€997 — was €1,500",
+    offerCloses: `founding rate ends ${OFFER_DEADLINE}`,
+    compChip: `${PRICE_CURRENT} — was ${PRICE_ANCHOR}`,
   },
 
   problem: {
@@ -152,12 +151,11 @@ const en: DirectPageDict = {
     del2: "4–6 use cases ranked by estimated ROI",
     del3: "Phase 1 quoted — or an honest 'not yet'",
     anchorLabel: "Normally",
-    anchorValue: "€1,500",
-    compPriceLabel: `Complimentary until ${COMP_DEADLINE}`,
-    compPriceValue: "Free",
+    anchorValue: PRICE_ANCHOR,
+    compPriceLabel: `Founding rate until ${OFFER_DEADLINE}`,
+    compPriceValue: PRICE_CURRENT,
     compJustify:
       "This isn't a discovery call with a pitch at the end. It's a real working session with a real deliverable — a one-page, ROI-ranked map of your entire operation. If nothing's worth automating, I'll tell you straight. The map is yours either way.",
-    // PAID: creditNote: "The €997 is fully credited toward Phase 1 if you proceed — so the map effectively costs you nothing.",
   },
 
   guarantee: {
@@ -174,10 +172,9 @@ const en: DirectPageDict = {
     included1: "90-minute Strategic AI Map session",
     included2: "One-page ROI-ranked map, delivered within 48 hours",
     included3: "Phase 1 quoted — or an honest 'not yet'",
-    compLine: `Complimentary until ${COMP_DEADLINE}. No pitch, no obligation.`,
+    compLine: `Founding rate ${PRICE_CURRENT} (was ${PRICE_ANCHOR}) until ${OFFER_DEADLINE}. No pitch, no obligation.`,
     guaranteeLine: "10× guarantee: find €10k+/yr in your business — or you owe nothing.",
-    deadlineChip: `Complimentary until ${COMP_DEADLINE}`,
-    // PAID: creditLine: "Fully credited toward Phase 1 — the map effectively costs you nothing if you proceed.",
+    deadlineChip: `Founding rate until ${OFFER_DEADLINE}`,
   },
 
   process: {
@@ -237,11 +234,9 @@ const en: DirectPageDict = {
     headline: "Before you book",
     items: [
       {
-        // MERGED from: "Why €997? Why isn't this free?" + "Is €997 worth it?"
-        // PAID: restore those two questions and remove this one after June 15
-        q: "It's free — so what's the catch?",
+        q: `Why ${PRICE_CURRENT}? Why isn't this free?`,
         a: () =>
-          `No catch. Until ${COMP_DEADLINE} the Strategic AI Map is complimentary while I build out case studies across new industries. It's a real working session with a real one-page deliverable — not a disguised sales call. If your map leads to a build, great. If it doesn't, the map and the clarity are yours. Either way, you walk away knowing exactly where AI fits your business and where it doesn't.`,
+          `Because it's 90 minutes of focused, one-on-one diagnostic work — not a generic quiz or a sales script. The standard rate is ${PRICE_ANCHOR}; until ${OFFER_DEADLINE} it's ${PRICE_CURRENT} while I build out case studies across new industries. And the risk sits with me: if I don't find at least €10,000/year in recoverable cost, the session is refunded and you keep the map anyway.`,
       },
       {
         q: "What if I can't implement what's on the map?",
@@ -282,7 +277,7 @@ const en: DirectPageDict = {
 
   finalCta: {
     headline: "Get your map. Know your number.",
-    sub: `Complimentary until ${COMP_DEADLINE}. 90 minutes. No pitch.`,
+    sub: `Founding rate ${PRICE_CURRENT} (was ${PRICE_ANCHOR}) until ${OFFER_DEADLINE}. 90 minutes. No pitch.`,
     cta: "Book your Strategic AI Map",
     messengerLabel: "Message on Telegram first",
     guarantee: "10× guarantee: find €10k+/yr — or owe nothing.",
@@ -350,9 +345,8 @@ const es: DirectPageDict = {
       "Una sesión de trabajo de 90 minutos que mapea cada oportunidad de IA en tu negocio, priorizada por ROI. Entregada como un documento de una página en 48 horas.",
     cta: "Reserva tu Mapa Estratégico de IA",
     daysLeft: (n) => `${n} ${n === 1 ? "día" : "días"} restantes`,
-    offerCloses: `oferta cierra el ${COMP_DEADLINE}`,
-    compChip: `Gratis hasta el ${COMP_DEADLINE}`,
-    // PAID: priceChip: "€997 — antes €1,500",
+    offerCloses: "tarifa fundacional hasta el 30 de junio",
+    compChip: `${PRICE_CURRENT} — antes ${PRICE_ANCHOR}`,
   },
 
   problem: {
@@ -374,9 +368,9 @@ const es: DirectPageDict = {
     del2: "4–6 casos de uso clasificados por ROI estimado",
     del3: "Fase 1 cotizada — o un honesto 'todavía no'",
     anchorLabel: "Normalmente",
-    anchorValue: "€1,500",
-    compPriceLabel: `Gratis hasta el ${COMP_DEADLINE}`,
-    compPriceValue: "Gratis",
+    anchorValue: PRICE_ANCHOR,
+    compPriceLabel: "Tarifa fundacional hasta el 30 de junio",
+    compPriceValue: PRICE_CURRENT,
     compJustify:
       "Esto no es una llamada de descubrimiento con una venta al final. Es una sesión de trabajo real con un entregable real: un mapa de una página, priorizado por ROI, de toda tu operación. Si no hay nada que valga la pena automatizar, te lo diré claramente. El mapa es tuyo en cualquier caso.",
   },
@@ -395,9 +389,9 @@ const es: DirectPageDict = {
     included1: "Sesión del Mapa Estratégico de IA de 90 minutos",
     included2: "Mapa de una página priorizado por ROI, entregado en 48 horas",
     included3: "Fase 1 cotizada — o un honesto 'todavía no'",
-    compLine: `Gratis hasta el ${COMP_DEADLINE}. Sin venta, sin obligación.`,
+    compLine: `Tarifa fundacional ${PRICE_CURRENT} (antes ${PRICE_ANCHOR}) hasta el 30 de junio. Sin venta, sin obligación.`,
     guaranteeLine: "Garantía 10×: encontramos €10k+/año en tu negocio — o no debes nada.",
-    deadlineChip: `Gratis hasta el ${COMP_DEADLINE}`,
+    deadlineChip: "Tarifa fundacional hasta el 30 de junio",
   },
 
   process: {
@@ -456,9 +450,9 @@ const es: DirectPageDict = {
     headline: "Antes de reservar",
     items: [
       {
-        q: "Es gratis, ¿cuál es el truco?",
+        q: `¿Por qué ${PRICE_CURRENT}? ¿Por qué no es gratis?`,
         a: () =>
-          `Ningún truco. Hasta el ${COMP_DEADLINE} el Mapa Estratégico de IA es gratuito mientras desarrollo casos de estudio en nuevos sectores. Es una sesión de trabajo real con un entregable real de una página, no una llamada de ventas disfrazada. Si tu mapa lleva a un proyecto, perfecto. Si no, el mapa y la claridad son tuyos. En cualquier caso, sales sabiendo exactamente dónde encaja la IA en tu negocio y dónde no.`,
+          `Porque son 90 minutos de trabajo diagnóstico individual y enfocado — no un cuestionario genérico ni un guion de ventas. La tarifa estándar es ${PRICE_ANCHOR}; hasta el 30 de junio es ${PRICE_CURRENT} mientras desarrollo casos de estudio en nuevos sectores. Y el riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, la sesión se reembolsa y el mapa es tuyo igualmente.`,
       },
       {
         q: "¿Qué pasa si no puedo implementar lo del mapa?",
@@ -499,7 +493,7 @@ const es: DirectPageDict = {
 
   finalCta: {
     headline: "Obtén tu mapa. Conoce tu número.",
-    sub: `Gratis hasta el ${COMP_DEADLINE}. 90 minutos. Sin venta.`,
+    sub: `Tarifa fundacional ${PRICE_CURRENT} (antes ${PRICE_ANCHOR}) hasta el 30 de junio. 90 minutos. Sin venta.`,
     cta: "Reserva tu Mapa Estratégico de IA",
     messengerLabel: "Escribe primero por Telegram",
     guarantee: "Garantía 10×: €10k+/año — o no debes nada.",
@@ -571,8 +565,8 @@ const uk: DirectPageDict = {
       const form = (ll >= 11 && ll <= 14) ? "днів" : l === 1 ? "день" : (l >= 2 && l <= 4) ? "дні" : "днів";
       return `${n} ${form} залишилось`;
     },
-    offerCloses: `пропозиція закривається ${COMP_DEADLINE}`,
-    compChip: `Безкоштовно до ${COMP_DEADLINE}`,
+    offerCloses: "стартова ціна діє до 30 червня",
+    compChip: `${PRICE_CURRENT} — було ${PRICE_ANCHOR}`,
   },
 
   problem: {
@@ -594,9 +588,9 @@ const uk: DirectPageDict = {
     del2: "4–6 сценаріїв, пріоритизованих за ROI",
     del3: "Оцінка першого етапу — або чесне «ще не час»",
     anchorLabel: "Зазвичай",
-    anchorValue: "€1,500",
-    compPriceLabel: `Безкоштовно до ${COMP_DEADLINE}`,
-    compPriceValue: "Безкоштовно",
+    anchorValue: PRICE_ANCHOR,
+    compPriceLabel: "Стартова ціна до 30 червня",
+    compPriceValue: PRICE_CURRENT,
     compJustify:
       "Це не ознайомчий дзвінок із продажем наприкінці. Це реальна робоча сесія з реальним результатом — односторінкова карта вашого бізнесу з пріоритетами за ROI. Якщо нічого не варто автоматизувати — я скажу прямо. Карта залишається у вас у будь-якому разі.",
   },
@@ -615,9 +609,9 @@ const uk: DirectPageDict = {
     included1: "90-хвилинна сесія Стратегічної карти ШІ",
     included2: "Односторінковий ROI-пріоритизований документ протягом 48 годин",
     included3: "Оцінка першого етапу — або чесне «ще не час»",
-    compLine: `Безкоштовно до ${COMP_DEADLINE}. Без продажу, без зобов'язань.`,
+    compLine: `Стартова ціна ${PRICE_CURRENT} (було ${PRICE_ANCHOR}) до 30 червня. Без продажу, без зобов'язань.`,
     guaranteeLine: "Гарантія 10×: знайдемо €10k+/рік у вашому бізнесі — або ви нічого не платите.",
-    deadlineChip: `Безкоштовно до ${COMP_DEADLINE}`,
+    deadlineChip: "Стартова ціна до 30 червня",
   },
 
   process: {
@@ -676,9 +670,9 @@ const uk: DirectPageDict = {
     headline: "Перед бронюванням",
     items: [
       {
-        q: "Це безкоштовно — у чому підступ?",
+        q: `Чому ${PRICE_CURRENT}? Чому не безкоштовно?`,
         a: () =>
-          `Жодного підступу. До ${COMP_DEADLINE} Стратегічна карта ШІ безкоштовна, поки я напрацьовую кейси в нових галузях. Це реальна робоча сесія з реальним результатом на одну сторінку, а не замаскований продаж. Якщо карта приведе до проєкту — чудово. Якщо ні — карта і ясність залишаються у вас. У будь-якому разі ви дізнаєтесь, де саме ШІ підходить вашому бізнесу, а де ні.`,
+          `Бо це 90 хвилин сфокусованої індивідуальної діагностики — не загальний тест і не сценарій продажу. Стандартна ціна — ${PRICE_ANCHOR}; до 30 червня діє стартова ціна ${PRICE_CURRENT}, поки я напрацьовую кейси в нових галузях. І ризик на мені: якщо я не знайду щонайменше €10,000/рік відновлюваних витрат — сесію буде відшкодовано, а карта залишиться у вас.`,
       },
       {
         q: "А якщо я не зможу впровадити те, що є на карті?",
@@ -719,7 +713,7 @@ const uk: DirectPageDict = {
 
   finalCta: {
     headline: "Отримайте карту. Дізнайтеся свої цифри.",
-    sub: `Безкоштовно до ${COMP_DEADLINE}. 90 хвилин. Без продажу.`,
+    sub: `Стартова ціна ${PRICE_CURRENT} (було ${PRICE_ANCHOR}) до 30 червня. 90 хвилин. Без продажу.`,
     cta: "Забронювати Стратегічну карту ШІ",
     messengerLabel: "Спочатку написати в Telegram",
     guarantee: "Гарантія 10×: €10k+/рік — або ви нічого не платите.",

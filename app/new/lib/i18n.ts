@@ -111,12 +111,17 @@ export interface NewPageDict {
   map: {
     label: string;
     headline: string;
+    /** Substring of headline rendered in accent + nowrap (locale-specific) */
+    headlineHighlight: string;
     body: string;
     bullets: string[];
     sample: SampleMapDict;
     note: string;
-    /** Button after this section -> CTA_TARGET. Takes the live founding/standard rate. */
-    ctaLabel: (rate: string) => string;
+    /** Button after this section -> CTA_TARGET. The struck-through standard
+     *  rate + live founding rate are appended in the component. */
+    ctaLabel: string;
+    /** Deadline microcopy under the button, e.g. "Founding rate — until June 30" */
+    ctaDeadline: string;
   };
 
   proof: {
@@ -175,6 +180,8 @@ export interface NewPageDict {
   cta: {
     label: string;
     headline: string;
+    /** Substring of headline rendered in accent (locale-specific) */
+    headlineAccent: string;
     sub: string;
     primaryCta: string;
     /** Score CTA used in the dual-CTA row (mobile-primary) */
@@ -335,7 +342,8 @@ const en: NewPageDict = {
     primaryCta: "Get your Bottleneck Score",
     primaryMicrocopy: "2 minutes · free · no call",
     secondaryCta: "Book the Bottleneck Map",
-    guarantee: "10× the value or you don't pay — and you keep the map.",
+    // Rendered as a sticker chip with a "10×" accent prefix — keep it short.
+    guarantee: "the value — or you don't pay",
   },
 
   pain: {
@@ -384,6 +392,7 @@ const en: NewPageDict = {
   map: {
     label: "The mechanism",
     headline: "The Bottleneck Map — 90 minutes, ROI-ranked.",
+    headlineHighlight: "90 minutes, ROI-ranked",
     body: "ROI-first diagnosis, not tools. Process before automation — you can't automate chaos. We spend 90 minutes mapping the 3 places where the business still runs through you — what each one costs, and what's actually worth fixing.",
     bullets: [
       "The 3 places everything still routes through you",
@@ -418,7 +427,8 @@ const en: NewPageDict = {
       bleedPayback: "Under 2 months",
       note: "Sample output — yours will be specific to your business.",
     },
-    ctaLabel: (rate) => `Book the Map — founding rate ${rate}`,
+    ctaLabel: "Book the Map —",
+    ctaDeadline: "Founding rate — until June 30",
   },
 
   proof: {
@@ -527,6 +537,7 @@ const en: NewPageDict = {
   cta: {
     label: "Find your one leak",
     headline: "Find the leak. Fix it first. Or don't — your call.",
+    headlineAccent: "Or don't — your call.",
     sub: "90 minutes. One-page, ROI-ranked map of where your time, money, and founder-energy are leaking.",
     primaryCta: "Book the Bottleneck Map",
     scoreCta: "Get your Bottleneck Score",
@@ -628,13 +639,327 @@ const en: NewPageDict = {
 
 // ─── ES ─────────────────────────────────────────────────────────────────────
 //
-// TODO: translate — every string below is the EN copy, used as a placeholder
-// so the EN/ES toggle is fully wired before Maks approves Spanish copy.
-// Positioning copy is locked; do not machine-translate it. Replace field by
-// field (or the whole object) with reviewed Spanish translations.
+// Full Spanish translation of the EN dict (Spain Spanish, tuteo — same
+// register as the /ai-map ES copy). Product names ("Bottleneck Map",
+// "Bottleneck Score") stay in English as brand names, with Spanish copy
+// around them. Testimonials are verbatim client reviews and the services
+// ticker tags are SEO keywords — both stay in English (shared data above).
+
+const PILLAR_PAINS_ES: [[string, string], [string, string], [string, string]] = [
+  ["Respuesta lenta a leads (>4h de media)", "Seguimiento manual de reservas"],
+  ["El conocimiento vive en la cabeza del fundador", "Notas de reuniones + seguimiento de tareas"],
+  ["Procesado de facturas y documentos", "Informes semanales a stakeholders"],
+];
 
 const es: NewPageDict = {
   ...en,
+
+  header: {
+    ctaLabel: "Reserva el Mapa",
+    aiMapLabel: "Mapa IA",
+    blogLabel: "Blog",
+  },
+
+  hero: {
+    eyebrow: "El cuello de botella eres tú",
+    headlineLines: ["Tu equipo no es el cuello de botella.", "Eres tú."],
+    sub: "Encuentro la fuga que más te está costando — y la tapo con IA que funciona de verdad. O te digo claramente dónde la IA no es la respuesta.",
+    primaryCta: "Haz tu Bottleneck Score",
+    primaryMicrocopy: "2 minutos · gratis · sin llamada",
+    secondaryCta: "Reserva el Bottleneck Map",
+    // Rendered as a sticker chip with a "10×" accent prefix — keep it short.
+    guarantee: "el valor — o no pagas",
+  },
+
+  pain: {
+    label: "¿Te suena?",
+    headline: "Cada decisión sigue pasando por ti.",
+    lines: [
+      "Cada decisión pasa por ti — incluso las pequeñas.",
+      "Tres operaciones de €20k llevan toda la semana paradas en el pipeline porque no tuviste tiempo de revisarlas.",
+      "Ganas cuando estás en la sala. Pierdes cuando lo delegas. Pero no puedes estar en cuatro salas a la vez.",
+      "Probaste una herramienta de IA una vez. Le soltó disparates inventados a un cliente real. Nunca más.",
+    ],
+    punch: "Si mañana te atropella un autobús, ¿el negocio sobrevive más allá del viernes?",
+    ctaLabel: "Descubre lo que te está costando — Bottleneck Score de 2 min",
+    closingLine: "Nada de esto significa que lo construiste mal. Significa que lo construiste — y ahora te necesita menos.",
+  },
+
+  reframe: {
+    label: "Antes de hablar de IA",
+    headline: "No necesitas otra herramienta de IA.",
+    body: "La mayoría de los consejos sobre IA ahora mismo son humo — y el caos no se puede automatizar. La pregunta no es “¿qué herramienta de IA?”. Es “¿qué merece la pena arreglar primero?”",
+    enemies: [
+      {
+        title: "El hype de la IA",
+        desc: "Gurús gritando “agentes de IA”, cursos que te entregan un chatbot que alucina delante de tus clientes.",
+      },
+      {
+        title: "Consultores de PowerPoint",
+        desc: "Nunca han llevado un negocio real. Te entregan palabras de moda, cobran el cheque y se van.",
+      },
+      {
+        title: "Inflación de herramientas",
+        desc: "€2k/mes en SaaS en el que nadie entra. El caos no se automatiza — primero hay que arreglarlo.",
+      },
+    ],
+    ctaLabel: "Haz tu Bottleneck Score",
+  },
+
+  belief: {
+    label: "Por qué hago esto",
+    headline: "La mayoría de los fundadores construyen una prisión y la llaman negocio.",
+    body: "Echarle IA a un negocio desordenado no lo arregla — solo escala el desorden. Lo aprendí por las malas, y casi lo vi estrellarse. Ahora ayudo a fundadores a encontrar el primer movimiento más seguro y rentable — antes de que gasten dinero construyendo lo que no toca.",
+    roleLine: "Operador, no consultor. He sido el fundador atrapado — esto no es teoría para mí.",
+    signature: "— Maks Nedbailo, fundador, Care Less",
+  },
+
+  map: {
+    label: "El mecanismo",
+    headline: "El Bottleneck Map — 90 minutos, priorizado por ROI.",
+    headlineHighlight: "90 minutos, priorizado por ROI",
+    body: "Diagnóstico ROI-primero, no herramientas. Proceso antes que automatización — el caos no se automatiza. Dedicamos 90 minutos a mapear los 3 puntos donde el negocio todavía pasa por ti — lo que cuesta cada uno, y qué merece la pena arreglar de verdad.",
+    bullets: [
+      "Los 3 puntos por los que todo sigue pasando por ti",
+      "Lo que te cuesta cada uno — en tiempo, dinero o ambos",
+      "Qué conviene automatizar, delegar, simplificar o ignorar",
+      "El arreglo por el que empezar — priorizado por ROI",
+      "Humano + IA, nunca IA-primero. Proceso antes que automatización.",
+    ],
+    note: "Hasta Klarna apostó todo a la IA, chocó con un muro de calidad y volvió a contratar humanos. Nosotros empezamos donde ellos acabaron.",
+    sample: {
+      docTitle: "Bottleneck Map",
+      clientLabel: "[El nombre de tu negocio]",
+      sessionLabel: "RESULTADO DE LA SESIÓN DE 90 MIN",
+      studioName: "Care Less",
+      pillarLabels: ["Comunicación con clientes", "Conocimiento interno y operaciones", "Ejecución repetible"],
+      pillarPains: PILLAR_PAINS_ES,
+      pillarPrefix: (n, label) => `Área ${n} — ${label}`,
+      colPain: "Problema",
+      colLosingNow: "Pierdes ahora",
+      colFeasibility: "Viabilidad IA",
+      colPriority: "Prioridad",
+      phase1Heading: "Primer movimiento recomendado",
+      phase1Rec: "#1 — Sistema de respuesta a leads con IA · WhatsApp + web · 24/7",
+      phase1Timeline: "2–3 semanas",
+      phase1IfProceed: "si sigues adelante",
+      bleedLabel: "Ejemplo: fuga",
+      bleedStat: "~€6,000/mes",
+      bleedAnnual: "(~€72k/año)",
+      bleedDesc: (phase1Anchor) =>
+        `Este negocio pierde ~€6,000/mes (~€72k/año) — costes directos más tiempo de fundador desperdiciado (~21 h/sem). El primer movimiento ataca la fuga más grande (#1 — respuesta lenta a leads, ~€2,400/mes): ${phase1Anchor} pago único. Se amortiza en menos de 2 meses — y el ahorro se acumula.`,
+      bleedPhase1Label: "Primer movimiento",
+      bleedPayback: "Menos de 2 meses",
+      note: "Ejemplo ilustrativo — el tuyo será específico de tu negocio.",
+    },
+    ctaLabel: "Reserva el Mapa —",
+    ctaDeadline: "Tarifa fundacional — hasta el 30 de junio",
+  },
+
+  proof: {
+    label: "Pruebas",
+    headline: "Sistemas reales, funcionando ahora.",
+    sub: "Software en producción, gestionando conversaciones reales cada día.",
+    liveBadge: "LIVE",
+    cases: [
+      {
+        name: "Amira para HC MedSpa",
+        desc: "Agente de IA para respuesta a leads. Responde en 9 segundos por WhatsApp y en la web.",
+        tag: "MedSpa (UK) · Respuesta a leads",
+        href: "/automations/hcmedspa",
+      },
+      {
+        name: "Elena Hotel & SPA",
+        desc: "El agente de IA gestiona reservas y responde a los huéspedes — 24/7 por WhatsApp y en la web.",
+        tag: "Hotel · Reservas y soporte",
+        href: "https://bukovel-elena.com.ua/en/",
+      },
+      {
+        name: "Voz IA en la web",
+        desc: "Agente de voz que responde a los visitantes en tiempo real — sin formularios, sin esperas.",
+        tag: "Demo · Agente de voz",
+        href: VOICE_DEMO_ANCHOR,
+      },
+    ],
+    industryLabel: "El mismo patrón, a escala",
+    industry: [
+      {
+        name: "Klarna",
+        desc: "Construyó un asistente de IA que hacía el trabajo de cientos de agentes — y luego volvió a contratar humanos para las conversaciones que necesitaban uno.",
+        tag: "Industria · en producción",
+      },
+      {
+        name: "IKEA",
+        desc: "Automatizó las preguntas rutinarias de clientes y reconvirtió al personal del call center en roles de asesoría de mayor valor.",
+        tag: "Industria · en producción",
+      },
+      {
+        name: "Octopus Energy",
+        desc: "La IA redacta respuestas con la voz de la empresa; agentes humanos revisan y envían. Velocidad de automatización, criterio de persona.",
+        tag: "Industria · en producción",
+      },
+    ],
+    ctaLabel: "Mira tus propios números en 2 minutos",
+  },
+
+  path: {
+    label: "Cómo funciona",
+    headline: "Tres pasos. Puedes parar después de cualquiera.",
+    steps: [
+      {
+        number: "01",
+        title: "Bottleneck Score",
+        badge: "Gratis · 2 minutos",
+        desc: "Una autoevaluación. Estima lo que tu cuello de botella de fundador te cuesta al mes, y muestra tu categoría de fuga #1.",
+        ctaLabel: "Hazlo",
+      },
+      {
+        number: "02",
+        title: "Bottleneck Map",
+        desc: "90 minutos, priorizado por ROI. El mapa exacto de dónde eres el cuello de botella, lo que te cuesta, y qué merece arreglar primero.",
+        ctaLabel: "Reservar",
+        microcopy: "Si no encuentro €10,000+/año recuperables — se reembolsa, y el mapa es tuyo.",
+      },
+      {
+        number: "03",
+        title: "Primera construcción",
+        badge: "Definida desde tu Mapa · 2–3 semanas",
+        desc: "El arreglo que señala el Mapa, construido y en marcha. Acotado, priorizado por ROI, sin sorpresas de alcance.",
+        note: "Se desbloquea con el Mapa.",
+      },
+    ],
+    foundingLabel: "fundacional",
+    capacityLine: (slotsOpen) =>
+      `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
+  },
+
+  testimonials: {
+    label: "Cómo es trabajar conmigo",
+    headline: "Escúchalo de quienes han trabajado conmigo.",
+    sub: "Fiable, claro y centrado en el resultado — no en las herramientas.",
+    items: TESTIMONIAL_ITEMS,
+  },
+
+  whyMe: {
+    label: "Por qué yo",
+    headline: "Por qué esto no es otro pitch de agencia.",
+    colThem: "Ellos",
+    colMe: "Care Less",
+    rows: [
+      ["Consultor con PowerPoint", "Operador que ha sido el fundador atrapado"],
+      ["“La IA lo va a transformar todo”", "Aquí es donde la IA compensa — y donde no"],
+      ["Te vende herramientas", "Te vende claridad, y luego el único arreglo que vale la pena"],
+      ["Dice conocer tu sector", "No finge conocerlo — y no lo necesita"],
+    ],
+  },
+
+  services: {
+    label: "¿Tienes otro problema? Probablemente ya hemos resuelto uno parecido",
+    tags: SERVICES_TAGS,
+    hoverCta: "Reserva el Mapa",
+  },
+
+  cta: {
+    label: "Encuentra tu fuga",
+    headline: "Encuentra la fuga. Arréglala primero. O no — tú decides.",
+    headlineAccent: "O no — tú decides.",
+    sub: "90 minutos. Un mapa de una página, priorizado por ROI, de dónde se te escapan el tiempo, el dinero y la energía de fundador.",
+    primaryCta: "Reserva el Bottleneck Map",
+    scoreCta: "Haz tu Bottleneck Score",
+    guarantee: "10× el valor, o no pagas — y el mapa es tuyo en cualquier caso.",
+    secondaryCta: "¿Una duda rápida? Escríbeme por WhatsApp",
+    closing: "Si no hay una oportunidad clara, te lo diré. Eso es parte del trabajo.",
+  },
+
+  faq: {
+    label: "FAQ",
+    headline: "Antes de reservar",
+    items: [
+      {
+        q: "¿Esto es solo una llamada de ventas?",
+        a: "No. Son 90 minutos de trabajo diagnóstico real. Te llevarás un mapa de una página aunque no volvamos a trabajar juntos. Si no hay una oportunidad clara, te lo diré sin rodeos — eso es parte del trato.",
+      },
+      {
+        q: "¿Por qué no es gratis?",
+        a: "Porque son 90 minutos de trabajo diagnóstico individual y enfocado — no un test genérico ni un guion de ventas. Lo gratis recibe una plantilla; lo pagado recibe toda mi atención sobre tus números. Y el riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, la sesión se reembolsa y el mapa es tuyo igualmente.",
+      },
+      {
+        q: "¿Qué es el Bottleneck Score?",
+        a: "Una autoevaluación gratuita de 2 minutos. Estima lo que tu cuello de botella de fundador cuesta al mes y muestra tu categoría de fuga #1. Sin llamada, sin compromiso — el Mapa lo hace exacto.",
+      },
+      {
+        q: "¿Y si la IA no es la respuesta para mi negocio?",
+        a: "Entonces te lo diré, claramente. A veces el arreglo con mayor ROI es un cambio de proceso o una contratación — no software. Prefiero perder una venta antes que venderte algo que no necesitas.",
+      },
+      {
+        q: "¿Con qué me voy exactamente?",
+        a: "Un mapa de una página priorizado por ROI: las 3 áreas donde eres el cuello de botella, lo que te cuesta cada una, qué conviene automatizar / delegar / simplificar / ignorar, y el arreglo por el que empezar.",
+      },
+      {
+        q: "¿Para quién es esto?",
+        a: "Negocios dirigidos por su dueño de unos €3–10M de facturación, 20–50 empleados, donde el fundador sigue siendo el sistema operativo — cada decisión pasa por ti, decides solo, y tienes presupuesto real.",
+      },
+      {
+        q: "¿Para quién NO es?",
+        a: "Solopreneurs por debajo de €1M (no hay equipo que liberar) y empresas de 100–1000 empleados (decisiones por comité, ciclos de 6 meses — un proceso completamente distinto). Si ese es tu caso, probablemente aún no encaja.",
+      },
+      {
+        q: "¿Sonará como un robot?",
+        a: "No. Se entrena con TU voz, TUS respuestas, TU forma de hablar con los clientes. La mayoría de la gente no nota la diferencia.",
+      },
+      {
+        q: "¿Cuánto tiempo y dinero puedo ahorrar de forma realista?",
+        a: "La mayoría de los clientes recuperan 15–30 horas al mes en seguimientos manuales y mensajes sin responder. En ingresos, capturar incluso 3–4 leads al mes que se habrían quedado sin respuesta suele pagar todo el sistema — a menudo en la primera semana.",
+      },
+      {
+        q: "¿Cuánto tarda en verse un resultado real?",
+        a: "La mayoría ve su primer lead capturado en las 48 horas siguientes a la puesta en marcha. Las mejoras de tiempo de respuesta se ven desde el primer día. El ROI suele aparecer en las primeras 2–4 semanas.",
+      },
+      {
+        q: "¿Funcionará con las herramientas que ya uso?",
+        a: "Sí. Se integra con WhatsApp, tu web, Google Calendar y la mayoría de sistemas de reservas. Mapeamos tus herramientas actuales antes de construir nada — el objetivo es conectarse a lo que ya tienes, no obligarte a cambiar.",
+      },
+      {
+        q: "¿Y si da una respuesta incorrecta?",
+        a: "Solo responde con la información que tú apruebas. Cualquier cosa de la que no esté seguro te llega directamente a ti. Nunca da consejos médicos, legales ni profesionales — solo gestiona reservas, horarios, ubicación y preguntas frecuentes. Tú mantienes el control.",
+      },
+      {
+        q: "¿Es otra herramienta cara que tendré que gestionar yo?",
+        a: "No. No gestionas nada. Lo construimos, lo monitorizamos y lo mantenemos. Tu único trabajo es seguir haciendo lo que haces — nosotros nos ocupamos del resto. Y el coste mensual es menos que el sueldo semanal de un empleado a tiempo parcial.",
+      },
+      {
+        q: "¿Puedo empezar pequeño con un solo proceso?",
+        a: "Por supuesto. La mayoría empieza con un canal — normalmente WhatsApp — y amplía desde ahí cuando ve resultados. No hace falta automatizarlo todo el primer día.",
+      },
+      {
+        q: "¿Cómo de seguros están los datos de mi negocio?",
+        a: "Tus datos se quedan en sistemas que tú controlas. No almacenamos conversaciones de clientes en servidores externos. Todo se construye con principios de privacidad primero, y con gusto te explicamos la configuración técnica antes de empezar.",
+      },
+      {
+        q: "¿Cómo es el soporte después de la puesta en marcha?",
+        a: "Estamos disponibles por WhatsApp para cualquier incidencia. La mayoría de los clientes necesitan muy poco soporte después del arranque — pero si algo se rompe o hay que actualizarlo, lo resolvemos rápido. Sin sistemas de tickets, sin colas.",
+      },
+      {
+        q: "No soy técnico. ¿Esto será complicado para mí?",
+        a: "No tocarás ninguna tecnología. Nosotros lo montamos, lo configuramos y lo probamos. Tú sigues haciendo lo que ya haces.",
+      },
+      {
+        q: "¿Qué diferencia hay entre las herramientas de IA baratas y lo que construís vosotros?",
+        a: "Las herramientas genéricas están hechas para todos, lo que significa que no funcionan perfecto para nadie. Lo que construimos se entrena específicamente con tu negocio: tus servicios, tu tono, tus preguntas más frecuentes. El resultado es un asistente que suena como tú — no un chatbot genérico que frustra a los clientes.",
+      },
+    ],
+    guarantee: "Si no encuentro al menos €10,000/año en costes recuperables, la sesión se reembolsa y el mapa es tuyo.",
+    closingCta: "¿Aún no lo tienes claro? Escríbeme por WhatsApp",
+  },
+
+  footer: {
+    credit: "care less AI automation",
+    location: "Santander, España",
+    tagline: "Diagnóstico de IA ROI-primero para negocios dirigidos por su dueño. Honesto sobre dónde ayuda la IA — y dónde no.",
+    waLabel: "¿Una duda rápida? Escríbeme por WhatsApp",
+    navHome: "Inicio",
+    navScore: "Bottleneck Score",
+  },
 };
 
 // ─── Accessor ───────────────────────────────────────────────────────────────
