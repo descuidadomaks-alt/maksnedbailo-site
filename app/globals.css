@@ -515,9 +515,9 @@ h1.font-playfair, h2.font-playfair {
    VoidSection's particle field without hiding the dots entirely.
  ──────────────────────────────────────────────────────────────────────────── */
 .map-content-panel {
-  background: rgba(255, 255, 255, 0.012);
-  backdrop-filter: blur(11px);
-  -webkit-backdrop-filter: blur(11px);
+  background: rgba(255, 255, 255, 0.006);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 48px rgba(0, 0, 0, 0.3);
@@ -622,7 +622,7 @@ h1.font-playfair, h2.font-playfair {
    iOS-style refraction (SVG displacement in backdrop-filter) is still
    Chromium-only, so this layered approximation is the cross-browser ceiling. */
 .btn-glass-dark {
-  background: linear-gradient(180deg, rgba(255,255,255,0.09) 0%, rgba(16,16,18,0.30) 60%, rgba(16,16,18,0.38) 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(16,16,18,0.12) 60%, rgba(16,16,18,0.18) 100%);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.16);
@@ -704,7 +704,7 @@ h1.font-playfair, h2.font-playfair {
   aspect-ratio: 1400 / 950;
   overflow: hidden;
   line-height: 0;
-  margin-top: -220px;
+  margin-top: -140px;
 }
 
 .new-hero-photo {
@@ -722,7 +722,7 @@ h1.font-playfair, h2.font-playfair {
   top: 0;
   left: 0;
   right: 0;
-  height: 240px;
+  height: 160px;
   background: linear-gradient(
     to bottom,
     #060608 0%,
@@ -750,7 +750,7 @@ h1.font-playfair, h2.font-playfair {
     width: 115%;
   }
   .new-hero-photo-fade {
-    height: 300px;
+    height: 200px;
   }
 }
 
