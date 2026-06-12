@@ -116,7 +116,7 @@ const INDUSTRY_WORDMARKS = [KlarnaWordmark, IkeaWordmark, OctopusWordmark];
 
 export default function ProofSection({ d }: { d: NewPageDict }) {
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+    <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       {/* Soft section gradient */}
       <div
         aria-hidden

@@ -15,9 +15,7 @@ const YEAR = new Date().getFullYear();
 export default function NewFooter({ d }: { d: NewPageDict }) {
   const ctaTarget = useCtaTarget();
   return (
-    // Transparent — the FAQ -> footer ElevatorField's dot shaft shows
-    // through, so the footer reads as sitting over the 3D space underneath.
-    <footer className="section-divider pt-20 pb-32 md:pt-24 md:pb-16">
+    <footer className="section-divider pt-20 pb-32 md:pt-24 md:pb-16" style={{ background: "var(--bg)" }}>
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
 
         {/* eslint-disable-next-line @next/next/no-img-element */}

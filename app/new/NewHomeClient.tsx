@@ -55,16 +55,10 @@ export default function NewHomePage() {
         <ServicesTicker d={d} />
         <FinalCTA d={d} />
       </main>
-      {/* FAQ keeps its solid fill; the dot shaft shows through the
-          (transparent) footer underneath it — same treatment as the main
-          field. Small cameraSpan: this wrapper is short, so the dots drift
-          instead of racing through all 12 floors. */}
-      <ElevatorField cameraSpan={0.18}>
-        <div data-short-page>
-          <NewFAQ d={d} />
-        </div>
-        <NewFooter d={d} />
-      </ElevatorField>
+      <div data-short-page>
+        <NewFAQ d={d} />
+      </div>
+      <NewFooter d={d} />
       <MobileCtaBar />
       <FloatingWhatsApp />
     </>
