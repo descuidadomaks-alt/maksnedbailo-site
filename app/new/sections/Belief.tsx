@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { NewPageDict } from "../lib/i18n";
 import { CRM_SCREENSHOT_SRC } from "../lib/config";
 
@@ -59,8 +60,13 @@ export default function Belief({ d }: { d: NewPageDict }) {
           <div className="order-2 flex justify-center lg:justify-end">
             <div data-reveal className="belief-screenshot-frame">
               <span className="hero-photo-glow" aria-hidden />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={CRM_SCREENSHOT_SRC} alt="Maks Nedbailo" />
+              <Image
+                src={CRM_SCREENSHOT_SRC}
+                alt="Maks Nedbailo"
+                width={1536}
+                height={2752}
+                sizes="(min-width: 1024px) 340px, 320px"
+              />
             </div>
           </div>
 

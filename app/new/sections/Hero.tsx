@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { SCORE_TARGET, STAGE_PHOTO_SRC } from "../lib/config";
@@ -178,11 +179,14 @@ export default function Hero({ d }: { d: NewPageDict }) {
 
       {/* Stage photo band — scroll-linked horizontal pan */}
       <div className="new-hero-photo-band">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           ref={photoRef}
           src={STAGE_PHOTO_SRC}
           alt="Maks Nedbailo speaking on stage"
+          width={1400}
+          height={450}
+          priority
+          sizes="100vw"
           className="new-hero-photo"
           style={{ filter: "grayscale(0.3) contrast(1.02) brightness(0.92)", opacity: 0.82 }}
         />

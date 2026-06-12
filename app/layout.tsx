@@ -11,6 +11,10 @@ const playfair = Playfair_Display({
   display: "swap",
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+  // Overridden to Roboto Mono on the homepage ([data-short-page]); avoid
+  // preloading it there. Pages that do render Playfair (e.g. /blog) still
+  // load it on demand via the @font-face.
+  preload: false,
 });
 
 // ── Primary body (Latin) ───────────────────────────────────────────────────────
@@ -30,6 +34,9 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
   weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
+  // Only used for :lang(uk) on /ai-map and partner pages; never preload it
+  // on the homepage.
+  preload: false,
 });
 
 // ── Cyrillic body — replaces Sora when lang="uk" ─────────────────────────────
