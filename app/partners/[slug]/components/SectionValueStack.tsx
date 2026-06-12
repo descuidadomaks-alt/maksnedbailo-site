@@ -3,7 +3,7 @@ import type { PartnerData } from "@/content/partners/index";
 const STACK = [
   { label: "Operational Discovery (3 pillars, 40 questions)", value: "€600" },
   { label: "Live ROI calculation for your top 3 AI opportunities", value: "€700" },
-  { label: "One-page Strategic AI Map (ranked by impact)", value: "€1,500" },
+  { label: "One-page Strategic AI Map (ranked by impact)", value: "€1,470" },
   { label: "Phase 1 Implementation Roadmap (only if it's worth doing)", value: "€400" },
 ];
 

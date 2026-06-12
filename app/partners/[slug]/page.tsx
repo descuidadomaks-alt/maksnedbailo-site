@@ -71,7 +71,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const c = SHORT[slug];
   if (!c) return {};
   const title = `Strategic AI Map — ${c.partnerName}'s circle · care less`;
-  const description = `A 90-minute Strategic AI Map session gifted through ${c.partnerName}. Normally €1,500. Yours complimentary — if there's nothing worth automating, I'll say so.`;
+  const description = `A 90-minute Strategic AI Map session gifted through ${c.partnerName}. Normally €1,470. Yours complimentary — if there's nothing worth automating, I'll say so.`;
   return {
     title,
     description,

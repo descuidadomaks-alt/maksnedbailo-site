@@ -4,8 +4,8 @@ import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import GlassButton from "../components/GlassButton";
 import { SCORE_TARGET } from "../lib/config";
-import { foundingSlotsLeft, FOUNDING_RATE, STANDARD_RATE, slotsOpen } from "../lib/site.config";
-import { useCtaTarget } from "../lib/locale";
+import { foundingSlotsLeft, FOUNDING_RATE, FOUNDING_RATE_ES, STANDARD_RATE, slotsOpen } from "../lib/site.config";
+import { useCtaTarget, useNewLocale } from "../lib/locale";
 
 /**
  * Section 7 — THE PATH (offer ladder).
@@ -17,6 +17,8 @@ import { useCtaTarget } from "../lib/locale";
 export default function ThePath({ d }: { d: NewPageDict }) {
   const [score, map, build] = d.path.steps;
   const ctaTarget = useCtaTarget();
+  const { locale } = useNewLocale();
+  const foundingRate = locale === "es" ? FOUNDING_RATE_ES : FOUNDING_RATE;
 
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
@@ -60,7 +62,7 @@ export default function ThePath({ d }: { d: NewPageDict }) {
                 {foundingSlotsLeft > 0 ? (
                   <>
                     <span className="text-fg/30 line-through mr-2">{STANDARD_RATE}</span>
-                    <span className="text-accent font-semibold">{FOUNDING_RATE} {d.path.foundingLabel}</span>
+                    <span className="text-accent font-semibold">{foundingRate} {d.path.foundingLabel}</span>
                   </>
                 ) : (
                   <span className="text-fg/75 font-semibold">{STANDARD_RATE}</span>

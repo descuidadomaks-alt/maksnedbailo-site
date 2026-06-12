@@ -99,7 +99,14 @@ function getCameraY(wrapperEl: HTMLElement, cameraSpan: number, cameraOffset: nu
   const rect = wrapperEl.getBoundingClientRect();
   const windowH = window.innerHeight;
   const scrollable = rect.height - windowH;
-  const progress = scrollable > 0 ? Math.max(0, Math.min(1, -rect.top / scrollable)) : 0;
+  // Wrappers shorter than the viewport (e.g. a single `clip` section) never
+  // satisfy scrollable > 0, so the sticky-range formula above would stay
+  // pinned at progress = 0 the whole time the section is on screen — the
+  // camera (and dots) wouldn't move at all. Fall back to progress through
+  // the section's pass across the viewport instead.
+  const progress = scrollable > 0
+    ? Math.max(0, Math.min(1, -rect.top / scrollable))
+    : Math.max(0, Math.min(1, (windowH - rect.top) / (windowH + rect.height)));
   return CAMERA_Y_START + (cameraOffset + progress * cameraSpan) * (CAMERA_Y_END - CAMERA_Y_START);
 }
 
@@ -209,6 +216,7 @@ export default function ElevatorField({
     let rafId: number | null = null;
     let dirty = false;
     let ambientActive = false;
+    let nearViewport = false;
 
     const scheduleRender = () => {
       if (rafId !== null) return;
@@ -225,7 +233,14 @@ export default function ElevatorField({
       });
     };
 
-    const onScroll = () => { dirty = true; scheduleRender(); };
+    // The scroll handler is on `window`, so without this gate every scroll
+    // anywhere on the page would re-render the ~4680-dot field even while
+    // it's far off-screen (e.g. scrolled down to Testimonials/WhyMe).
+    const onScroll = () => {
+      if (!nearViewport) return;
+      dirty = true;
+      scheduleRender();
+    };
 
     // Mobile browsers fire `resize` when the URL bar shows/hides (height
     // only) — re-measuring then is wasted work and can cause a visible
@@ -253,11 +268,28 @@ export default function ElevatorField({
     );
     io.observe(wrapper);
 
+    // Wider margin than `io` — wakes the scroll handler up one viewport
+    // before the field enters view and keeps it awake one viewport after,
+    // so scrolling far away (e.g. near Testimonials/WhyMe) doesn't keep
+    // re-rendering the ~4680-dot field on every scroll frame.
+    const proximityIo = new IntersectionObserver(
+      ([entry]) => {
+        nearViewport = entry?.isIntersecting ?? false;
+        if (nearViewport) {
+          dirty = true;
+          scheduleRender();
+        }
+      },
+      { rootMargin: "100% 0px 100% 0px" }
+    );
+    proximityIo.observe(wrapper);
+
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
       io.disconnect();
+      proximityIo.disconnect();
       ambientActive = false;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

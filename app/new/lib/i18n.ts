@@ -343,8 +343,8 @@ const en: NewPageDict = {
     primaryCta: "Get your Bottleneck Score",
     primaryMicrocopy: "2 minutes · free · no call",
     secondaryCta: "Book the Bottleneck Map",
-    // Rendered as a sticker chip with a "10×" accent prefix — keep it short.
-    guarantee: "the value — or you don't pay",
+    // Rendered as a sticker chip with a "10k" accent prefix — keep it short.
+    guarantee: "found — or it's still free",
   },
 
   pain: {
@@ -402,7 +402,7 @@ const en: NewPageDict = {
       "The one fix to start with — ranked by ROI",
       "Human + AI, never AI-first. Process before automation.",
     ],
-    note: "Even Klarna went AI-first, hit a quality wall, and rehired humans. We start where they ended up.",
+    note: "Klarna is the textbook case of rushing AI-first — a celebrated rollout, a quiet quality wall, then humans quietly rehired to clean it up. We start exactly where they landed, so you skip that expensive lesson.",
     sample: {
       docTitle: "Bottleneck Map",
       clientLabel: "[Your Business Name]",
@@ -429,7 +429,7 @@ const en: NewPageDict = {
       note: "Sample output — yours will be specific to your business.",
     },
     ctaLabel: "Book the Map —",
-    ctaDeadline: "Founding rate — until June 30",
+    ctaDeadline: "Free until June 30 — then €1,470",
   },
 
   proof: {
@@ -494,7 +494,7 @@ const en: NewPageDict = {
         title: "Bottleneck Map",
         desc: "90 minutes, ROI-ranked. The exact map of where you're the bottleneck, what it's costing you, and what's worth fixing first.",
         ctaLabel: "Book",
-        microcopy: "If I don't find €10,000+/year recoverable — refunded, and you keep the map.",
+        microcopy: "If I don't find €10,000+/year recoverable, it's still free — and you keep the map.",
       },
       {
         number: "03",
@@ -504,7 +504,7 @@ const en: NewPageDict = {
         note: "Unlocked by the Map.",
       },
     ],
-    foundingLabel: "founding",
+    foundingLabel: "until June 30",
     capacityLine: (slotsOpen) =>
       `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
@@ -542,7 +542,7 @@ const en: NewPageDict = {
     sub: "90 minutes. One-page, ROI-ranked map of where your time, money, and founder-energy are leaking.",
     primaryCta: "Book the Bottleneck Map",
     scoreCta: "Get your Bottleneck Score",
-    guarantee: "10× the value, or you don't pay — and you keep the map either way.",
+    guarantee: "Backed by the 10k Guarantee: I find at least €10k in recoverable cost, or it's still free — and the map's yours either way.",
     secondaryCta: "Quick question? WhatsApp me",
     closing: "If there's no clear opportunity, I'll tell you. That's part of the work.",
   },
@@ -556,8 +556,8 @@ const en: NewPageDict = {
         a: "No. It's 90 minutes of real diagnostic work. You'll leave with a one-page map even if we never work together again. If there's no clear opportunity, I'll tell you straight — that's part of the deal.",
       },
       {
-        q: "Why isn't this free?",
-        a: "Because it's 90 minutes of focused, one-on-one diagnostic work — not a generic quiz or a sales script. Free things get a template; paid things get my full attention on your numbers. And the risk sits with me: if I don't find at least €10,000/year in recoverable cost, the session is refunded and you keep the map anyway.",
+        q: "Free? What's the catch?",
+        a: "No catch. Until June 30 I'm running these sessions free — normally €1,470 — while I build out case studies in new industries. You still get the full 90 minutes and the same one-page, ROI-ranked map. The only thing on the line is mine: if I don't find at least €10,000/year in recoverable cost, you've lost nothing and you keep the map anyway.",
       },
       {
         q: "What's the Bottleneck Score?",
@@ -669,8 +669,8 @@ const es: NewPageDict = {
     primaryCta: "Haz tu Bottleneck Score",
     primaryMicrocopy: "2 minutos · gratis · sin llamada",
     secondaryCta: "Reserva el Bottleneck Map",
-    // Rendered as a sticker chip with a "10×" accent prefix — keep it short.
-    guarantee: "el valor — o no pagas",
+    // Rendered as a sticker chip with a "10k" accent prefix — keep it short.
+    guarantee: "encontrados — o sigue siendo gratis",
   },
 
   pain: {
@@ -728,7 +728,7 @@ const es: NewPageDict = {
       "El arreglo por el que empezar — priorizado por ROI",
       "Humano + IA, nunca IA-primero. Proceso antes que automatización.",
     ],
-    note: "Hasta Klarna apostó todo a la IA, chocó con un muro de calidad y volvió a contratar humanos. Nosotros empezamos donde ellos acabaron.",
+    note: "Klarna es el ejemplo de manual de precipitarse con la IA primero — un lanzamiento aplaudido, un muro de calidad silencioso y humanos recontratados sin hacer ruido para arreglarlo. Nosotros empezamos justo donde ellos acabaron, para que tú te ahorres esa lección cara.",
     sample: {
       docTitle: "Bottleneck Map",
       clientLabel: "[El nombre de tu negocio]",
@@ -755,7 +755,7 @@ const es: NewPageDict = {
       note: "Ejemplo ilustrativo — el tuyo será específico de tu negocio.",
     },
     ctaLabel: "Reserva el Mapa —",
-    ctaDeadline: "Tarifa fundacional — hasta el 30 de junio",
+    ctaDeadline: "Gratis hasta el 30 de junio — luego €1,470",
   },
 
   proof: {
@@ -820,7 +820,7 @@ const es: NewPageDict = {
         title: "Bottleneck Map",
         desc: "90 minutos, priorizado por ROI. El mapa exacto de dónde eres el cuello de botella, lo que te cuesta, y qué merece arreglar primero.",
         ctaLabel: "Reservar",
-        microcopy: "Si no encuentro €10,000+/año recuperables — se reembolsa, y el mapa es tuyo.",
+        microcopy: "Si no encuentro €10,000+/año recuperables, sigue siendo gratis — y el mapa es tuyo.",
       },
       {
         number: "03",
@@ -830,7 +830,7 @@ const es: NewPageDict = {
         note: "Se desbloquea con el Mapa.",
       },
     ],
-    foundingLabel: "fundacional",
+    foundingLabel: "hasta el 30 de junio",
     capacityLine: (slotsOpen) =>
       `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
@@ -868,7 +868,7 @@ const es: NewPageDict = {
     sub: "90 minutos. Un mapa de una página, priorizado por ROI, de dónde se te escapan el tiempo, el dinero y la energía de fundador.",
     primaryCta: "Reserva el Bottleneck Map",
     scoreCta: "Haz tu Bottleneck Score",
-    guarantee: "10× el valor, o no pagas — y el mapa es tuyo en cualquier caso.",
+    guarantee: "Con la Garantía 10k: encuentro al menos €10k en costes recuperables, o sigue siendo gratis — y el mapa es tuyo en cualquier caso.",
     secondaryCta: "¿Una duda rápida? Escríbeme por WhatsApp",
     closing: "Si no hay una oportunidad clara, te lo diré. Eso es parte del trabajo.",
   },
@@ -882,8 +882,8 @@ const es: NewPageDict = {
         a: "No. Son 90 minutos de trabajo diagnóstico real. Te llevarás un mapa de una página aunque no volvamos a trabajar juntos. Si no hay una oportunidad clara, te lo diré sin rodeos — eso es parte del trato.",
       },
       {
-        q: "¿Por qué no es gratis?",
-        a: "Porque son 90 minutos de trabajo diagnóstico individual y enfocado — no un test genérico ni un guion de ventas. Lo gratis recibe una plantilla; lo pagado recibe toda mi atención sobre tus números. Y el riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, la sesión se reembolsa y el mapa es tuyo igualmente.",
+        q: "¿Gratis? ¿Cuál es la trampa?",
+        a: "Ninguna. Hasta el 30 de junio ofrezco estas sesiones gratis — normalmente €1,470 — mientras desarrollo casos de estudio en nuevos sectores. Recibes los mismos 90 minutos y el mismo mapa de una página priorizado por ROI. El único riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, no pierdes nada y el mapa es tuyo igualmente.",
       },
       {
         q: "¿Qué es el Bottleneck Score?",

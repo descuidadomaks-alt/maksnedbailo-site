@@ -99,7 +99,7 @@ function HeroCTAs({ d }: { d: NewPageDict }) {
             color: "rgba(240,236,230,0.7)",
           }}
         >
-          <span className="font-semibold text-accent">10×</span>
+          <span className="font-semibold text-accent">10k</span>
           {d.hero.guarantee}
         </p>
       </div>

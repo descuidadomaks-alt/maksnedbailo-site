@@ -148,7 +148,7 @@ const en: ShortPageDict = {
     eyebrow: (p) => `Personal invitation through ${p}'s circle`,
     headline: "See where AI actually pays off in your business — and where it doesn't.",
     subheadline: (p) =>
-      `A 90-minute Strategic AI Map, ranked by ROI. Normally €1,500 — reserved for you through ${p}.`,
+      `A 90-minute Strategic AI Map, ranked by ROI. Normally €1,470 — reserved for you through ${p}.`,
     cta: "Claim Your Complimentary Session",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
     offerCloses: "offer closes June 30",
@@ -156,9 +156,9 @@ const en: ShortPageDict = {
 
   offer: {
     label: "The Offer",
-    headline: (p) => `A €1,500 session — reserved through ${p}`,
+    headline: (p) => `A €1,470 session — reserved through ${p}`,
     normallyLabel: "Normally",
-    normallyValue: "€1,500",
+    normallyValue: "€1,470",
     giftedLine: (p) => `Gifted to you through ${p}. No strings.`,
     body:
       "This isn't a discovery call with a pitch attached. It's a working session. You leave with a one-page map of every AI opportunity in your business — scored, ranked by ROI, and ready to act on. If nothing clears the bar, I'll tell you that. You keep the map either way.",
@@ -424,7 +424,7 @@ const uk: ShortPageDict = {
     eyebrow: (p) => `Особисте запрошення для людей із кола ${p}`,
     headline: "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
     subheadline: (p) =>
-      `90-хвилинна Стратегічна карта ШІ з пріоритетами за ROI. Зазвичай — €1,500. Для вас — зарезервовано через ${p}.`,
+      `90-хвилинна Стратегічна карта ШІ з пріоритетами за ROI. Зазвичай — €1,470. Для вас — зарезервовано через ${p}.`,
     cta: "Забронювати безкоштовну сесію",
     daysLeft: (n) => {
       // Ukrainian plural rules for "day":
@@ -445,9 +445,9 @@ const uk: ShortPageDict = {
 
   offer: {
     label: "Пропозиція",
-    headline: (p) => `Сесія вартістю €1,500 — зарезервована через ${p}`,
+    headline: (p) => `Сесія вартістю €1,470 — зарезервована через ${p}`,
     normallyLabel: "Зазвичай",
-    normallyValue: "€1,500",
+    normallyValue: "€1,470",
     giftedLine: (p) => `Для вас — у подарунок через ${p}. Без жодних зобов'язань.`,
     body:
       "Це не ознайомчий дзвінок із прихованим продажем наприкінці. Це робоча сесія. Після неї у вас буде односторінкова карта всіх можливостей для ШІ у вашому бізнесі — з оцінкою, пріоритетами за ROI і чіткими кроками. Якщо жодна ідея не проходить планку — я прямо вам про це скажу. Карта залишається у вас у будь-якому разі.",

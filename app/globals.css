@@ -56,7 +56,7 @@ body::before {
   100% { transform: translateX(-50%); }
 }
 .ticker-track {
-  animation: ticker 38s linear infinite;
+  animation: ticker 70s linear infinite;
   will-change: transform;
 }
 .ticker-track:hover {

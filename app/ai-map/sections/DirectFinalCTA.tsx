@@ -1,7 +1,7 @@
 "use client";
 
 import type { DirectPageDict } from "../lib/directi18n";
-import { CHECKOUT_URL, PRICE_CURRENT, PRICE_ANCHOR } from "../lib/config";
+import { CHECKOUT_URL } from "../lib/config";
 import { WA_LINK } from "@/lib/content";
 
 declare global {
@@ -47,8 +47,8 @@ export default function DirectFinalCTA({ d }: { d: DirectPageDict }) {
             onClick={() => track("direct_cta_book", { location: "final" })}
           >
             {d.finalCta.cta}
-            <span className="line-through opacity-45 font-normal">{PRICE_ANCHOR}</span>
-            <span>{PRICE_CURRENT}</span>
+            <span className="line-through opacity-45 font-normal">{d.offer.anchorValue}</span>
+            <span>{d.offer.compPriceValue}</span>
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
           </a>
 

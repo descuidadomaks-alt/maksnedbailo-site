@@ -24,7 +24,7 @@ const vlad: PartnerData = {
     subheadline:
       "Map the gaps — and hand three of them to AI — in 90 minutes.",
     subtext:
-      "A €1,500 Strategic AI Mapping session, gifted through Vlad. You walk away with a one-page map of your business ranked by ROI. If nothing's worth automating, I'll say so — and you keep the map.",
+      "A €1,470 Strategic AI Mapping session, gifted through Vlad. You walk away with a one-page map of your business ranked by ROI. If nothing's worth automating, I'll say so — and you keep the map.",
     cta: "Claim Your Complimentary Session",
   },
 
@@ -37,8 +37,8 @@ const vlad: PartnerData = {
 
   pricing: {
     phase1Anchor: "€4,500",
-    workshopValueAnchor: "€1,500",
-    totalValueAnchor: "€3,200+",
+    workshopValueAnchor: "€1,470",
+    totalValueAnchor: "€3,170+",
   },
 
   booking: {
@@ -51,7 +51,7 @@ const vlad: PartnerData = {
     title:
       "A Personal Invitation Through Vlad — Strategic AI Map · care less",
     description:
-      "Vlad invited you. A 90-minute Strategic AI Mapping session for entrepreneurs who've lost team and need leverage. Normally €1,500, complimentary through Vlad's circle.",
+      "Vlad invited you. A 90-minute Strategic AI Mapping session for entrepreneurs who've lost team and need leverage. Normally €1,470, complimentary through Vlad's circle.",
     noindex: true,
   },
 };

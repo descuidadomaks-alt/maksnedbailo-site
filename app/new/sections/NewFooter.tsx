@@ -67,22 +67,17 @@ export default function NewFooter({ d, locale: localeProp, ctaTarget: ctaTargetP
           </a>
         </nav>
 
-        {/* Locations */}
-        <div className="flex flex-col items-center gap-2">
-          <p className="font-sora text-[9px] uppercase tracking-[2.5px] text-fg/20">
-            {d.footer.locationsLabel}
-          </p>
-          <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-            {CITIES.map((city) => (
-              <Link
-                key={city.slug}
-                href={`/${locale}/${city.slug}`}
-                className="font-sora text-[11px] text-fg/25 hover:text-fg/55 transition-colors"
-              >
-                {city.name}
-              </Link>
-            ))}
-          </div>
+        {/* City pages (SEO/GEO) */}
+        <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          {CITIES.map((city) => (
+            <Link
+              key={city.slug}
+              href={`/${locale}/${city.slug}`}
+              className="font-sora text-[11px] text-fg/25 hover:text-fg/55 transition-colors"
+            >
+              {city.name}
+            </Link>
+          ))}
         </div>
 
         <p className="font-sora text-[11px] text-fg/10">

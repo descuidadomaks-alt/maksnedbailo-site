@@ -3,8 +3,8 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { PHASE1_ANCHOR } from "../lib/config";
-import { FOUNDING_RATE, STANDARD_RATE } from "../lib/site.config";
-import { useCtaTarget } from "../lib/locale";
+import { FOUNDING_RATE, FOUNDING_RATE_ES, STANDARD_RATE } from "../lib/site.config";
+import { useCtaTarget, useNewLocale } from "../lib/locale";
 import { KlarnaWordmark } from "../components/BrandWordmarks";
 
 /**
@@ -50,6 +50,8 @@ function FeasibilityDots({ score }: { score: number }) {
 export default function BottleneckMap({ d }: { d: NewPageDict }) {
   const sm = d.map.sample;
   const ctaTarget = useCtaTarget();
+  const { locale } = useNewLocale();
+  const foundingRate = locale === "es" ? FOUNDING_RATE_ES : FOUNDING_RATE;
 
   // Split the headline so the highlight ("90 minutes, ROI-ranked") can be
   // styled as a single accent-coloured, non-wrapping unit (it was breaking
@@ -305,7 +307,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             >
               {d.map.ctaLabel}
               <span className="line-through opacity-45 font-normal">{STANDARD_RATE}</span>
-              <span>{FOUNDING_RATE}</span>
+              <span>{foundingRate}</span>
               <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
             </Link>
             <p className="font-sora font-light text-fg/35 mt-2.5" style={{ fontSize: "12px" }}>
