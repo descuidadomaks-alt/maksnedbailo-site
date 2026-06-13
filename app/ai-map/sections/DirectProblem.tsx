@@ -14,7 +14,7 @@ import type { DirectPageDict } from "../lib/directi18n";
 export default function DirectProblem({ d }: { d: DirectPageDict }) {
   return (
     <ElevatorField className="section-divider" clip cameraSpan={0.35} cameraOffset={0.32}>
-      <div className="elevator-section max-w-3xl mx-auto px-6 py-16 md:py-24 flex flex-col items-center justify-center">
+      <div className="max-w-3xl mx-auto px-6 py-16 md:py-24">
         <div data-reveal className="map-content-panel w-full flex flex-col items-center text-center">
           <p
             className="font-label text-fg/28 mb-5"

@@ -307,19 +307,42 @@ export default function ElevatorField({
     ...(clip ? { overflow: "hidden" } : null),
   };
 
-  const canvasStyle: CSSProperties = {
-    display: "block",
-    position: "sticky",
-    top: 0,
-    left: 0,
-    width: "100%",
-    pointerEvents: "none",
-    zIndex: 0,
-  };
+  // Two layouts:
+  //  - Tall multi-section shafts (home: Belief + Mechanism + Bottleneck Map):
+  //    a `sticky`, 100vh canvas (via .elevator-canvas) that pins to the
+  //    viewport and sweeps as you scroll the long wrapper.
+  //  - Single clipped sections (AI Map's Problem): the wrapper is one compact
+  //    section, so an `absolute` canvas that fills the wrapper keeps the dot
+  //    field's vanishing point (canvas center) on the section's own center,
+  //    instead of a 100vh canvas whose center falls below the clipped area.
+  const canvasStyle: CSSProperties = clip
+    ? {
+        display: "block",
+        position: "absolute",
+        inset: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      }
+    : {
+        display: "block",
+        position: "sticky",
+        top: 0,
+        left: 0,
+        width: "100%",
+        pointerEvents: "none",
+        zIndex: 0,
+      };
 
   return (
     <div ref={wrapperRef} className={className} style={wrapperStyle}>
-      <canvas ref={canvasRef} aria-hidden className="elevator-canvas" style={canvasStyle} />
+      <canvas
+        ref={canvasRef}
+        aria-hidden
+        className={clip ? "" : "elevator-canvas"}
+        style={canvasStyle}
+      />
       <div style={{ position: "relative", zIndex: 1 }}>{children}</div>
     </div>
   );
