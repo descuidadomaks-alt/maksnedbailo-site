@@ -265,16 +265,16 @@ const en: DirectPageDict = {
       {
         q: "What does Phase 1 typically look like?",
         a: () =>
-          `A working prototype of the highest-ROI use case from your map. Typically ${PHASE1_ANCHOR}, 2–3 weeks, built with Ukrainian dev capacity. Real software you can use on Monday — not a strategy document.`,
+          `A working prototype of the highest-ROI use case from your map. Typically ${PHASE1_ANCHOR}, 2–3 weeks. Real software you can use on Monday — not a strategy document.`,
       },
       {
         q: "Who is this for?",
         a: () =>
-          "For you if: you're running a business doing €30k–€200k+ per month, you can decide and act inside 30 days, and you want numbers, not hype. Not for you if: every decision needs six stakeholders, or you're looking for someone to sell you an AI tool.",
+          "For you if: you're running a €3–10M/year, owner-led business, you can decide and act inside 30 days, and you want numbers, not hype. Not for you if: every decision needs six stakeholders, or you're looking for someone to sell you an AI tool.",
       },
       {
         q: "In what language can we run the session?",
-        a: () => "Ukrainian, Russian, English — or Spanish if you're feeling generous.",
+        a: () => "English or Spanish.",
       },
     ],
   },
@@ -482,16 +482,16 @@ const es: DirectPageDict = {
       {
         q: "¿Cómo suele ser la Fase 1?",
         a: () =>
-          `Un prototipo funcional del caso de uso con mayor ROI de tu mapa. Típicamente ${PHASE1_ANCHOR}, 2–3 semanas, con capacidad de desarrollo ucraniana. Software real que puedes usar el lunes — no un documento estratégico.`,
+          `Un prototipo funcional del caso de uso con mayor ROI de tu mapa. Típicamente ${PHASE1_ANCHOR}, 2–3 semanas. Software real que puedes usar el lunes — no un documento estratégico.`,
       },
       {
         q: "¿Para quién es esto?",
         a: () =>
-          "Para ti si: tienes un negocio con €30k–€200k+/mes, puedes decidir y actuar en 30 días, y quieres cifras, no hype. No para ti si: cada decisión necesita seis partes interesadas.",
+          "Para ti si: tienes un negocio de €3–10M/año, con un fundador al mando, puedes decidir y actuar en 30 días, y quieres cifras, no hype. No para ti si: cada decisión necesita seis partes interesadas.",
       },
       {
         q: "¿En qué idioma podemos hacer la sesión?",
-        a: () => "Ucraniano, ruso, inglés — o español si te apetece.",
+        a: () => "Inglés o español.",
       },
     ],
   },
