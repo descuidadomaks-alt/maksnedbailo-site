@@ -52,6 +52,11 @@ export default function DirectFinalCTA({ d }: { d: DirectPageDict }) {
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
           </a>
 
+          {/* Capacity line — single sitewide source, see app/new/lib/site.config */}
+          <p className="font-sora font-light text-accent/65" style={{ fontSize: "12px" }}>
+            {d.finalCta.capacityLine}
+          </p>
+
           <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px" }}>
             {d.finalCta.guarantee}
           </p>

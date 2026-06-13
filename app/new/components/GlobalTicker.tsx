@@ -73,7 +73,7 @@ export default function GlobalTicker({ locale }: { locale: "en" | "es" }) {
             style={{ marginRight: "0px" }}
           >
             {msg}
-            <span className="text-accent/20 mx-5">{separator}</span>
+            <span className="text-accent/20 mx-5" aria-hidden="true">{separator}</span>
           </span>
         ))}
       </div>

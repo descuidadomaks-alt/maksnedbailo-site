@@ -10,6 +10,7 @@ import SectionShortProcess from "./SectionShortProcess";
 import SectionShortProof from "./SectionShortProof";
 import SectionShortCTA from "./SectionShortCTA";
 import SectionShortFAQ from "./SectionShortFAQ";
+import SectionBottleneckScore from "./SectionBottleneckScore";
 import ShortFooter from "./ShortFooter";
 import StickyShortCTA from "./StickyShortCTA";
 
@@ -69,6 +70,7 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
           d={d}
           partnerNameForSentences={pGen}
         />
+        <SectionBottleneckScore d={d} />
         <ShortFooter d={d} />
       </main>
     </>

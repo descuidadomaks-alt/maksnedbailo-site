@@ -120,6 +120,14 @@ export interface ShortPageDict {
     guarantee: string;
   };
 
+  /** Lighter entry point above the footer — for visitors not ready to book the Map yet */
+  bottleneckScore: {
+    label: string;
+    headline: string;
+    body: string;
+    cta: string;
+  };
+
   faq: {
     label: string;
     headline: string;
@@ -401,6 +409,13 @@ const en: ShortPageDict = {
         a: () => "Ukrainian, Russian, English — or Spanish if you're feeling generous.",
       },
     ],
+  },
+
+  bottleneckScore: {
+    label: "Not Ready to Book?",
+    headline: "Start with the free Bottleneck Score",
+    body: "Two minutes, no call required. Answer a few questions about how your business handles customer messages and get an instant score — plus where you're likely losing the most.",
+    cta: "Get your Bottleneck Score",
   },
 
   footer: {
@@ -690,6 +705,13 @@ const uk: ShortPageDict = {
         a: () => "Українською, російською, англійською — або іспанською, якщо є настрій.",
       },
     ],
+  },
+
+  bottleneckScore: {
+    label: "Ще не готові до сесії?",
+    headline: "Почніть із безкоштовного Bottleneck Score",
+    body: "Дві хвилини, без дзвінка. Відповісте на кілька запитань про те, як ваш бізнес обробляє звернення клієнтів — і отримаєте миттєву оцінку та підказку, де ви найбільше втрачаєте.",
+    cta: "Отримати Bottleneck Score",
   },
 
   footer: {

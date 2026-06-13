@@ -1,5 +1,5 @@
 import { CityData } from "@/lib/cities";
-import { BOOKING_LINK, WA_LINK } from "@/lib/content";
+import { WA_LINK } from "@/lib/content";
 
 export default function LocalBusinessSchema({ city }: { city: CityData }) {
   const businessSchema = {
@@ -30,8 +30,8 @@ export default function LocalBusinessSchema({ city }: { city: CityData }) {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: `Auditoría Gratuita de Respuesta al Cliente en ${city.name}`,
-            description: `Análisis de 48h para negocios en ${city.name}: dónde pierdes leads y cuánto te cuesta.`,
+            name: `Bottleneck Score — Respuesta al Cliente en ${city.name}`,
+            description: `Diagnóstico gratuito de 2 minutos para negocios en ${city.name}: dónde pierdes leads y cuánto te cuesta al mes.`,
           },
         },
         {
@@ -46,8 +46,8 @@ export default function LocalBusinessSchema({ city }: { city: CityData }) {
     },
     potentialAction: {
       "@type": "ReserveAction",
-      target: BOOKING_LINK,
-      name: "Agendar Auditoría Gratuita",
+      target: "https://maksnedbailo.site/score",
+      name: "Hacer el Bottleneck Score",
     },
     sameAs: [`https://wa.me/${WA_LINK.replace("https://wa.me/", "")}`],
   };

@@ -12,9 +12,9 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-const TITLE = "The Bottleneck Score — What Is Being the Bottleneck Costing You? | Care Less";
+const TITLE = "The Bottleneck Score — Free 2-Minute Diagnostic | Care Less";
 const DESCRIPTION =
-  "8 questions. 2 minutes. Find out what being the bottleneck is costing your business every month — before you spend a cent fixing it. Free Bottleneck Score from Care Less.";
+  "8 questions, 2 minutes. Find out what being the bottleneck is costing your business every month — before you spend a cent fixing it.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -52,12 +52,33 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "The Bottleneck Score",
+  url: "https://maksnedbailo.site/score",
+  description: DESCRIPTION,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  isAccessibleForFree: true,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "EUR",
+  },
+  provider: { "@id": "https://maksnedbailo.site/#business" },
+};
+
 export default function ScoreLayout({ children }: { children: ReactNode }) {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link href="/" className="fixed left-5 top-5 z-[60]" aria-label="Care Less home">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="Care Less" className="w-auto" style={{ height: "26px" }} />
+        <img src="/logo.svg" alt="Care Less" width={26} height={26} className="w-auto" style={{ height: "26px" }} />
       </Link>
       {children}
     </>

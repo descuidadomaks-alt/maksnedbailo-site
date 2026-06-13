@@ -63,7 +63,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
   title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
   description:
-    "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
+    "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
   keywords: [
     "AI chatbot for small business",
     "WhatsApp automation",
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
     description:
-      "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
+      "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     type: "website",
     url: "https://maksnedbailo.site",
     siteName: "care less AI automation",
@@ -99,7 +99,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
     description:
-      "AI assistants that reply to every customer in under 60 seconds — on WhatsApp, your website, or both. Free audit. 30-day guarantee. 500+ businesses across 34+ countries.",
+      "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
   },
   robots: {
     index: true,

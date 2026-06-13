@@ -1,0 +1,33 @@
+# Care Less — Maks Nedbailo
+
+> Care Less builds custom AI assistants and automations for owner-led businesses (restaurants, salons, clinics, real estate, e-commerce) across Spain and the UK. The focus is removing the founder as the bottleneck: faster customer response, fewer dropped leads, and ops that run without the owner in every loop.
+
+## Start here
+
+- [Bottleneck Score](https://maksnedbailo.site/score) — free, 2-minute diagnostic that scores where a business is losing the most time and money to slow response and manual ops. No booking required.
+- [AI Map](https://maksnedbailo.site/ai-map) — the next step after the score: a working session that turns the diagnosis into a ranked, ROI-ordered build plan.
+- [Homepage](https://maksnedbailo.site) — overview of the offer, mechanism, proof, and guarantee.
+
+## How engagements work
+
+1. **Bottleneck Score** (free, 2 minutes) — identifies the single biggest leak.
+2. **Bottleneck Map** — a scoped, ROI-ranked plan for what to fix first.
+3. **First build** — Maks builds the highest-leverage automation himself, scoped from the Map.
+
+Maks builds every project personally — capacity is capped at 5 slots per month.
+
+## Guarantee
+
+If the Map doesn't find at least €10,000/year in recoverable cost, the session is refunded and the business keeps the map.
+
+## Insights
+
+- [Blog](https://maksnedbailo.site/blog) — articles on AI automation, response-time economics, and industry-specific guides (restaurants, real estate, beauty salons, WhatsApp automation) for businesses in Spain and the UK.
+
+## Local pages
+
+City-specific pages for Spain (Santander, Madrid, Barcelona, Valencia) at `/en/{city}` and `/es/{city}`.
+
+## Contact
+
+WhatsApp: https://wa.me/34641935207

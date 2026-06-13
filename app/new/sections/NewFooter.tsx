@@ -37,7 +37,7 @@ export default function NewFooter({ d, locale: localeProp, ctaTarget: ctaTargetP
       <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="Care Less" className="w-auto shrink-0 opacity-80" style={{ height: "28px" }} />
+        <img src="/logo.svg" alt="Care Less" width={28} height={28} className="w-auto shrink-0 opacity-80" style={{ height: "28px" }} />
 
         <p className="font-sora font-light text-[13px] text-fg/30 leading-relaxed max-w-[480px] tracking-wide">
           {d.footer.tagline}

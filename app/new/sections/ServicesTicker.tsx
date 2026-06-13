@@ -31,10 +31,10 @@ export default function ServicesTicker({ d }: { d: NewPageDict }) {
       </div>
       <Link
         href={ctaTarget}
-        aria-label={d.services.hoverCta}
         className="group relative w-full overflow-hidden flex items-center"
         style={{ height: "40px", background: "#000000" }}
       >
+        <span className="sr-only">{d.services.hoverCta}</span>
         {/* Services keywords — same animated track keeps running on hover,
             just fades out so the "Book the Map" track shows through. */}
         <div className="services-ticker-track absolute inset-0 flex items-center whitespace-nowrap transition-opacity duration-300 group-hover:opacity-0">

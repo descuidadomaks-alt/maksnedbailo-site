@@ -19,9 +19,10 @@ import QuizProgress from "./components/QuizProgress";
 import Intro from "./components/Intro";
 import QuestionScreen from "./components/QuestionScreen";
 import SoftGate from "./components/SoftGate";
+import Computing from "./components/Computing";
 import ResultScreen from "./components/ResultScreen";
 
-type Step = "intro" | number | "gate" | "result";
+type Step = "intro" | number | "gate" | "computing" | "result";
 
 export default function ScorePage() {
   const [step, setStep] = useState<Step>("intro");
@@ -60,7 +61,7 @@ export default function ScorePage() {
   function handleGateSuccess() {
     const encoded = encodeAnswers(answers);
     window.history.replaceState(null, "", `/score?a=${encoded}`);
-    setStep("result");
+    setStep("computing");
   }
 
   return (
@@ -74,6 +75,7 @@ export default function ScorePage() {
           <QuestionScreen key={step} index={step} onSelect={selectAnswer} onBack={goBack} />
         )}
         {step === "gate" && <SoftGate key="gate" answers={answers} onSuccess={handleGateSuccess} />}
+        {step === "computing" && <Computing key="computing" onDone={() => setStep("result")} />}
         {step === "result" && <ResultScreen key="result" answers={answers} />}
       </div>
     </main>

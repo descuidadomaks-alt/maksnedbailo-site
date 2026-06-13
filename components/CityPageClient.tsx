@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { CityData } from "@/lib/cities";
-import { BOOKING_LINK, WA_LINK } from "@/lib/content";
+import { WA_LINK } from "@/lib/content";
 
 type Lang = "es" | "en";
 
@@ -136,16 +136,14 @@ function CityFAQItem({
               {a}
             </p>
             <p className="pb-5 pr-8">
-              <a
-                href={BOOKING_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/score"
                 className="font-sora text-[12px] text-accent/70 hover:text-accent underline underline-offset-4 decoration-accent/30 transition-colors"
               >
                 {lang === "es"
-                  ? "¿Quieres ver cómo funcionaría en tu negocio? → Auditoría gratuita"
-                  : "Want to see how this would work for your business? → Free audit"}
-              </a>
+                  ? "¿Quieres ver cómo funcionaría en tu negocio? → Bottleneck Score"
+                  : "Want to see how this would work for your business? → Bottleneck Score"}
+              </Link>
             </p>
           </motion.div>
         )}
@@ -240,16 +238,14 @@ export default function CityPageClient({
             transition={{ duration: 0.6, delay: 0.38 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3"
           >
-            <a
-              href={BOOKING_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/score"
               className="bg-accent text-bg font-semibold px-7 py-3 md:py-3.5 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
             >
               {lang === "es"
-                ? `Auditoría Gratuita para ${city.name} →`
-                : `Free Audit for ${city.name} →`}
-            </a>
+                ? "Consigue tu Bottleneck Score — 2 min, gratis →"
+                : "Get your Bottleneck Score — 2 min, free →"}
+            </Link>
             <a
               href={WA_LINK}
               target="_blank"
@@ -350,8 +346,8 @@ export default function CityPageClient({
               ? [
                   {
                     num: "01",
-                    title: "Auditoría Gratuita",
-                    desc: `Analizo cómo responde tu negocio en ${city.name} y te muestro exactamente dónde desaparecen los leads. 48 horas. No te cuesta nada.`,
+                    title: "Diagnóstico de Fugas",
+                    desc: `Haz el Bottleneck Score de 2 minutos y luego hablamos 15 minutos — gratis. Te muestro exactamente dónde se están escapando las citas en ${city.name} y cuánto te cuesta al mes.`,
                   },
                   {
                     num: "02",
@@ -367,8 +363,8 @@ export default function CityPageClient({
               : [
                   {
                     num: "01",
-                    title: "Free Audit",
-                    desc: `I analyse how your business in ${city.name} handles enquiries and show you exactly where leads are disappearing. 48 hours. No cost.`,
+                    title: "Leak Check",
+                    desc: "Take the 2-minute Bottleneck Score, then we talk for 15 minutes — free. I show you exactly where bookings are leaking and what it costs per month.",
                   },
                   {
                     num: "02",
@@ -503,18 +499,16 @@ export default function CityPageClient({
           </h2>
           <p className="font-sora font-light text-[15px] text-fg/45 leading-relaxed mb-10 max-w-lg mx-auto">
             {lang === "es"
-              ? `Hablo con negocios en ${city.name} todos los meses. La auditoría dura 15 minutos, es gratuita, y te doy un número concreto de lo que te está costando no responder a tiempo.`
-              : `I speak with businesses in ${city.name} every month. The audit takes 15 minutes, it's free, and I give you a concrete number for what slow response times are costing you.`}
+              ? "El Score tarda 2 minutos. La llamada de seguimiento, 15. Ambos son gratis — y obtienes una cifra concreta en €/mes de lo que te están costando las respuestas lentas."
+              : "The Score takes 2 minutes. The follow-up call takes 15. Both free — and you get a concrete €/month number for what slow responses are costing you."}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href={BOOKING_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/score"
               className="bg-accent text-bg font-semibold px-8 py-4 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
             >
-              {lang === "es" ? "Reserva tu Auditoría Gratuita →" : "Book Your Free Audit →"}
-            </a>
+              {lang === "es" ? "Consigue tu Bottleneck Score →" : "Get your Bottleneck Score →"}
+            </Link>
             <a
               href={WA_LINK}
               target="_blank"

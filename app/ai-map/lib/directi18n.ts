@@ -10,6 +10,7 @@
 import type { DirectLocale } from "./locale";
 import type { IndustryTab } from "@/app/partners/[slug]/lib/i18n";
 import { PHASE1_ANCHOR, PRICE_CURRENT, PRICE_CURRENT_ES, PRICE_CURRENT_UK, PRICE_ANCHOR, OFFER_DEADLINE } from "./config";
+import { slotsOpen } from "@/app/new/lib/site.config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -94,6 +95,8 @@ export interface DirectPageDict {
     cta: string;
     messengerLabel: string;
     guarantee: string;
+    /** Single sitewide source for the "X of 5 still open" capacity line. */
+    capacityLine: string;
   };
 
   footer: { credit: string; location: string };
@@ -282,6 +285,7 @@ const en: DirectPageDict = {
     cta: "Book your Strategic AI Map",
     messengerLabel: "Message on WhatsApp first",
     guarantee: "10k guarantee: find €10k+/yr — or owe nothing.",
+    capacityLine: `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
 
   footer: { credit: "care less AI automation", location: "Santander, Spain" },
@@ -498,6 +502,7 @@ const es: DirectPageDict = {
     cta: "Reserva tu Mapa Estratégico de IA",
     messengerLabel: "Escribe primero por WhatsApp",
     guarantee: "Garantía 10k: €10k+/año — o no debes nada.",
+    capacityLine: `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
 
   footer: { credit: "care less AI automation", location: "Santander, España" },
@@ -718,6 +723,7 @@ const uk: DirectPageDict = {
     cta: "Забронювати Стратегічну карту ШІ",
     messengerLabel: "Спочатку написати в WhatsApp",
     guarantee: "Гарантія 10k: €10k+/рік — або ви нічого не платите.",
+    capacityLine: `Я будую кожен проєкт особисто — лише 5 місць на місяць. Залишилось ${slotsOpen} з 5.`,
   },
 
   footer: { credit: "care less AI automation", location: "Сантандер, Іспанія" },

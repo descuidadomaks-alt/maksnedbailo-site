@@ -12,12 +12,22 @@ const nextConfig = {
     ];
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
     ],
+  },
+  // Disable webpack's persistent disk cache in dev — its gzip serialize step
+  // OOMs in this environment (ERR_MEMORY_ALLOCATION_FAILED), which silently
+  // leaves the dev server serving stale compiled output after edits.
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.cache = false;
+    }
+    return config;
   },
 };
 

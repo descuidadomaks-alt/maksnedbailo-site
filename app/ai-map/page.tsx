@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import DirectPage from "./DirectPage";
 
 export const metadata: Metadata = {
-  title: "Strategic AI Map — 90 minutes, ROI-ranked | care less AI automation",
+  title: "Strategic AI Map — 90 Minutes, ROI-Ranked | Care Less",
   description:
-    "A 90-minute working session that maps every AI opportunity in your business, ranked by ROI. One-page document delivered within 48 hours. Free (was €1,470) until June 30, 2026.",
+    "A 90-minute working session that maps every AI opportunity in your business, ranked by ROI. One-page document delivered within 48 hours.",
   alternates: { canonical: "https://maksnedbailo.site/ai-map" },
   robots: { index: true, follow: true }, // public sales page — intentionally indexed
   openGraph: {

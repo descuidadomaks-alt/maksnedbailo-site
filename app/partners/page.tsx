@@ -469,6 +469,55 @@ export default function PartnersIndexPage() {
             </div>
           </div>
         </section>
+
+        {/* ══ Section 4: Bottleneck Score — lighter entry point ══════════════ */}
+        <section className="section-divider py-14 md:py-20">
+          <div className="max-w-lg mx-auto px-6 text-center">
+
+            <p
+              data-reveal
+              className="font-label text-fg/30 mb-5"
+              style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
+            >
+              Not Ready to Book?
+            </p>
+
+            <h2
+              data-reveal
+              className="font-playfair font-normal text-fg mb-4"
+              style={{ fontSize: "clamp(20px, 2.8vw, 34px)", lineHeight: 1.15, letterSpacing: "-0.02em" }}
+            >
+              Start with the free Bottleneck Score
+            </h2>
+
+            <p
+              data-reveal
+              className="font-sora font-light text-fg/55 leading-[1.85] mb-8"
+              style={{ fontSize: "14px", maxWidth: "48ch", marginInline: "auto" }}
+            >
+              Two minutes, no booking required. Answer a few questions about how your business handles customer messages and get an instant score — plus where you&apos;re likely losing the most.
+            </p>
+
+            <Link
+              data-reveal="d1"
+              href="/score"
+              className="group inline-flex items-center justify-center gap-2.5 font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] w-full sm:w-auto"
+              style={{
+                fontSize: "14px",
+                padding: "15px 32px",
+                minHeight: "52px",
+                letterSpacing: "-0.01em",
+                color: "rgba(212,255,43,0.85)",
+                border: "1px solid rgba(212,255,43,0.22)",
+                background: "rgba(212,255,43,0.04)",
+              }}
+            >
+              Get your Bottleneck Score
+              <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+            </Link>
+
+          </div>
+        </section>
       </main>
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}

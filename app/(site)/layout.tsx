@@ -17,9 +17,9 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <LanguageProvider>
       <SiteHeader />
-      <div data-short-page style={{ paddingTop: "76px" }}>
+      <main data-short-page style={{ paddingTop: "76px" }}>
         {children}
-      </div>
+      </main>
     </LanguageProvider>
   );
 }

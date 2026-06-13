@@ -63,23 +63,23 @@ const CITIES: Record<string, CityData> = {
       tag: "Para salones, spas y clínicas de Cantabria que pierden citas por no poder atender el móvil",
       h1: "Estás con una Clienta. Te Entra un Mensaje.",
       h1accent: "¿Quién Agenda la Siguiente Cita?",
-      sub: "Configuramos asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos — gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos — gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For beauty salons, spas & clinics in Cantabria missing bookings while serving clients",
       h1: "You're With a Client. Someone Messages.",
       h1accent: "Who Books the Next Appointment?",
-      sub: "We set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds — handling bookings, treatment questions and waiting lists on WhatsApp or your website. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds — handling bookings, treatment questions and waiting lists on WhatsApp or your website. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
     },
     meta: {
-      title: "Automatización IA para Salones y Spas en Santander | Maks Nedbailo",
+      title: "IA para Salones y Spas en Santander | Care Less",
       description:
-        "Asistente IA para salones de belleza, spas y clínicas en Santander. Gestiona citas y responde clientes en menos de 60 segundos, 24/7. Auditoría gratuita.",
+        "Asistente IA para salones, spas y clínicas en Santander. Responde a clientes y gestiona citas en segundos, 24/7. Bottleneck Score gratis, 2 min.",
     },
     metaEn: {
-      title: "AI Automation for Beauty Salons & Spas in Santander | Maks Nedbailo",
+      title: "AI Lead Response for Salons & Spas in Santander | Care Less",
       description:
-        "AI assistant for beauty salons, spas and clinics in Santander. Handles bookings and answers clients in under 60 seconds, 24/7. Free audit. 30-day guarantee.",
+        "AI assistant for beauty salons, spas and clinics in Santander. Replies to clients and books appointments in seconds, 24/7. Free 2-min Bottleneck Score.",
     },
     schema: {
       name: "Maks Nedbailo AI Automation — Santander, Cantabria",
@@ -169,23 +169,23 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Madrid que pierden clientes por no responder primero",
       h1: "En Madrid, el Primero que Responde",
       h1accent: "se Queda con el Cliente.",
-      sub: "Configuramos asistentes de IA para negocios madrileños que responden en menos de 60 segundos — mientras estás con otro cliente, en reunión, o desconectado. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios madrileños que responden en menos de 60 segundos — mientras estás con otro cliente, en reunión, o desconectado. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Madrid businesses losing clients to whoever responds first",
       h1: "In Madrid, the First to Reply",
       h1accent: "Keeps the Client.",
-      sub: "We set up AI assistants for Madrid businesses that reply in under 60 seconds — while you're with another client, in a meeting, or off. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Madrid businesses that reply in under 60 seconds — while you're with another client, in a meeting, or off. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
     },
     meta: {
-      title: "Automatización de IA en Madrid | Consultor IA para Pymes | Maks Nedbailo",
+      title: "Automatización IA para Pymes en Madrid | Care Less",
       description:
-        "Asistente de IA para pymes de Madrid. Responde a cada cliente en menos de 60 segundos en WhatsApp y tu web. Auditoría gratuita. Sin contratos. 30 días de garantía.",
+        "Asistente de IA para pymes de Madrid. Responde a cada cliente en segundos por WhatsApp y web. Bottleneck Score gratis, 2 minutos.",
     },
     metaEn: {
-      title: "AI conversations for Madrid businesses | Maks Nedbailo | care less AI automation",
+      title: "AI Lead Response for Madrid Businesses | Care Less",
       description:
-        "AI assistant for Madrid businesses. Replies to every client in under 60 seconds on WhatsApp and your website. Free audit. No contracts. 30-day guarantee.",
+        "AI assistant for Madrid businesses. Replies to every client in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
     },
     schema: {
       name: "Maks Nedbailo AI Automation — Madrid",
@@ -276,23 +276,23 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Barcelona que no pueden permitirse perder clientes internacionales",
       h1: "Barcelona No Espera.",
       h1accent: "Tus Clientes Tampoco.",
-      sub: "Configuramos asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos — en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos — en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Barcelona businesses that can't afford to miss international clients",
       h1: "Barcelona Doesn't Wait.",
       h1accent: "Neither Do Your Clients.",
-      sub: "We set up AI assistants for Barcelona businesses that reply in under 60 seconds — in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Barcelona businesses that reply in under 60 seconds — in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
     },
     meta: {
-      title: "Automatización de IA en Barcelona | Asistente para Pymes | Maks Nedbailo",
+      title: "Automatización IA para Negocios en Barcelona | Care Less",
       description:
-        "Asistente de IA para negocios en Barcelona. Responde en español, inglés y catalán en menos de 60 segundos. Capta clientes internacionales 24/7. Auditoría gratuita.",
+        "Asistente IA para negocios en Barcelona. Responde en español, inglés y catalán en segundos. Bottleneck Score gratis, 2 minutos.",
     },
     metaEn: {
-      title: "AI Automation for Barcelona Businesses | Maks Nedbailo",
+      title: "AI Lead Response for Barcelona Businesses | Care Less",
       description:
-        "AI assistant for Barcelona businesses. Replies in Spanish, English and Catalan in under 60 seconds. Capture international clients 24/7. Free audit. 30-day guarantee.",
+        "AI assistant for Barcelona businesses. Replies in Spanish, English and Catalan in seconds, capturing international clients. Free 2-min Bottleneck Score.",
     },
     schema: {
       name: "Maks Nedbailo AI Automation — Barcelona, Cataluña",
@@ -383,23 +383,23 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Valencia que responden tarde y pierden clientes al momento",
       h1: "En Valencia, Cada Minuto sin Responder",
       h1accent: "es un Cliente que se Va.",
-      sub: "Configuramos asistentes de IA para negocios en Valencia que responden en menos de 60 segundos — en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Auditoría gratuita. 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Valencia que responden en menos de 60 segundos — en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Valencia businesses losing clients to slow response times",
       h1: "In Valencia, Every Minute Without a Reply",
       h1accent: "Is a Client Gone.",
-      sub: "We set up AI assistants for Valencia businesses that reply in under 60 seconds — on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Free audit. 30 days risk-free.",
+      sub: "We set up AI assistants for Valencia businesses that reply in under 60 seconds — on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
     },
     meta: {
-      title: "Automatización de IA en Valencia | Asistente para Pymes | Maks Nedbailo",
+      title: "Automatización IA para Pymes en Valencia | Care Less",
       description:
-        "Asistente de IA para negocios en Valencia. Responde en menos de 60 segundos en WhatsApp y tu web. Auditoría gratuita. Sin contratos. 30 días de garantía.",
+        "Asistente de IA para negocios en Valencia. Responde en segundos por WhatsApp y web. Bottleneck Score gratis, 2 minutos. Sin contratos.",
     },
     metaEn: {
-      title: "AI Automation for Valencia Businesses | Maks Nedbailo",
+      title: "AI Lead Response for Valencia Businesses | Care Less",
       description:
-        "AI assistant for Valencia businesses. Replies in under 60 seconds on WhatsApp and your website. Free audit. No contracts. 30-day guarantee.",
+        "AI assistant for Valencia businesses. Replies in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
     },
     schema: {
       name: "Maks Nedbailo AI Automation — Valencia, Comunitat Valenciana",

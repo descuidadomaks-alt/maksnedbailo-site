@@ -1,16 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { useLang } from "@/lib/LanguageContext";
-import { BOOKING_LINK } from "@/lib/content";
 
 const COPY = {
   en: {
-    question: "Want to see if this applies to your business?",
-    cta: "Book a Free Audit →",
+    question: "Want to see how this would work for your business?",
+    cta: "Get your Bottleneck Score →",
   },
   es: {
-    question: "¿Quieres ver si esto aplica a tu negocio?",
-    cta: "Auditoría Gratuita →",
+    question: "¿Quieres ver cómo funcionaría en tu negocio?",
+    cta: "Consigue tu Bottleneck Score →",
   },
 };
 
@@ -24,14 +24,12 @@ export default function BlogBottomCta() {
         <p className="font-playfair text-2xl font-normal text-fg/70 mb-6">
           {d.question}
         </p>
-        <a
-          href={BOOKING_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/score"
           className="inline-block bg-accent text-bg font-bold px-8 py-4 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200"
         >
           {d.cta}
-        </a>
+        </Link>
       </div>
     </section>
   );

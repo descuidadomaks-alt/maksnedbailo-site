@@ -19,9 +19,9 @@ import NewHomeClient from "./new/NewHomeClient";
 // Reuse the partner-page ScrollReveal (identical IntersectionObserver logic).
 import ScrollReveal from "@/app/partners/[slug]/components/ScrollReveal";
 
-const TITLE = "The Bottleneck Map — Find the One Leak That's Costing You | Care Less";
+const TITLE = "The Bottleneck Map — Find Your #1 Cost Leak | Care Less";
 const DESCRIPTION =
-  "Most founders aren't drowning in too little AI — they're drowning in being the bottleneck. The Bottleneck Map is a 90-minute, ROI-ranked audit of where your time, money, and energy are leaking, and what's actually worth fixing first.";
+  "Most founders aren't drowning in AI — they're drowning in being the bottleneck. The Map shows where you're leaking time and money, ranked by ROI.";
 
 export const metadata: Metadata = {
   title: TITLE,

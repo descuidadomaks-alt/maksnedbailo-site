@@ -103,7 +103,7 @@ export default function NewHeader({ locale: localeProp, setLocale: setLocaleProp
           {/* Logo */}
           <Link href={logoHref} className="pointer-events-auto flex items-center" aria-label="Care Less home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" alt="Care Less" className="w-auto shrink-0" style={{ height: "36px" }} />
+            <img src="/logo.svg" alt="Care Less" width={36} height={36} className="w-auto shrink-0" style={{ height: "36px" }} />
           </Link>
 
           {/* Right islands */}
