@@ -510,6 +510,19 @@ h1.font-playfair, h2.font-playfair {
   }
 }
 
+/* Single-section ElevatorField wrappers (e.g. AI Map's Problem section) need
+   to be exactly as tall as the canvas above, or `clip` cuts off the canvas's
+   vertical center (50vh) and the dot field's vanishing point no longer lines
+   up with the section's own centered content. */
+.elevator-section {
+  min-height: 100vh;
+}
+@supports (height: 100dvh) {
+  .elevator-section {
+    min-height: 100dvh;
+  }
+}
+
 /* ─── Bottleneck Map — glass content panel ──────────────────────────────────
    Frosted panel behind the mechanism intro copy, so it stays readable over
    VoidSection's particle field without hiding the dots entirely.
