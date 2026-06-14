@@ -48,7 +48,7 @@ export default function NewHomePage() {
           <Belief d={d} />
           <BottleneckMap d={d} />
         </ElevatorField>
-        <ProofSection d={d} />
+        <ProofSection proof={d.proof} />
         <ThePath d={d} />
         <Testimonials d={d} />
         <WhyMe d={d} />

@@ -107,8 +107,14 @@ export interface ShortPageDict {
   proof: {
     label: string;
     headline: string;
+    sub: string;
     liveBadge: string;
     cases: { name: string; desc: string; tag: string; href: string }[];
+    /** "The same pattern, at scale" — Klarna/IKEA/Octopus industry strip. */
+    industryLabel: string;
+    industry: { desc: string; tag: string }[];
+    /** Low-friction link after the section → /score */
+    ctaLabel: string;
   };
 
   cta: {
@@ -329,7 +335,8 @@ const en: ShortPageDict = {
 
   proof: {
     label: "Proof",
-    headline: "Live builds",
+    headline: "Real systems, live now.",
+    sub: "Software in production, handling real conversations every day.",
     liveBadge: "LIVE",
     cases: [
       {
@@ -351,6 +358,22 @@ const en: ShortPageDict = {
         href: "https://chasehughes.com/",
       },
     ],
+    industryLabel: "The same pattern, at scale",
+    industry: [
+      {
+        desc: "Built an AI assistant that did the work of hundreds of agents — then rehired humans for the conversations that needed one.",
+        tag: "Industry · in production",
+      },
+      {
+        desc: "Automated routine customer questions, then retrained call-centre staff into higher-value advisory roles.",
+        tag: "Industry · in production",
+      },
+      {
+        desc: "AI drafts replies in the company's own voice; human agents review and send. Speed of automation, judgment of a person.",
+        tag: "Industry · in production",
+      },
+    ],
+    ctaLabel: "See your own numbers in 2 minutes",
   },
 
   cta: {
@@ -625,7 +648,8 @@ const uk: ShortPageDict = {
 
   proof: {
     label: "Докази",
-    headline: "Реальні запущені рішення",
+    headline: "Реальні системи, що працюють зараз.",
+    sub: "Софт у продакшені — щодня обробляє реальні розмови.",
     liveBadge: "LIVE",
     cases: [
       {
@@ -647,6 +671,22 @@ const uk: ShortPageDict = {
         href: "https://chasehughes.com/",
       },
     ],
+    industryLabel: "Той самий підхід — у великому масштабі",
+    industry: [
+      {
+        desc: "Побудували ШІ-асистента, який виконував роботу сотень операторів — а потім повернули людей на розмови, де вони справді потрібні.",
+        tag: "Індустрія · у продакшені",
+      },
+      {
+        desc: "Автоматизували рутинні запитання клієнтів, а персонал кол-центру перенавчили на ролі вищої цінності.",
+        tag: "Індустрія · у продакшені",
+      },
+      {
+        desc: "ШІ готує відповіді у власному тоні компанії; людина перевіряє й надсилає. Швидкість автоматизації, судження людини.",
+        tag: "Індустрія · у продакшені",
+      },
+    ],
+    ctaLabel: "Дізнайтесь свої цифри за 2 хвилини",
   },
 
   cta: {

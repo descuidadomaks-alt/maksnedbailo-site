@@ -1,9 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import type { NewPageDict } from "../lib/i18n";
 import { SCORE_TARGET } from "../lib/config";
 import { KlarnaWordmark, IkeaWordmark, OctopusWordmark } from "../components/BrandWordmarks";
+
+/**
+ * Structural shape this section needs. Both the homepage dict
+ * (NewPageDict["proof"]) and the partner-page dict satisfy it, so the same
+ * section renders on / , /ai-map and /partners/* with each page's own
+ * localized copy.
+ */
+export interface ProofSectionContent {
+  label: string;
+  headline: string;
+  sub: string;
+  liveBadge: string;
+  cases: { name: string; desc: string; tag: string; href: string }[];
+  industryLabel: string;
+  industry: { desc: string; tag: string }[];
+  ctaLabel: string;
+}
 
 /**
  * Section 6 — PROOF (capability): "Real systems, live now".
@@ -114,7 +130,14 @@ const CASE_VISUALS = [ChatMock, BookingMock, VoiceMock];
 
 const INDUSTRY_WORDMARKS = [KlarnaWordmark, IkeaWordmark, OctopusWordmark];
 
-export default function ProofSection({ d }: { d: NewPageDict }) {
+export default function ProofSection({
+  proof,
+  scoreHref = SCORE_TARGET,
+}: {
+  proof: ProofSectionContent;
+  scoreHref?: string;
+}) {
+  const d = { proof };
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       {/* Soft section gradient */}
@@ -209,7 +232,7 @@ export default function ProofSection({ d }: { d: NewPageDict }) {
         {/* CTA — low-friction, routes to the Bottleneck Score */}
         <div data-reveal className="text-center">
           <Link
-            href={SCORE_TARGET}
+            href={scoreHref}
             className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent"
             style={{ fontSize: "13px" }}
           >

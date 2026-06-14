@@ -51,7 +51,7 @@ export default function DirectPage() {
         <DirectIndustry d={d} />
         {/* Newer proof section (visual previews + industry strip) shared with
             the homepage — replaces the old text-only DirectProof. */}
-        <ProofSection d={newD} />
+        <ProofSection proof={newD.proof} />
         <DirectProcess d={d} />
         <DirectGuarantee d={d} />
         <DirectClose d={d} />

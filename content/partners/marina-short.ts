@@ -8,10 +8,10 @@ const marinaShort: ShortPartnerConfig = {
   partnerNameGenitiveUk: "Марини",
   partnerNameAccusativeUk: "Марину",
 
-  partnerTitle: "psychologist",
-  partnerTitleUk: "психолог",
+  partnerTitle: "psychologist & gestalt therapist",
+  partnerTitleUk: "Психолог та гештальт-терапевт",
 
-  partnerPhoto: null,
+  partnerPhoto: "/partners/marina/photo_marina.jpg",
 
   partnerQuote:
     "In a year and a half of working with Maks, I came to see his defining trait: he doesn't stop at the first comfortable answer. He asks precise questions, looks at reality honestly, and finds solutions that can actually be put into practice. That's a rare quality.",
