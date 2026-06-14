@@ -53,23 +53,34 @@ function StarRow() {
 
 function QuoteCard({ item, accent }: { item: TestimonialItem; accent: boolean }) {
   return (
-    <div
+    <blockquote
+      itemProp="review"
+      itemScope
+      itemType="https://schema.org/Review"
       className="rounded-xl p-5 flex flex-col gap-3"
-      style={
-        accent
+      style={{
+        margin: 0,
+        ...(accent
           ? { background: "rgba(212,255,43,0.05)", border: "1px solid rgba(212,255,43,0.18)" }
-          : { background: "rgba(255,255,255,0.014)", border: "1px solid rgba(255,255,255,0.05)" }
-      }
+          : { background: "rgba(255,255,255,0.014)", border: "1px solid rgba(255,255,255,0.05)" }),
+      }}
     >
       <StarRow />
-      <p className="font-sora font-light text-fg/65 leading-[1.65]" style={{ fontSize: "12.5px" }}>
+      {/* Verbatim 5★ client reviews — every card carries a 5/5 rating. */}
+      <div itemProp="reviewRating" itemScope itemType="https://schema.org/Rating" hidden>
+        <meta itemProp="ratingValue" content="5" />
+        <meta itemProp="bestRating" content="5" />
+      </div>
+      <p itemProp="reviewBody" className="font-sora font-light text-fg/65 leading-[1.65]" style={{ fontSize: "12.5px" }}>
         &ldquo;{item.quote}&rdquo;
       </p>
       <div className="mt-auto">
-        <p className="font-sora text-fg/75 font-semibold" style={{ fontSize: "11px" }}>{item.author}</p>
+        <p itemProp="author" itemScope itemType="https://schema.org/Person" className="font-sora text-fg/75 font-semibold" style={{ fontSize: "11px" }}>
+          <span itemProp="name">{item.author}</span>
+        </p>
         <p className="font-sora text-fg/30 mt-0.5" style={{ fontSize: "10px" }}>{item.role}</p>
       </div>
-    </div>
+    </blockquote>
   );
 }
 

@@ -3,6 +3,7 @@ import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans, Roboto_Mono 
 import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "./components/LenisProvider";
+import { TESTIMONIAL_ITEMS } from "./new/lib/i18n";
 
 // ── Primary display (Latin) ────────────────────────────────────────────────────
 const playfair = Playfair_Display({
@@ -112,29 +113,36 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://maksnedbailo.site/#website",
+      url: "https://maksnedbailo.site",
+      name: "Care Less AI Automation",
+      description:
+        "ROI-first AI diagnosis and systems architecture for owner-led businesses.",
+      publisher: { "@id": "https://maksnedbailo.site/#person" },
+    },
+    {
       "@type": "Person",
       "@id": "https://maksnedbailo.site/#person",
       name: "Maks Nedbailo",
+      jobTitle: "AI Automation Operator",
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
-        "Operator, not consultant. ROI-first AI diagnosis for owner-led businesses — honest about where AI helps and where it doesn't.",
+        "Operator, not consultant. Designing ROI-ranked AI diagnostics and custom systems for owner-led businesses — honest about where AI helps and where it doesn't.",
       knowsLanguage: ["en", "es", "ru"],
       knowsAbout: [
-        "AI automation",
-        "WhatsApp Business API",
-        "customer response automation",
-        "small business AI",
-        "chatbot development",
+        "Generative Engine Optimization",
+        "AI Automation Architecture",
+        "WhatsApp Business API Development",
+        "Process Automation",
       ],
-      areaServed: [
-        { "@type": "Country", name: "Spain" },
-        { "@type": "Country", name: "United Kingdom" },
-        { "@type": "Country", name: "United States" },
-        { "@type": "AdministrativeArea", name: "Cantabria" },
-        { "@type": "City", name: "Santander" },
-        { "@type": "City", name: "Madrid" },
-      ],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Santander",
+        addressRegion: "Cantabria",
+        addressCountry: "ES",
+      },
     },
     {
       "@type": "ProfessionalService",
@@ -144,38 +152,55 @@ const jsonLd = {
       telephone: "+34641935207",
       description:
         "The Bottleneck Map: a 90-minute, ROI-ranked diagnosis of where an owner-led business is leaking time and money — and what's actually worth fixing first.",
-      priceRange: "$$",
+      priceRange: "€€€",
       currenciesAccepted: "EUR, GBP, USD",
-      areaServed: [
-        { "@type": "Country", name: "Spain" },
-        { "@type": "Country", name: "United Kingdom" },
-        { "@type": "Country", name: "United States" },
-      ],
+      founder: { "@id": "https://maksnedbailo.site/#person" },
+      areaServed: ["Spain", "United Kingdom", "United States"],
+      // Real, verbatim client reviews (Upwork) — single source of truth in
+      // app/new/lib/i18n.ts, also rendered on-page as Review microdata in
+      // sections/Testimonials.tsx. All cards display a 5★ rating.
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        reviewCount: String(TESTIMONIAL_ITEMS.length),
+      },
+      review: TESTIMONIAL_ITEMS.map((t) => ({
+        "@type": "Review",
+        author: { "@type": "Person", name: t.author },
+        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+        reviewBody: t.quote,
+      })),
       hasOfferCatalog: {
         "@type": "OfferCatalog",
-        name: "AI Automation Services",
+        name: "Founder Optimization Capabilities",
         itemListElement: [
           {
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",
-              name: "Bottleneck Map",
+              name: "The Bottleneck Map",
               description:
-                "90-minute working session producing a one-page, ROI-ranked map of where the business still runs through the founder — and the one fix to start with.",
+                "An intensive 90-minute working session that visualizes where operations bottle up at the founder layer, producing an ROI-ranked automation blueprint.",
+              offers: {
+                "@type": "Offer",
+                price: "1470.00",
+                priceCurrency: "EUR",
+                valueAddedTaxIncluded: true,
+              },
             },
           },
           {
             "@type": "Offer",
             itemOffered: {
               "@type": "Service",
-              name: "AI Customer Assistant",
+              name: "Custom WhatsApp Assistant Integration",
               description:
-                "Custom AI assistant for WhatsApp and website that responds to every customer in seconds, 24/7.",
+                "Full-stack development of automated, instant lead-response systems natively connected to corporate CRMs for service and hospitality brands.",
             },
           },
         ],
       },
-      founder: { "@id": "https://maksnedbailo.site/#person" },
     },
   ],
 };

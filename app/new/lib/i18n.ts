@@ -217,7 +217,7 @@ export interface NewPageDict {
 
 // Real client quotes — ported from components/Proof.tsx CARDS. Kept in their
 // original language (English) for both locales; these are verbatim reviews.
-const TESTIMONIAL_ITEMS: TestimonialItem[] = [
+export const TESTIMONIAL_ITEMS: TestimonialItem[] = [
   {
     quote: "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!",
     author: "Corinna C.",
@@ -552,6 +552,18 @@ const en: NewPageDict = {
     headline: "Before you book",
     items: [
       {
+        q: "How do I know if my business is ready for AI automation?",
+        a: "If you are still the human operating system of your business—approving every invoice, routing every CRM lead, and answering basic team questions—you don't need another tool. You are ready for automation when your workflows are broken, but manual processes are proven. We automate operations, not chaos.",
+      },
+      {
+        q: "What is a bottleneck map vs a standard business process audit?",
+        a: "Standard consultants charge €5k to hand you a 60-page PDF report you'll never read. The Bottleneck Map is a 90-minute live diagnostic run by an operator. We trace where workflows stall at the founder level, map out custom AI integrations (like automated WhatsApp customer triage or instant CRM processing), and rank them by hard financial ROI.",
+      },
+      {
+        q: "Is a WhatsApp AI chatbot worth it for a small business or medical spa?",
+        a: "Only if you are actively bleeding revenue from missed leads. If a client messages your MedSpa or service business while you're with another client, and you take 2 hours to reply, that lead is dead. A custom WhatsApp Business API assistant that books appointments in 9s pays for itself immediately. If it doesn't solve a direct money leak, don't build it.",
+      },
+      {
         q: "Is this just a sales call?",
         a: "No. It's 90 minutes of real diagnostic work. You'll leave with a one-page map even if we never work together again. If there's no clear opportunity, I'll tell you straight — that's part of the deal.",
       },
@@ -877,6 +889,18 @@ const es: NewPageDict = {
     label: "FAQ",
     headline: "Antes de reservar",
     items: [
+      {
+        q: "¿Cómo sé si mi negocio está listo para la automatización con IA?",
+        a: "Si todavía eres el sistema operativo humano de tu negocio —apruebas cada factura, rediriges cada lead del CRM y respondes las preguntas básicas del equipo— no necesitas otra herramienta. Estás listo para automatizar cuando tus flujos de trabajo están rotos, pero los procesos manuales están probados. Automatizamos operaciones, no caos.",
+      },
+      {
+        q: "¿Qué diferencia hay entre un bottleneck map y una auditoría de procesos estándar?",
+        a: "Los consultores estándar te cobran €5k por entregarte un PDF de 60 páginas que nunca leerás. El Bottleneck Map es un diagnóstico en vivo de 90 minutos dirigido por un operador. Rastreamos dónde se atascan los flujos de trabajo a nivel del fundador, mapeamos integraciones de IA a medida (como el triaje automático de clientes por WhatsApp o el procesamiento instantáneo en el CRM) y las priorizamos por ROI financiero real.",
+      },
+      {
+        q: "¿Merece la pena un chatbot de IA en WhatsApp para una pequeña empresa o un centro de estética?",
+        a: "Solo si estás perdiendo ingresos de forma activa por leads sin responder. Si un cliente escribe a tu centro de estética o negocio de servicios mientras atiendes a otro, y tardas 2 horas en responder, ese lead está muerto. Un asistente a medida con la API de WhatsApp Business que reserva citas en 9s se paga solo de inmediato. Si no resuelve una fuga de dinero directa, no lo construyas.",
+      },
       {
         q: "¿Esto es solo una llamada de ventas?",
         a: "No. Son 90 minutos de trabajo diagnóstico real. Te llevarás un mapa de una página aunque no volvamos a trabajar juntos. Si no hay una oportunidad clara, te lo diré sin rodeos — eso es parte del trato.",
