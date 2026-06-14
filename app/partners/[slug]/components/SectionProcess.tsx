@@ -17,7 +17,7 @@ const STEPS = [
   {
     num: "03",
     title: "Receive",
-    body: "You receive the Strategic AI Map within 48 hours — a proper document, not rough notes. If something's worth building, I'll quote Phase 1 (typically €4,500 + Ukrainian dev capacity, 2–3 weeks). If not, you still have the map.",
+    body: "You receive the Strategic AI Map within 48 hours — a proper document, not rough notes. If something's worth building, I'll quote Phase 1 — typically a focused €4,500 build (2–3 weeks) that pays for itself within a couple of months. I won't pitch a build that doesn't. If not, you still have the map.",
   },
 ];
 

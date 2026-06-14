@@ -389,7 +389,7 @@ const en: ShortPageDict = {
       {
         q: "What does Phase 1 typically look like?",
         a: ({ phase1Anchor }) =>
-          `A working prototype of the highest-ROI use case from your map. Typically ${phase1Anchor}, 2–3 weeks, built with Ukrainian dev capacity. Real software you can use on Monday — not a strategy document.`,
+          `A working prototype of your highest-ROI use case — real software you can use on Monday, not a slide deck. I won't pitch a build that doesn't earn its keep: for most businesses the first step is a focused ${phase1Anchor} fix that pays for itself within a couple of months.`,
       },
       {
         q: "Who is this for — and who isn't it?",
@@ -685,7 +685,7 @@ const uk: ShortPageDict = {
       {
         q: "Як зазвичай виглядає перший етап?",
         a: ({ phase1Anchor }) =>
-          `Працюючий прототип сценарію з найвищим ROI з вашої карти. Зазвичай ${phase1Anchor}, 2–3 тижні, команда перевірених українських девелоперів. Реальне програмне забезпечення на понеділок — не стратегічний документ.`,
+          `Працюючий прототип сценарію з найвищим ROI — реальне ПЗ, яким користуєтесь уже в понеділок, а не стратегічний документ. Я не запропоную рішення, яке не окупається: для більшості бізнесів перший крок — точкове покращення приблизно за ${phase1Anchor}, що повертає вкладене за пару місяців.`,
       },
       {
         q: "Кому це підходить — і кому ні?",

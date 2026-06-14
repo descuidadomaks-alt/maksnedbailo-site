@@ -6,6 +6,7 @@ const marinaShort: ShortPartnerConfig = {
   partnerName: "Marina",
   partnerNameUk: "Марина",
   partnerNameGenitiveUk: "Марини",
+  partnerNameAccusativeUk: "Марину",
 
   partnerTitle: "psychologist",
   partnerTitleUk: "психолог",
@@ -28,7 +29,7 @@ const marinaShort: ShortPartnerConfig = {
 
   schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 
-  phase1Anchor: "€4,500",
+  phase1Anchor: "€3–4k",
 
   gender: "f",
 };

@@ -30,12 +30,15 @@ export default function SectionShortHero({
   config,
   d,
   partnerNameForSentences,
+  partnerNameAccusative,
   partnerNameDisplay,
 }: {
   config: ShortPartnerConfig;
   d: ShortPageDict;
-  /** Grammatically appropriate form for sentence use (genitive in UK) */
+  /** Genitive form — for "from {name}'s circle" (із кола {name}) */
   partnerNameForSentences?: string;
+  /** Accusative form — for "reserved through {name}" (через {name}) */
+  partnerNameAccusative?: string;
   /** Nominative/display form for bylines and captions */
   partnerNameDisplay?: string;
 }) {
@@ -43,6 +46,7 @@ export default function SectionShortHero({
   const daysLeft = useCountdownDays(config.offerDeadline);
   const lines = d.hero.headline.split("\n");
   const pSentence = partnerNameForSentences ?? config.partnerName;
+  const pAcc      = partnerNameAccusative ?? partnerNameForSentences ?? config.partnerName;
   const pDisplay  = partnerNameDisplay ?? config.partnerName;
 
   // Per-partner locale text: config field takes priority over the shared dict override
@@ -120,7 +124,7 @@ export default function SectionShortHero({
             marginBottom: "clamp(20px, 3vw, 32px)",
           }}
         >
-          {d.hero.subheadline(pSentence)}
+          {d.hero.subheadline(pAcc)}
         </p>
 
         {/* Countdown chip */}

@@ -27,10 +27,17 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
   const { locale } = usePartnerLocale();
   const d = getDict(locale);
 
-  // Genitive form — used in "through {name}", "reserved via {name}" constructions
+  // Genitive form — used in "from {name}'s circle" (із кола {name}) constructions
   const pGen =
     locale === "uk"
       ? (config.partnerNameGenitiveUk ?? config.partnerNameUk ?? config.partnerName)
+      : config.partnerName;
+
+  // Accusative form — used after "через" ("reserved through {name}"). For
+  // masculine animate names this equals the genitive, so they fall back to it.
+  const pAcc =
+    locale === "uk"
+      ? (config.partnerNameAccusativeUk ?? config.partnerNameGenitiveUk ?? config.partnerNameUk ?? config.partnerName)
       : config.partnerName;
 
   // Nominative form — used when the partner is the subject ("Vlad sent you here")
@@ -50,12 +57,13 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
           config={config}
           d={d}
           partnerNameForSentences={pGen}
+          partnerNameAccusative={pAcc}
           partnerNameDisplay={pNom}
         />
         <SectionOfferGlance
           config={config}
           d={d}
-          partnerNameForSentences={pGen}
+          partnerNameForSentences={pAcc}
         />
         <SectionShortIndustry d={d} />
         <SectionShortProcess d={d} />

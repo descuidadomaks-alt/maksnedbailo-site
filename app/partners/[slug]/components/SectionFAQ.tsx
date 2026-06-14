@@ -19,7 +19,7 @@ function getFAQs(data: PartnerData) {
     },
     {
       q: "What does Phase 1 typically look like?",
-      a: "A working prototype of the highest-ROI use case from your map. Usually " + data.pricing.phase1Anchor + ". 2–3 weeks. Real software you can use Monday morning, not a strategy document.",
+      a: "A working prototype of your highest-ROI use case — real software you can use Monday morning, not a strategy document. I won't pitch a build that doesn't earn its keep: for most businesses the first step is a focused " + data.pricing.phase1Anchor + " fix that pays for itself within a couple of months.",
     },
     {
       q: "Why is " + data.partner.name + " giving this away?",

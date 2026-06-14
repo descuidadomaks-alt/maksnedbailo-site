@@ -28,7 +28,7 @@ const artemShort: ShortPartnerConfig = {
 
   schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 
-  phase1Anchor: "€4,500",
+  phase1Anchor: "€3–4k",
 };
 
 export default artemShort;

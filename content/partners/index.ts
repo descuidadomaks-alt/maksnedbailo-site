@@ -65,10 +65,18 @@ export type ShortPartnerConfig = {
   /** Ukrainian nominative form — shown in bylines, captions. e.g. "Влад" */
   partnerNameUk?: string;
   /**
-   * Ukrainian genitive form — used in sentences: "через Влада", "зарезервовано через Влада".
+   * Ukrainian genitive form — used in sentences like "із кола Влада" (from X's circle).
    * Falls back to partnerNameUk → partnerName if not set.
    */
   partnerNameGenitiveUk?: string;
+  /**
+   * Ukrainian accusative form — used after "через" ("зарезервовано через Юлію").
+   * For masculine animate names it equals the genitive ("Влада"), so those can
+   * leave it unset and fall back to genitive. Feminine names diverge
+   * (genitive "Юлії" vs accusative "Юлію") and must set this.
+   * Falls back to partnerNameGenitiveUk → partnerNameUk → partnerName.
+   */
+  partnerNameAccusativeUk?: string;
 
   partnerTitle: string;
   /** Ukrainian form of the title, e.g. "радник і ментор" */

@@ -36,7 +36,7 @@ const vlad: PartnerData = {
   ],
 
   pricing: {
-    phase1Anchor: "€4,500",
+    phase1Anchor: "€3–4k",
     workshopValueAnchor: "€1,470",
     totalValueAnchor: "€3,170+",
   },

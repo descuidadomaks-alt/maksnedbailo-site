@@ -6,11 +6,12 @@ const juliaShort: ShortPartnerConfig = {
   partnerName: "Julia",
   partnerNameUk: "Юлія",
   partnerNameGenitiveUk: "Юлії",
+  partnerNameAccusativeUk: "Юлію",
 
-  partnerTitle: "longtime friend & colleague",
-  partnerTitleUk: "давня подруга і колега",
+  partnerTitle: "karmologist & advisor",
+  partnerTitleUk: "кармолог і радник",
 
-  partnerPhoto: null,
+  partnerPhoto: "/partners/julia/photo_julia.jpg",
 
   partnerQuote:
     "I've known Maks since school — and for the last five years we've worked together. I've seen him in real projects, deadlines, and tough decisions. He doesn't sugarcoat a situation — he breaks it down to its core and shows where it actually makes sense to act.",
@@ -28,7 +29,7 @@ const juliaShort: ShortPartnerConfig = {
 
   schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 
-  phase1Anchor: "€4,500",
+  phase1Anchor: "€3–4k",
 
   gender: "f",
 };
