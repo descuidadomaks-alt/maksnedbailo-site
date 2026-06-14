@@ -2,6 +2,7 @@
 
 import { useCallback, useRef } from "react";
 import type { NewPageDict, TestimonialItem } from "../lib/i18n";
+import { UPWORK_PROFILE_URL } from "../lib/config";
 
 /**
  * Section 6b — TESTIMONIALS (trust).
@@ -187,6 +188,20 @@ export default function Testimonials({ d }: { d: NewPageDict }) {
           <p data-reveal className="font-sora font-light text-fg/45" style={{ fontSize: "14px" }}>
             {d.testimonials.sub}
           </p>
+          {/* Third-party source — makes the first-party quotes independently
+              verifiable for search / AI engines and visitors alike. */}
+          <a
+            data-reveal
+            href={UPWORK_PROFILE_URL}
+            target="_blank"
+            rel="noopener noreferrer me"
+            className="inline-flex items-center gap-1.5 mt-4 font-sora text-fg/40 transition-opacity duration-200 hover:opacity-70"
+            style={{ fontSize: "12px", letterSpacing: "-0.005em" }}
+          >
+            <span aria-hidden style={{ color: "#D4FF2B" }}>★★★★★</span>
+            All reviews verified on Upwork
+            <span aria-hidden>↗</span>
+          </a>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 lg:gap-8 items-stretch">

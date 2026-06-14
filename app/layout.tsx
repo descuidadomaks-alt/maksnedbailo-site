@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "./components/LenisProvider";
 import { TESTIMONIAL_ITEMS } from "./new/lib/i18n";
+import { UPWORK_PROFILE_URL } from "./new/lib/config";
 
 // ── Primary display (Latin) ────────────────────────────────────────────────────
 const playfair = Playfair_Display({
@@ -127,6 +128,8 @@ const jsonLd = {
       name: "Maks Nedbailo",
       jobTitle: "AI Automation Operator",
       url: "https://maksnedbailo.site",
+      // Independent third-party source backing the on-page client reviews.
+      sameAs: [UPWORK_PROFILE_URL],
       telephone: "+34641935207",
       description:
         "Operator, not consultant. Designing ROI-ranked AI diagnostics and custom systems for owner-led businesses — honest about where AI helps and where it doesn't.",

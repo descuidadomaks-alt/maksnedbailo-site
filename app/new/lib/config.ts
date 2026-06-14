@@ -24,6 +24,13 @@ export const PHASE1_ANCHOR = "€4,500";
 export const TELEGRAM_HANDLE = "maksym_nedbailo";
 export const TELEGRAM_URL = `https://t.me/${TELEGRAM_HANDLE}`;
 
+// Public Upwork profile — third-party source for the on-page client reviews.
+// Used as `sameAs` on the Person schema (app/layout.tsx) and as the visible
+// "verified on Upwork" source link in sections/Testimonials.tsx. First-party
+// testimonials are only trusted by search/AI engines when the independent
+// source is linked.
+export const UPWORK_PROFILE_URL = "https://www.upwork.com/freelancers/maksdcoast";
+
 // WhatsApp number — shared across /new and /score for wa.me links with
 // custom prefilled text (e.g. the /score result share link).
 export const WA_NUMBER = "34641935207";
