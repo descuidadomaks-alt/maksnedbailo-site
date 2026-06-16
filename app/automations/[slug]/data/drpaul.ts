@@ -71,7 +71,7 @@ const drpaul: ProspectData = {
   ctaCalendarUrl: "https://zcal.co/carelessmaks/free-audit",
   ctaWhatsappUrl: "https://wa.me/34641935207",
   ctaWhatsappMessage:
-    "Hi Maks, I saw the personalised Aoife demo for Dr. Paul and I'm interested in the free audit.",
+    "Hi Maks, I saw the Dr. Paul case study and I'd like one for my clinic.",
   formWebhookUrl: "", // TODO: paste n8n / make.com webhook URL here
 
   slotExpiryISO: "2026-06-01",
@@ -86,14 +86,25 @@ const drpaul: ProspectData = {
     locations: "4",
   },
 
+  mathParagraphOverride:
+    "Across Dr. Paul's 4 clinics, at an average treatment value of €275 and a conservative 35% after-hours response gap, an aesthetics practice this size hands first-mover advantage to whoever answers first.",
+  mathDisclaimerOverride:
+    "Illustrative figures for a clinic of this size, based on Irish aesthetics industry benchmarks.",
+
   caseStudy: true,
   heroSubtext:
     "73% of customers buy from the first responder. We built Aoife for Dr. Paul Coughlan in 48 hours, using public information only — here's what a custom AI receptionist looks like for an aesthetics clinic.",
   caseStudyBand: "Built in 48 hours · Public data only · Part of the care less AI portfolio",
-  formHeading: "Want one built for your clinic?",
-  ctaHeading: "Want this for your clinic?",
+  agentRetiredNotice:
+    "The live agent has been retired from this page. Below is the build we delivered for Dr. Paul Coughlan.",
+
+  ctaLabel: "Next Step",
+  ctaHeading: "Want one for your clinic?",
   ctaSubtext:
-    "15 minutes. I'll show you exactly how a build like this works for your practice.",
+    "Aoife was a live demo built in 48 hours for Dr. Paul Coughlan, using public information only. She's since been retired from this page — but the same custom AI receptionist can be built for your aesthetics clinic, trained on your treatments, your team, and your tone.",
+  ctaPrimaryLabel: "Book a 15-Min Call",
+  ctaFooterLinkText: "Or explore the full offer → maksnedbailo.site",
+  ctaFooterLinkHref: "https://www.maksnedbailo.site",
 
   connectoWidget: {
     src: "https://app.theconnecto.ai/widget.js",

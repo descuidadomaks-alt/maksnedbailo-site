@@ -29,6 +29,15 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
     <section className="section-divider py-24 md:py-36">
       <div className="max-w-xl mx-auto px-6 text-center">
 
+        {data.ctaLabel && (
+          <p
+            className="font-sora text-fg/30 mb-5"
+            style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
+          >
+            {data.ctaLabel}
+          </p>
+        )}
+
         <h2
           data-reveal
           className="font-playfair font-normal text-fg mb-4"
@@ -59,7 +68,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
             style={{ fontSize: "16px", padding: "20px 44px", minHeight: "64px", letterSpacing: "-0.01em" }}
             onClick={() => track("cta_booked", "final")}
           >
-            Book 15-Min Setup Call
+            {data.ctaPrimaryLabel ?? "Book 15-Min Setup Call"}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">→</span>
           </a>
 
@@ -99,7 +108,16 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
           </a>
         </div>
 
-        {!data.slotExpired && (
+        {/* Footer link — case-study mode shows portfolio link; live mode shows form anchor */}
+        {data.caseStudy && data.ctaFooterLinkText && data.ctaFooterLinkHref ? (
+          <a
+            href={data.ctaFooterLinkHref}
+            className="font-sora text-fg/22 hover:text-fg/50 transition-colors"
+            style={{ fontSize: "12px" }}
+          >
+            {data.ctaFooterLinkText}
+          </a>
+        ) : !data.slotExpired ? (
           <a
             href="#get-audit"
             className="font-sora text-fg/22 hover:text-fg/50 transition-colors underline underline-offset-4 decoration-white/10"
@@ -107,7 +125,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
           >
             Or fill in the quick form above to give us context first ↑
           </a>
-        )}
+        ) : null}
       </div>
     </section>
   );

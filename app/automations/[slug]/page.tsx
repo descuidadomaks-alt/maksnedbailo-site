@@ -111,6 +111,15 @@ export default function DemoPage({ params }: Props) {
           </div>
         )}
 
+        {/* 1c. Agent-retired notice */}
+        {data.caseStudy && data.agentRetiredNotice && (
+          <div className="py-4 text-center px-6">
+            <p className="font-sora text-fg/28 leading-relaxed" style={{ fontSize: "12px" }}>
+              {data.agentRetiredNotice}
+            </p>
+          </div>
+        )}
+
         {/* 2. Live widget anchor (analytics + section divider) */}
         <ConnectoWidget data={data} />
 
@@ -135,8 +144,8 @@ export default function DemoPage({ params }: Props) {
         {/* 9. Scarcity — dynamic expiry from createdAt (hidden in case-study mode) */}
         {!data.caseStudy && <SectionSlot data={data} />}
 
-        {/* 10. Enquiry form → Web3Forms + calendar redirect */}
-        <SectionEnquiryForm data={data} />
+        {/* 10. Enquiry form → Web3Forms + calendar redirect (hidden in case-study mode) */}
+        {!data.caseStudy && <SectionEnquiryForm data={data} />}
 
         {/* 11. Final CTA */}
         <SectionCTA data={data} />

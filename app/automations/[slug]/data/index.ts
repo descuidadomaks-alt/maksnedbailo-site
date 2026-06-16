@@ -156,12 +156,24 @@ export type ProspectData = {
   heroSubtext?: string;
   /** Text for the slim band rendered directly under the hero in case-study mode. */
   caseStudyBand?: string;
+  /** One-line muted notice rendered below the framing band in case-study mode. */
+  agentRetiredNotice?: string;
   /** Override enquiry-form H2. Default: "She's good. But only you can make her perfect." */
   formHeading?: string;
+  /** Override final CTA section label (small ALL-CAPS text above the H2). */
+  ctaLabel?: string;
   /** Override final CTA H2. Default: "Ready to stop losing leads?" */
   ctaHeading?: string;
-  /** Override final CTA subtext. Default: "15 minutes. You tell me what she got wrong…" */
+  /** Override final CTA body paragraph. Default: "15 minutes. You tell me what she got wrong…" */
   ctaSubtext?: string;
+  /** Override primary CTA button label. Default: "Book 15-Min Setup Call" */
+  ctaPrimaryLabel?: string;
+  /** Small muted link text below the CTA buttons (case-study mode). */
+  ctaFooterLinkText?: string;
+  /** Href for the small muted footer link below the CTA buttons. */
+  ctaFooterLinkHref?: string;
+  /** Override the revenue-leak disclaimer line. Default: "…confirmed during the free audit." */
+  mathDisclaimerOverride?: string;
 
   // ── Connecto widget ───────────────────────────────────────────────────────
   connectoWidget: ConnectoWidgetConfig | null;

@@ -94,17 +94,21 @@ export default function SectionMath({ data }: { data: ProspectData }) {
           className="font-sora font-light text-fg/30 leading-relaxed"
           style={{ fontSize: "11px", letterSpacing: "0.01em" }}
         >
-          Estimates based on {m.benchmarkUrl ? (
-            <a
-              href={m.benchmarkUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline underline-offset-2 decoration-white/15 hover:text-fg/45 transition-colors"
-            >
-              {m.benchmarkSource}
-            </a>
-          ) : m.benchmarkSource}
-          . Your actual numbers will be confirmed during the free audit.
+          {data.mathDisclaimerOverride ?? (
+            <>
+              Estimates based on {m.benchmarkUrl ? (
+                <a
+                  href={m.benchmarkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 decoration-white/15 hover:text-fg/45 transition-colors"
+                >
+                  {m.benchmarkSource}
+                </a>
+              ) : m.benchmarkSource}
+              . Your actual numbers will be confirmed during the free audit.
+            </>
+          )}
         </p>
       </div>
     </section>
