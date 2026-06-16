@@ -150,6 +150,13 @@ export type ProspectData = {
   mathParagraphOverride?: string;
 
   // ── Case-study mode ───────────────────────────────────────────────────────
+  /** Override the entire hero H1 as a plain string (no dynamic accent coloring). */
+  heroH1Override?: string;
+  /** Override page <title>, og:title, twitter:title. */
+  metaTitleOverride?: string;
+  /** Override meta description, og:description, twitter:description. */
+  metaDescriptionOverride?: string;
+
   /** When true: hides live widget + countdown, changes badge to "Case Study". */
   caseStudy?: boolean;
   /** Override hero subtext paragraph (typically set when caseStudy: true). */

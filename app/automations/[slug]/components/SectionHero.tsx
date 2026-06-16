@@ -73,10 +73,16 @@ export default function SectionHero({ data }: { data: ProspectData }) {
             marginBottom: "clamp(20px, 2.5vw, 28px)",
           }}
         >
-          <em className="not-italic text-accent">{data.heroDisplayName ?? data.businessName}</em>
-          , We Reply to Your Leads in {m.responseTimeUs}.{" "}
-          <br className="hidden md:block" />
-          Your Competitors Take {m.responseTimeThem}.
+          {data.heroH1Override ? (
+            data.heroH1Override
+          ) : (
+            <>
+              <em className="not-italic text-accent">{data.heroDisplayName ?? data.businessName}</em>
+              , We Reply to Your Leads in {m.responseTimeUs}.{" "}
+              <br className="hidden md:block" />
+              Your Competitors Take {m.responseTimeThem}.
+            </>
+          )}
         </h1>
 
         {/* Subhead */}
@@ -124,7 +130,7 @@ export default function SectionHero({ data }: { data: ProspectData }) {
               window.plausible?.("cta_booked", { props: { slug: data.slug, location: "hero" } })
             }
           >
-            Book 15-Min Setup Call
+            {data.ctaPrimaryLabel ?? "Book 15-Min Setup Call"}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block">
               →
             </span>

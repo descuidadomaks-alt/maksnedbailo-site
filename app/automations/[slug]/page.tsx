@@ -26,21 +26,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!d) return {};
   const og = `/automations/${d.slug}/og.png`;
   return {
-    title: `A live AI agent built for ${d.businessName} — care less AI automation`,
-    description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
+    title: d.metaTitleOverride ?? `A live AI agent built for ${d.businessName} — care less AI automation`,
+    description: d.metaDescriptionOverride ?? `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
     alternates: { canonical: `https://maksnedbailo.site/automations/${d.slug}` },
     robots: { index: false, follow: false },
     openGraph: {
-      title: `A live AI agent built for ${d.businessName} — care less AI automation`,
-      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
+      title: d.metaTitleOverride ?? `A live AI agent built for ${d.businessName} — care less AI automation`,
+      description: d.metaDescriptionOverride ?? `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
       url: `https://maksnedbailo.site/automations/${d.slug}`,
       type: "website",
       images: [{ url: og, width: 1200, height: 630, alt: `${d.agentName} for ${d.businessName}` }],
     },
     twitter: {
       card: "summary_large_image",
-      title: `A live AI agent built for ${d.businessName} — care less AI automation`,
-      description: `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
+      title: d.metaTitleOverride ?? `A live AI agent built for ${d.businessName} — care less AI automation`,
+      description: d.metaDescriptionOverride ?? `48 hours. Public information only. ${d.ownerFirstName}, here's what it looks like when your website replies in ${d.metrics.responseTimeUs}.`,
       images: [og],
     },
   };

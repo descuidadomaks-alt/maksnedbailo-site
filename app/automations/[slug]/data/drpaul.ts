@@ -57,11 +57,11 @@ const drpaul: ProspectData = {
     },
     {
       title: "24/7 Availability",
-      body: "Instant replies on WhatsApp and your website — after hours, between clinic days, bank holidays. No missed enquiry, ever.",
+      body: "Instant replies on WhatsApp and Dr. Paul's website — after hours, between clinic days, bank holidays. No missed enquiry, ever.",
     },
     {
       title: "Multi-Clinic Schedule Awareness",
-      body: "Aoife knows your rotation across Dublin, Waterford, and Wexford. She books patients at the right clinic on the right day.",
+      body: "Aoife knows Dr. Paul's rotation across Dublin, Waterford, and Wexford, booking patients at the right clinic on the right day.",
     },
   ],
 
@@ -90,6 +90,13 @@ const drpaul: ProspectData = {
     "Across Dr. Paul's 4 clinics, at an average treatment value of €275 and a conservative 35% after-hours response gap, an aesthetics practice this size hands first-mover advantage to whoever answers first.",
   mathDisclaimerOverride:
     "Illustrative figures for a clinic of this size, based on Irish aesthetics industry benchmarks.",
+
+  heroH1Override:
+    "How We Reply to Aesthetic Clinic Leads in 9 Seconds. Competitors Take 19+ hours.",
+  metaTitleOverride:
+    "Case study: AI receptionist built for Dr. Paul Coughlan — care less AI automation",
+  metaDescriptionOverride:
+    "Built in 48 hours on public data only. A working example of a custom AI receptionist for an aesthetics clinic.",
 
   caseStudy: true,
   heroSubtext:
