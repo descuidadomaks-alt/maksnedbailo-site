@@ -38,7 +38,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
             letterSpacing: "-0.022em",
           }}
         >
-          Ready to stop losing leads?
+          {data.ctaHeading ?? "Ready to stop losing leads?"}
         </h2>
 
         <p
@@ -46,7 +46,7 @@ export default function SectionCTA({ data }: { data: ProspectData }) {
           className="font-sora font-light text-fg/40 leading-relaxed mb-12"
           style={{ fontSize: "15px" }}
         >
-          15 minutes. You tell me what she got wrong. I fix it. Then we flip the switch.
+          {data.ctaSubtext ?? "15 minutes. You tell me what she got wrong. I fix it. Then we flip the switch."}
         </p>
 
         <div data-reveal="d1" className="flex flex-col items-center gap-4 mb-8">

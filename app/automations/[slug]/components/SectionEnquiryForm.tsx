@@ -131,7 +131,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
             letterSpacing: "-0.022em",
           }}
         >
-          She&apos;s good. But only you can make her perfect.
+          {data.formHeading ?? "She’s good. But only you can make her perfect."}
         </h2>
         <p
           data-reveal
@@ -294,7 +294,7 @@ export default function SectionEnquiryForm({ data }: { data: ProspectData }) {
                 Sending…
               </>
             ) : (
-              "Send & Book 15-Min Call →"
+              data.caseStudy ? "Book 15-Min Call →" : "Send & Book 15-Min Call →"
             )}
           </button>
 

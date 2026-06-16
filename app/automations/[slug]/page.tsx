@@ -68,7 +68,7 @@ export default function DemoPage({ params }: Props) {
        * preflight, so we rewrite wss://[proxy] → wss://api.theconnecto.ai/api/v1
        * while keeping HTTP calls through the Vercel proxy.
        */}
-      {w && !data.slotExpired && (
+      {w && !data.slotExpired && !data.caseStudy && (
         // eslint-disable-next-line @next/next/no-sync-scripts
         <script
           dangerouslySetInnerHTML={{
@@ -78,7 +78,7 @@ export default function DemoPage({ params }: Props) {
       )}
 
       {/* Connecto chat widget */}
-      {w && !data.slotExpired && (
+      {w && !data.slotExpired && !data.caseStudy && (
         <Script
           src={w.src}
           strategy="afterInteractive"
@@ -98,6 +98,18 @@ export default function DemoPage({ params }: Props) {
       <main className="min-h-screen">
         {/* 1. Hero — H1 + single CTA + animated arrow */}
         <SectionHero data={data} />
+
+        {/* 1b. Case-study framing band (drpaul and similar) */}
+        {data.caseStudy && data.caseStudyBand && (
+          <div className="section-divider py-5 md:py-6">
+            <p
+              className="font-sora text-center text-fg/35 leading-relaxed"
+              style={{ fontSize: "13px", letterSpacing: "0.04em" }}
+            >
+              {data.caseStudyBand}
+            </p>
+          </div>
+        )}
 
         {/* 2. Live widget anchor (analytics + section divider) */}
         <ConnectoWidget data={data} />
@@ -120,8 +132,8 @@ export default function DemoPage({ params }: Props) {
         {/* 8. Reality check — why clinics quit AI too early */}
         <SectionReality data={data} />
 
-        {/* 9. Scarcity — dynamic expiry from createdAt */}
-        <SectionSlot data={data} />
+        {/* 9. Scarcity — dynamic expiry from createdAt (hidden in case-study mode) */}
+        {!data.caseStudy && <SectionSlot data={data} />}
 
         {/* 10. Enquiry form → Web3Forms + calendar redirect */}
         <SectionEnquiryForm data={data} />

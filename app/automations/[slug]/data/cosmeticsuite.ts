@@ -92,7 +92,7 @@ const cosmeticsuite: ProspectData = {
     "Hi Maks, I saw the personalised Saoirse demo for The Cosmetic Suite and I'm interested.",
   formWebhookUrl: "", // TODO: paste n8n / make.com webhook URL here
 
-  slotExpiryISO: "2026-06-04",
+  slotExpiryISO: "2026-06-20",
 
   formPrefill: {
     name: "Paul",

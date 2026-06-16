@@ -149,6 +149,20 @@ export type ProspectData = {
    */
   mathParagraphOverride?: string;
 
+  // ── Case-study mode ───────────────────────────────────────────────────────
+  /** When true: hides live widget + countdown, changes badge to "Case Study". */
+  caseStudy?: boolean;
+  /** Override hero subtext paragraph (typically set when caseStudy: true). */
+  heroSubtext?: string;
+  /** Text for the slim band rendered directly under the hero in case-study mode. */
+  caseStudyBand?: string;
+  /** Override enquiry-form H2. Default: "She's good. But only you can make her perfect." */
+  formHeading?: string;
+  /** Override final CTA H2. Default: "Ready to stop losing leads?" */
+  ctaHeading?: string;
+  /** Override final CTA subtext. Default: "15 minutes. You tell me what she got wrong…" */
+  ctaSubtext?: string;
+
   // ── Connecto widget ───────────────────────────────────────────────────────
   connectoWidget: ConnectoWidgetConfig | null;
 };

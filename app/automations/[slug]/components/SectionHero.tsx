@@ -14,14 +14,15 @@ declare global {
 export default function SectionHero({ data }: { data: ProspectData }) {
   const m = data.metrics;
 
-  // Auto-open widget after delay
+  // Auto-open widget after delay (skipped in case-study mode — no live widget)
   useEffect(() => {
+    if (data.caseStudy) return;
     const mobile = window.matchMedia("(max-width: 768px)").matches;
     const t = setTimeout(() => {
       window.__connectoOpenWidget?.();
     }, mobile ? 8000 : 4000);
     return () => clearTimeout(t);
-  }, []);
+  }, [data.caseStudy]);
 
   return (
     <section
@@ -59,7 +60,7 @@ export default function SectionHero({ data }: { data: ProspectData }) {
             className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"
             style={{ opacity: 0.7 }}
           />
-          Live Demo · {data.businessName}
+          {data.caseStudy ? "Case Study" : "Live Demo"} · {data.businessName}
         </div>
 
         {/* H1 */}
@@ -87,12 +88,16 @@ export default function SectionHero({ data }: { data: ProspectData }) {
             marginBottom: "clamp(36px, 5vw, 52px)",
           }}
         >
-          73% of customers buy from the first responder.{" "}
-          <span className="text-fg/80 font-normal">{data.agentName}</span> goes
-          live on your website in 48 hours — WhatsApp + Instagram added once
-          Meta approves. Try her live{" "}
-          <span className="hidden md:inline">to the right</span>
-          <span className="md:hidden">below</span>.
+          {data.heroSubtext ?? (
+            <>
+              73% of customers buy from the first responder.{" "}
+              <span className="text-fg/80 font-normal">{data.agentName}</span> goes
+              live on your website in 48 hours — WhatsApp + Instagram added once
+              Meta approves. Try her live{" "}
+              <span className="hidden md:inline">to the right</span>
+              <span className="md:hidden">below</span>.
+            </>
+          )}
         </p>
 
         {/* Single CTA */}

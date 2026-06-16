@@ -77,7 +77,7 @@ const drpaul: ProspectData = {
   slotExpiryISO: "2026-06-01",
 
   enquirySubtext:
-    "I built Aoife in 48 hours using only public info. She already knows your treatments, clinics, and schedule — but she's not you yet. Tell me what she got wrong.",
+    "This is a working example built for a live aesthetics practice. If you run a clinic and want your own, the first build takes 48 hours.",
 
   formPrefill: {
     name: "Paul",
@@ -85,6 +85,15 @@ const drpaul: ProspectData = {
     website: "drpaul.ie",
     locations: "4",
   },
+
+  caseStudy: true,
+  heroSubtext:
+    "73% of customers buy from the first responder. We built Aoife for Dr. Paul Coughlan in 48 hours, using public information only — here's what a custom AI receptionist looks like for an aesthetics clinic.",
+  caseStudyBand: "Built in 48 hours · Public data only · Part of the care less AI portfolio",
+  formHeading: "Want one built for your clinic?",
+  ctaHeading: "Want this for your clinic?",
+  ctaSubtext:
+    "15 minutes. I'll show you exactly how a build like this works for your practice.",
 
   connectoWidget: {
     src: "https://app.theconnecto.ai/widget.js",
