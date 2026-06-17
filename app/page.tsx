@@ -47,11 +47,20 @@ export const metadata: Metadata = {
     siteName: "Care Less",
     locale: "en_US",
     alternateLocale: ["es_ES"],
+    images: [
+      {
+        url: "/maks-stage2.jpg",
+        width: 1400,
+        height: 450,
+        alt: "Maks Nedbailo — Care Less AI automation",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: ["/maks-stage2.jpg"],
   },
   robots: {
     index: true,

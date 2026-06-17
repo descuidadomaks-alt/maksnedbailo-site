@@ -96,12 +96,21 @@ export const metadata: Metadata = {
     url: "https://maksnedbailo.site",
     siteName: "care less AI automation",
     locale: "en_US",
+    images: [
+      {
+        url: "/maks-stage2.jpg",
+        width: 1400,
+        height: 450,
+        alt: "Maks Nedbailo — care less AI automation",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
     description:
       "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
+    images: ["/maks-stage2.jpg"],
   },
   robots: {
     index: true,
