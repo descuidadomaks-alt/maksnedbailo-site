@@ -73,9 +73,12 @@ body::before {
 }
 
 /* /new ServicesTicker — two stacked tracks crossfade on hover, so the
-   marquee must keep running underneath (no pause-on-hover). */
+   marquee must keep running underneath (no pause-on-hover).
+   45s tuned so the scroll speed (~px/sec) matches the top GlobalTicker
+   (.ticker-track) — its track is wider, so a longer duration there lands
+   at the same perceived pace. */
 .services-ticker-track {
-  animation: ticker 80s linear infinite;
+  animation: ticker 45s linear infinite;
   will-change: transform;
 }
 
