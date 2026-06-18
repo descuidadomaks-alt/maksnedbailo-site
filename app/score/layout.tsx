@@ -39,11 +39,13 @@ export const metadata: Metadata = {
     url: "https://maksnedbailo.site/score",
     siteName: "Care Less",
     locale: "en_US",
+    images: [{ url: "/maks-stage2.jpg", width: 1400, height: 450, alt: "The Bottleneck Score — Care Less" }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: ["/maks-stage2.jpg"],
   },
   robots: {
     index: true,

@@ -29,6 +29,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Maks Nedbailo",
       locale: "es_ES",
       type: "website",
+      images: [{ url: "/maks-stage2.jpg", width: 1400, height: 450, alt: city.meta.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: city.meta.title,
+      description: city.meta.description,
+      images: ["/maks-stage2.jpg"],
     },
     robots: { index: true, follow: true },
   };
