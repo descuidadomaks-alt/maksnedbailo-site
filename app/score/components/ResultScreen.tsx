@@ -144,7 +144,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
             className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)] w-full sm:w-auto"
             style={{ fontSize: "15px", padding: "18px 32px", minHeight: "58px", letterSpacing: "-0.01em" }}
           >
-            Book the Bottleneck Map — {FOUNDING_RATE} {FOUNDING_DEADLINE_EN}
+            Book your AI Map — {FOUNDING_RATE} {FOUNDING_DEADLINE_EN}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>
               →
             </span>
