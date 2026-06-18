@@ -285,7 +285,7 @@ const en: DirectPageDict = {
     cta: "Book your Strategic AI Map",
     messengerLabel: "Message on WhatsApp first",
     guarantee: "10k guarantee: find €10k+/yr — or owe nothing.",
-    capacityLine: `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
+    capacityLine: `I lead every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
 
   footer: { credit: "Care Less AI Automation", location: "Santander, Spain" },
@@ -502,7 +502,7 @@ const es: DirectPageDict = {
     cta: "Reserva tu Mapa Estratégico de IA",
     messengerLabel: "Escribe primero por WhatsApp",
     guarantee: "Garantía 10k: €10k+/año — o no debes nada.",
-    capacityLine: `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
+    capacityLine: `Lidero cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
 
   footer: { credit: "Care Less AI Automation", location: "Santander, España" },
@@ -723,7 +723,7 @@ const uk: DirectPageDict = {
     cta: "Забронювати Стратегічну карту ШІ",
     messengerLabel: "Спочатку написати в WhatsApp",
     guarantee: "Гарантія 10k: €10k+/рік — або ви нічого не платите.",
-    capacityLine: `Я будую кожен проєкт особисто — лише 5 місць на місяць. Залишилось ${slotsOpen} з 5.`,
+    capacityLine: `Я веду кожен проєкт особисто — лише 5 місць на місяць. Залишилось ${slotsOpen} з 5.`,
   },
 
   footer: { credit: "Care Less AI Automation", location: "Сантандер, Іспанія" },

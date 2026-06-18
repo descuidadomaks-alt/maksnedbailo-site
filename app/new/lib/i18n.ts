@@ -506,7 +506,7 @@ const en: NewPageDict = {
     ],
     foundingLabel: "until June 30",
     capacityLine: (slotsOpen) =>
-      `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
+      `I lead every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
 
   testimonials: {
@@ -844,7 +844,7 @@ const es: NewPageDict = {
     ],
     foundingLabel: "hasta el 30 de junio",
     capacityLine: (slotsOpen) =>
-      `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
+      `Lidero cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
 
   testimonials: {
