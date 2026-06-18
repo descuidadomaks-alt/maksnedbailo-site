@@ -72,7 +72,7 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
         <div className="max-w-3xl mx-auto">
 
         <div className="text-center mb-10">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.faq.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
@@ -99,11 +99,11 @@ export default function NewFAQ({ d }: { d: NewPageDict }) {
               <div key={i} className="border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
                 <button className="w-full flex items-center justify-between py-5 text-left gap-6 transition-opacity duration-150 hover:opacity-75" onClick={() => toggle(i)} aria-expanded={isOpen}>
                   <span className="font-sora text-fg/72" style={{ fontSize: "15px", lineHeight: 1.5 }}>{item.q}</span>
-                  <span className="text-fg/28 flex-shrink-0"><ChevronIcon open={isOpen} /></span>
+                  <span className="text-fg/55 flex-shrink-0"><ChevronIcon open={isOpen} /></span>
                 </button>
                 <div style={{ maxHeight: isOpen ? "600px" : "0", overflow: "hidden", transition: "max-height 0.38s cubic-bezier(0.16,1,0.3,1)" }}>
                   <div className="pb-6">
-                    <p className="font-sora font-light text-fg/48 leading-[1.88]" style={{ fontSize: "14px", maxWidth: "62ch" }}>
+                    <p className="font-sora font-light text-fg/62 leading-[1.88]" style={{ fontSize: "14px", maxWidth: "62ch" }}>
                       {item.a}
                     </p>
                   </div>

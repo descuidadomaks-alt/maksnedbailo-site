@@ -39,7 +39,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
       />
       <div className="relative max-w-2xl mx-auto px-6 text-center">
 
-        <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+        <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.cta.label}
         </p>
 
@@ -53,7 +53,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
             d.cta.headline
           )}
         </h2>
-        <p data-reveal className="font-sora font-light text-fg/45 mb-12 mx-auto" style={{ fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.55, maxWidth: "48ch" }}>
+        <p data-reveal className="font-sora font-light text-fg/62 mb-12 mx-auto" style={{ fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.55, maxWidth: "48ch" }}>
           {d.cta.sub}
         </p>
 
@@ -79,7 +79,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
             {d.path.capacityLine(slotsOpen)}
           </p>
 
-          <p className="font-sora font-light text-fg/28" style={{ fontSize: "12px" }}>
+          <p className="font-sora font-light text-fg/55" style={{ fontSize: "12px" }}>
             {d.cta.guarantee}
           </p>
 
@@ -95,7 +95,7 @@ export default function FinalCTA({ d }: { d: NewPageDict }) {
             {d.cta.secondaryCta}
           </a>
 
-          <p className="font-sora font-light italic text-fg/16 mt-2 mx-auto" style={{ fontSize: "11px", maxWidth: "40ch" }}>
+          <p className="font-sora font-light italic text-fg/55 mt-2 mx-auto" style={{ fontSize: "11px", maxWidth: "40ch" }}>
             {d.cta.closing}
           </p>
         </div>

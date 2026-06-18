@@ -51,7 +51,7 @@ function ChatMock() {
     <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="px-3 py-2 flex items-center gap-2 border-b border-white/[0.05]">
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
-        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
+        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
       </div>
       <div className="px-3 pt-3 pb-4 flex flex-col gap-1.5 flex-1 justify-end">
         <div className="self-start max-w-[82%] rounded-lg rounded-bl-sm px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.05)" }}>
@@ -77,14 +77,14 @@ function BookingMock() {
   return (
     <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="px-3 py-2 flex items-center justify-between border-b border-white/[0.05]">
-        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>BOOKING CONFIRMED</span>
+        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>BOOKING CONFIRMED</span>
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
       <div className="px-3 pt-3 pb-4 flex flex-col gap-2.5 flex-1 justify-end">
         <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room · 2 nights</p>
-        <p className="font-sora text-fg/38" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
+        <p className="font-sora text-fg/62" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
         <div className="flex items-center justify-between pt-2.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
-          <span className="font-sora text-fg/28" style={{ fontSize: "10px" }}>Confirmed via WhatsApp</span>
+          <span className="font-sora text-fg/55" style={{ fontSize: "10px" }}>Confirmed via WhatsApp</span>
           <span className="font-numeral font-bold text-accent" style={{ fontSize: "12px" }}>#EH-2291</span>
         </div>
       </div>
@@ -99,7 +99,7 @@ function VoiceMock() {
   return (
     <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06] px-3 pt-3 pb-4" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="flex items-center justify-between mb-2.5">
-        <span className="font-label text-fg/35" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
+        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>VOICE AGENT · LIVE</span>
         <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
       <div className="flex-1 flex flex-col justify-end gap-3">
@@ -118,7 +118,7 @@ function VoiceMock() {
             />
           ))}
         </div>
-        <p className="font-sora font-light italic text-fg/40" style={{ fontSize: "12px", lineHeight: 1.4 }}>
+        <p className="font-sora font-light italic text-fg/62" style={{ fontSize: "12px", lineHeight: 1.4 }}>
           &ldquo;Sure — let me check our availability for you.&rdquo;
         </p>
       </div>
@@ -151,13 +151,13 @@ export default function ProofSection({
 
         {/* ── 6a: Real systems, live now ── */}
         <div className="max-w-2xl mb-12">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.proof.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mb-4" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>
             {d.proof.headline}
           </h2>
-          <p data-reveal className="font-sora font-light text-fg/35" style={{ fontSize: "14px" }}>
+          <p data-reveal className="font-sora font-light text-fg/55" style={{ fontSize: "14px" }}>
             {d.proof.sub}
           </p>
         </div>
@@ -191,11 +191,11 @@ export default function ProofSection({
                         <span className="w-1 h-1 rounded-full animate-pulse" style={{ background: "rgb(74,222,128)" }} />
                         <span className="font-sora font-semibold" style={{ fontSize: "8px", letterSpacing: "1.5px", color: "rgba(74,222,128,0.75)" }}>{d.proof.liveBadge}</span>
                       </div>
-                      <span className="text-fg/20 group-hover:text-fg/40 transition-colors duration-200"><ArrowIcon /></span>
+                      <span className="text-fg/55 group-hover:text-fg/62 transition-colors duration-200"><ArrowIcon /></span>
                     </div>
                   </div>
-                  <p className="font-sora font-light text-fg/38 leading-[1.65]" style={{ fontSize: "13px" }}>{c.desc}</p>
-                  <span className="font-sora text-fg/20 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>{c.tag}</span>
+                  <p className="font-sora font-light text-fg/62 leading-[1.65]" style={{ fontSize: "13px" }}>{c.desc}</p>
+                  <span className="font-sora text-fg/55 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>{c.tag}</span>
                 </div>
               </Link>
             );
@@ -204,7 +204,7 @@ export default function ProofSection({
 
         {/* ── 6b: Industry strip — same pattern proven at scale ── */}
         <div className="mb-12">
-          <p data-reveal className="font-label text-fg/22 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.proof.industryLabel}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-stretch">
@@ -217,10 +217,10 @@ export default function ProofSection({
                   className="h-full rounded-2xl border border-white/[0.05] bg-white/[0.012] p-5 flex flex-col gap-3"
                 >
                   {Wordmark && <Wordmark className="h-5 w-auto self-start" />}
-                  <p className="font-sora font-light text-fg/45 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>
+                  <p className="font-sora font-light text-fg/62 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>
                     {item.desc}
                   </p>
-                  <span className="font-sora text-fg/20 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                  <span className="font-sora text-fg/55 mt-auto" style={{ fontSize: "9px", letterSpacing: "2px", textTransform: "uppercase" }}>
                     {item.tag}
                   </span>
                 </div>
@@ -233,7 +233,7 @@ export default function ProofSection({
         <div data-reveal className="text-center">
           <Link
             href={scoreHref}
-            className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent"
+            className="group inline-flex items-center gap-1.5 font-sora font-light text-fg/62 transition-colors duration-200 hover:text-accent"
             style={{ fontSize: "13px" }}
           >
             {d.proof.ctaLabel}

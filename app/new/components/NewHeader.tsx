@@ -136,7 +136,7 @@ export default function NewHeader({ locale: localeProp, setLocale: setLocaleProp
               <button
                 onClick={() => setLocale("en")}
                 className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
-                  locale === "en" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
+                  locale === "en" ? "bg-accent text-bg" : "text-fg/62 hover:text-fg/75"
                 }`}
                 aria-pressed={locale === "en"}
                 aria-label="Switch to English"
@@ -146,7 +146,7 @@ export default function NewHeader({ locale: localeProp, setLocale: setLocaleProp
               <button
                 onClick={() => setLocale("es")}
                 className={`min-w-[34px] xs:min-w-[38px] min-h-[32px] px-2 xs:px-2.5 py-1.5 rounded-full text-[12px] font-sora font-semibold transition-all duration-200 ${
-                  locale === "es" ? "bg-accent text-bg" : "text-fg/45 hover:text-fg/75"
+                  locale === "es" ? "bg-accent text-bg" : "text-fg/62 hover:text-fg/75"
                 }`}
                 aria-pressed={locale === "es"}
                 aria-label="Cambiar a español"

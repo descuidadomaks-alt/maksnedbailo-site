@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { NewPageDict, TestimonialItem } from "../lib/i18n";
 import { UPWORK_PROFILE_URL } from "../lib/config";
 
@@ -20,21 +20,51 @@ const VIDEOS = [
 ];
 
 function VideoEmbed({ youtubeId, name, company }: { youtubeId: string; name: string; company: string }) {
+  // Tap-to-play facade: render only a thumbnail until the user clicks, so the
+  // heavy YouTube iframe (+ its JS) never loads on initial page load. Big
+  // mobile-TBT win — the iframe is created with autoplay only on demand.
+  const [play, setPlay] = useState(false);
   return (
     <div className="flex flex-col gap-2">
       <div className="relative rounded-xl overflow-hidden bg-black" style={{ aspectRatio: "9/16" }}>
-        <iframe
-          src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1`}
-          title={`Testimonial from ${name}`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          className="absolute inset-0 w-full h-full border-0"
-          loading="lazy"
-        />
+        {play ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&playsinline=1&autoplay=1`}
+            title={`Testimonial from ${name}`}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full border-0"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => setPlay(true)}
+            aria-label={`Play video testimonial from ${name}`}
+            className="group absolute inset-0 w-full h-full cursor-pointer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`}
+              alt={`Video testimonial from ${name}`}
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span
+                className="flex items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-110"
+                style={{ width: 54, height: 54, background: "rgba(0,0,0,0.55)", border: "1px solid rgba(255,255,255,0.3)" }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden>
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </span>
+          </button>
+        )}
       </div>
       <div className="text-left">
         <p className="font-sora text-[12px] font-semibold text-fg/65">{name}</p>
-        <p className="font-sora text-[10px] text-fg/30 mt-0.5">{company}</p>
+        <p className="font-sora text-[10px] text-fg/55 mt-0.5">{company}</p>
       </div>
     </div>
   );
@@ -79,7 +109,7 @@ function QuoteCard({ item, accent }: { item: TestimonialItem; accent: boolean })
         <p itemProp="author" itemScope itemType="https://schema.org/Person" className="font-sora text-fg/75 font-semibold" style={{ fontSize: "11px" }}>
           <span itemProp="name">{item.author}</span>
         </p>
-        <p className="font-sora text-fg/30 mt-0.5" style={{ fontSize: "10px" }}>{item.role}</p>
+        <p className="font-sora text-fg/55 mt-0.5" style={{ fontSize: "10px" }}>{item.role}</p>
       </div>
     </blockquote>
   );
@@ -179,13 +209,13 @@ export default function Testimonials({ d }: { d: NewPageDict }) {
       <div className="relative max-w-6xl mx-auto px-6">
 
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.testimonials.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mb-4 mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "22ch" }}>
             {d.testimonials.headline}
           </h2>
-          <p data-reveal className="font-sora font-light text-fg/45" style={{ fontSize: "14px" }}>
+          <p data-reveal className="font-sora font-light text-fg/62" style={{ fontSize: "14px" }}>
             {d.testimonials.sub}
           </p>
           {/* Third-party source — makes the first-party quotes independently
@@ -195,7 +225,7 @@ export default function Testimonials({ d }: { d: NewPageDict }) {
             href={UPWORK_PROFILE_URL}
             target="_blank"
             rel="noopener noreferrer me"
-            className="inline-flex items-center gap-1.5 mt-4 font-sora text-fg/40 transition-opacity duration-200 hover:opacity-70"
+            className="inline-flex items-center gap-1.5 mt-4 font-sora text-fg/62 transition-opacity duration-200 hover:opacity-70"
             style={{ fontSize: "12px", letterSpacing: "-0.005em" }}
           >
             <span aria-hidden style={{ color: "#D4FF2B" }}>★★★★★</span>

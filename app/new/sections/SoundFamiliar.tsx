@@ -23,7 +23,7 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
 
           {/* Quotes — ~55% on desktop */}
           <div>
-            <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.pain.label}
             </p>
             <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
@@ -64,7 +64,7 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
             <div data-reveal className="text-center mt-6">
               <Link
                 href={SCORE_TARGET}
-                className="group inline-flex flex-col items-center sm:flex-row sm:items-center gap-x-1.5 font-sora font-light text-fg/45 transition-colors duration-200 hover:text-accent text-center"
+                className="group inline-flex flex-col items-center sm:flex-row sm:items-center gap-x-1.5 font-sora font-light text-fg/62 transition-colors duration-200 hover:text-accent text-center"
                 style={{ fontSize: "13px" }}
               >
                 <span>{d.pain.ctaLabel.split(" — ")[0]} —</span>
@@ -78,7 +78,7 @@ export default function SoundFamiliar({ d }: { d: NewPageDict }) {
 
         </div>
 
-        <p data-reveal className="font-sora font-light italic text-fg/30 text-center mt-12" style={{ fontSize: "13px" }}>
+        <p data-reveal className="font-sora font-light italic text-fg/55 text-center mt-12" style={{ fontSize: "13px" }}>
           {d.pain.closingLine}
         </p>
       </div>

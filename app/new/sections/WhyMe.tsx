@@ -38,7 +38,7 @@ export default function WhyMe({ d }: { d: NewPageDict }) {
       <div className="relative max-w-5xl mx-auto px-6">
 
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.whyMe.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "22ch" }}>
@@ -49,12 +49,12 @@ export default function WhyMe({ d }: { d: NewPageDict }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-3xl mx-auto">
           {/* Them — muted, strikethrough */}
           <div data-reveal="d0" className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 md:p-8">
-            <p className="font-label text-fg/25 uppercase mb-6" style={{ fontSize: "9px", letterSpacing: "2.5px" }}>{d.whyMe.colThem}</p>
+            <p className="font-label text-fg/55 uppercase mb-6" style={{ fontSize: "9px", letterSpacing: "2.5px" }}>{d.whyMe.colThem}</p>
             <ul className="flex flex-col gap-4">
               {d.whyMe.rows.map(([them], i) => (
                 <li key={i} className="flex items-start gap-3">
-                  <span className="text-fg/22 mt-0.5"><XIcon /></span>
-                  <p className="font-sora font-light text-fg/32 line-through decoration-fg/45 leading-[1.6]" style={{ fontSize: "14px" }}>{them}</p>
+                  <span className="text-fg/55 mt-0.5"><XIcon /></span>
+                  <p className="font-sora font-light text-fg/55 line-through decoration-fg/45 leading-[1.6]" style={{ fontSize: "14px" }}>{them}</p>
                 </li>
               ))}
             </ul>

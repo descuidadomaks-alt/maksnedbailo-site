@@ -147,7 +147,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
       >
         <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <p data-reveal className="font-label text-fg/30 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
+            <p data-reveal className="font-label text-fg/55 uppercase" style={{ fontSize: "10px", letterSpacing: "3px" }}>
               {sm.docTitle}
             </p>
           </div>
@@ -166,8 +166,8 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                   <p className="font-label text-fg font-medium mt-0.5" style={{ fontSize: "15px" }}>{sm.clientLabel}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-label text-fg/22 uppercase" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>{sm.sessionLabel}</p>
-                  <p className="font-sora text-fg/35" style={{ fontSize: "9px" }}>{sm.studioName}</p>
+                  <p className="font-label text-fg/55 uppercase" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>{sm.sessionLabel}</p>
+                  <p className="font-sora text-fg/55" style={{ fontSize: "9px" }}>{sm.studioName}</p>
                 </div>
               </div>
             </div>
@@ -175,10 +175,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
             {/* DESKTOP TABLE */}
             <div className="hidden md:block">
               <div className="grid px-6 py-2.5 border-b border-white/[0.04]" style={{ gridTemplateColumns: COL_TEMPLATE }}>
-                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPain}</span>
-                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colLosingNow}</span>
-                <span className="font-label text-fg/48" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colFeasibility}</span>
-                <span className="font-label text-fg/48 text-right" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPriority}</span>
+                <span className="font-label text-fg/62" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPain}</span>
+                <span className="font-label text-fg/62" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colLosingNow}</span>
+                <span className="font-label text-fg/62" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colFeasibility}</span>
+                <span className="font-label text-fg/62 text-right" style={{ fontSize: "9px", letterSpacing: "1.5px", textTransform: "uppercase" }}>{sm.colPriority}</span>
               </div>
 
               {pillars.map((pillar, pi) => (
@@ -211,9 +211,9 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                 <div className="flex items-start justify-between gap-4">
                   <p className="font-sora font-light text-fg/72 flex-1" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
                   <div className="text-right shrink-0">
-                    <p className="font-sora text-fg/45" style={{ fontSize: "10px" }}>{sm.phase1Timeline}</p>
+                    <p className="font-sora text-fg/62" style={{ fontSize: "10px" }}>{sm.phase1Timeline}</p>
                     <p className="font-numeral font-bold text-accent" style={{ fontSize: "17px", lineHeight: 1.2 }}>{PHASE1_ANCHOR}</p>
-                    <p className="font-sora text-fg/30" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
+                    <p className="font-sora text-fg/55" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
                   </div>
                 </div>
               </div>
@@ -250,10 +250,10 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                 </p>
                 <p className="font-sora font-light text-fg/72 mb-3" style={{ fontSize: "12px" }}>{sm.phase1Rec}</p>
                 <div className="flex items-center justify-between">
-                  <span className="font-sora text-fg/45" style={{ fontSize: "11px" }}>{sm.phase1Timeline}</span>
+                  <span className="font-sora text-fg/62" style={{ fontSize: "11px" }}>{sm.phase1Timeline}</span>
                   <div className="text-right">
                     <span className="font-numeral font-bold text-accent" style={{ fontSize: "16px" }}>{PHASE1_ANCHOR}</span>
-                    <p className="font-sora text-fg/30" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
+                    <p className="font-sora text-fg/55" style={{ fontSize: "9px" }}>{sm.phase1IfProceed}</p>
                   </div>
                 </div>
               </div>
@@ -264,14 +264,14 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
           <div data-reveal className="mt-4 rounded-2xl border border-white/[0.06] overflow-hidden" style={{ background: "rgba(255,255,255,0.012)" }}>
             <div className="px-6 py-5 flex flex-col sm:flex-row gap-5 sm:items-center">
               <div className="shrink-0">
-                <p className="font-label text-fg/22 uppercase mb-1" style={{ fontSize: "9px", letterSpacing: "2px" }}>
+                <p className="font-label text-fg/55 uppercase mb-1" style={{ fontSize: "9px", letterSpacing: "2px" }}>
                   {sm.bleedLabel}
                 </p>
                 <div className="flex items-baseline gap-2">
                   <span className="font-numeral font-bold text-fg/55" style={{ fontSize: "clamp(22px, 3vw, 30px)", lineHeight: 1 }}>
                     {sm.bleedStat}
                   </span>
-                  <span className="font-sora text-fg/28" style={{ fontSize: "12px" }}>{sm.bleedAnnual}</span>
+                  <span className="font-sora text-fg/55" style={{ fontSize: "12px" }}>{sm.bleedAnnual}</span>
                 </div>
               </div>
 
@@ -289,7 +289,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
                 </div>
               </div>
 
-              <p className="font-sora font-light text-fg/38 leading-[1.75]" style={{ fontSize: "13px" }}>
+              <p className="font-sora font-light text-fg/62 leading-[1.75]" style={{ fontSize: "13px" }}>
                 {sm.bleedDesc(PHASE1_ANCHOR)}
               </p>
             </div>
@@ -310,7 +310,7 @@ export default function BottleneckMap({ d }: { d: NewPageDict }) {
               <span>{foundingRate}</span>
               <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
             </Link>
-            <p className="font-sora font-light text-fg/35 mt-2.5" style={{ fontSize: "12px" }}>
+            <p className="font-sora font-light text-fg/55 mt-2.5" style={{ fontSize: "12px" }}>
               {d.map.ctaDeadline}
             </p>
           </div>

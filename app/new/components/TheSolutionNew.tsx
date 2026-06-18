@@ -67,7 +67,7 @@ export default function TheSolutionNew() {
             variants={fadeUp}
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
-            className="font-sora font-light text-[13px] text-fg/40 leading-relaxed"
+            className="font-sora font-light text-[13px] text-fg/62 leading-relaxed"
           >
             {t(content.solution.trustNew, lang)}
           </motion.p>
@@ -98,7 +98,7 @@ export default function TheSolutionNew() {
                 <h3 className="font-sora text-[16px] font-semibold text-fg mb-3 pr-10">
                   {t(card.title, lang)}
                 </h3>
-                <p className="font-sora font-light text-[13px] text-fg/40 leading-relaxed">
+                <p className="font-sora font-light text-[13px] text-fg/62 leading-relaxed">
                   {t(card.desc, lang)}
                 </p>
               </motion.div>

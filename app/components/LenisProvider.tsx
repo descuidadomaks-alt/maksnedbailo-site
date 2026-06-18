@@ -23,6 +23,11 @@ export default function LenisProvider() {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) return;
 
+    // Skip on touch / small screens. The smooth-scroll RAF loop + parallax
+    // scroll handler is a major mobile main-thread (TBT) cost, and native
+    // mobile scrolling is already smooth. Desktop keeps the premium glide.
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024) return;
+
     // Dynamically import Lenis so it's never bundled server-side
     import("lenis").then(({ default: Lenis }) => {
       const lenis = new Lenis({

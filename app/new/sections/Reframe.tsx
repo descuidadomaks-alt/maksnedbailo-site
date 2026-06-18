@@ -31,7 +31,7 @@ export default function Reframe({ d }: { d: NewPageDict }) {
       <div className="relative max-w-6xl mx-auto px-6">
 
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.reframe.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mb-6 mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
@@ -52,7 +52,7 @@ export default function Reframe({ d }: { d: NewPageDict }) {
             >
               <FractureSVG variant={i} />
               <span
-                className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-fg/30"
+                className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-fg/55"
                 style={{ border: "1px solid rgba(255,255,255,0.1)" }}
                 aria-hidden
               >
@@ -61,7 +61,7 @@ export default function Reframe({ d }: { d: NewPageDict }) {
               <h3 className="font-playfair font-normal text-fg/75" style={{ fontSize: "16px", lineHeight: 1.3 }}>
                 {enemy.title}
               </h3>
-              <p className="font-sora font-light text-fg/40 leading-[1.65]" style={{ fontSize: "13px" }}>
+              <p className="font-sora font-light text-fg/62 leading-[1.65]" style={{ fontSize: "13px" }}>
                 {enemy.desc}
               </p>
             </div>

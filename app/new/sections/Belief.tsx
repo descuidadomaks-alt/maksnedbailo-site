@@ -30,7 +30,7 @@ export default function Belief({ d }: { d: NewPageDict }) {
 
           {/* ── Copy column ── */}
           <div className="order-1">
-            <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+            <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
               {d.belief.label}
             </p>
 
@@ -50,7 +50,7 @@ export default function Belief({ d }: { d: NewPageDict }) {
               <p className="font-playfair italic text-fg/70" style={{ fontSize: "14px", lineHeight: 1.5 }}>
                 {d.belief.roleLine}
               </p>
-              <p className="font-label text-fg/25 mt-1" style={{ fontSize: "11px", letterSpacing: "1.5px" }}>
+              <p className="font-label text-fg/55 mt-1" style={{ fontSize: "11px", letterSpacing: "1.5px" }}>
                 {d.belief.signature}
               </p>
             </div>

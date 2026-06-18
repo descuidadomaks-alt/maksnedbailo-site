@@ -25,7 +25,7 @@ export default function ThePath({ d }: { d: NewPageDict }) {
       <div className="relative max-w-6xl mx-auto px-6">
 
         <div className="max-w-2xl mx-auto mb-12 text-center">
-          <p data-reveal className="font-label text-fg/28 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.path.label}
           </p>
           <h2 data-reveal className="font-playfair font-normal text-fg mx-auto" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em", maxWidth: "20ch" }}>
@@ -37,12 +37,12 @@ export default function ThePath({ d }: { d: NewPageDict }) {
 
           {/* Step 1 — Bottleneck Score */}
           <div data-reveal="d0" className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-4">
-            <span className="font-label text-fg/15" style={{ fontSize: "28px", letterSpacing: "1px" }}>{score.number}</span>
+            <span className="font-label text-fg/55" style={{ fontSize: "28px", letterSpacing: "1px" }}>{score.number}</span>
             <div>
               <h3 className="font-playfair font-normal text-fg/85 mb-1.5" style={{ fontSize: "17px", lineHeight: 1.3 }}>{score.title}</h3>
               <span className="font-label text-accent/65" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>{score.badge}</span>
             </div>
-            <p className="font-sora font-light text-fg/40 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{score.desc}</p>
+            <p className="font-sora font-light text-fg/62 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{score.desc}</p>
             <Link
               href={SCORE_TARGET}
               className="group inline-flex items-center gap-1.5 font-sora font-semibold text-fg/75 hover:text-accent transition-colors duration-200"
@@ -61,7 +61,7 @@ export default function ThePath({ d }: { d: NewPageDict }) {
               <span className="font-numeral" style={{ fontSize: "13px" }}>
                 {foundingSlotsLeft > 0 ? (
                   <>
-                    <span className="text-fg/30 line-through mr-2">{STANDARD_RATE}</span>
+                    <span className="text-fg/55 line-through mr-2">{STANDARD_RATE}</span>
                     <span className="text-accent font-semibold">{foundingRate} {d.path.foundingLabel}</span>
                   </>
                 ) : (
@@ -69,23 +69,23 @@ export default function ThePath({ d }: { d: NewPageDict }) {
                 )}
               </span>
             </div>
-            <p className="font-sora font-light text-fg/45 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{map.desc}</p>
+            <p className="font-sora font-light text-fg/62 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{map.desc}</p>
             <GlassButton href={ctaTarget} className="self-start" style={{ fontSize: "13px", padding: "12px 24px", minHeight: "44px" }}>
               {map.ctaLabel}
               <span aria-hidden>→</span>
             </GlassButton>
-            <p className="font-sora font-light text-fg/30 leading-[1.5]" style={{ fontSize: "11.5px" }}>{map.microcopy}</p>
+            <p className="font-sora font-light text-fg/55 leading-[1.5]" style={{ fontSize: "11.5px" }}>{map.microcopy}</p>
           </div>
 
           {/* Step 3 — First build (no CTA, unlocked by the Map) */}
           <div data-reveal="d2" className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 flex flex-col gap-4">
-            <span className="font-label text-fg/15" style={{ fontSize: "28px", letterSpacing: "1px" }}>{build.number}</span>
+            <span className="font-label text-fg/55" style={{ fontSize: "28px", letterSpacing: "1px" }}>{build.number}</span>
             <div>
               <h3 className="font-playfair font-normal text-fg/85 mb-1.5" style={{ fontSize: "17px", lineHeight: 1.3 }}>{build.title}</h3>
-              <span className="font-label text-fg/35" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>{build.badge}</span>
+              <span className="font-label text-fg/55" style={{ fontSize: "10px", letterSpacing: "2px", textTransform: "uppercase" }}>{build.badge}</span>
             </div>
-            <p className="font-sora font-light text-fg/40 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{build.desc}</p>
-            <p className="font-sora font-light italic text-fg/25" style={{ fontSize: "12px" }}>{build.note}</p>
+            <p className="font-sora font-light text-fg/62 leading-[1.65] flex-1" style={{ fontSize: "13px" }}>{build.desc}</p>
+            <p className="font-sora font-light italic text-fg/55" style={{ fontSize: "12px" }}>{build.note}</p>
           </div>
 
         </div>

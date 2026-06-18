@@ -67,7 +67,7 @@ function HeroCTAs({ d }: { d: NewPageDict }) {
           {d.hero.primaryCta}
           <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
         </Link>
-        <p className="font-sora font-light text-fg/45 mt-2.5" style={{ fontSize: "12px" }}>
+        <p className="font-sora font-light text-fg/62 mt-2.5" style={{ fontSize: "12px" }}>
           {d.hero.primaryMicrocopy}
         </p>
       </div>
