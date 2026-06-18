@@ -641,7 +641,7 @@ const en: NewPageDict = {
   },
 
   footer: {
-    credit: "care less AI automation",
+    credit: "Care Less AI Automation",
     location: "Santander, Spain",
     tagline: "ROI-first AI diagnosis for owner-led businesses. Honest about where AI helps — and where it doesn't.",
     waLabel: "Quick question? Message me on WhatsApp",
@@ -979,7 +979,7 @@ const es: NewPageDict = {
   },
 
   footer: {
-    credit: "care less AI automation",
+    credit: "Care Less AI Automation",
     location: "Santander, España",
     tagline: "Diagnóstico de IA ROI-primero para negocios dirigidos por su dueño. Honesto sobre dónde ayuda la IA — y dónde no.",
     waLabel: "¿Una duda rápida? Escríbeme por WhatsApp",

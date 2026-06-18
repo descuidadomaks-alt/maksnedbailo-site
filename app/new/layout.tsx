@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     type: "website",
     url: "https://maksnedbailo.site/new",
-    siteName: "Care Less",
+    siteName: "Care Less AI Automation",
     locale: "en_US",
   },
   twitter: {

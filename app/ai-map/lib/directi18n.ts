@@ -288,7 +288,7 @@ const en: DirectPageDict = {
     capacityLine: `I build every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
 
-  footer: { credit: "care less AI automation", location: "Santander, Spain" },
+  footer: { credit: "Care Less AI Automation", location: "Santander, Spain" },
 
   industry: {
     label: "Industry",
@@ -505,7 +505,7 @@ const es: DirectPageDict = {
     capacityLine: `Construyo cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
 
-  footer: { credit: "care less AI automation", location: "Santander, España" },
+  footer: { credit: "Care Less AI Automation", location: "Santander, España" },
 
   industry: {
     label: "Sector",
@@ -726,7 +726,7 @@ const uk: DirectPageDict = {
     capacityLine: `Я будую кожен проєкт особисто — лише 5 місць на місяць. Залишилось ${slotsOpen} з 5.`,
   },
 
-  footer: { credit: "care less AI automation", location: "Сантандер, Іспанія" },
+  footer: { credit: "Care Less AI Automation", location: "Сантандер, Іспанія" },
 
   industry: {
     label: "Галузь",

@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: meta.title,
       description: meta.description,
       url: `https://maksnedbailo.site/en/${city.slug}`,
-      siteName: "Maks Nedbailo",
+      siteName: "Care Less AI Automation",
       locale: "en_US",
       type: "website",
       images: [{ url: "/maks-stage2.jpg", width: 1400, height: 450, alt: meta.title }],

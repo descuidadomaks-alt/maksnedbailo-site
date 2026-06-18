@@ -82,7 +82,7 @@ const CITIES: Record<string, CityData> = {
         "AI assistant for beauty salons, spas and clinics in Santander. Replies to clients and books appointments in seconds, 24/7. Free 2-min Bottleneck Score.",
     },
     schema: {
-      name: "Maks Nedbailo AI Automation — Santander, Cantabria",
+      name: "Care Less AI Automation — Santander, Cantabria",
       description:
         "Asistente de IA para salones de belleza, spas y clínicas en Santander y Cantabria. Gestiona citas y responde clientes en menos de 60 segundos, 24/7.",
       areaServed: "Santander, Cantabria, España",
@@ -188,7 +188,7 @@ const CITIES: Record<string, CityData> = {
         "AI assistant for Madrid businesses. Replies to every client in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
     },
     schema: {
-      name: "Maks Nedbailo AI Automation — Madrid",
+      name: "Care Less AI Automation — Madrid",
       description:
         "Consultor de automatización IA para pymes de Madrid. Asistente que responde a clientes en menos de 60 segundos en WhatsApp y web, 24/7.",
       areaServed: "Madrid, Comunidad de Madrid, España",
@@ -295,7 +295,7 @@ const CITIES: Record<string, CityData> = {
         "AI assistant for Barcelona businesses. Replies in Spanish, English and Catalan in seconds, capturing international clients. Free 2-min Bottleneck Score.",
     },
     schema: {
-      name: "Maks Nedbailo AI Automation — Barcelona, Cataluña",
+      name: "Care Less AI Automation — Barcelona, Cataluña",
       description:
         "Asistente de IA para pymes de Barcelona. Responde en español, inglés y catalán en menos de 60 segundos, 24/7.",
       areaServed: "Barcelona, Cataluña, España",
@@ -402,7 +402,7 @@ const CITIES: Record<string, CityData> = {
         "AI assistant for Valencia businesses. Replies in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
     },
     schema: {
-      name: "Maks Nedbailo AI Automation — Valencia, Comunitat Valenciana",
+      name: "Care Less AI Automation — Valencia, Comunitat Valenciana",
       description:
         "Asistente de IA para pymes de Valencia. Responde a clientes en menos de 60 segundos en WhatsApp y web, 24/7.",
       areaServed: "Valencia, Comunitat Valenciana, España",

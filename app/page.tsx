@@ -19,7 +19,7 @@ import NewHomeClient from "./new/NewHomeClient";
 // Reuse the partner-page ScrollReveal (identical IntersectionObserver logic).
 import ScrollReveal from "@/app/partners/[slug]/components/ScrollReveal";
 
-const TITLE = "Bottleneck Map: Find Your #1 Cost Leak | AI Automation for Founders";
+const TITLE = "Bottleneck Map: Find Your #1 Cost Leak | Care Less AI Automation";
 const DESCRIPTION =
   "Diagnose your founder bottlenecks in 90 minutes. Map your highest-ROI AI automation fixes (WhatsApp agents, lead systems) with an operator, not a consultant.";
 
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     type: "website",
     url: "https://maksnedbailo.site",
-    siteName: "Care Less",
+    siteName: "Care Less AI Automation",
     locale: "en_US",
     alternateLocale: ["es_ES"],
     images: [

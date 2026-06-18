@@ -63,7 +63,7 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
-  title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
+  title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
   description:
     "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
   keywords: [
@@ -82,32 +82,32 @@ export const metadata: Metadata = {
     "asistente IA WhatsApp",
     "automatización atención cliente España",
     "Maks Nedbailo",
-    "care less AI automation",
+    "Care Less AI Automation",
   ],
   authors: [{ name: "Maks Nedbailo", url: "https://maksnedbailo.site" }],
   alternates: {
     canonical: "https://maksnedbailo.site",
   },
   openGraph: {
-    title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
     description:
       "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     type: "website",
     url: "https://maksnedbailo.site",
-    siteName: "care less AI automation",
+    siteName: "Care Less AI Automation",
     locale: "en_US",
     images: [
       {
         url: "/maks-stage2.jpg",
         width: 1400,
         height: 450,
-        alt: "Maks Nedbailo — care less AI automation",
+        alt: "Maks Nedbailo — Care Less AI Automation",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Chatbot & WhatsApp Automation for Small Business | care less AI automation",
+    title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
     description:
       "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     images: ["/maks-stage2.jpg"],
@@ -159,7 +159,8 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": "https://maksnedbailo.site/#business",
-      name: "care less AI automation",
+      name: "Care Less AI Automation",
+      alternateName: ["Care Less", "Careless", "Care Less by Careless AI & Automation"],
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
       description:
