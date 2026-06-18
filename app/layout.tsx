@@ -112,6 +112,9 @@ export const metadata: Metadata = {
       "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     images: ["/maks-stage2.jpg"],
   },
+  verification: {
+    google: "NgBNyM1mR1Yu3tK0i0CPKiAZ2Mrwr4FoVF-ECEysJg4",
+  },
   robots: {
     index: true,
     follow: true,
