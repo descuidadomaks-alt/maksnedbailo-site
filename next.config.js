@@ -18,6 +18,11 @@ const nextConfig = {
         destination: "/projects/roman",
         permanent: true,
       },
+      {
+        source: "/parati",
+        destination: "/projects/parati",
+        permanent: true,
+      },
     ];
   },
   images: {
