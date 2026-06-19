@@ -3,7 +3,6 @@ import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans, Roboto_Mono 
 import Script from "next/script";
 import "./globals.css";
 import LenisProvider from "./components/LenisProvider";
-import { TESTIMONIAL_ITEMS } from "./new/lib/i18n";
 import { UPWORK_PROFILE_URL } from "./new/lib/config";
 
 // ── Primary display (Latin) ────────────────────────────────────────────────────
@@ -172,21 +171,11 @@ const jsonLd = {
       currenciesAccepted: "EUR, GBP, USD",
       founder: { "@id": "https://maksnedbailo.site/#person" },
       areaServed: ["Spain", "United Kingdom", "United States"],
-      // Real, verbatim client reviews (Upwork) — single source of truth in
-      // app/new/lib/i18n.ts, also rendered on-page as Review microdata in
-      // sections/Testimonials.tsx. All cards display a 5★ rating.
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "5",
-        bestRating: "5",
-        reviewCount: String(TESTIMONIAL_ITEMS.length),
-      },
-      review: TESTIMONIAL_ITEMS.map((t) => ({
-        "@type": "Review",
-        author: { "@type": "Person", name: t.author },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody: t.quote,
-      })),
+      // NOTE: Review / AggregateRating markup intentionally omitted. These are
+      // self-serving reviews (about our own business, on our own site), which
+      // Google does not allow for star rich results and which triggered a
+      // "Missing field itemReviewed" Search Console error. Testimonials still
+      // render visually in sections/Testimonials.tsx as plain content.
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Founder Optimization Capabilities",
