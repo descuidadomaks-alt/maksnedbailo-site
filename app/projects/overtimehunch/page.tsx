@@ -24,7 +24,7 @@ export default function OvertimeHunchPage() {
   return (
     <GateProvider>
       <Nav />
-      <main className="pb-24 sm:pb-0">
+      <main>
         <Hero />
         <ProofStrip />
         <ProblemSolution />
