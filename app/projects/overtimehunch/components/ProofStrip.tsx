@@ -1,3 +1,5 @@
+import { CalendarIcon, PhoneIcon, CrmIcon } from "./IntegrationIcons";
+
 /**
  * Section 2 — the only hard stat on the page (verified). Dark band.
  * Integration line names real tools the owner already uses. No fake logos.
@@ -16,17 +18,17 @@ export function ProofStrip() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/50">
             Works with the tools you already use
           </p>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-medium text-white/75">
-            <span className="inline-flex items-center gap-2">
-              <span aria-hidden>📅</span> Google Calendar
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-7 gap-y-4 text-sm font-medium text-white/75">
+            <span className="inline-flex items-center gap-2.5">
+              <CalendarIcon /> Google Calendar
             </span>
-            <span className="text-white/20">•</span>
-            <span className="inline-flex items-center gap-2">
-              <span aria-hidden>📞</span> Your phone
+            <span className="hidden text-white/20 sm:inline">•</span>
+            <span className="inline-flex items-center gap-2.5">
+              <PhoneIcon /> Your phone
             </span>
-            <span className="text-white/20">•</span>
-            <span className="inline-flex items-center gap-2">
-              <span aria-hidden>🗂️</span> Your CRM
+            <span className="hidden text-white/20 sm:inline">•</span>
+            <span className="inline-flex items-center gap-2.5">
+              <CrmIcon /> Your CRM
             </span>
           </div>
         </div>
