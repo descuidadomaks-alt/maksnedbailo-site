@@ -8,8 +8,8 @@ const juliaShort: ShortPartnerConfig = {
   partnerNameGenitiveUk: "Юлії",
   partnerNameAccusativeUk: "Юлію",
 
-  partnerTitle: "karmologist & advisor",
-  partnerTitleUk: "кармолог і радник",
+  partnerTitle: "karmologist & advisor · 10+ yrs in banking, led a VIP division",
+  partnerTitleUk: "кармолог і радник · 10+ років у банку, керувала VIP-відділенням",
 
   partnerPhoto: "/partners/julia/photo_julia.jpg",
 

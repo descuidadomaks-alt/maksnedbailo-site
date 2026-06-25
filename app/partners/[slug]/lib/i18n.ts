@@ -159,7 +159,7 @@ const en: ShortPageDict = {
   },
 
   hero: {
-    eyebrow: (p) => `Personal invitation through ${p}'s circle`,
+    eyebrow: (p) => `Personal invitation from ${p}`,
     headline: "See where AI actually pays off in your business — and where it doesn't.",
     subheadline: (p) =>
       `A 90-minute Strategic AI Map, ranked by ROI. Normally €1,470 — reserved for you through ${p}.`,
@@ -173,7 +173,7 @@ const en: ShortPageDict = {
     headline: (p) => `A €1,470 session — reserved through ${p}`,
     normallyLabel: "Normally",
     normallyValue: "€1,470",
-    giftedLine: (p) => `Gifted to you through ${p}. No strings.`,
+    giftedLine: () => `Gifted to you. No obligations.`,
     body:
       "This isn't a discovery call with a pitch attached. It's a working session. You leave with a one-page map of every AI opportunity in your business — scored, ranked by ROI, and ready to act on. If nothing clears the bar, I'll tell you that. You keep the map either way.",
     deliverableHeading: "You walk away with",
@@ -391,8 +391,8 @@ const en: ShortPageDict = {
     items: [
       {
         q: "Is this a sales call disguised as something else?",
-        a: ({ partnerName }) =>
-          `No. The Strategic AI Map is a real deliverable — a scored, working document. If you don't want to work together after, the map is still yours. That's the whole point of the gift framing — ${partnerName} wouldn't share this with his circle if it weren't genuine.`,
+        a: ({ partnerName, gender = 'm' }) =>
+          `No. The Strategic AI Map is a real deliverable — a scored, working document. If you don't want to work together after, the map is still yours. That's the whole point of the gift framing — ${partnerName} wouldn't share this with ${gender === 'f' ? 'her' : 'his'} circle if it weren't genuine.`,
       },
       {
         q: "How is this different from a consultancy deck, a ChatGPT demo, or hiring a consultant?",
@@ -459,7 +459,7 @@ const uk: ShortPageDict = {
   },
 
   hero: {
-    eyebrow: (p) => `Особисте запрошення для людей із кола ${p}`,
+    eyebrow: (p) => `Особисте запрошення від ${p}`,
     headline: "Побачте, де ШІ справді окупається у вашому бізнесі — а де ні.",
     subheadline: (p) =>
       `90-хвилинна Стратегічна карта ШІ з пріоритетами за ROI. Зазвичай — €1,470. Для вас — зарезервовано через ${p}.`,
@@ -486,7 +486,7 @@ const uk: ShortPageDict = {
     headline: (p) => `Сесія вартістю €1,470 — зарезервована через ${p}`,
     normallyLabel: "Зазвичай",
     normallyValue: "€1,470",
-    giftedLine: (p) => `Для вас — у подарунок через ${p}. Без жодних зобов'язань.`,
+    giftedLine: () => `Для вас — просто у подарунок. Без жодних зобов'язань.`,
     body:
       "Це не ознайомчий дзвінок із прихованим продажем наприкінці. Це робоча сесія. Після неї у вас буде односторінкова карта всіх можливостей для ШІ у вашому бізнесі — з оцінкою, пріоритетами за ROI і чіткими кроками. Якщо жодна ідея не проходить планку — я прямо вам про це скажу. Карта залишається у вас у будь-якому разі.",
     deliverableHeading: "Що ви отримаєте після сесії",
@@ -690,7 +690,7 @@ const uk: ShortPageDict = {
   },
 
   cta: {
-    headline: (p, g = 'm') => `${p} відправив${g === 'f' ? 'а' : ''} вас сюди не просто так.`,
+    headline: (p, g = 'm') => `${p} відправи${g === 'f' ? 'ла' : 'в'} вас сюди не просто так.`,
     sub: "Карта залишається у вас у будь-якому разі.",
     primaryCta: "Забронювати безкоштовну сесію",
     messengerLabel: (channel) =>
@@ -704,8 +704,8 @@ const uk: ShortPageDict = {
     items: [
       {
         q: "Чи це прихований продажний дзвінок?",
-        a: ({ partnerName }) =>
-          `Ні. Стратегічна карта ШІ — це реальний результат, а не привід для продажу. Якщо після сесії ви не захочете продовжувати — карта залишається у вас. Саме тому ${partnerName} і поділився цим зі своїм колом: тут немає підступу.`,
+        a: ({ partnerName, gender = 'm' }) =>
+          `Ні. Стратегічна карта ШІ — це реальний результат, а не привід для продажу. Якщо після сесії ви не захочете продовжувати — карта залишається у вас. Саме тому ${partnerName} і поділи${gender === 'f' ? 'лася' : 'вся'} цим зі своїм колом: тут немає підступу.`,
       },
       {
         q: "Чим це відрізняється від консалтингу, демо ChatGPT або найму консультанта?",

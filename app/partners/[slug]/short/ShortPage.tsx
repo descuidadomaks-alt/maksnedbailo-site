@@ -76,7 +76,7 @@ export default function ShortPage({ config }: { config: ShortPartnerConfig }) {
         <SectionShortFAQ
           config={config}
           d={d}
-          partnerNameForSentences={pGen}
+          partnerNameForSentences={pNom}
         />
         <SectionBottleneckScore d={d} />
         <ShortFooter d={d} />
