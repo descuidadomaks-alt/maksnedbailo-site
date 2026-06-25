@@ -196,10 +196,14 @@ export default function SectionShortHero({
                 </svg>
               )}
             </div>
-            <span className="font-sora text-fg/30" style={{ fontSize: "10px", letterSpacing: "1.5px", textTransform: "uppercase" }}>
-              {pDisplay}
+            {/* Name on its own line (slightly larger); role/credentials below,
+                balanced into equal-length lines (slightly smaller). */}
+            <span className="font-sora text-fg/30 flex flex-col" style={{ letterSpacing: "1.5px", textTransform: "uppercase" }}>
+              <span style={{ fontSize: "11px", lineHeight: 1.35 }}>{pDisplay}</span>
               {roleText && (
-                <span className="text-fg/18"> · {roleText}</span>
+                <span className="text-fg/18" style={{ fontSize: "9px", lineHeight: 1.45, textWrap: "balance", width: "clamp(190px, 52vw, 280px)" }}>
+                  {roleText}
+                </span>
               )}
             </span>
           </figcaption>
