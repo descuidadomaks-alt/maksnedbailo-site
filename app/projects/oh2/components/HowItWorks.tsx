@@ -7,7 +7,7 @@ const STEPS = [
   {
     n: "1",
     title: "We build your AI front desk.",
-    body: "Your custom site + AI receptionist, your branding, live in 48 hours.",
+    body: "Your custom site + AI receptionist, your branding — we'll set your go-live date on the call.",
   },
   {
     n: "2",

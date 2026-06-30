@@ -15,11 +15,14 @@ import { useGate, type Lead } from "./GateContext";
 const EMPTY: Lead = { name: "", business: "", email: "", phone: "" };
 
 export function GateForm({
-  ctaLabel = "UNLOCK THE DEMO",
+  ctaLabel = "BOOK MY FREE CALL",
   compact = false,
+  onSubmitted,
 }: {
   ctaLabel?: string;
   compact?: boolean;
+  /** Called after a valid lead is posted — e.g. to route the visitor to booking. */
+  onSubmitted?: () => void;
 }) {
   const { submitLead, submitting } = useGate();
   const [lead, setLead] = useState<Lead>(EMPTY);
@@ -34,10 +37,11 @@ export function GateForm({
   const set = (key: keyof Lead) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setLead((l) => ({ ...l, [key]: e.target.value }));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setTouched(true);
     if (!valid || submitting) return;
-    void submitLead(lead);
+    await submitLead(lead);
+    onSubmitted?.();
   };
 
   const inputBase =

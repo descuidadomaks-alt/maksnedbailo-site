@@ -23,6 +23,8 @@ export const BOOKING_LINK = "https://zcal.co/carelessmaks/15min"; // TODO: Carte
 // gate still unlocks so the page stays usable while you wire this up).
 export const FORM_WEBHOOK = ""; // TODO: CRM / webhook endpoint
 
-// Demo video. Leave empty to render the 16:9 placeholder with a play button.
-// Set to a full embed URL (YouTube/Vimeo/Loom) to play the real demo.
-export const VIDEO_EMBED = ""; // TODO: demo video embed URL
+// Demo video — direct video FILE url (.mp4/.webm), not a YouTube/iframe embed.
+// The demo section renders a <video autoPlay muted loop playsInline> so it
+// plays silently on loop the moment a real file is set. Empty = 16:9
+// placeholder with a play icon.
+export const VIDEO_EMBED = ""; // TODO: demo video file URL (mp4/webm)

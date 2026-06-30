@@ -10,13 +10,13 @@ import {
 import { FORM_WEBHOOK } from "../lib/config";
 
 /**
- * The gate mechanic for the whole page.
+ * Booking-capture mechanic for the page.
  *
- * Every primary CTA calls openGate(). If the visitor has NOT filled the form
- * yet, the modal form opens. On submit we POST to the webhook, flip `unlocked`
- * to true, and the demo video + booking step appear everywhere at once (modal
- * thank-you state + the inline demo section). Once unlocked, openGate() just
- * jumps the visitor to the demo instead of re-asking.
+ * The demo is no longer gated (the video is freely visible in the demo
+ * section). "Book"/"claim" CTAs call openGate() to open the capture modal;
+ * "see the demo" CTAs call scrollToDemo() to jump to the visible demo. On
+ * submit we POST to the webhook and flip `unlocked` for the modal's thank-you
+ * state.
  */
 
 export type Lead = {
@@ -54,13 +54,7 @@ export function GateProvider({ children }: { children: ReactNode }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const openGate = useCallback(() => {
-    if (unlocked) {
-      scrollToDemo();
-      return;
-    }
-    setModalOpen(true);
-  }, [unlocked]);
+  const openGate = useCallback(() => setModalOpen(true), []);
 
   const closeModal = useCallback(() => setModalOpen(false), []);
 

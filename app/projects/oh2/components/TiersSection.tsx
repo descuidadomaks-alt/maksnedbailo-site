@@ -1,61 +1,78 @@
 "use client";
 
 import { useGate } from "./GateContext";
-import { PRICE, SETUP } from "../lib/config";
 
 /**
- * "Pick your lane" — tiered pricing, placed after the value stack and before
- * the final CTA. This is NOT three equal choices: the $499 AI Front Desk is
- * the visual hero ("Start here"), and the higher tiers exist to anchor it and
- * show the growth path. Every CTA opens the SAME gated booking form — there is
+ * "Pick your lane" — tiered pricing after the value stack, before the final
+ * close. Not three equal choices: each tier shows its full inclusion list,
+ * and the higher tiers use an "Everything in [previous], plus:" pattern so the
+ * deltas are obvious. Card 2 is the highlighted "Most popular"; Card 3 is the
+ * dark premium "Best value" anchor. Every CTA opens the SAME booking form —
  * no per-tier checkout.
  *
- * The guarantee strategy lives here: the front desk carries an honest,
- * fully-deliverable speed guarantee (we control response time), while the
- * "booked jobs in 30 days" outcome guarantee sits on the Lead Gen tier — the
- * only tier that includes ads, so it's the only tier where we control lead
- * volume and can actually honor it.
- *
- * Zero-CLS: no animation here; uniform min-height + items-stretch lock the
- * cards to equal heights, CTAs pinned to the bottom so they align.
+ * Zero-CLS: no animation; uniform min-height + items-stretch lock equal card
+ * heights, CTAs pinned to the bottom so they align across all three.
  */
+
+type Variant = "plain" | "highlight" | "dark";
 
 type Tier = {
   name: string;
   price: string;
-  priceNote?: string;
+  priceNote: string;
   badge?: string;
-  desc: string;
+  intro?: string;
+  items: string[];
   guarantee?: string;
-  hero?: boolean;
-  dark?: boolean;
+  variant: Variant;
 };
 
 const TIERS: Tier[] = [
   {
     name: "AI Front Desk",
-    price: PRICE,
-    priceNote: SETUP,
-    badge: "Start here",
-    desc:
-      "Everything you just saw. Your AI answers, qualifies, and books every lead. Never miss a call again.",
-    guarantee: "Answered in 60 seconds or that month's free.",
-    hero: true,
+    price: "$499/mo",
+    priceNote: "$0 setup",
+    variant: "plain",
+    items: [
+      "Custom AI website + hosting",
+      "24/7 AI receptionist (voice + chat) — answers, qualifies, books",
+      "Emergency Triage — books real jobs, filters tire-kickers",
+      "Instant reply + 3–5 touch follow-up",
+      "Google 5-star review engine",
+      "Missed-call text-back",
+      "Leads pushed straight to your phone",
+    ],
+    guarantee: "Every lead answered in 60 seconds — or that month's free.",
   },
   {
-    name: "Front Desk + Lead Gen",
-    price: "From $1,000/mo",
-    priceNote: "+ ad spend",
-    desc:
-      "We bring the customers too — Facebook ads, a landing page, and a bigger AI team on every channel.",
-    guarantee: "Booked jobs in 30 days or you don't pay.",
+    name: "Front Desk + Leads",
+    price: "$999/mo",
+    priceNote: "$0 setup",
+    badge: "Most popular",
+    variant: "highlight",
+    intro: "Everything in AI Front Desk, plus:",
+    items: [
+      "Facebook ad campaigns — we build and run them",
+      "A high-converting landing page",
+      "AI on every channel (site + Instagram + Facebook + SMS)",
+      "Premium voice agent (tuned, higher call volume)",
+      "Advanced follow-up + re-engagement",
+      "You cover your ad spend",
+    ],
   },
   {
-    name: "Total Domination",
-    price: "Custom",
-    desc:
-      "Everything, plus SEO and AI search — so you show up first on Google AND in ChatGPT across your whole service area.",
-    dark: true,
+    name: "The Full Engine",
+    price: "$1,489/mo",
+    priceNote: "$0 setup",
+    badge: "Best value",
+    variant: "dark",
+    intro: "Everything in Front Desk + Leads, plus:",
+    items: [
+      "Your starter ad budget — included (no separate ad bill)",
+      "AI Smart Quotes — instant estimates from your pricing, so tire-kickers filter themselves",
+      "Get found on Google AND ChatGPT (AI-search visibility)",
+      "Priority support",
+    ],
   },
 ];
 
@@ -74,15 +91,16 @@ export function TiersSection() {
 
         <div className="mt-12 grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
           {TIERS.map((t) => {
-            const dark = t.dark;
+            const dark = t.variant === "dark";
+            const highlight = t.variant === "highlight";
             return (
               <div
                 key={t.name}
-                className={`oh-card relative flex min-h-[440px] flex-col rounded-2xl p-7 ${
-                  t.hero
-                    ? "border-2 border-[#ffe17c] bg-white shadow-2xl"
-                    : dark
-                    ? "border border-[#b7c6c2]/10 bg-[#171e19] text-white shadow-xl"
+                className={`oh-card relative flex min-h-[560px] flex-col rounded-2xl p-7 ${
+                  dark
+                    ? "border border-[#b7c6c2]/10 bg-[#171e19] text-white shadow-2xl"
+                    : highlight
+                    ? "border-2 border-[#ffe17c] bg-[#fffdf5] text-[#171e19] shadow-2xl"
                     : "border border-[#171e19]/10 bg-[#f8f9fa] text-[#171e19]"
                 }`}
               >
@@ -97,33 +115,41 @@ export function TiersSection() {
                 </h3>
 
                 <div className="mt-4 flex flex-wrap items-baseline gap-x-2">
-                  <span
-                    className={`oh-display text-4xl ${
-                      t.hero ? "text-[#171e19]" : dark ? "text-[#ffe17c]" : "text-[#171e19]"
-                    }`}
-                  >
+                  <span className={`oh-display text-4xl ${dark ? "text-[#ffe17c]" : "text-[#171e19]"}`}>
                     {t.price}
                   </span>
-                  {t.priceNote && (
-                    <span className={`text-sm font-bold ${dark ? "text-white/60" : "text-[#171e19]/55"}`}>
-                      {t.priceNote}
-                    </span>
-                  )}
+                  <span className={`text-sm font-bold ${dark ? "text-white/60" : "text-[#171e19]/55"}`}>
+                    {t.priceNote}
+                  </span>
                 </div>
 
-                <p className={`mt-4 text-base ${dark ? "text-white/75" : "text-[#171e19]/70"}`}>
-                  {t.desc}
-                </p>
+                {t.intro && (
+                  <p className={`mt-5 text-sm font-bold ${dark ? "text-white/80" : "text-[#171e19]/80"}`}>
+                    {t.intro}
+                  </p>
+                )}
+
+                <ul className={`${t.intro ? "mt-3" : "mt-5"} space-y-2.5`}>
+                  {t.items.map((item) => (
+                    <li key={item} className="flex gap-2.5">
+                      <span
+                        aria-hidden
+                        className={`mt-0.5 flex h-5 w-5 flex-none items-center justify-center rounded-full text-[11px] ${
+                          dark ? "bg-[#ffe17c]/15 text-[#ffe17c]" : "bg-[#ffe17c] text-[#171e19]"
+                        }`}
+                      >
+                        ✓
+                      </span>
+                      <span className={`text-sm ${dark ? "text-white/80" : "text-[#171e19]/75"}`}>
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
 
                 {t.guarantee && (
-                  <p
-                    className={`mt-4 inline-flex items-start gap-2 rounded-lg px-3 py-2 text-sm font-medium ${
-                      t.hero
-                        ? "bg-[#ffe17c]/20 text-[#171e19]"
-                        : "bg-[#171e19]/5 text-[#171e19]/80"
-                    }`}
-                  >
-                    <span aria-hidden className="text-[#171e19]">✓</span> {t.guarantee}
+                  <p className="mt-4 inline-flex items-start gap-2 rounded-lg bg-[#ffe17c]/20 px-3 py-2 text-sm font-medium text-[#171e19]">
+                    <span aria-hidden>✓</span> {t.guarantee}
                   </p>
                 )}
 
@@ -131,11 +157,9 @@ export function TiersSection() {
                   type="button"
                   onClick={openGate}
                   className={`oh-display oh-card mt-auto w-full rounded-lg px-6 py-4 text-lg shadow-lg hover:scale-[1.02] min-h-[52px] ${
-                    t.hero
+                    dark || highlight
                       ? "bg-[#ffe17c] text-[#171e19]"
-                      : dark
-                      ? "bg-[#ffe17c] text-[#171e19]"
-                      : "border border-[#171e19] bg-transparent text-[#171e19]"
+                      : "bg-[#171e19] text-white"
                   }`}
                 >
                   Book your free call

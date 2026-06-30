@@ -1,26 +1,29 @@
 "use client";
 
 import { useGate } from "./GateContext";
-import { PRICE, SETUP, TERMS } from "../lib/config";
+import { PRICE } from "../lib/config";
 
 /**
- * New centerpiece section — the value stack. Hormozi-style: anchor a big
- * stacked value, then reveal the real price underneath it. High-contrast
- * card on a dark band so it reads as the "wait, that's it?" moment.
+ * Value stack. Hormozi-style: total the value, strike it, reveal the real
+ * price. Two-column ledger (feature left, value right-aligned + tabular) so
+ * the "$8,741 → $499" contrast lands. Values are exact/non-round on purpose —
+ * round numbers read as made-up.
+ *
+ * ROWS must sum to TOTAL. If you edit a value, update TOTAL to match.
  */
 
-const ROWS = [
-  { item: "Custom AI-built website + hosting", value: "$2,500 value" },
-  {
-    item: "24/7 AI voice + chat receptionist (answers, qualifies, books)",
-    value: "replaces a $3,500/mo receptionist",
-  },
-  { item: "Emergency Triage — books real jobs, filters tire-kickers", value: "$500/mo value" },
-  { item: "Instant response + 3–5 touch follow-up (kills no-shows)", value: "$400/mo value" },
-  { item: "Google 5-star review engine", value: "$300/mo value" },
-  { item: "Missed-call text-back", value: "$200/mo value" },
-  { item: "Done-for-you setup, live in 48 hours", value: "$1,000 value" },
+const ROWS: { item: string; value: number }[] = [
+  { item: "Custom AI website + hosting", value: 2470 },
+  { item: "24/7 AI receptionist (voice + chat)", value: 3460 },
+  { item: "Emergency Triage — real jobs, not tire-kickers", value: 640 },
+  { item: "Instant reply + 3–5 touch follow-up", value: 580 },
+  { item: "Google 5-star review engine", value: 390 },
+  { item: "Missed-call text-back", value: 240 },
+  { item: "Done-for-you build & onboarding", value: 961 },
 ];
+
+const TOTAL = ROWS.reduce((sum, r) => sum + r.value, 0); // 8741
+const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 export function OfferStack() {
   const { openGate } = useGate();
@@ -37,32 +40,29 @@ export function OfferStack() {
             {ROWS.map((row, i) => (
               <li
                 key={row.item}
-                className={`flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-8 ${
+                className={`flex items-baseline justify-between gap-4 px-5 py-4 sm:px-8 ${
                   i !== ROWS.length - 1 ? "border-b border-[#b7c6c2]/10" : ""
                 }`}
               >
-                <div className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[#ffe17c]/15 text-xs text-[#ffe17c]">
-                    ✓
-                  </span>
-                  <span className="text-sm text-white/90 sm:text-base">{row.item}</span>
-                </div>
-                <span className="flex-none pl-9 text-xs font-bold uppercase tracking-wide text-[#ffe17c] sm:pl-0 sm:text-right sm:text-sm">
-                  {row.value}
+                <span className="line-clamp-2 text-sm font-medium text-white/90 sm:text-base">
+                  {row.item}
+                </span>
+                <span className="flex-none tabular-nums text-base font-bold text-[#ffe17c] sm:text-lg">
+                  {fmt(row.value)}
                 </span>
               </li>
             ))}
           </ul>
 
           <div className="border-t-2 border-dashed border-[#b7c6c2]/20 bg-[#171e19] px-5 py-8 text-center sm:px-8">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-white/50">
-              Total value: $4,000+/mo
+            <p className="text-base font-bold text-white/45 line-through sm:text-lg">
+              Total value: {fmt(TOTAL)}
             </p>
             <p className="oh-display mt-3 text-5xl text-[#ffe17c] sm:text-6xl">
-              You pay: {PRICE}
+              Today: {PRICE}
             </p>
-            <p className="mt-2 text-base font-bold text-white/80">
-              {SETUP} · {TERMS.replace("No contract · ", "")}
+            <p className="mt-2 text-sm font-medium text-white/70">
+              $0 setup · cancel anytime
             </p>
             <p className="mx-auto mt-5 max-w-md text-sm text-white/55">
               Other agencies charge $500–$1,500 just to switch it on. We charge nothing for

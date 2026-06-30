@@ -3,8 +3,9 @@
 import { useGate } from "./GateContext";
 
 /**
- * Mobile-only sticky CTA bar. Always within thumb reach. Opens the gate.
- * Hidden on sm+ (the nav pill + section CTAs cover desktop).
+ * Mobile-only sticky CTA bar. Always within thumb reach. Opens the booking
+ * capture (the page's primary action). Hidden on sm+ (the nav + section CTAs
+ * cover desktop).
  */
 export function StickyCTA() {
   const { openGate } = useGate();
@@ -16,7 +17,7 @@ export function StickyCTA() {
         onClick={openGate}
         className="oh-display w-full rounded-lg bg-[#ffe17c] px-6 py-4 text-lg text-[#171e19] shadow-lg min-h-[52px]"
       >
-        Watch the demo
+        Book your free call
       </button>
     </div>
   );

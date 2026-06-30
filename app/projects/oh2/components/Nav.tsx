@@ -9,7 +9,7 @@ import { useGate } from "./GateContext";
  * job.
  */
 export function Nav() {
-  const { openGate } = useGate();
+  const { scrollToDemo } = useGate();
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-[#171e19]/10 bg-white/90 backdrop-blur">
@@ -24,7 +24,7 @@ export function Nav() {
 
         <button
           type="button"
-          onClick={openGate}
+          onClick={scrollToDemo}
           className="oh-card rounded-full bg-[#171e19] px-5 py-2.5 text-sm font-medium text-white hover:scale-105 sm:px-6 sm:text-base min-h-[44px]"
         >
           See The Demo

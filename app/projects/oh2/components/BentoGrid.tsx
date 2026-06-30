@@ -183,13 +183,13 @@ export function BentoGrid() {
           {/* Row 3 — wide left: all done for you. Right: kill no-shows. */}
           <Card
             title="All done for you"
-            body="We build it, set it live in 48 hours, and run it. $0 setup. You just take the booked jobs."
+            body="We build it, set it live, and run it. $0 setup. You just take the booked jobs."
             className="md:col-span-2"
           >
             <div className="mt-auto grid grid-cols-1 gap-3 sm:grid-cols-3">
               {[
                 { n: "1", t: "We build it", d: "Your AI front desk, custom-built." },
-                { n: "2", t: "Live in 48 hrs", d: "Set up, tested, switched on." },
+                { n: "2", t: "Up & running", d: "Set up, tested, switched on." },
                 { n: "3", t: "We run it", d: "Tuned every week. $0 setup." },
               ].map((s) => (
                 <div key={s.n} className="rounded-xl border border-[#171e19]/10 bg-white p-4">

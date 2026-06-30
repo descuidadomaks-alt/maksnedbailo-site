@@ -6,9 +6,10 @@ import { GateForm } from "./GateForm";
 import { BOOKING_LINK } from "../lib/config";
 
 /**
- * The single modal reused by every CTA. Locked state = the 4-field form.
- * Unlocked state = thank-you + "Book Your Call" + a jump to the live demo.
- * Mounted once at the page root inside <GateProvider>.
+ * The single booking-capture modal opened by the "book"/"claim" CTAs.
+ * Locked state = the 4-field form. Submitted state = thank-you + "Book Your
+ * Call" (→ calendar) + a jump to the visible demo. Mounted once at the page
+ * root inside <GateProvider>.
  */
 export function GateModal() {
   const { modalOpen, unlocked, closeModal, scrollToDemo } = useGate();
@@ -53,22 +54,22 @@ export function GateModal() {
         {!unlocked ? (
           <>
             <h3 className="oh-display pr-8 text-3xl text-[#171e19]">
-              See it answer &amp; book a real lead.
+              Book your free call.
             </h3>
             <p className="mt-2 mb-5 text-[#171e19]/70">
-              Tell us where to send it. You&apos;ll watch the 90-second demo next — then
-              you can grab a call.
+              Drop your details and we&apos;ll get you on the calendar — a free 15-minute
+              call to show you exactly how it&apos;d run for you.
             </p>
-            <GateForm ctaLabel="WATCH THE DEMO" compact />
+            <GateForm ctaLabel="BOOK MY FREE CALL" compact />
           </>
         ) : (
           <div className="py-2 text-center">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#ffe17c] text-3xl">
               ✓
             </div>
-            <h3 className="oh-display text-3xl text-[#171e19]">You&apos;re in.</h3>
+            <h3 className="oh-display text-3xl text-[#171e19]">You&apos;re all set.</h3>
             <p className="mt-2 mb-6 text-[#171e19]/70">
-              The demo is unlocked below. Watch it, then book your call.
+              Grab a time on the calendar — then watch the demo while you wait.
             </p>
             <a
               href={BOOKING_LINK}
@@ -86,7 +87,7 @@ export function GateModal() {
               }}
               className="mt-3 w-full rounded-lg px-8 py-3 text-base font-medium text-[#171e19] underline underline-offset-4"
             >
-              Watch the demo first
+              See the demo
             </button>
           </div>
         )}

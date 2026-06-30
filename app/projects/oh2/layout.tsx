@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Overtime Hunch. — Every lead answered, qualified & booked",
     description:
-      "Your AI receptionist picks up every call, text, and form in seconds — qualifies the job and books it straight onto your calendar. 24/7. Live in 48 hours.",
+      "Your AI receptionist picks up every call, text, and form in seconds — qualifies the job and books it straight onto your calendar. 24/7.",
   },
   // Campaign/demo page — keep it out of the index.
   robots: { index: false, follow: true },
