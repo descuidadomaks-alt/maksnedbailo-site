@@ -148,15 +148,28 @@ export function BentoGrid() {
             title="Follow-up on autopilot"
             body="Every lead chased with 3–5 texts until they book or say no. Nothing slips."
           >
-            <div className="mt-auto flex items-center gap-2">
-              {["Text 1", "Text 2", "Text 3"].map((t, i) => (
-                <span
-                  key={t}
-                  className="flex-1 rounded-lg border border-[#171e19]/10 bg-white px-3 py-2.5 text-center text-xs font-bold text-[#171e19]/60"
+            <div className="mt-auto space-y-2.5">
+              {[
+                { d: "Day 1", t: "First text sent", done: true },
+                { d: "Day 3", t: "Friendly reminder", done: true },
+                { d: "Day 5", t: "Final nudge", done: false },
+              ].map((s) => (
+                <div
+                  key={s.d}
+                  className="flex items-center gap-3 rounded-lg border border-[#171e19]/10 bg-white px-3 py-2.5"
                 >
-                  {t}
-                  <span className="mt-1 block text-[#ffe17c]">{"●".repeat(i + 1)}</span>
-                </span>
+                  <span
+                    className={`flex h-5 w-5 flex-none items-center justify-center rounded-full text-[11px] ${
+                      s.done
+                        ? "bg-[#ffe17c] text-[#171e19]"
+                        : "border border-[#171e19]/20 text-[#171e19]/30"
+                    }`}
+                  >
+                    {s.done ? "✓" : "○"}
+                  </span>
+                  <span className="text-sm font-bold text-[#171e19]/80">{s.d}</span>
+                  <span className="text-sm text-[#171e19]/55">{s.t}</span>
+                </div>
               ))}
             </div>
           </Card>
@@ -189,9 +202,12 @@ export function BentoGrid() {
           </Card>
 
           <Card title="Kill no-shows" body="Smart text reminders before every appointment. Fewer empty slots, more jobs done." dark>
-            <div className="mt-auto">
+            <div className="mt-auto space-y-2">
               <div className="max-w-[90%] rounded-2xl rounded-bl-sm bg-white/10 px-3 py-2.5 text-sm text-white/85">
                 Reminder: your appointment is tomorrow at 9:00 AM. Reply YES to confirm.
+              </div>
+              <div className="ml-auto w-fit rounded-2xl rounded-br-sm bg-[#ffe17c] px-3 py-2 text-sm font-medium text-[#171e19]">
+                YES 👍
               </div>
             </div>
           </Card>

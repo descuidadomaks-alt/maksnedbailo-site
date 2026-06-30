@@ -9,6 +9,7 @@ import { DemoVideo } from "./components/DemoVideo";
 import { BentoGrid } from "./components/BentoGrid";
 import { HowItWorks } from "./components/HowItWorks";
 import { OfferStack } from "./components/OfferStack";
+import { TiersSection } from "./components/TiersSection";
 import { FinalCTA } from "./components/FinalCTA";
 import { Footer } from "./components/Footer";
 import { StickyCTA } from "./components/StickyCTA";
@@ -18,7 +19,7 @@ import { StickyCTA } from "./components/StickyCTA";
  * $499/mo AI-front-desk offer (no ads spend included). Single-page
  * composition. Order IS the conversion funnel — do not reorder:
  * hero → proof → problem/solution → anti-template wedge → gated demo →
- * features → how it works → value stack → guarantee.
+ * features → how it works → value stack → tiers → guarantee.
  *
  * Testimonials (Section 7) is built (./components/Testimonials.tsx) but NOT
  * rendered: no real reviews exist, and the rule is no fabricated reviews.
@@ -36,6 +37,7 @@ export default function Oh2Page() {
         <BentoGrid />
         <HowItWorks />
         <OfferStack />
+        <TiersSection />
         <FinalCTA />
       </main>
       <Footer />
