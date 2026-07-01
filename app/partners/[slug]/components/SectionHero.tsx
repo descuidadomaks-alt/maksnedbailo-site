@@ -126,7 +126,7 @@ export default function SectionHero({ data }: { data: PartnerData }) {
                 className="w-1.5 h-1.5 rounded-full shrink-0"
                 style={{ background: "rgba(212,255,43,0.6)" }}
               />
-              {daysLeft} {daysLeft === 1 ? "day" : "days"} left · offer closes June 30
+              {daysLeft} {daysLeft === 1 ? "day" : "days"} left · offer closes July 31
             </div>
           </div>
         )}

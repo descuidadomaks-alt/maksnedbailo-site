@@ -21,7 +21,7 @@ const vladShort: ShortPartnerConfig = {
 
   defaultLocale: "uk", // Vlad's circle is Ukrainian — change to "en" for main-site clones
 
-  offerDeadline: "2026-06-30", // drives countdown chip; update per offer cycle
+  offerDeadline: "2026-07-31", // drives countdown chip; update per offer cycle
 
   schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 

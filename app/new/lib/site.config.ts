@@ -12,8 +12,8 @@ export const STANDARD_RATE = "€1,470";
 export const FOUNDING_SLOTS_TOTAL = 5;
 
 /** Shown next to the founding rate wherever the offer has a hard deadline. */
-export const FOUNDING_DEADLINE_EN = "until June 30";
-export const FOUNDING_DEADLINE_ES = "hasta el 30 de junio";
+export const FOUNDING_DEADLINE_EN = "until July 31";
+export const FOUNDING_DEADLINE_ES = "hasta el 31 de julio";
 
 /** Monthly build capacity — shown in the "X of 5 still open" capacity line. */
 export const slotsOpen = 2;

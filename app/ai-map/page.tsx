@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Strategic AI Map — 90 minutes, ROI-ranked",
     description:
-      "Find where AI pays off in your business. One-page map, delivered within 48h. Free until June 30, 2026. 10k guarantee.",
+      "Find where AI pays off in your business. One-page map, delivered within 48h. Free until July 31, 2026. 10k guarantee.",
     url: "https://maksnedbailo.site/ai-map",
     type: "website",
     siteName: "Care Less AI Automation",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Strategic AI Map — 90 minutes, ROI-ranked",
-    description: "Free (was €1,470) until June 30, 2026. 10k guarantee.",
+    description: "Free (was €1,470) until July 31, 2026. 10k guarantee.",
     images: ["/AI_Map_Thumbnail.jpg"],
   },
 };

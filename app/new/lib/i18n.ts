@@ -120,7 +120,7 @@ export interface NewPageDict {
     /** Button after this section -> CTA_TARGET. The struck-through standard
      *  rate + live founding rate are appended in the component. */
     ctaLabel: string;
-    /** Deadline microcopy under the button, e.g. "Founding rate — until June 30" */
+    /** Deadline microcopy under the button, e.g. "Founding rate — until July 31" */
     ctaDeadline: string;
   };
 
@@ -429,7 +429,7 @@ const en: NewPageDict = {
       note: "Sample output — yours will be specific to your business.",
     },
     ctaLabel: "Book the Map —",
-    ctaDeadline: "Free until June 30 — then €1,470",
+    ctaDeadline: "Free until July 31 — then €1,470",
   },
 
   proof: {
@@ -504,7 +504,7 @@ const en: NewPageDict = {
         note: "Unlocked by the Map.",
       },
     ],
-    foundingLabel: "until June 30",
+    foundingLabel: "until July 31",
     capacityLine: (slotsOpen) =>
       `I lead every project myself — only 5 slots per month. ${slotsOpen} of 5 still open.`,
   },
@@ -569,7 +569,7 @@ const en: NewPageDict = {
       },
       {
         q: "Free? What's the catch?",
-        a: "No catch. Until June 30 I'm running these sessions free — normally €1,470 — while I build out case studies in new industries. You still get the full 90 minutes and the same one-page, ROI-ranked map. The only thing on the line is mine: if I don't find at least €10,000/year in recoverable cost, you've lost nothing and you keep the map anyway.",
+        a: "No catch. Until July 31 I'm running these sessions free — normally €1,470 — while I build out case studies in new industries. You still get the full 90 minutes and the same one-page, ROI-ranked map. The only thing on the line is mine: if I don't find at least €10,000/year in recoverable cost, you've lost nothing and you keep the map anyway.",
       },
       {
         q: "What's the Bottleneck Score?",
@@ -767,7 +767,7 @@ const es: NewPageDict = {
       note: "Ejemplo ilustrativo — el tuyo será específico de tu negocio.",
     },
     ctaLabel: "Reserva el Mapa —",
-    ctaDeadline: "Gratis hasta el 30 de junio — luego €1,470",
+    ctaDeadline: "Gratis hasta el 31 de julio — luego €1,470",
   },
 
   proof: {
@@ -842,7 +842,7 @@ const es: NewPageDict = {
         note: "Se desbloquea con el Mapa.",
       },
     ],
-    foundingLabel: "hasta el 30 de junio",
+    foundingLabel: "hasta el 31 de julio",
     capacityLine: (slotsOpen) =>
       `Lidero cada proyecto yo mismo — solo 5 plazas al mes. Quedan ${slotsOpen} de 5.`,
   },
@@ -907,7 +907,7 @@ const es: NewPageDict = {
       },
       {
         q: "¿Gratis? ¿Cuál es la trampa?",
-        a: "Ninguna. Hasta el 30 de junio ofrezco estas sesiones gratis — normalmente €1,470 — mientras desarrollo casos de estudio en nuevos sectores. Recibes los mismos 90 minutos y el mismo mapa de una página priorizado por ROI. El único riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, no pierdes nada y el mapa es tuyo igualmente.",
+        a: "Ninguna. Hasta el 31 de julio ofrezco estas sesiones gratis — normalmente €1,470 — mientras desarrollo casos de estudio en nuevos sectores. Recibes los mismos 90 minutos y el mismo mapa de una página priorizado por ROI. El único riesgo es mío: si no encuentro al menos €10,000/año en costes recuperables, no pierdes nada y el mapa es tuyo igualmente.",
       },
       {
         q: "¿Qué es el Bottleneck Score?",

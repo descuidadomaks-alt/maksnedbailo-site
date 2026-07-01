@@ -3,13 +3,13 @@
  */
 
 // ── Complimentary phase (active until OFFER_DEADLINE) ───────────────────────
-// Matches the homepage: €1,470 struck through -> Free until June 30.
+// Matches the homepage: €1,470 struck through -> Free until July 31.
 export const PRICE_CURRENT      = "Free";
 export const PRICE_CURRENT_ES   = "Gratis";
 export const PRICE_CURRENT_UK   = "Безкоштовно";
 export const PRICE_ANCHOR       = "€1,470";
-export const OFFER_DEADLINE     = "June 30, 2026";
-export const OFFER_DEADLINE_ISO = "2026-06-30T23:59:59";
+export const OFFER_DEADLINE     = "July 31, 2026";
+export const OFFER_DEADLINE_ISO = "2026-07-31T23:59:59";
 
 // Legacy aliases — countdown components keep working against the deadline.
 export const COMP_DEADLINE     = OFFER_DEADLINE;

@@ -165,7 +165,7 @@ const en: ShortPageDict = {
       `A 90-minute Strategic AI Map, ranked by ROI. Normally €1,470 — reserved for you through ${p}.`,
     cta: "Claim Your Complimentary Session",
     daysLeft: (n) => `${n} ${n === 1 ? "day" : "days"} left`,
-    offerCloses: "offer closes June 30",
+    offerCloses: "offer closes July 31",
   },
 
   offer: {
@@ -475,7 +475,7 @@ const uk: ShortPageDict = {
         : "днів";
       return `${d} ${form} залишилось`;
     },
-    offerCloses: "пропозиція закривається 30 червня",
+    offerCloses: "пропозиція закривається 31 липня",
     partnerQuoteOverride:
       "Я знаю Макса вже багато років. Коли комусь із мого кола потрібно тверезо розібратися з ШІ, я відправляю їх до нього. Він не буде продавати вам те, що вам не потрібно.",
     partnerRoleOverride: "радник і ментор",

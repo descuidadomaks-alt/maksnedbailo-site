@@ -25,7 +25,7 @@ const marinaShort: ShortPartnerConfig = {
 
   defaultLocale: "uk",
 
-  offerDeadline: "2026-06-30",
+  offerDeadline: "2026-07-31",
 
   schedulerUrl: "https://zcal.co/carelessmaks/ai-map",
 
