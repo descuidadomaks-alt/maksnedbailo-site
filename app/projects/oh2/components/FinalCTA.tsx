@@ -3,9 +3,9 @@
 import { useGate } from "./GateContext";
 
 /**
- * Final section — book-a-call close on the yellow band, with a faint giant
- * Anton overlay behind. No time-bound guarantee (nothing is deployed yet, so
- * we don't promise a go-live window anywhere). CTA opens the booking form.
+ * Final section — 30-day risk-free refund close on the yellow band, with a
+ * faint giant Anton overlay behind. No time-bound go-live claim. CTA opens
+ * the booking form.
  */
 export function FinalCTA() {
   const { openGate } = useGate();
@@ -17,23 +17,22 @@ export function FinalCTA() {
         aria-hidden
         className="oh-display pointer-events-none absolute inset-0 flex items-center justify-center text-[24vw] leading-none text-[#171e19]/10"
       >
-        BOOKED
+        RISK-FREE
       </span>
 
       <div className="relative mx-auto max-w-3xl px-5 text-center">
         <h2 className="oh-display text-5xl leading-[0.9] text-[#171e19] sm:text-7xl lg:text-8xl">
-          See it working for your business.
+          Try it risk-free for 30 days.
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-xl text-[#171e19]/80 sm:text-2xl">
-          Book a free 15-minute call. We&apos;ll show you exactly how it&apos;d run for you —
-          and we&apos;ll tell you straight if it&apos;s not a fit. $0 setup. No contract.
-          Cancel anytime.
+          Not happy for any reason in your first 30 days? We refund every cent — and you keep
+          your website. $0 setup. No contract. Cancel anytime.
         </p>
 
         <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/70">
-          We onboard a limited number of businesses per area — so you&apos;re never up
-          against our own clients.
+          We take a limited number of businesses per area — you&apos;re never up against our
+          own clients.
         </p>
 
         <button

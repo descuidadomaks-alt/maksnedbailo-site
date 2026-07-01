@@ -70,8 +70,8 @@ const TIERS: Tier[] = [
     items: [
       "Your starter ad budget — included (no separate ad bill)",
       "AI Smart Quotes — instant estimates from your pricing, so tire-kickers filter themselves",
-      "Get found on Google AND ChatGPT (AI-search visibility)",
       "Priority support",
+      "Monthly optimization call",
     ],
   },
 ];

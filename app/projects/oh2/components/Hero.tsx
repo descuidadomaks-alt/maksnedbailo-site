@@ -15,7 +15,7 @@ import { PRICE, SETUP, TERMS } from "../lib/config";
  * "we run your ads" language anywhere here.
  */
 export function Hero() {
-  const { scrollToDemo } = useGate();
+  const { openGate } = useGate();
 
   return (
     <section id="top" className="oh-grid-bg relative overflow-hidden bg-white pt-28 pb-16 sm:pt-36 sm:pb-24">
@@ -65,7 +65,7 @@ export function Hero() {
 
         {/* Video preview — blurred behind the CTA so the visitor sees a video
             is waiting (it's the demo conversation, dimmed + blurred). Clicking
-            scrolls to the visible demo video below. */}
+            opens the lead-capture pop-up form. */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -74,7 +74,7 @@ export function Hero() {
         >
           <button
             type="button"
-            onClick={scrollToDemo}
+            onClick={openGate}
             aria-label="Watch the 90-second demo"
             className="oh-card group relative mx-auto block aspect-video w-full max-w-3xl overflow-hidden rounded-2xl border border-[#171e19]/15 bg-[#171e19] shadow-2xl hover:scale-[1.01]"
           >

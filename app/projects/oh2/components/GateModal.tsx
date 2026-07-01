@@ -54,13 +54,13 @@ export function GateModal() {
         {!unlocked ? (
           <>
             <h3 className="oh-display pr-8 text-3xl text-[#171e19]">
-              Book your free call.
+              Let&apos;s get you started.
             </h3>
             <p className="mt-2 mb-5 text-[#171e19]/70">
-              Drop your details and we&apos;ll get you on the calendar — a free 15-minute
-              call to show you exactly how it&apos;d run for you.
+              Drop your details — we&apos;ll show you the demo and book a free 15-minute call
+              to walk you through exactly how it&apos;d run for you.
             </p>
-            <GateForm ctaLabel="BOOK MY FREE CALL" compact />
+            <GateForm ctaLabel="GET STARTED" compact />
           </>
         ) : (
           <div className="py-2 text-center">
