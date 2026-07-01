@@ -42,27 +42,26 @@ export function Hero() {
       <PetalField />
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center">
-        {/* Lotus mark — gentle bloom on load */}
+        {/* Full brand lockup (lotus + wordmark + tagline) — gentle bloom on load */}
         <motion.div
-          aria-hidden
           className={reduce ? "" : "animate-bloom"}
           initial={reduce ? { opacity: 0 } : false}
           animate={reduce ? { opacity: 1 } : undefined}
           transition={reduce ? { duration: 0.6 } : undefined}
         >
-          <LotusMark className="mb-6 h-12 w-12 text-gold" />
+          <Image
+            src="/projects/parati/Logo_l.png"
+            alt={`${site.business} — ${site.tagline}`}
+            width={1007}
+            height={832}
+            priority
+            className="mb-4 h-auto w-[230px] sm:w-[270px] md:w-[300px]"
+          />
         </motion.div>
-
-        <motion.span
-          {...fade(0.15)}
-          className="font-jost text-xs uppercase tracking-label text-gold-deep"
-        >
-          {site.hero.eyebrow}
-        </motion.span>
 
         <motion.h1
           {...fade(0.3)}
-          className="mt-5 font-display text-4xl leading-[1.1] text-charcoal sm:text-5xl md:text-6xl"
+          className="mt-2 font-display text-4xl leading-[1.1] text-charcoal sm:text-5xl md:text-6xl"
         >
           {site.hero.headline}
         </motion.h1>
@@ -90,22 +89,5 @@ export function Hero() {
         ) : null}
       </div>
     </section>
-  );
-}
-
-function LotusMark({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 64 64" className={className} fill="none" aria-hidden>
-      <path
-        d="M32 52c-9 0-17-5-21-13 4-1 8-1 11 .5C20 33 22 24 32 16c10 8 12 17 10 23.5 3-1.5 7-1.5 11-.5-4 8-12 13-21 13Z"
-        fill="currentColor"
-        opacity="0.9"
-      />
-      <path
-        d="M32 50c-5-4-8-10-8-17 0-6 3-12 8-17 5 5 8 11 8 17 0 7-3 13-8 17Z"
-        fill="#FBF8F2"
-        opacity="0.55"
-      />
-    </svg>
   );
 }

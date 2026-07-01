@@ -87,33 +87,75 @@ const es = {
       "Cada sesión es un momento solo tuyo. Elige el ritual que tu cuerpo te está pidiendo.",
     cardCta: "Reservar este servicio",
     durationLabel: "Duración",
+    // Order: most expensive first (price anchoring), descending.
     items: [
       {
         name: "Método Golden Touch",
         duration: "90 min",
         price: "99€",
-        benefit:
-          "Ritual completo de cuerpo entero. Sales nueva, ligera, renovada.",
+        benefit: "Masaje relajante y reparador energético. Sales nueva.",
+      },
+      {
+        name: "Golden Skin Microneedling",
+        duration: "Tratamiento facial",
+        price: "90€",
+        benefit: "Piel renovada, firme y luminosa desde dentro.",
+      },
+      {
+        name: "Luxury Detox Flow",
+        duration: "90 min",
+        price: "80€",
+        benefit: "Drenaje linfático corporal. Ligereza que se nota.",
+      },
+      {
+        name: "Signature Balance",
+        duration: "60 min",
+        price: "60€",
+        benefit: "Masaje clásico de recuperación. Cuerpo en equilibrio.",
       },
       {
         name: "Imperial Gold Ritual",
         duration: "50 min",
         price: "55€",
-        benefit: "Relajación profunda. La tensión deshecha, capa a capa.",
+        benefit: "Ritual exclusivo de relajación profunda.",
       },
       {
-        name: "Masajes faciales",
-        duration: "[duración]",
-        price: "[precio]",
-        benefit: "Piel más firme, luminosa y descansada.",
+        name: "Diamond Face Sculpt",
+        duration: "50 min",
+        price: "55€",
+        benefit: "Masaje premium de rejuvenecimiento facial.",
       },
       {
-        name: "Extensión de pestañas",
-        duration: "[duración]",
-        price: "[precio]",
-        benefit: "Mirada definida, con una técnica suave y cuidadosa.",
+        name: "Deep Recovery",
+        duration: "40 min",
+        price: "45€",
+        benefit: "Masaje de recuperación muscular. Tensión deshecha.",
+      },
+      {
+        name: "Lifting de cejas con tinte y forma",
+        duration: "Tratamiento estético",
+        price: "40€",
+        benefit: "Cejas definidas, con forma y color a tu medida.",
+      },
+      {
+        name: "Lifting de pestañas",
+        duration: "Tratamiento estético",
+        price: "35€",
+        benefit: "Mirada abierta y curvada, sin extensiones.",
+      },
+      {
+        name: "Silk Steps",
+        duration: "30 min",
+        price: "30€",
+        benefit: "Ritual de piernas ligeras. Alivio inmediato.",
       },
     ] as Service[],
+    // Loyalty bundles + tax note, from the printed carta de servicios.
+    bonos: [
+      "Bono 5 sesiones — la 5ª al 50%",
+      "Bono 10 sesiones — la 10ª gratis",
+    ],
+    note: "Precios con IVA incluido.",
   },
 
   // ── Disponibilidad cue ──────────────────────────────────────────────

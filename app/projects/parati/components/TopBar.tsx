@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { site } from "../lib/content";
 import { waLink } from "../lib/whatsapp";
 import { WhatsAppButton } from "./WhatsAppButton";
@@ -28,12 +29,15 @@ export function TopBar() {
       }`}
     >
       <div className="mx-auto flex max-w-content items-center justify-between px-5 py-3.5 sm:px-8">
-        <a
-          href="#top"
-          className="font-display text-xl tracking-wide text-charcoal sm:text-2xl"
-          aria-label={`${site.business} — inicio`}
-        >
-          {site.business}
+        <a href="#top" aria-label={`${site.business} — inicio`} className="flex items-center">
+          <Image
+            src="/projects/parati/Logo_s.png"
+            alt={site.business}
+            width={577}
+            height={498}
+            priority
+            className="h-9 w-auto sm:h-10"
+          />
         </a>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Jost } from "next/font/google";
+import { Fraunces, Mulish } from "next/font/google";
 
 /**
  * Para Ti — self-contained demo landing under /projects/parati.
@@ -14,7 +14,8 @@ import { Cormorant_Garamond, Jost } from "next/font/google";
  * shared tailwind.config.ts and are not used anywhere else.
  */
 
-const display = Cormorant_Garamond({
+// Soft, warm serif for headings — more readable than the previous Cormorant.
+const display = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
@@ -22,9 +23,10 @@ const display = Cormorant_Garamond({
   display: "swap",
 });
 
-const body = Jost({
+// Clean, airy humanist sans for body + labels.
+const body = Mulish({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["300", "400", "500", "600"],
   variable: "--font-pt-body",
   display: "swap",
 });
