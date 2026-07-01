@@ -31,6 +31,7 @@ export function Contact() {
                 height="380"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                className="pt-map"
                 style={{ border: 0, display: "block" }}
               />
             </div>

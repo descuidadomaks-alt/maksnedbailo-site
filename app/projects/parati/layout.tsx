@@ -56,6 +56,19 @@ export default function ParatiLayout({ children }: { children: ReactNode }) {
         /* Thin gold hairline used between footer items */
         .pt-scope .hairline { height: 1px; width: 100%; background: rgba(194,160,91,0.25); }
 
+        /* Branded map — Google Maps iframe embeds can't take custom map styles,
+           so we tint the whole frame toward the cream/gold palette with a CSS
+           filter. Hover eases back to full colour so it stays usable. */
+        .pt-scope .pt-map {
+          filter: grayscale(0.28) sepia(0.5) saturate(0.82) hue-rotate(-12deg)
+                  brightness(1.05) contrast(0.9);
+          transition: filter 550ms ease;
+        }
+        .pt-scope .pt-map:hover {
+          filter: grayscale(0) sepia(0.08) saturate(1) hue-rotate(0deg)
+                  brightness(1) contrast(1);
+        }
+
         /* Hero petal drift — keyframes here so each petal can read its --drift var.
            Travels up and sways gently; fades in/out at the edges. */
         @keyframes pt-drift {
@@ -68,6 +81,7 @@ export default function ParatiLayout({ children }: { children: ReactNode }) {
 
         @media (prefers-reduced-motion: reduce) {
           .pt-scope .animate-bloom { animation: none !important; }
+          .pt-scope .pt-map { transition: none; }
         }
       `}</style>
 
