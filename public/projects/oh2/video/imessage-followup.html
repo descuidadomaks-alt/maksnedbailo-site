@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<!--
+  imessage-followup.html — iOS 17 Messages mock (iPhone 13 mini, 375×812 logical @3x)
+  Auto-plays a ~9s HVAC follow-up conversation for screen recording.
+
+  RECORDING:
+  - Record just the 375×812 screen div (it fills the frame, no bezel).
+  - Easiest crisp capture: Chrome DevTools -> device toolbar -> add a custom
+    device 375×812 @ DPR 3, then record the viewport. Or zoom the browser
+    (Cmd/Ctrl +) and crop in post. Scrollbars are hidden.
+  - The Replay button sits BELOW the screen, outside the capture area.
+
+  CONFIG: MESSAGES / TOTAL_MS / CONTACT_NAME / USE_IMESSAGE_BLUE / STATUS_TIME
+  live at the top of the <script> block.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iMessage follow-up — Peak Comfort HVAC</title>
+<style>
+  :root {
+    --sent: #34C759;          /* overridden to #0A84FF by USE_IMESSAGE_BLUE */
+    --received: #E9E9EB;
+    --ios-blue: #0A84FF;
+    --hairline: rgba(60, 60, 67, 0.29);
+    --grey-label: #8E8E93;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: #000;
+    font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 0;
+  }
+
+  /* ============ PHONE SCREEN (capture area, 375×812) ============ */
+  .screen {
+    width: 375px;
+    height: 812px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    flex: none;
+  }
+
+  /* ---- Status bar ---- */
+  .status-bar {
+    height: 47px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 27px 0 34px;
+    background: #fff;
+    position: relative;
+    z-index: 3;
+  }
+  .status-time {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    color: #000;
+    font-variant-numeric: tabular-nums;
+  }
+  .status-icons { display: flex; align-items: center; gap: 7px; }
+  .status-icons svg { display: block; }
+
+  /* ---- Header ---- */
+  .header {
+    flex: none;
+    height: 96px;
+    background: rgba(249, 249, 249, 0.94);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid var(--hairline);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 6px 16px 0 8px;
+    position: relative;
+    z-index: 2;
+    margin-top: -47px;   /* status bar sits on top of the blur */
+    padding-top: 53px;
+  }
+  .screen > .status-bar { background: transparent; }
+  .back-btn { display: flex; align-items: center; padding: 6px 8px; }
+  .header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 47px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #A9B2BC 0%, #8D96A3 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-shadow: 0 0.5px 1px rgba(0,0,0,0.08);
+  }
+  .contact-name {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 400;
+    color: #000;
+    letter-spacing: 0.05px;
+    max-width: 180px;
+  }
+  .contact-name span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-actions { display: flex; align-items: center; gap: 20px; padding: 12px 4px 0 0; }
+
+  /* ---- Thread ---- */
+  .thread {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    background: #fff;
+    scrollbar-width: none;
+  }
+  .thread::-webkit-scrollbar { display: none; }
+  .thread-inner {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 12px 16px 10px;
+  }
+  .day-stamp {
+    text-align: center;
+    font-size: 11px;
+    color: var(--grey-label);
+    padding: 4px 0 12px;
+    letter-spacing: 0.05px;
+  }
+  .day-stamp b { font-weight: 600; }
+
+  /* ---- Bubbles ---- */
+  .msg-row { display: flex; margin-top: 8px; }
+  .msg-row.stacked { margin-top: 2px; }
+  .msg-row.business { justify-content: flex-start; }
+  .msg-row.customer { justify-content: flex-end; }
+
+  .bubble {
+    position: relative;
+    max-width: 72%;
+    padding: 8px 13px;
+    border-radius: 18px;
+    font-size: 16.5px;
+    line-height: 1.26;
+    letter-spacing: -0.2px;
+    word-wrap: break-word;
+  }
+  .bubble.business { background: var(--received); color: #000; }
+  .bubble.customer { background: var(--sent); color: #fff; }
+
+  /* iOS tails — blob + background-colored mask, pure CSS so crisp at 3× */
+  .bubble.tail::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 12px;
+    height: 19px;
+    z-index: -1;
+  }
+  .bubble.tail::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 12px;
+    height: 19px;
+    background: #fff;
+  }
+  .bubble.business.tail::before {
+    left: -5.5px;
+    background: var(--received);
+    border-bottom-right-radius: 14px 12px;
+  }
+  .bubble.business.tail::after {
+    left: -12px;
+    border-bottom-right-radius: 8px;
+  }
+  .bubble.customer.tail::before {
+    right: -5.5px;
+    background: var(--sent);
+    border-bottom-left-radius: 14px 12px;
+  }
+  .bubble.customer.tail::after {
+    right: -12px;
+    border-bottom-left-radius: 8px;
+  }
+  .bubble { z-index: 0; }
+
+  /* ---- Entrance animations ---- */
+  @keyframes popInReceived {
+    from { transform: scale(0.92) translateY(8px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);      opacity: 1; }
+  }
+  @keyframes riseInSent {
+    from { transform: translateY(10px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .bubble.business.anim {
+    transform-origin: bottom left;
+    animation: popInReceived 250ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .bubble.customer.anim {
+    transform-origin: bottom right;
+    animation: riseInSent 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* ---- Typing indicator ---- */
+  .bubble.typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 16px;
+    min-height: 36px;
+  }
+  .typing .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #9E9EA3;
+    animation: typingBounce 1.2s ease-in-out infinite;
+  }
+  .typing .dot:nth-child(2) { animation-delay: 0.15s; }
+  .typing .dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes typingBounce {
+    0%, 60%, 100% { opacity: 0.35; transform: scale(0.85); }
+    30%           { opacity: 1;    transform: scale(1); }
+  }
+
+  /* ---- Input bar ---- */
+  .input-area {
+    flex: none;
+    background: #fff;
+    padding: 6px 12px 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .plus-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #E9E9EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+  }
+  .camera-btn { flex: none; display: flex; align-items: center; padding: 0 2px; }
+  .text-field {
+    flex: 1 1 auto;
+    height: 34px;
+    border: 1px solid #D1D1D6;
+    border-radius: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 13px;
+  }
+  .text-field .placeholder {
+    font-size: 16.5px;
+    color: #BCBCC0;
+    letter-spacing: -0.2px;
+  }
+
+  /* ---- Home indicator ---- */
+  .home-area {
+    flex: none;
+    height: 30px;
+    background: #fff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+  }
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    border-radius: 2.5px;
+    background: #000;
+  }
+
+  /* ============ Replay (outside capture) ============ */
+  .replay-btn {
+    flex: none;
+    background: #1C1C1E;
+    color: #fff;
+    border: 1px solid #3A3A3C;
+    border-radius: 18px;
+    padding: 8px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .replay-btn:hover { background: #2C2C2E; }
+</style>
+</head>
+<body>
+
+  <div class="screen" id="screen">
+
+    <div class="status-bar">
+      <div class="status-time" id="statusTime">2:14</div>
+      <div class="status-icons">
+        <!-- cellular bars -->
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0"    y="7.5" width="3" height="4.5" rx="1" fill="#000"/>
+          <rect x="4.7"  y="5"   width="3" height="7"   rx="1" fill="#000"/>
+          <rect x="9.4"  y="2.5" width="3" height="9.5" rx="1" fill="#000"/>
+          <rect x="14.1" y="0"   width="3" height="12"  rx="1" fill="#000"/>
+        </svg>
+        <!-- wifi -->
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.5 2.44c2.42 0 4.75.93 6.51 2.61a.5.5 0 0 0 .71-.02l1.13-1.14a.53.53 0 0 0-.01-.75A12.24 12.24 0 0 0 8.5 0C5.36 0 2.36 1.12.16 3.14a.53.53 0 0 0-.01.75l1.13 1.14c.2.2.51.2.71.02A9.44 9.44 0 0 1 8.5 2.44Z" fill="#000"/>
+          <path d="M8.5 6.28c1.33 0 2.61.5 3.59 1.4.2.18.5.18.69-.01l1.13-1.14a.53.53 0 0 0-.02-.76 8.1 8.1 0 0 0-10.78 0 .53.53 0 0 0-.02.76l1.13 1.14c.19.19.5.2.69.01a5.32 5.32 0 0 1 3.59-1.4Z" fill="#000"/>
+          <path d="M10.75 10.03c0 .14-.06.28-.16.38l-1.72 1.73a.52.52 0 0 1-.74 0L6.4 10.41a.53.53 0 0 1 .04-.79 3.25 3.25 0 0 1 4.1 0c.13.1.2.25.2.41Z" fill="#000"/>
+        </svg>
+        <!-- battery -->
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#000" stroke-opacity="0.35"/>
+          <path d="M23 4v4c.8-.34 1.33-1.13 1.33-2S23.8 4.34 23 4Z" fill="#000" fill-opacity="0.4"/>
+          <rect x="2" y="2" width="18" height="8" rx="2" fill="#000"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="back-btn">
+        <svg width="13" height="22" viewBox="0 0 13 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.5 1.5 2 11l9.5 9.5" stroke="#0A84FF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="header-center">
+        <div class="avatar" id="avatar">PC</div>
+        <div class="contact-name">
+          <span id="contactName">Peak Comfort HVAC</span>
+          <svg width="7" height="5" viewBox="0 0 7 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l2.5 2.5L6 1" stroke="#8E8E93" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- FaceTime -->
+        <svg width="26" height="17" viewBox="0 0 26 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0" y="0.5" width="17" height="16" rx="4" fill="#0A84FF"/>
+          <path d="M18.5 6.5 23.3 3a1 1 0 0 1 1.7.8v9.4a1 1 0 0 1-1.7.8l-4.8-3.5v-4Z" fill="#0A84FF"/>
+        </svg>
+        <!-- info -->
+        <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10.5" cy="10.5" r="9.5" stroke="#0A84FF" stroke-width="1.6"/>
+          <circle cx="10.5" cy="6.2" r="1.15" fill="#0A84FF"/>
+          <rect x="9.45" y="8.9" width="2.1" height="7" rx="1.05" fill="#0A84FF"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="thread" id="thread">
+      <div class="thread-inner" id="threadInner">
+        <div class="day-stamp"><b>Today</b> 2:12 PM</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="camera-btn">
+        <svg width="27" height="21" viewBox="0 0 27 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4.5h3.2l1.3-2a2 2 0 0 1 1.67-.9h6.66a2 2 0 0 1 1.67.9l1.3 2H23a3 3 0 0 1 3 3V17a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3Z" stroke="#8E8E93" stroke-width="1.8"/>
+          <circle cx="13.5" cy="12" r="4.2" stroke="#8E8E93" stroke-width="1.8"/>
+        </svg>
+      </div>
+      <div class="plus-btn">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 1v13M1 7.5h13" stroke="#7C7C82" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="text-field">
+        <span class="placeholder">Text Message</span>
+        <svg width="13" height="20" viewBox="0 0 13 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3.75" y="0.75" width="5.5" height="11" rx="2.75" stroke="#8E8E93" stroke-width="1.5"/>
+          <path d="M1 9.5a5.5 5.5 0 0 0 11 0" stroke="#8E8E93" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M6.5 15.5V19" stroke="#8E8E93" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="home-area">
+      <div class="home-indicator"></div>
+    </div>
+
+  </div>
+
+  <button class="replay-btn" id="replayBtn">↻ Replay</button>
+
+<script>
+  /* ============================ CONFIG ============================ */
+  const CONTACT_NAME = "Peak Comfort HVAC";
+  const STATUS_TIME  = "2:14";
+  const USE_IMESSAGE_BLUE = false;          // true -> blue #0A84FF sent bubbles
+  const TOTAL_MS = 9000;                    // full sequence settles within this
+
+  // from: 'business' (received, grey, left) | 'customer' (sent, green, right)
+  // at:   ms when the typing indicator starts (business) or bubble appears
+  // typingMs: how long the typing indicator shows before the bubble swaps in
+  const MESSAGES = [
+    { from: "business", text: "You're booked for AC repair today, 2–4 PM — 212 Birch Ln. Reply C to confirm.", at: 0,    typingMs: 800 },
+    { from: "customer", text: "Yes! Thanks 🙏",                                                              at: 1900 },
+    { from: "business", text: "⏰ Reminder: your tech's arriving 2–4 PM today. See you soon!",                 at: 3200, typingMs: 700 },
+    { from: "business", text: "Mike's on his way — ETA ~20 min 🚚",                                      at: 5200 },
+    { from: "customer", text: "Perfect, see you then 👍",                                                    at: 6400 },
+  ];
+  /* ================================================================ */
+
+  if (USE_IMESSAGE_BLUE) {
+    document.documentElement.style.setProperty("--sent", "#0A84FF");
+  }
+  document.getElementById("statusTime").textContent = STATUS_TIME;
+  document.getElementById("contactName").textContent = CONTACT_NAME;
+  document.getElementById("avatar").textContent = CONTACT_NAME
+    .split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+
+  const thread      = document.getElementById("thread");
+  const threadInner = document.getElementById("threadInner");
+  const replayBtn   = document.getElementById("replayBtn");
+
+  let timers = [];
+  let lastRow = null;      // previous message row, for tail + grouping logic
+
+  function schedule(fn, ms) { timers.push(setTimeout(fn, ms)); }
+
+  function scrollToBottom() {
+    thread.scrollTo({ top: thread.scrollHeight, behavior: "smooth" });
+  }
+
+  function makeRow(from) {
+    const row = document.createElement("div");
+    row.className = "msg-row " + from;
+    // stacked same-sender bubbles sit 2px apart; previous one loses its tail
+    if (lastRow && lastRow.dataset.from === from) {
+      row.classList.add("stacked");
+      const prevBubble = lastRow.querySelector(".bubble");
+      if (prevBubble) prevBubble.classList.remove("tail");
+    }
+    row.dataset.from = from;
+    return row;
+  }
+
+  function addTypingIndicator(from) {
+    const row = makeRow(from);
+    const bubble = document.createElement("div");
+    bubble.className = "bubble " + from + " typing tail anim";
+    bubble.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    row.appendChild(bubble);
+    threadInner.appendChild(row);
+    lastRow = row;
+    requestAnimationFrame(scrollToBottom);
+    return row;
+  }
+
+  function addMessage(from, text, typingRow) {
+    let row;
+    if (typingRow) {
+      // swap the typing indicator into the real message, re-popping the spring
+      row = typingRow;
+      row.innerHTML = "";
+    } else {
+      row = makeRow(from);
+      threadInner.appendChild(row);
+      lastRow = row;
+    }
+    const bubble = document.createElement("div");
+    bubble.className = "bubble " + from + " tail anim";
+    bubble.textContent = text;
+    row.appendChild(bubble);
+    requestAnimationFrame(scrollToBottom);
+  }
+
+  function play() {
+    timers.forEach(clearTimeout);
+    timers = [];
+    lastRow = null;
+    threadInner.innerHTML = '<div class="day-stamp"><b>Today</b> 2:12 PM</div>';
+    thread.scrollTop = 0;
+
+    MESSAGES.forEach(msg => {
+      if (msg.from === "business" && msg.typingMs) {
+        let typingRow = null;
+        schedule(() => { typingRow = addTypingIndicator("business"); }, msg.at);
+        schedule(() => addMessage("business", msg.text, typingRow), msg.at + msg.typingMs);
+      } else {
+        schedule(() => addMessage(msg.from, msg.text, null), msg.at);
+      }
+    });
+  }
+
+  replayBtn.addEventListener("click", play);
+  play();
+</script>
+</body>
+</html>
