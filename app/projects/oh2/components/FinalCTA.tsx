@@ -26,8 +26,8 @@ export function FinalCTA() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-xl text-[#171e19]/80 sm:text-2xl">
-          Not happy for any reason in your first 30 days? We refund every cent — and you keep
-          your website. $0 setup. No contract. Cancel anytime.
+          Not happy for any reason in your first 30 days? We refund every cent — no questions
+          asked. $0 setup. No contract. Cancel anytime.
         </p>
 
         <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/70">
