@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GateForm } from "./GateForm";
+import { Dot } from "./Dot";
 import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
 
 /**
@@ -22,10 +23,10 @@ export function VideoForm() {
   };
 
   return (
-    <section id="demo" className="scroll-mt-24 bg-white py-16 sm:py-24">
+    <section id="demo" className="scroll-mt-24 bg-white pt-6 pb-16 sm:pt-10 sm:pb-24">
       <div className="mx-auto max-w-3xl px-5 text-center">
         <h2 className="oh-display text-4xl text-[#171e19] sm:text-6xl">
-          Watch it book a real job.
+          Watch it book a real job<Dot />
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-[#171e19]/70">
           A real call, answered, qualified, and booked — while the owner keeps working.
@@ -58,7 +59,7 @@ export function VideoForm() {
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#ffe17c] text-3xl">
                 ✓
               </div>
-              <p className="oh-display text-2xl text-[#171e19]">You&apos;re all set.</p>
+              <p className="oh-display text-2xl text-[#171e19]">You&apos;re all set<Dot /></p>
               <p className="mt-2 text-sm text-[#171e19]/60">
                 We opened the calendar in a new tab. Didn&apos;t see it? Tap below.
               </p>

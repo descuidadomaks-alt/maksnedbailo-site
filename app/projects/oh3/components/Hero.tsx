@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useGate } from "./GateContext";
 import { Highlight } from "./Highlight";
+import { Dot } from "./Dot";
 import { PRICE, SETUP, TERMS } from "../lib/config";
 
 /**
@@ -17,7 +18,7 @@ export function Hero() {
   const { scrollToDemo } = useGate();
 
   return (
-    <section id="top" className="oh-grid-bg relative overflow-hidden bg-white pt-28 pb-16 sm:pt-36 sm:pb-24">
+    <section id="top" className="oh-grid-bg relative overflow-hidden bg-white pt-28 pb-6 sm:pt-36 sm:pb-10">
       {/* soft fade so the grid doesn't fight the copy */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white" />
 
@@ -38,7 +39,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.05 }}
           className="oh-display mx-auto mt-6 max-w-4xl text-5xl text-[#171e19] xs:text-6xl sm:text-7xl lg:text-8xl"
         >
-          Every lead answered, qualified &amp; <Highlight>booked</Highlight> — in under 60 seconds.
+          Every lead answered, qualified &amp; <Highlight>booked</Highlight> — in under 60 seconds<Dot />
         </motion.h1>
 
         <motion.p
@@ -49,7 +50,7 @@ export function Hero() {
         >
           Your AI receptionist picks up every call, text, and form in seconds — qualifies
           the job and books it straight onto your calendar. 24/7, even while you&apos;re up
-          on a roof. Up and running fast.
+          on a roof. Up and running in 48 hours.
         </motion.p>
 
         <motion.p

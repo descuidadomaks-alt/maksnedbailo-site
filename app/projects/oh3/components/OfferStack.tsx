@@ -1,6 +1,7 @@
 "use client";
 
 import { useGate } from "./GateContext";
+import { Dot } from "./Dot";
 import { PRICE } from "../lib/config";
 
 /**
@@ -35,7 +36,7 @@ export function OfferStack() {
     <section className="bg-[#171e19] py-16 text-white sm:py-24">
       <div className="mx-auto max-w-3xl px-5">
         <h2 className="oh-display text-center text-5xl text-white sm:text-7xl">
-          Add it all up.
+          Add it all up<Dot />
         </h2>
 
         <div className="oh-card mt-10 overflow-hidden rounded-2xl border border-[#b7c6c2]/15 bg-[#0f1410] shadow-2xl">

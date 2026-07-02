@@ -3,13 +3,15 @@
 import { useEffect } from "react";
 import { useGate } from "./GateContext";
 import { GateForm } from "./GateForm";
+import { Dot } from "./Dot";
 import { BOOKING_LINK } from "../lib/config";
 
 /**
  * The single booking-capture modal opened by the "book"/"claim" CTAs.
  * Locked state = the 4-field form. Submitted state = thank-you + "Book Your
- * Call" (→ calendar) + a jump to the visible demo. Mounted once at the page
- * root inside <GateProvider>.
+ * Call" (→ calendar) + a jump to the demo. Copy never promises to "reveal"
+ * the demo — the video is public in the VideoForm section, not gated behind
+ * this modal. Mounted once at the page root inside <GateProvider>.
  */
 export function GateModal() {
   const { modalOpen, unlocked, closeModal, scrollToDemo } = useGate();
@@ -54,11 +56,11 @@ export function GateModal() {
         {!unlocked ? (
           <>
             <h3 className="oh-display pr-8 text-3xl text-[#171e19]">
-              Let&apos;s get you started.
+              Let&apos;s get you started<Dot />
             </h3>
             <p className="mt-2 mb-5 text-[#171e19]/70">
-              Drop your details — we&apos;ll show you the demo and book a free 15-minute call
-              to walk you through exactly how it&apos;d run for you.
+              Drop your details and we&apos;ll book you a free 15-minute call — we&apos;ll walk
+              you through exactly how it&apos;d run for your business.
             </p>
             <GateForm ctaLabel="GET STARTED" compact />
           </>
@@ -67,9 +69,10 @@ export function GateModal() {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#ffe17c] text-3xl">
               ✓
             </div>
-            <h3 className="oh-display text-3xl text-[#171e19]">You&apos;re all set.</h3>
+            <h3 className="oh-display text-3xl text-[#171e19]">You&apos;re all set<Dot /></h3>
             <p className="mt-2 mb-6 text-[#171e19]/70">
-              Grab a time on the calendar — then watch the demo while you wait.
+              Grab a time on the calendar — the demo&apos;s right below whenever you want to
+              watch it.
             </p>
             <a
               href={BOOKING_LINK}

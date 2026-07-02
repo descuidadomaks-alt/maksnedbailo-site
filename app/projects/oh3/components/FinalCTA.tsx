@@ -1,6 +1,7 @@
 "use client";
 
 import { useGate } from "./GateContext";
+import { Dot } from "./Dot";
 
 /**
  * Final section — 30-day risk-free refund close on the yellow band, with a
@@ -22,7 +23,7 @@ export function FinalCTA() {
 
       <div className="relative mx-auto max-w-3xl px-5 text-center">
         <h2 className="oh-display text-5xl leading-[0.9] text-[#171e19] sm:text-7xl lg:text-8xl">
-          Try it risk-free for 30 days.
+          Try it risk-free for 30 days<Dot white />
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-xl text-[#171e19]/80 sm:text-2xl">

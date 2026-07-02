@@ -1,6 +1,7 @@
 "use client";
 
 import { useGate } from "./GateContext";
+import { Dot } from "./Dot";
 
 /**
  * "Pick your lane" — tiered pricing after the value stack, before the final
@@ -87,7 +88,7 @@ export function TiersSection() {
     <section className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-6xl px-5">
         <h2 className="oh-display text-center text-5xl text-[#171e19] sm:text-7xl">
-          Pick your lane.
+          Pick your lane<Dot />
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-center text-lg text-[#171e19]/70">
           Start with the front desk. Add leads and visibility when you&apos;re ready.
@@ -185,7 +186,8 @@ export function TiersSection() {
         </div>
 
         <p className="mx-auto mt-6 max-w-xl text-center text-sm text-[#171e19]/50">
-          Not sure which lane? Book the free call — we&apos;ll point you to the right one.
+          Not sure which lane? Book the free call — we&apos;ll tell you straight which one
+          fits, even if it&apos;s the cheapest.
         </p>
       </div>
     </section>
