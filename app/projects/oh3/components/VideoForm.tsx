@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { GateForm } from "./GateForm";
 import { Dot } from "./Dot";
+import { GeoPin } from "./GeoPin";
 import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER, REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
@@ -53,7 +54,7 @@ export function VideoForm() {
                 Drop your details and we&apos;ll show you how it&apos;d run for your business.
               </p>
               <p className="mb-5 flex items-center justify-center gap-1.5 text-center text-xs font-bold text-[#171e19]">
-                <span aria-hidden className="h-1.5 w-1.5 flex-none rounded-full bg-[#ffe17c]" />
+                <GeoPin />
                 {SPOTS_LEFT} onboarding spots left in {REGION}
               </p>
               <GateForm ctaLabel="BOOK MY FREE CALL" compact onSubmitted={goToBooking} />

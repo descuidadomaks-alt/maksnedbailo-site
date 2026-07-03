@@ -2,6 +2,7 @@
 
 import { useGate } from "./GateContext";
 import { Dot } from "./Dot";
+import { GeoPin } from "./GeoPin";
 import { PRICE, REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
@@ -79,7 +80,7 @@ export function OfferStack() {
             </p>
 
             <p className="mx-auto mt-4 flex items-center justify-center gap-1.5 text-sm font-bold text-[#ffe17c]">
-              <span aria-hidden className="h-1.5 w-1.5 flex-none rounded-full bg-[#ffe17c]" />
+              <GeoPin />
               {SPOTS_LEFT} onboarding spots left in {REGION}
             </p>
 
