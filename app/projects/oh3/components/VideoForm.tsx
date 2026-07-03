@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { GateForm } from "./GateForm";
 import { Dot } from "./Dot";
-import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
+import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER, REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
  * Video + form — the new centerpiece, directly under the hero. The demo is
@@ -49,8 +49,12 @@ export function VideoForm() {
               <p className="oh-display mb-1 text-center text-2xl text-[#171e19]">
                 See it working for your business
               </p>
-              <p className="mb-5 text-center text-sm text-[#171e19]/60">
+              <p className="mb-3 text-center text-sm text-[#171e19]/60">
                 Drop your details and we&apos;ll show you how it&apos;d run for your business.
+              </p>
+              <p className="mb-5 flex items-center justify-center gap-1.5 text-center text-xs font-bold text-[#171e19]">
+                <span aria-hidden className="h-1.5 w-1.5 flex-none rounded-full bg-[#ffe17c]" />
+                {SPOTS_LEFT} onboarding spots left in {REGION}
               </p>
               <GateForm ctaLabel="BOOK MY FREE CALL" compact onSubmitted={goToBooking} />
             </div>

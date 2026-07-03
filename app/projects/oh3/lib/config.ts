@@ -9,8 +9,16 @@
 
 export const BRAND = "Overtime Hunch.";
 
-// Your target service area, e.g. "the UK". Shown in copy where region matters.
-export const REGION = "the UK"; // TODO: confirm target area
+// Campaign target market — shown in every scarcity line on the page.
+// First market: New England (cheapest contractor CPMs, low agency saturation,
+// and the "one business per area" promise is literally checkable there).
+// Retargeting a new metro per campaign = change this one line.
+export const REGION = "New England";
+
+// ⚠ HONEST scarcity — a real onboarding cap, not a marketing number.
+// Update it as spots actually fill; a fake counter breaks the one rule this
+// whole company runs on.
+export const SPOTS_LEFT = "5";
 
 // The offer — shown in the hero chip, the value stack, and the final CTA.
 export const PRICE = "$499/mo";

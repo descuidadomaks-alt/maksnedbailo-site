@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useGate } from "./GateContext";
 import { Highlight } from "./Highlight";
 import { Dot } from "./Dot";
-import { PRICE, SETUP, TERMS } from "../lib/config";
+import { PRICE, SETUP, TERMS, REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
  * Hero on the 40px grid background. No chat animation here — the real video
@@ -92,6 +92,11 @@ export function Hero() {
           </button>
           <p className="mt-1.5 text-[11px] text-[#171e19]/60 sm:mt-4 sm:text-sm">
             See it answer and book a real lead — live.
+          </p>
+          {/* honest scarcity seed — the specific close lives in FinalCTA */}
+          <p className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] font-bold text-[#171e19]/80 sm:mt-3 sm:text-sm">
+            <span aria-hidden className="h-1.5 w-1.5 flex-none rounded-full bg-[#ffe17c]" />
+            Now onboarding: {SPOTS_LEFT} spots left in {REGION}.
           </p>
         </motion.div>
       </div>

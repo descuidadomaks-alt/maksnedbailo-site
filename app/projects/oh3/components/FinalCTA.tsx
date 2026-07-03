@@ -2,6 +2,7 @@
 
 import { useGate } from "./GateContext";
 import { Dot } from "./Dot";
+import { REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
  * Final section — 30-day risk-free refund close on the yellow band, with a
@@ -31,9 +32,10 @@ export function FinalCTA() {
           asked. $0 setup. No contract. Cancel anytime.
         </p>
 
-        <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/70">
-          We take a limited number of businesses per area — you&apos;re never up against our
-          own clients.
+        <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/80">
+          Right now we&apos;re onboarding <span className="font-bold">{SPOTS_LEFT} more
+          businesses in {REGION}</span> — and never two competitors in the same area. When
+          the spots fill, we pause onboarding.
         </p>
 
         <button

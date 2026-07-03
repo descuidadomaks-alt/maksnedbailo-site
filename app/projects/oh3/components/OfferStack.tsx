@@ -2,7 +2,7 @@
 
 import { useGate } from "./GateContext";
 import { Dot } from "./Dot";
-import { PRICE } from "../lib/config";
+import { PRICE, REGION, SPOTS_LEFT } from "../lib/config";
 
 /**
  * Value stack. Hormozi-style: total the value, strike it, reveal the real
@@ -78,10 +78,15 @@ export function OfferStack() {
               setup — we&apos;d rather earn your business every single month.
             </p>
 
+            <p className="mx-auto mt-4 flex items-center justify-center gap-1.5 text-sm font-bold text-[#ffe17c]">
+              <span aria-hidden className="h-1.5 w-1.5 flex-none rounded-full bg-[#ffe17c]" />
+              {SPOTS_LEFT} onboarding spots left in {REGION}
+            </p>
+
             <button
               type="button"
               onClick={openGate}
-              className="oh-display oh-card mt-7 inline-block rounded-lg bg-[#ffe17c] px-8 py-4 text-xl text-[#171e19] shadow-xl hover:scale-105 min-h-[56px]"
+              className="oh-display oh-card mt-5 inline-block rounded-lg bg-[#ffe17c] px-8 py-4 text-xl text-[#171e19] shadow-xl hover:scale-105 min-h-[56px]"
             >
               Claim your spot
             </button>
