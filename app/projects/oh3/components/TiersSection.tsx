@@ -129,7 +129,7 @@ export function TiersSection() {
                 </div>
 
                 {t.intro && (
-                  <p className={`mt-5 text-sm font-bold ${dark ? "text-white/80" : "text-[#171e19]/80"}`}>
+                  <p className={`mt-5 text-sm font-bold ${dark ? "text-white" : "text-[#171e19]"}`}>
                     {t.intro}
                   </p>
                 )}
