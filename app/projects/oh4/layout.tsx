@@ -92,9 +92,27 @@ export default function Oh4Layout({ children }: { children: ReactNode }) {
         @keyframes oh-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
         .oh-eq-bar { transform-origin: bottom; animation: oh-eq 0.9s ease-in-out infinite; }
 
+        /* Quiz modal header — Anton font without oh-display's forced uppercase
+           (the exact copy is sentence-case) or its tight line-height. */
+        .oh-quiz-header {
+          font-family: var(--font-oh-display), 'Arial Narrow', sans-serif;
+          letter-spacing: 0.01em;
+        }
+
+        /* Quiz progress bar — animated diagonal stripes, width transitions
+           per-step. */
+        .oh-quiz-progress-fill {
+          background-image: repeating-linear-gradient(45deg, #171e19 0 6px, #ffe17c 6px 12px);
+          background-size: 24px 24px;
+          animation: oh-quiz-stripes 1s linear infinite;
+          transition: width 450ms cubic-bezier(0.4,0,0.2,1);
+        }
+        @keyframes oh-quiz-stripes { from { background-position: 0 0; } to { background-position: 24px 0; } }
+
         @media (prefers-reduced-motion: reduce) {
           .oh-scope .oh-card { transition: none; }
           .oh-scope .oh-dot, .oh-scope .oh-eq-bar { animation: none; }
+          .oh-scope .oh-quiz-progress-fill { animation: none; }
         }
       `,
         }}

@@ -11,21 +11,10 @@
 
 export const BRAND = "Overtime Hunch.";
 
-// Location is now resolved per-visitor (city → region → "your area"; see
-// LocationContext.tsx + app/api/geo/route.ts) instead of one hardcoded
-// REGION constant. SCARCITY_LINE fills in the resolved label at render time.
-//
-// ⚠ Deliberately no per-city/state numeric spot count here — multiplying a
-// single "N spots" figure across every detected city would be false. If a
-// number is wanted anywhere, use the single global CAPACITY_LINE below
-// instead.
-export const SCARCITY_LINE = (location: string) =>
-  `Now onboarding in ${location} — we only take a few businesses per area, so you never compete with our own clients.`;
-
-// ⚠ HONEST scarcity — a real, non-per-city onboarding cap. Update the wording
-// as spots actually fill; a fake counter breaks the one rule this whole
-// company runs on.
-export const CAPACITY_LINE = "A few onboarding spots open this month.";
+// Location is resolved per-visitor (city → region → "your area"; see
+// LocationContext.tsx + app/api/geo/route.ts). The scarcity copy is
+// market-size-aware — tier logic, metro/state tables, and all tunable
+// numbers live in lib/geoScarcity.ts.
 
 // The offer — shown in the hero chip, the value stack, and the final CTA.
 export const PRICE = "$499/mo";
@@ -34,10 +23,6 @@ export const TERMS = "No contract · cancel anytime";
 
 // Carter's closer calendar (Calendly / zcal). Shown after the form is submitted.
 export const BOOKING_LINK = "https://zcal.co/carelessmaks/15min"; // TODO: Carter's closer calendar
-
-// CRM / webhook endpoint the lead form POSTs to. Empty = no network call (the
-// gate still unlocks so the page stays usable while you wire this up).
-export const FORM_WEBHOOK = ""; // TODO: CRM / webhook endpoint
 
 // Self-hosted demo video — native <video>, no iframe/YouTube. Gated behind
 // the form until submit (see VideoForm.tsx). Files live in

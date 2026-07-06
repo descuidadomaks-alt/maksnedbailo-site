@@ -1,6 +1,6 @@
 "use client";
 
-import { useGate } from "./GateContext";
+import { useQuiz } from "./QuizContext";
 import { Dot } from "./Dot";
 
 /**
@@ -82,7 +82,7 @@ const TIERS: Tier[] = [
 ];
 
 export function TiersSection() {
-  const { openGate } = useGate();
+  const { openQuiz } = useQuiz();
 
   return (
     <section className="bg-white py-16 sm:py-24">
@@ -171,7 +171,7 @@ export function TiersSection() {
 
                 <button
                   type="button"
-                  onClick={openGate}
+                  onClick={openQuiz}
                   className={`oh-display oh-card mt-auto w-full rounded-lg px-6 py-4 text-lg shadow-lg hover:scale-[1.02] min-h-[52px] ${
                     dark || highlight
                       ? "bg-[#ffe17c] text-[#171e19]"

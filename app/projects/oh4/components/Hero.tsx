@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useGate } from "./GateContext";
-import { useLocation } from "./LocationContext";
+import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
 import { Highlight } from "./Highlight";
 import { Dot } from "./Dot";
 import { GeoPin } from "./GeoPin";
-import { PRICE, SETUP, TERMS, SCARCITY_LINE } from "../lib/config";
+import { PRICE, SETUP, TERMS } from "../lib/config";
 
 /**
  * Hero on the 40px grid background. No chat animation here — the real video
@@ -27,8 +27,8 @@ import { PRICE, SETUP, TERMS, SCARCITY_LINE } from "../lib/config";
  * the contractor's EXISTING calls/texts/forms.
  */
 export function Hero() {
-  const { scrollToDemo } = useGate();
-  const location = useLocation();
+  const { openQuiz } = useQuiz();
+  const scarcityLine = useScarcityLine();
 
   return (
     <section
@@ -87,7 +87,7 @@ export function Hero() {
         >
           <button
             type="button"
-            onClick={scrollToDemo}
+            onClick={openQuiz}
             className="oh-display oh-card inline-block rounded-lg bg-[#ffe17c] px-7 py-4 text-lg text-[#171e19] shadow-xl hover:scale-105 min-h-[52px] sm:px-8 sm:text-2xl sm:min-h-[56px]"
           >
             Watch it book a real job
@@ -98,7 +98,7 @@ export function Hero() {
           {/* honest scarcity seed — the specific close lives in FinalCTA */}
           <p className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#171e19]/80 sm:mt-3 sm:text-sm">
             <GeoPin />
-            {SCARCITY_LINE(location)}
+            {scarcityLine}
           </p>
         </motion.div>
       </div>

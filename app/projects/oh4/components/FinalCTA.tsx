@@ -1,9 +1,8 @@
 "use client";
 
-import { useGate } from "./GateContext";
-import { useLocation } from "./LocationContext";
+import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
 import { Dot } from "./Dot";
-import { SCARCITY_LINE, CAPACITY_LINE } from "../lib/config";
 
 /**
  * Final section — 30-day risk-free refund close on the yellow band, with a
@@ -11,8 +10,8 @@ import { SCARCITY_LINE, CAPACITY_LINE } from "../lib/config";
  * the booking form.
  */
 export function FinalCTA() {
-  const { openGate } = useGate();
-  const location = useLocation();
+  const { openQuiz } = useQuiz();
+  const scarcityLine = useScarcityLine();
 
   return (
     <section className="relative overflow-hidden bg-[#ffe17c] py-20 sm:py-28">
@@ -35,12 +34,12 @@ export function FinalCTA() {
         </p>
 
         <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/80">
-          {SCARCITY_LINE(location)} {CAPACITY_LINE}
+          {scarcityLine}
         </p>
 
         <button
           type="button"
-          onClick={openGate}
+          onClick={openQuiz}
           className="oh-display oh-card mt-9 inline-block rounded-lg bg-[#171e19] px-8 py-5 text-xl text-white shadow-xl hover:scale-105 sm:text-2xl min-h-[56px]"
         >
           Book your free call

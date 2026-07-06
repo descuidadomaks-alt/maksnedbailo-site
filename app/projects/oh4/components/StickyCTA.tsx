@@ -1,15 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useQuiz } from "./QuizContext";
 
 /**
  * Mobile-only sticky CTA bar. Hidden until the visitor has scrolled past the
- * video + form section (they've already seen the offer by then), then stays
- * pinned within thumb reach. Tapping it jumps straight to the form (not just
- * the section top) so a second scroll isn't needed. Hidden on sm+ (the nav +
- * section CTAs cover desktop).
+ * video section (they've already seen the offer by then), then stays pinned
+ * within thumb reach. Tapping it opens the quiz — same CTA as everywhere
+ * else on the page. Hidden on sm+ (the nav + section CTAs cover desktop).
  */
 export function StickyCTA() {
+  const { openQuiz } = useQuiz();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -33,17 +34,13 @@ export function StickyCTA() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToForm = () => {
-    document.getElementById("book-call-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   if (!visible) return null;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#171e19]/10 bg-white/95 p-3 backdrop-blur sm:hidden">
       <button
         type="button"
-        onClick={scrollToForm}
+        onClick={openQuiz}
         className="oh-display w-full rounded-lg bg-[#ffe17c] px-6 py-4 text-lg text-[#171e19] shadow-lg min-h-[52px]"
       >
         Book my free call

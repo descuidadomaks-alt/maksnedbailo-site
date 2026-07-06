@@ -1,10 +1,10 @@
 "use client";
 
-import { useGate } from "./GateContext";
-import { useLocation } from "./LocationContext";
+import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
 import { Dot } from "./Dot";
 import { GeoPin } from "./GeoPin";
-import { PRICE, SCARCITY_LINE } from "../lib/config";
+import { PRICE } from "../lib/config";
 
 /**
  * Value stack. Hormozi-style: total the value, strike it, reveal the real
@@ -32,8 +32,8 @@ const TOTAL = ROWS.reduce((sum, r) => sum + r.value, 0); // 8741
 const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 export function OfferStack() {
-  const { openGate } = useGate();
-  const location = useLocation();
+  const { openQuiz } = useQuiz();
+  const scarcityLine = useScarcityLine();
 
   return (
     <section className="bg-[#171e19] py-16 text-white sm:py-24">
@@ -83,12 +83,12 @@ export function OfferStack() {
 
             <p className="mx-auto mt-4 flex items-center justify-center gap-1.5 text-sm font-bold text-[#ffe17c]">
               <GeoPin />
-              {SCARCITY_LINE(location)}
+              {scarcityLine}
             </p>
 
             <button
               type="button"
-              onClick={openGate}
+              onClick={openQuiz}
               className="oh-display oh-card mt-5 inline-block rounded-lg bg-[#ffe17c] px-8 py-4 text-xl text-[#171e19] shadow-xl hover:scale-105 min-h-[56px]"
             >
               Claim your spot
