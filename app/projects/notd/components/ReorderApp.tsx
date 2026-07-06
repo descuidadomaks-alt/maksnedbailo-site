@@ -8,7 +8,7 @@ import { buildForecast } from "../lib/forecast";
 import { normalizeOrderRows, normalizeProductRows } from "../lib/normalize";
 import { parseWorkbookFile } from "../lib/parseWorkbook";
 import { filterAndJoin } from "../lib/pipeline";
-import { applySurvey, summarizeSurvey } from "../lib/survey";
+import { applySurvey, submitSurvey, summarizeSurvey } from "../lib/survey";
 import type {
   ForecastConfig,
   ForecastResult,
@@ -52,6 +52,8 @@ export function ReorderApp() {
     setConfig((c) => applySurvey(c, answers));
     setSurveyNote(summarizeSurvey(answers));
     setSurveyOpen(false);
+    // Deliver answers off-device (best-effort) so the owner can review them.
+    void submitSurvey(answers);
   }
 
   function addSource(source: Omit<LoadedSource, "id">) {

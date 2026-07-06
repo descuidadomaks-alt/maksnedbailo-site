@@ -29,3 +29,10 @@ export const FOOTER_LINK = "https://maksnedbailo.site";
 
 export const KEYCRM_HINT =
   "Потрібні два файли з KeyCRM: історія замовлень (експорт продажів) і список товарів із залишками.";
+
+// Where survey answers are delivered. Paste an n8n / Make / Zapier webhook URL
+// (or any endpoint that accepts a JSON POST — e.g. a Google Apps Script web
+// app or Formspree). The browser POSTs through /api/outreach-form (same-origin,
+// no CORS), which forwards the payload server-side. Empty = answers are only
+// logged in the Vercel function logs and still adjust the on-screen forecast.
+export const SURVEY_WEBHOOK = "";

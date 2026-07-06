@@ -1,6 +1,7 @@
 // The "improve accuracy" survey: question definitions + how answers feed the
 // forecast. lead time, service level and season change the math directly;
 // the rest are captured to inform future refinements.
+import { SURVEY_WEBHOOK } from "./config";
 import type { ForecastConfig, SurveyAnswers } from "./types";
 
 export const LEAD_TIME_OPTIONS = [
@@ -45,6 +46,27 @@ export function applySurvey(config: ForecastConfig, answers: SurveyAnswers): For
     safety_days: SERVICE_TO_SAFETY[answers.serviceLevel],
     demand_multiplier: SEASON_TO_MULTIPLIER[answers.season],
   };
+}
+
+/** Deliver the answers off the visitor's device so the owner can see them.
+ * POSTs through the same-origin /api/outreach-form proxy (no CORS), which
+ * forwards to SURVEY_WEBHOOK server-side. Fire-and-forget: a network failure
+ * never blocks the visitor, whose forecast still updates locally. */
+export async function submitSurvey(answers: SurveyAnswers): Promise<void> {
+  try {
+    await fetch("/api/outreach-form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        webhookUrl: SURVEY_WEBHOOK || undefined,
+        source: "notd-reorder-survey",
+        submittedAt: new Date().toISOString(),
+        ...answers,
+      }),
+    });
+  } catch {
+    // Swallow — delivery is best-effort, the tool keeps working regardless.
+  }
 }
 
 /** Human summary of what the survey changed, for the confirmation line. */
