@@ -202,10 +202,32 @@ function FullList({ reduce }: { reduce: boolean }) {
 }
 
 /**
- * Interactive silhouette. Four zones (head, shoulders, torso, legs) compose a
- * calm figure; the active zone glows gold. Each zone is a real <button> for
- * keyboard + screen-reader access; the chips below mirror the same state.
+ * Interactive silhouette. One seamless figure (same-fill shapes merge into a
+ * clean body); selecting a zone lights up a gold band clipped to the body, so
+ * the highlight always fits the figure exactly. Transparent hit-rects capture
+ * taps; the chips below mirror the same state for keyboard / screen-reader use.
  */
+const BAND: Record<
+  string,
+  { hl: { y: number; h: number }; hit: { x: number; y: number; w: number; h: number } }
+> = {
+  rostro: { hl: { y: 6, h: 86 }, hit: { x: 70, y: 6, w: 80, h: 86 } },
+  espalda: { hl: { y: 92, h: 92 }, hit: { x: 44, y: 92, w: 132, h: 84 } },
+  cuerpo: { hl: { y: 6, h: 458 }, hit: { x: 66, y: 176, w: 88, h: 74 } },
+  piernas: { hl: { y: 250, h: 216 }, hit: { x: 58, y: 250, w: 104, h: 214 } },
+};
+
+// Same shapes power the fill, the clip, and (kept identical) the silhouette.
+const BODY_SHAPES = (
+  <>
+    <circle cx="110" cy="48" r="30" />
+    <rect x="100" y="72" width="20" height="24" rx="9" />
+    <path d="M74 100 C90 92 130 92 146 100 C153 98 156 105 155 113 L149 196 C147 226 137 250 128 256 L92 256 C83 250 73 226 71 196 L65 113 C64 105 67 98 74 100 Z" />
+    <rect x="83" y="250" width="25" height="206" rx="12" />
+    <rect x="112" y="250" width="25" height="206" rx="12" />
+  </>
+);
+
 function BodyMap({
   active,
   onSelect,
@@ -215,91 +237,62 @@ function BodyMap({
   onSelect: (id: string) => void;
   reduce: boolean;
 }) {
-  const zoneLabel = (id: string) =>
-    site.zones.find((z) => z.id === id)?.label ?? id;
-
-  const fill = (id: string) => (active === id ? "#C2A05B" : "#E9DCC1");
-  const stroke = (id: string) => (active === id ? "#9A7B33" : "#CBB889");
-
-  const Z = ({ id, children }: { id: string; children: React.ReactNode }) => (
-    <g
-      role="button"
-      tabIndex={0}
-      aria-label={zoneLabel(id)}
-      aria-pressed={active === id}
-      onClick={() => onSelect(id)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onSelect(id);
-        }
-      }}
-      style={{ cursor: "pointer", transition: reduce ? "none" : "opacity .3s" }}
-      className="pt-zone outline-none"
-    >
-      {children}
-    </g>
-  );
+  const zoneLabel = (id: string) => site.zones.find((z) => z.id === id)?.label ?? id;
 
   return (
-    <div className="relative w-full max-w-[300px]">
-      {/* soft halo behind the figure — the logo's rising sun */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-6 -z-0 h-56 w-56 -translate-x-1/2 rounded-full bg-gold/10 blur-2xl"
-      />
+    <div className="relative w-full max-w-[240px]">
       <svg
-        viewBox="0 0 240 470"
-        className="relative w-full"
-        style={{ filter: "drop-shadow(0 18px 40px rgba(154,123,51,0.15))" }}
+        viewBox="0 0 220 470"
+        className="w-full"
+        style={{ filter: "drop-shadow(0 16px 34px rgba(154,123,51,0.16))" }}
       >
         <title>Cuerpo para elegir la zona a cuidar</title>
+        <defs>
+          <clipPath id="pt-body">{BODY_SHAPES}</clipPath>
+        </defs>
 
-        {/* Legs (piernas) */}
-        <Z id="piernas">
-          <path
-            d="M96 250 h48 q6 0 6 8 l-6 178 q-1 14 -13 14 q-11 0 -12 -13 l-5 -132 h-3 l-5 132 q-1 13 -12 13 q-12 0 -13 -14 l-6 -178 q0 -8 6 -8 z"
-            fill={fill("piernas")}
-            stroke={stroke("piernas")}
-            strokeWidth={2.5}
-            style={{ transition: reduce ? "none" : "fill .35s, stroke .35s" }}
-          />
-        </Z>
+        {/* base fill + active-zone highlight, both clipped to the body */}
+        <g clipPath="url(#pt-body)">
+          <rect x="0" y="0" width="220" height="470" fill="#E7D8B8" />
+          {ZONE_ORDER.map((id) => (
+            <rect
+              key={id}
+              x="0"
+              y={BAND[id].hl.y}
+              width="220"
+              height={BAND[id].hl.h}
+              fill="#C2A05B"
+              style={{ opacity: active === id ? 1 : 0, transition: reduce ? "none" : "opacity .4s ease" }}
+            />
+          ))}
+        </g>
 
-        {/* Torso (cuerpo entero) */}
-        <Z id="cuerpo">
-          <path
-            d="M84 150 q-6 0 -6 10 l4 60 q2 26 14 40 q4 5 4 14 h40 q0 -9 4 -14 q12 -14 14 -40 l4 -60 q0 -10 -6 -10 z"
-            fill={fill("cuerpo")}
-            stroke={stroke("cuerpo")}
-            strokeWidth={2.5}
-            style={{ transition: reduce ? "none" : "fill .35s, stroke .35s" }}
-          />
-        </Z>
-
-        {/* Shoulders + neck (espalda, cuello y hombros) */}
-        <Z id="espalda">
-          <path
-            d="M112 84 h16 v18 q22 3 34 14 q10 9 12 26 q-30 -16 -54 -16 t-54 16 q2 -17 12 -26 q12 -11 34 -14 z"
-            fill={fill("espalda")}
-            stroke={stroke("espalda")}
-            strokeWidth={2.5}
-            style={{ transition: reduce ? "none" : "fill .35s, stroke .35s" }}
-          />
-        </Z>
-
-        {/* Head (rostro y mirada) */}
-        <Z id="rostro">
-          <circle
-            cx={120}
-            cy={50}
-            r={30}
-            fill={fill("rostro")}
-            stroke={stroke("rostro")}
-            strokeWidth={2.5}
-            style={{ transition: reduce ? "none" : "fill .35s, stroke .35s" }}
-          />
-        </Z>
+        {/* transparent tap targets */}
+        {ZONE_ORDER.map((id) => {
+          const h = BAND[id].hit;
+          return (
+            <rect
+              key={id}
+              x={h.x}
+              y={h.y}
+              width={h.w}
+              height={h.h}
+              fill="transparent"
+              role="button"
+              tabIndex={0}
+              aria-label={zoneLabel(id)}
+              aria-pressed={active === id}
+              onClick={() => onSelect(id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelect(id);
+                }
+              }}
+              style={{ cursor: "pointer", outline: "none" }}
+            />
+          );
+        })}
       </svg>
     </div>
   );

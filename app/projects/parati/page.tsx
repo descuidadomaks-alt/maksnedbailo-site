@@ -3,7 +3,6 @@ import { Hero } from "./components/Hero";
 import { RitualExplorer } from "./components/RitualExplorer";
 import { AvailabilityCue } from "./components/AvailabilityCue";
 import { About } from "./components/About";
-import { AtmosBand } from "./components/AtmosBand";
 import { Reviews } from "./components/Reviews";
 import { PreCta } from "./components/PreCta";
 import { Contact } from "./components/Contact";
@@ -24,7 +23,6 @@ export default function ParatiPage() {
         <RitualExplorer />
         <AvailabilityCue />
         <About />
-        <AtmosBand />
         <Reviews />
         <PreCta />
         <Contact />

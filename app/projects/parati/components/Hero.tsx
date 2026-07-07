@@ -38,20 +38,9 @@ export function Hero() {
       <div className="relative z-10 mx-auto grid max-w-content items-center gap-10 lg:min-h-[80svh] lg:grid-cols-12 lg:gap-6">
         {/* ── Content column (left, wider) ─────────────────────────── */}
         <div className="lg:col-span-7 lg:pr-8">
-          <motion.div {...fade(0.05)}>
-            <Image
-              src="/projects/parati/Logo_l.png"
-              alt={`${site.business} — ${site.tagline}`}
-              width={1007}
-              height={832}
-              priority
-              className="h-auto w-[150px] sm:w-[172px]"
-            />
-          </motion.div>
-
           <motion.span
             {...fade(0.15)}
-            className="mt-7 block font-jost text-[11px] uppercase tracking-label text-gold-deep"
+            className="block font-jost text-[11px] uppercase tracking-label text-gold-deep"
           >
             {site.hero.eyebrow}
           </motion.span>

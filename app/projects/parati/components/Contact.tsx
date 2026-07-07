@@ -3,13 +3,17 @@ import { waLink } from "../lib/whatsapp";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
-import { MapPara } from "./MapPara";
 
 /**
- * Contacto & Ubicación — Leaflet map (recoloured to the palette) + address,
- * hours, WhatsApp, Instagram.
+ * Contacto & Ubicación — Google Maps embed of the real business listing (so it
+ * carries their Google presence/reviews), tinted toward the cream/gold palette
+ * via a CSS filter; hover eases it back to full colour.
  */
 export function Contact() {
+  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
+    `${site.business} Masaje, ${site.address}`
+  )}&output=embed`;
+
   return (
     <section id="contacto" className="bg-ivory px-5 py-24 sm:px-8 sm:py-28">
       <div className="mx-auto max-w-content">
@@ -21,7 +25,16 @@ export function Contact() {
         <div className="mt-14 grid gap-10 md:grid-cols-2 md:gap-12">
           <Reveal>
             <div className="overflow-hidden rounded-soft border border-gold/20 shadow-card">
-              <MapPara />
+              <iframe
+                src={mapSrc}
+                title={site.contact.mapTitle}
+                width="100%"
+                height="380"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="pt-map"
+                style={{ border: 0, display: "block" }}
+              />
             </div>
             <a
               href={site.googleMaps}
