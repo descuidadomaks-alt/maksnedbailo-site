@@ -56,18 +56,21 @@ export default function ParatiLayout({ children }: { children: ReactNode }) {
         /* Thin gold hairline used between footer items */
         .pt-scope .hairline { height: 1px; width: 100%; background: rgba(194,160,91,0.25); }
 
-        /* Branded map — Google Maps iframe embeds can't take custom map styles,
-           so we tint the whole frame toward the cream/gold palette with a CSS
-           filter. Hover eases back to full colour so it stays usable. */
-        .pt-scope .pt-map {
-          filter: grayscale(0.28) sepia(0.5) saturate(0.82) hue-rotate(-12deg)
-                  brightness(1.05) contrast(0.9);
-          transition: filter 550ms ease;
+        /* Branded Leaflet map — warm the light basemap tiles toward the
+           cream/gold palette (filter only the tile pane, not the pin/controls). */
+        .pt-scope .leaflet-container { background: #F7F2E9; font-family: inherit; }
+        .pt-scope .pt-map .leaflet-tile-pane {
+          filter: sepia(0.42) saturate(0.85) hue-rotate(-10deg) brightness(1.03) contrast(0.94);
         }
-        .pt-scope .pt-map:hover {
-          filter: grayscale(0) sepia(0.08) saturate(1) hue-rotate(0deg)
-                  brightness(1) contrast(1);
+        .pt-scope .pt-pin span {
+          display: block; width: 16px; height: 16px; border-radius: 50%;
+          background: #C2A05B; border: 3px solid #FBF8F2;
+          box-shadow: 0 0 0 2px #9A7B33, 0 4px 10px rgba(58,51,43,0.35);
         }
+        .pt-scope .leaflet-bar a {
+          color: #9A7B33; border-color: rgba(194,160,91,0.3);
+        }
+        .pt-scope .leaflet-popup-content { font-family: inherit; color: #3A332B; }
 
         /* Hero petal drift — keyframes here so each petal can read its --drift var.
            Travels up and sways gently; fades in/out at the edges. */

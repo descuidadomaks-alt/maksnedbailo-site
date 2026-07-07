@@ -3,16 +3,13 @@ import { waLink } from "../lib/whatsapp";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
+import { MapPara } from "./MapPara";
 
 /**
- * Contacto & Ubicación — embedded map + address, hours, WhatsApp, Instagram.
- * The map uses a keyless `?q=…&output=embed` URL built from the address.
+ * Contacto & Ubicación — Leaflet map (recoloured to the palette) + address,
+ * hours, WhatsApp, Instagram.
  */
 export function Contact() {
-  const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(
-    site.address
-  )}&output=embed`;
-
   return (
     <section id="contacto" className="bg-ivory px-5 py-24 sm:px-8 sm:py-28">
       <div className="mx-auto max-w-content">
@@ -24,16 +21,7 @@ export function Contact() {
         <div className="mt-14 grid gap-10 md:grid-cols-2 md:gap-12">
           <Reveal>
             <div className="overflow-hidden rounded-soft border border-gold/20 shadow-card">
-              <iframe
-                src={mapSrc}
-                title={site.contact.mapTitle}
-                width="100%"
-                height="380"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="pt-map"
-                style={{ border: 0, display: "block" }}
-              />
+              <MapPara />
             </div>
             <a
               href={site.googleMaps}
@@ -41,7 +29,7 @@ export function Contact() {
               rel="noopener noreferrer"
               className="mt-3 inline-flex items-center gap-2 font-jost text-sm text-gold-deep underline-offset-4 transition-colors hover:underline"
             >
-              Abrir en Google Maps <span aria-hidden>→</span>
+              {site.contact.openMaps} <span aria-hidden>→</span>
             </a>
           </Reveal>
 

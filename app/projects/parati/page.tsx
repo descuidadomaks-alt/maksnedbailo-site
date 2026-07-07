@@ -1,19 +1,19 @@
 import { TopBar } from "./components/TopBar";
 import { Hero } from "./components/Hero";
-import { Services } from "./components/Services";
+import { RitualExplorer } from "./components/RitualExplorer";
 import { AvailabilityCue } from "./components/AvailabilityCue";
 import { About } from "./components/About";
+import { AtmosBand } from "./components/AtmosBand";
 import { Reviews } from "./components/Reviews";
-import { Gallery } from "./components/Gallery";
 import { PreCta } from "./components/PreCta";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { FloatingWhatsApp } from "./components/FloatingWhatsApp";
 
 /**
- * Single-page composition. Order IS the conversion logic — do not reorder:
- * hero → servicios → scarcity → about → proof → gallery → micro-yes →
- * contact → footer, with the floating WhatsApp button always present.
+ * Single-page composition. Order = the felt journey:
+ * hero (who / why) → find your ritual (the interactive core) → honest scarcity
+ * → Oksana (trust) → real reviews (proof) → micro-yes → where I am → footer.
  */
 export default function ParatiPage() {
   return (
@@ -21,11 +21,11 @@ export default function ParatiPage() {
       <TopBar />
       <main>
         <Hero />
-        <Services />
+        <RitualExplorer />
         <AvailabilityCue />
         <About />
+        <AtmosBand />
         <Reviews />
-        <Gallery />
         <PreCta />
         <Contact />
       </main>
