@@ -77,13 +77,21 @@ export function QuizModal() {
         </div>
 
         {showHeader && (
-          <p className="oh-quiz-header mt-1 text-center text-lg text-[#ffe17c] sm:text-xl">
-            {QUIZ_HEADER_TEXT} <span className="italic text-[#171e19]">{QUIZ_HEADER_PRICE}</span>
+          <p className="mt-2 text-center text-base font-medium leading-snug text-[#171e19]/80 sm:text-lg">
+            {QUIZ_HEADER_TEXT}{" "}
+            <span className="whitespace-nowrap rounded bg-[#ffe17c] px-1.5 py-0.5 font-bold text-[#171e19]">
+              {QUIZ_HEADER_PRICE}
+            </span>
           </p>
         )}
 
-        <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-[#171e19]/10">
-          <div className="oh-quiz-progress-fill h-full rounded-full" style={{ width: `${progress}%` }} />
+        <div className="mt-4 flex items-center gap-3">
+          <div className="h-3 flex-1 overflow-hidden rounded-full bg-[#171e19]/10">
+            <div className="oh-quiz-progress-fill h-full rounded-full" style={{ width: `${progress}%` }} />
+          </div>
+          <span className="oh-display shrink-0 text-xl tabular-nums text-[#171e19] sm:text-2xl">
+            {progress}%
+          </span>
         </div>
 
         <div className="mt-6 flex flex-1 flex-col justify-center overflow-y-auto">

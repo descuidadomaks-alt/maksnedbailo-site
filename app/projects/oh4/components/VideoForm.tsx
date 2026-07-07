@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dot } from "./Dot";
 import { useQuiz } from "./QuizContext";
 import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
@@ -8,15 +8,18 @@ import { BOOKING_LINK, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
 /**
  * Video — the centerpiece, directly under the hero. The video renders from
  * first paint (so its aspect-video box is reserved and unlocking never
- * shifts layout) but sits under a dimmed/blurred poster with a lock icon
- * until the quiz (QuizContext) completes. `unlocked` is shared page-wide
- * state — the quiz can be opened and finished from ANY CTA on the page, not
- * just this section, so this component just reacts to it.
+ * shifts layout). Before the quiz completes it shows the poster with a plain
+ * PLAY button — no lock, no gate copy — so the visitor expects to just watch
+ * (clicking it opens the quiz; a "locked" look kills the click). `unlocked`
+ * is shared page-wide state, set the instant the quiz completes from ANY CTA,
+ * so this component just reacts to it: swaps the poster for the real controls,
+ * autoplays, and reveals the book / "we'll call you" choice beneath it.
  */
 export function VideoForm() {
   const { unlocked, openQuiz } = useQuiz();
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasAutoplayed = useRef(false);
+  const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
     if (!unlocked || hasAutoplayed.current) return;
@@ -53,44 +56,60 @@ export function VideoForm() {
           />
 
           {!unlocked && (
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center bg-cover bg-center"
-              style={{ backgroundImage: `url(${VIDEO_POSTER})` }}
+            <button
+              type="button"
+              onClick={openQuiz}
+              aria-label="Play the demo"
+              className="group absolute inset-0 flex items-center justify-center"
             >
-              <div className="absolute inset-0 bg-[#171e19]/60 backdrop-blur-sm" />
-              <button type="button" onClick={openQuiz} className="relative flex flex-col items-center gap-3 px-6 text-center">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#ffe17c] shadow-xl">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden className="h-7 w-7">
-                    <rect x="5" y="10.5" width="14" height="9.5" rx="2" fill="#171e19" />
-                    <path
-                      d="M8 10.5V8a4 4 0 0 1 8 0v2.5"
-                      stroke="#171e19"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </span>
-                <span className="oh-display max-w-[16ch] text-lg text-white sm:text-xl">
-                  Drop your details — the demo plays right now.
-                </span>
-                <span className="oh-card mt-1 inline-block rounded-lg bg-[#ffe17c] px-6 py-3 text-sm font-bold uppercase tracking-wide text-[#171e19] shadow-lg hover:scale-105">
-                  Unlock the demo
-                </span>
-              </button>
-            </div>
+              {/* light dim only for play-button contrast — reads as "not
+                  playing yet", not "locked" */}
+              <span className="absolute inset-0 bg-[#171e19]/25 transition-colors group-hover:bg-[#171e19]/15" />
+              <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white/95 shadow-2xl transition-transform group-hover:scale-110 sm:h-24 sm:w-24">
+                <svg viewBox="0 0 24 24" fill="#171e19" aria-hidden className="ml-1 h-9 w-9 sm:h-10 sm:w-10">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+            </button>
           )}
         </div>
 
         {unlocked && (
           <div className="mx-auto mt-8 max-w-lg">
-            <a
-              href={BOOKING_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="oh-display oh-card inline-block w-full rounded-lg bg-[#171e19] px-8 py-4 text-lg text-white shadow-lg hover:scale-105 min-h-[52px]"
-            >
-              BOOK YOUR CALL
-            </a>
+            {!waiting ? (
+              <div className="flex flex-col gap-3">
+                <a
+                  href={BOOKING_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="oh-display oh-card block w-full rounded-lg bg-[#171e19] px-8 py-4 text-lg text-white shadow-lg hover:scale-[1.02] min-h-[52px]"
+                >
+                  BOOK YOUR CALL NOW
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setWaiting(true)}
+                  className="w-full rounded-lg border border-[#171e19]/20 px-8 py-3 text-base font-medium text-[#171e19]/70 hover:bg-[#f8f9fa] min-h-[48px]"
+                >
+                  I&apos;ll wait for your call
+                </button>
+              </div>
+            ) : (
+              <div className="rounded-2xl border border-[#171e19]/10 bg-[#ffe17c]/20 px-6 py-5 text-center">
+                <p className="oh-display text-2xl text-[#171e19]">You&apos;re on the list<Dot /></p>
+                <p className="mt-2 text-sm text-[#171e19]/70">
+                  We&apos;ve got your details — we&apos;ll reach out shortly. Want to skip the wait?
+                </p>
+                <a
+                  href={BOOKING_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-block text-sm font-bold text-[#171e19] underline underline-offset-4 hover:no-underline"
+                >
+                  Grab a time now
+                </a>
+              </div>
+            )}
           </div>
         )}
       </div>

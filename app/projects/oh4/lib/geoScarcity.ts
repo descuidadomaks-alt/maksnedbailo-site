@@ -1,21 +1,22 @@
 /**
  * Market-size-aware scarcity copy for oh4 (consumed via
- * LocationContext#useScarcityLine). Flat numbers read as fake as soon as the
- * market size varies — "5 spots in Madrid" (3.4M people) next to "50 spots
- * in Vermont" (620k) is backwards. So the unit of scarcity is the SERVICE
- * AREA, and the counts scale with the market:
+ * LocationContext#useScarcityLine). Two problems this solves:
  *
- *   major metro   → the city is split into N service areas (N scales with
- *                   the metro's size), most already claimed
- *   smaller city  → one city ≈ a few service areas → a tight flat count
+ *  1. Flat numbers read as fake once the market varies — "5 spots in Madrid"
+ *     (3.4M people) next to "50 spots in Vermont" (620k) is backwards. So the
+ *     spot count scales with the market.
+ *  2. "One business per trade, per service area" read as a fake, bureaucratic
+ *     scarcity rule nobody believes. The believable FOMO is a promise real
+ *     agencies actually make: once you're in, we won't take on your direct
+ *     competition. That's what pressures the visitor (their competitor could
+ *     grab the spot first) without inventing a rigid grid.
+ *
+ * Tiers by location confidence:
+ *   major metro   → a big spot count (scaled to the metro), most claimed
+ *   smaller city  → a tight flat count
  *   US state      → capacity derived from the state's population
- *   non-US region → named but numberless (we don't know that market)
- *   unknown       → generic one-per-trade-per-area line, no invented number
- *
- * "One business per trade, per service area" also fixes the exclusivity
- * promise for big cities — "never two competitors in New York" was
- * meaningless; "never two competitors in your service area" is the actual
- * offer.
+ *   non-US region → named, exclusivity promise, no invented number
+ *   unknown       → generic exclusivity line, no number
  *
  * ⚠ These are hand-set campaign constants, not a live counter. The FRACTIONS
  * below decide how "sold out" the campaign claims to be — keep them in sync
@@ -91,61 +92,62 @@ const STATE_NAME_TO_CODE: Record<string, string> = Object.fromEntries(
   Object.entries(US_STATES).map(([code, s]) => [s.name.toLowerCase(), code]),
 );
 
-// Major metros → how many service areas we split them into. Hand-tuned to
-// roughly track metro size. NYC boroughs alias to the New York entry —
-// ip-geo often returns the borough as the city. A few non-US cities are here
-// so international traffic (and dev testing from Spain) reads sanely too.
-const MAJOR_METROS: Record<string, { label: string; areas: number }> = {
-  "new york": { label: "New York", areas: 42 },
-  "new york city": { label: "New York", areas: 42 },
-  brooklyn: { label: "New York", areas: 42 },
-  queens: { label: "New York", areas: 42 },
-  bronx: { label: "New York", areas: 42 },
-  "the bronx": { label: "New York", areas: 42 },
-  manhattan: { label: "New York", areas: 42 },
-  "staten island": { label: "New York", areas: 42 },
-  "los angeles": { label: "Los Angeles", areas: 28 },
-  chicago: { label: "Chicago", areas: 20 },
-  houston: { label: "Houston", areas: 18 },
-  phoenix: { label: "Phoenix", areas: 14 },
-  philadelphia: { label: "Philadelphia", areas: 14 },
-  "san antonio": { label: "San Antonio", areas: 12 },
-  "san diego": { label: "San Diego", areas: 12 },
-  dallas: { label: "Dallas", areas: 14 },
-  "fort worth": { label: "Fort Worth", areas: 9 },
-  austin: { label: "Austin", areas: 10 },
-  jacksonville: { label: "Jacksonville", areas: 9 },
-  columbus: { label: "Columbus", areas: 9 },
-  charlotte: { label: "Charlotte", areas: 9 },
-  "san francisco": { label: "San Francisco", areas: 10 },
-  indianapolis: { label: "Indianapolis", areas: 8 },
-  seattle: { label: "Seattle", areas: 10 },
-  denver: { label: "Denver", areas: 10 },
-  boston: { label: "Boston", areas: 10 },
-  nashville: { label: "Nashville", areas: 8 },
-  "las vegas": { label: "Las Vegas", areas: 9 },
-  detroit: { label: "Detroit", areas: 10 },
-  memphis: { label: "Memphis", areas: 8 },
-  baltimore: { label: "Baltimore", areas: 9 },
-  milwaukee: { label: "Milwaukee", areas: 8 },
-  sacramento: { label: "Sacramento", areas: 9 },
-  "kansas city": { label: "Kansas City", areas: 8 },
-  atlanta: { label: "Atlanta", areas: 12 },
-  miami: { label: "Miami", areas: 12 },
-  tampa: { label: "Tampa", areas: 8 },
-  orlando: { label: "Orlando", areas: 8 },
-  minneapolis: { label: "Minneapolis", areas: 8 },
-  portland: { label: "Portland", areas: 8 },
-  washington: { label: "Washington, D.C.", areas: 10 },
+// Major metros → how many onboarding spots we show for that market. Hand-tuned
+// to roughly track metro size (a bigger market can absorb more before it's
+// "full"). NYC boroughs alias to the New York entry — ip-geo often returns the
+// borough as the city. A few non-US cities are here so international traffic
+// (and dev testing from Spain) reads sanely too.
+const MAJOR_METROS: Record<string, { label: string; spots: number }> = {
+  "new york": { label: "New York", spots: 42 },
+  "new york city": { label: "New York", spots: 42 },
+  brooklyn: { label: "New York", spots: 42 },
+  queens: { label: "New York", spots: 42 },
+  bronx: { label: "New York", spots: 42 },
+  "the bronx": { label: "New York", spots: 42 },
+  manhattan: { label: "New York", spots: 42 },
+  "staten island": { label: "New York", spots: 42 },
+  "los angeles": { label: "Los Angeles", spots: 28 },
+  chicago: { label: "Chicago", spots: 20 },
+  houston: { label: "Houston", spots: 18 },
+  phoenix: { label: "Phoenix", spots: 14 },
+  philadelphia: { label: "Philadelphia", spots: 14 },
+  "san antonio": { label: "San Antonio", spots: 12 },
+  "san diego": { label: "San Diego", spots: 12 },
+  dallas: { label: "Dallas", spots: 14 },
+  "fort worth": { label: "Fort Worth", spots: 9 },
+  austin: { label: "Austin", spots: 10 },
+  jacksonville: { label: "Jacksonville", spots: 9 },
+  columbus: { label: "Columbus", spots: 9 },
+  charlotte: { label: "Charlotte", spots: 9 },
+  "san francisco": { label: "San Francisco", spots: 10 },
+  indianapolis: { label: "Indianapolis", spots: 8 },
+  seattle: { label: "Seattle", spots: 10 },
+  denver: { label: "Denver", spots: 10 },
+  boston: { label: "Boston", spots: 10 },
+  nashville: { label: "Nashville", spots: 8 },
+  "las vegas": { label: "Las Vegas", spots: 9 },
+  detroit: { label: "Detroit", spots: 10 },
+  memphis: { label: "Memphis", spots: 8 },
+  baltimore: { label: "Baltimore", spots: 9 },
+  milwaukee: { label: "Milwaukee", spots: 8 },
+  sacramento: { label: "Sacramento", spots: 9 },
+  "kansas city": { label: "Kansas City", spots: 8 },
+  atlanta: { label: "Atlanta", spots: 12 },
+  miami: { label: "Miami", spots: 12 },
+  tampa: { label: "Tampa", spots: 8 },
+  orlando: { label: "Orlando", spots: 8 },
+  minneapolis: { label: "Minneapolis", spots: 8 },
+  portland: { label: "Portland", spots: 8 },
+  washington: { label: "Washington, D.C.", spots: 10 },
   // Non-US, mostly for demo/dev traffic:
-  madrid: { label: "Madrid", areas: 20 },
-  barcelona: { label: "Barcelona", areas: 14 },
-  london: { label: "London", areas: 30 },
-  toronto: { label: "Toronto", areas: 16 },
-  "mexico city": { label: "Mexico City", areas: 30 },
+  madrid: { label: "Madrid", spots: 20 },
+  barcelona: { label: "Barcelona", spots: 14 },
+  london: { label: "London", spots: 30 },
+  toronto: { label: "Toronto", spots: 16 },
+  "mexico city": { label: "Mexico City", spots: 30 },
 };
 
-/** ~1 service area per 500k people; floor 6 so tiny states still read as scarce, cap 48. */
+/** ~1 spot per 500k people; floor 6 so tiny states still read as scarce, cap 48. */
 function stateCapacity(popM: number): number {
   return Math.min(48, Math.max(6, Math.round(popM * 2)));
 }
@@ -163,6 +165,11 @@ export function lookupUsState(region: string): { name: string; popM: number } | 
   return code ? US_STATES[code] : null;
 }
 
+// The believable exclusivity promise — what actually creates FOMO. Real
+// agencies make this promise; it pressures the visitor (their competitor
+// could take the spot) without a made-up grid.
+const EXCLUSIVITY = "Once you're in, we won't take on your direct competition.";
+
 /**
  * The scarcity line, tiered by location confidence and market size.
  * `label` is the already-derived display label (titled-cased city/region).
@@ -175,10 +182,10 @@ export function scarcityLineFor(
   if (city) {
     const metro = MAJOR_METROS[city.trim().toLowerCase()];
     if (metro) {
-      const { taken, left } = split(metro.areas, METRO_CLAIMED_FRACTION);
-      return `${metro.label} is big — so we split it into ${metro.areas} service areas, one business per trade in each. ${taken} are already claimed; ${left} still open.`;
+      const { taken, left } = split(metro.spots, METRO_CLAIMED_FRACTION);
+      return `${taken} of ${metro.spots} ${metro.label}-area spots are taken — ${left} left. ${EXCLUSIVITY}`;
     }
-    return `Only ${SMALL_CITY_SPOTS_LEFT} spots left in ${label} — first come, first served. One business per trade, per service area.`;
+    return `Only ${SMALL_CITY_SPOTS_LEFT} spots left in ${label}. ${EXCLUSIVITY}`;
   }
 
   if (region) {
@@ -186,12 +193,12 @@ export function scarcityLineFor(
     if (state) {
       const total = stateCapacity(state.popM);
       const { taken, left } = split(total, STATE_CLAIMED_FRACTION);
-      return `${taken} of ${total} spots across ${state.name} are already claimed — ${left} left. One business per trade, per service area.`;
+      return `${taken} of ${total} spots across ${state.name} are taken — ${left} left. ${EXCLUSIVITY}`;
     }
     // Region resolved but not a US state (international traffic) — name it,
     // but don't invent a number for a market we haven't sized.
-    return `Now onboarding in ${label} — one business per trade, per service area, so you never compete with our own clients.`;
+    return `Now onboarding in ${label}. ${EXCLUSIVITY}`;
   }
 
-  return "We only take one business per trade, per service area — so you never compete with our own clients.";
+  return `Spots are limited. ${EXCLUSIVITY}`;
 }

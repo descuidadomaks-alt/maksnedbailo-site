@@ -92,13 +92,6 @@ export default function Oh4Layout({ children }: { children: ReactNode }) {
         @keyframes oh-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
         .oh-eq-bar { transform-origin: bottom; animation: oh-eq 0.9s ease-in-out infinite; }
 
-        /* Quiz modal header — Anton font without oh-display's forced uppercase
-           (the exact copy is sentence-case) or its tight line-height. */
-        .oh-quiz-header {
-          font-family: var(--font-oh-display), 'Arial Narrow', sans-serif;
-          letter-spacing: 0.01em;
-        }
-
         /* Quiz progress bar — animated diagonal stripes, width transitions
            per-step. */
         .oh-quiz-progress-fill {
