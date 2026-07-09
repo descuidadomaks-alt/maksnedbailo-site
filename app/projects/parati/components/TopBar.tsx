@@ -41,6 +41,7 @@ export function TopBar() {
             alt={`${site.business} — ${site.tagline}`}
             width={1007}
             height={832}
+            sizes="180px"
             priority
             className={`w-auto transition-all duration-500 ${
               scrolled ? "h-0 opacity-0" : "h-14 opacity-100 sm:h-16"
@@ -51,6 +52,7 @@ export function TopBar() {
             alt={site.business}
             width={577}
             height={498}
+            sizes="60px"
             className={`w-auto transition-all duration-500 ${
               scrolled ? "h-9 opacity-100" : "h-0 opacity-0"
             }`}

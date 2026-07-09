@@ -11,8 +11,15 @@
 
 import { WHATSAPP_NUMBER, PHONE_DISPLAY, RATING, REVIEW_COUNT } from "./config";
 
-/** One of the five service-purpose icons (see components/AttributeIcons.tsx). */
-export type Objetivo = "relajacion" | "tension" | "circulacion" | "estetica" | "energia";
+/** One of the seven service-purpose icons (see components/AttributeIcons.tsx). */
+export type Objetivo =
+  | "relajacion"
+  | "tension"
+  | "circulacion"
+  | "hidratacion"
+  | "lifting"
+  | "limpieza"
+  | "energia";
 
 export type Service = {
   name: string;
@@ -23,6 +30,7 @@ export type Service = {
   zones: string[]; // body-map zone ids this service belongs to
   pressure: 1 | 2 | 3; // touch intensity, shown as filled dots
   objetivo: Objetivo[]; // usually one icon, occasionally two
+  tag: string; // 2-3 word differentiator: "why this one vs its sibling"
 };
 
 export type Review = {
@@ -35,6 +43,7 @@ export type Review = {
 export type Zone = {
   id: string;
   label: string;
+  shortLabel: string; // compact mobile pill label
   tagline: string;
   services: string[]; // service names, resolved in the component
 };
@@ -104,7 +113,7 @@ const es = {
     listToggle: "Ver todos los rituales",
     mapToggle: "Elegir por zona",
     fullListHeading: "Carta de servicios",
-    legend: "Presión · Objetivo · Duración",
+    legend: "Presión · Objetivo · Duración · Para quién",
     legendScale: "● suave — ●●● firme",
     bookLabel: "Reservar",
     minutesLabel: "min",
@@ -125,6 +134,7 @@ const es = {
         zones: ["cuerpo"],
         pressure: 2,
         objetivo: ["energia", "relajacion"],
+        tag: "EL MÁS COMPLETO",
       },
       {
         name: "Luxury Detox Flow",
@@ -136,6 +146,7 @@ const es = {
         zones: ["cuerpo", "piernas"],
         pressure: 1,
         objetivo: ["circulacion"],
+        tag: "MENOS HINCHAZÓN",
       },
       {
         name: "Signature Balance",
@@ -147,6 +158,7 @@ const es = {
         zones: ["cuerpo"],
         pressure: 1,
         objetivo: ["relajacion"],
+        tag: "PRIMERA VEZ",
       },
       {
         name: "Imperial Gold Ritual",
@@ -158,6 +170,7 @@ const es = {
         zones: ["espalda"],
         pressure: 2,
         objetivo: ["tension", "relajacion"],
+        tag: "MÁS SUAVE",
       },
       {
         name: "Deep Recovery",
@@ -169,6 +182,7 @@ const es = {
         zones: ["espalda", "piernas"],
         pressure: 3,
         objetivo: ["tension"],
+        tag: "EFECTO INMEDIATO",
       },
       {
         name: "Silk Steps",
@@ -179,7 +193,8 @@ const es = {
           "Masaje de piernas y pies que quita el cansancio y la pesadez. Un pequeño momento con un gran alivio.",
         zones: ["piernas"],
         pressure: 1,
-        objetivo: ["circulacion"],
+        objetivo: ["relajacion"],
+        tag: "EXPRESS",
       },
       {
         name: "Diamond Face Sculpt",
@@ -189,8 +204,9 @@ const es = {
         plain:
           "Masaje facial que reafirma y define los rasgos. La piel queda descansada, luminosa y más firme, sin agujas.",
         zones: ["rostro"],
-        pressure: 1,
-        objetivo: ["estetica"],
+        pressure: 2,
+        objetivo: ["lifting"],
+        tag: "ANTIEDAD",
       },
       {
         name: "Golden Skin Microneedling",
@@ -200,8 +216,9 @@ const es = {
         plain:
           "Microagujas finísimas que estimulan tu piel para producir colágeno: más firmeza, textura y luz. Resultados que van a más con el tiempo.",
         zones: ["rostro"],
-        pressure: 1,
-        objetivo: ["estetica"],
+        pressure: 2,
+        objetivo: ["hidratacion", "lifting"],
+        tag: "RITUAL COMPLETO",
       },
       {
         name: "Lifting de pestañas",
@@ -212,7 +229,8 @@ const es = {
           "Se curvan y elevan tus propias pestañas desde la raíz. Mirada más despierta durante semanas, sin poner pestañas postizas.",
         zones: ["rostro"],
         pressure: 1,
-        objetivo: ["estetica"],
+        objetivo: ["limpieza"],
+        tag: "EXPRESS",
       },
       {
         name: "Lifting de cejas con tinte y forma",
@@ -223,7 +241,8 @@ const es = {
           "Se peinan, fijan y tintan tus cejas para darles forma y densidad. Mirada más definida y armónica durante semanas.",
         zones: ["rostro"],
         pressure: 1,
-        objetivo: ["estetica"],
+        objetivo: ["hidratacion"],
+        tag: "PRIMERA VEZ",
       },
     ] as Service[],
   },
@@ -244,6 +263,7 @@ const es = {
     {
       id: "rostro",
       label: "Rostro y mirada",
+      shortLabel: "Rostro",
       tagline: "Piel luminosa y una mirada despierta.",
       services: [
         "Diamond Face Sculpt",
@@ -255,18 +275,21 @@ const es = {
     {
       id: "espalda",
       label: "Espalda, cuello y hombros",
+      shortLabel: "Espalda",
       tagline: "Donde más se acumula la tensión del día.",
       services: ["Imperial Gold Ritual", "Deep Recovery"],
     },
     {
       id: "cuerpo",
       label: "Cuerpo entero",
+      shortLabel: "Cuerpo",
       tagline: "Desconexión completa, de la cabeza a los pies.",
       services: ["Método Golden Touch", "Signature Balance", "Luxury Detox Flow"],
     },
     {
       id: "piernas",
       label: "Piernas y pies",
+      shortLabel: "Piernas",
       tagline: "Ligereza para las piernas cansadas.",
       services: ["Silk Steps", "Luxury Detox Flow", "Deep Recovery"],
     },

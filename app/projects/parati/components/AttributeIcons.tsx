@@ -1,15 +1,18 @@
 import type { Objetivo, Service } from "../lib/content";
 
 /**
- * The "tobacco-tin" attribute row: presión (dots) · objetivo (icon) · duración
- * (clock). Thin gold-line icons matching the body silhouette's stroke weight.
+ * The "tobacco-tin" attribute row: presión (dots) · objetivo (icon) ·
+ * duración (clock) · differentiator tag. Thin gold-line icons matching the
+ * body figure's stroke weight.
  */
 
 const OBJETIVO_LABEL: Record<Objetivo, string> = {
   relajacion: "Relajación",
   tension: "Tensión muscular",
   circulacion: "Circulación",
-  estetica: "Estética",
+  hidratacion: "Hidratación",
+  lifting: "Lifting",
+  limpieza: "Renovación",
   energia: "Energía",
 };
 
@@ -32,6 +35,7 @@ function ObjetivoGlyph({ kind, className = "h-4 w-4" }: { kind: Objetivo; classN
   const common = { className, fill: "none", stroke: "currentColor", strokeWidth: 1.5, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, viewBox: "0 0 24 24" };
   switch (kind) {
     case "relajacion":
+      // wave
       return (
         <svg {...common} aria-hidden>
           <path d="M2 15c2-3 4-3 6 0s4 3 6 0 4-3 6 0" />
@@ -39,18 +43,37 @@ function ObjetivoGlyph({ kind, className = "h-4 w-4" }: { kind: Objetivo; classN
         </svg>
       );
     case "tension":
+      // spiral / knot
       return (
         <svg {...common} aria-hidden>
           <path d="M12 3c-4 1-6 4-4 7s-1 4-3 3c2 3 6 3 8 0s0-5-2-6c3-1 5 1 5 3" />
         </svg>
       );
     case "circulacion":
+      // droplet
       return (
         <svg {...common} aria-hidden>
           <path d="M12 3.5c3 3.5 6 7.3 6 10.8a6 6 0 1 1-12 0c0-3.5 3-7.3 6-10.8Z" />
         </svg>
       );
-    case "estetica":
+    case "hidratacion":
+      // leaf
+      return (
+        <svg {...common} aria-hidden>
+          <path d="M5 19c-1-7 2-13 14-14 1 12-5 15-14 14Z" />
+          <path d="M6.5 17.5 17 6" />
+        </svg>
+      );
+    case "lifting":
+      // upward arrow
+      return (
+        <svg {...common} aria-hidden>
+          <path d="M12 20V5" />
+          <path d="M6 11l6-6 6 6" />
+        </svg>
+      );
+    case "limpieza":
+      // sparkle (renovación)
       return (
         <svg {...common} aria-hidden>
           <path d="M12 3l1.6 4.7L18 9l-4.4 1.3L12 15l-1.6-4.7L6 9l4.4-1.3L12 3Z" />
@@ -58,6 +81,7 @@ function ObjetivoGlyph({ kind, className = "h-4 w-4" }: { kind: Objetivo; classN
         </svg>
       );
     case "energia":
+      // sun rays
       return (
         <svg {...common} aria-hidden>
           <circle cx="12" cy="12" r="4.2" />
@@ -85,8 +109,8 @@ export function AttributeLegend({ legend, scale }: { legend: string; scale: stri
   );
 }
 
-/** One row of presión / objetivo / duración glyphs + labels for a service. */
-export function AttributeRow({ service }: { service: Pick<Service, "pressure" | "objetivo" | "duration"> }) {
+/** One row of presión / objetivo / duración glyphs + labels + differentiator tag. */
+export function AttributeRow({ service }: { service: Pick<Service, "pressure" | "objetivo" | "duration" | "tag"> }) {
   return (
     <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-gold-deep">
       <span className="inline-flex items-center gap-1.5">
@@ -108,6 +132,10 @@ export function AttributeRow({ service }: { service: Pick<Service, "pressure" | 
         <span className="font-jost text-[10px] uppercase tracking-label text-charcoal/50">
           {service.duration}
         </span>
+      </span>
+
+      <span className="inline-flex items-center rounded-full bg-gold/12 px-2 py-0.5 font-jost text-[10px] uppercase tracking-label text-gold-deep">
+        {service.tag}
       </span>
     </div>
   );

@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { site, type Service } from "../lib/content";
 import { waServiceLink } from "../lib/whatsapp";
 import { SectionHeading } from "./SectionHeading";
 import { Reveal } from "./Reveal";
 import { WhatsAppButton } from "./WhatsAppButton";
 import { AttributeRow, AttributeLegend } from "./AttributeIcons";
-import { BodySilhouette, ZONE_ORDER } from "./BodySilhouette";
+import { BodyFigure } from "./BodyFigure";
 
 const byName: Record<string, Service> = Object.fromEntries(
   site.services.items.map((s) => [s.name, s])
@@ -17,21 +17,24 @@ const zoneLabels: Record<string, string> = Object.fromEntries(
   site.zones.map((z) => [z.id, z.label])
 );
 
+const ZONE_ORDER = ["rostro", "espalda", "cuerpo", "piernas"] as const;
+
 type Mode = "zone" | "list";
 
+/**
+ * Zone selection is one-way: text buttons (desktop chips + mobile pills) →
+ * `activeZone` state → the body figure's highlight + the card panel. Hover
+ * is CSS-only cosmetic tint — it never touches state, never touches layout.
+ * That was the root cause of the old scroll-jump loop (hover → state →
+ * content-height change → cursor lands on a different element → repeat).
+ */
 export function RitualExplorer() {
   const [mode, setMode] = useState<Mode>("zone");
   const [activeZone, setActiveZone] = useState<string>("cuerpo");
-  const [hoverZone, setHoverZone] = useState<string | null>(null);
   const reduce = !!useReducedMotion();
-
-  const displayZone = hoverZone ?? activeZone;
-  const zone = site.zones.find((z) => z.id === displayZone)!;
-  const zoneServices = zone.services.map((n) => byName[n]).filter(Boolean) as Service[];
 
   function handleSelectZone(id: string) {
     setActiveZone(id);
-    setHoverZone(null);
     if (mode === "list") {
       document.getElementById(`zone-${id}`)?.scrollIntoView({
         behavior: reduce ? "auto" : "smooth",
@@ -66,49 +69,63 @@ export function RitualExplorer() {
         <div className="mt-6 grid grid-cols-[30%_1fr] gap-4 sm:mt-10 sm:grid-cols-[26%_1fr] md:grid-cols-2 md:gap-14">
           <div>
             <div className="sticky top-24">
-              <BodySilhouette
-                activeZone={displayZone}
-                onSelectZone={handleSelectZone}
-                onHoverZone={(id) => mode === "zone" && setHoverZone(id)}
+              <BodyFigure
+                activeZone={activeZone}
                 reduce={reduce}
-                zoneLabels={zoneLabels}
                 className="mx-auto h-auto max-h-[36vh] w-full max-w-[150px] md:max-h-[64vh] md:max-w-[230px]"
               />
 
+              {/* Mobile: compact vertical pill stack — the ONLY zone selector on
+                  mobile now that the figure is non-interactive. Constrained to
+                  the mini-body column's width. */}
+              <div className="mt-3 flex flex-col gap-1.5 md:hidden">
+                {ZONE_ORDER.map((id) => {
+                  const z = site.zones.find((zz) => zz.id === id)!;
+                  const on = activeZone === id;
+                  return (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => handleSelectZone(id)}
+                      aria-pressed={on}
+                      className={`min-h-11 w-full rounded-full px-1.5 font-jost text-[11px] uppercase tracking-label transition-colors ${
+                        on
+                          ? "bg-gold text-ivory"
+                          : "border border-gold/30 text-charcoal/70 hover:border-gold hover:text-gold-deep"
+                      }`}
+                    >
+                      {z.shortLabel}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Desktop: horizontal chip row — zone mode only. Hover is a CSS
+                  tint (hover: classes), never a state change. */}
               {mode === "zone" ? (
-                <>
-                  <p className="mt-3 text-center font-jost text-[11px] uppercase tracking-label text-gold-deep md:hidden">
-                    {zone.label}
-                  </p>
-                  <div className="mt-4 hidden flex-wrap justify-center gap-2 md:flex">
-                    {ZONE_ORDER.map((id) => {
-                      const z = site.zones.find((zz) => zz.id === id)!;
-                      const on = displayZone === id;
-                      return (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => handleSelectZone(id)}
-                          onMouseEnter={() => setHoverZone(id)}
-                          onMouseLeave={() => setHoverZone(null)}
-                          aria-pressed={on}
-                          className={`rounded-full px-3.5 py-1.5 font-jost text-[11px] uppercase tracking-label transition-all ${
-                            on
-                              ? "bg-gold text-ivory shadow-soft"
-                              : "border border-gold/30 text-charcoal/70 hover:border-gold hover:text-gold-deep"
-                          }`}
-                        >
-                          {z.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <p className="mt-3 hidden text-center font-jost text-xs text-charcoal/40 md:block">
-                    {site.explorer.hint}
-                  </p>
-                </>
+                <div className="mt-4 hidden flex-wrap justify-center gap-2 md:flex">
+                  {ZONE_ORDER.map((id) => {
+                    const z = site.zones.find((zz) => zz.id === id)!;
+                    const on = activeZone === id;
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => handleSelectZone(id)}
+                        aria-pressed={on}
+                        className={`rounded-full px-3.5 py-1.5 font-jost text-[11px] uppercase tracking-label transition-colors ${
+                          on
+                            ? "bg-gold text-ivory shadow-soft"
+                            : "border border-gold/30 text-charcoal/70 hover:border-gold hover:text-gold-deep"
+                        }`}
+                      >
+                        {z.label}
+                      </button>
+                    );
+                  })}
+                </div>
               ) : (
-                <p className="mt-3 text-center font-jost text-[11px] uppercase tracking-label text-gold-deep">
+                <p className="mt-3 hidden text-center font-jost text-[11px] uppercase tracking-label text-gold-deep md:block">
                   {zoneLabels[activeZone]}
                 </p>
               )}
@@ -116,13 +133,11 @@ export function RitualExplorer() {
           </div>
 
           <div>
-            <AnimatePresence mode="wait" initial={false}>
-              {mode === "list" ? (
-                <GroupedList key="list" reduce={reduce} onActiveZoneChange={setActiveZone} />
-              ) : (
-                <ZonePanel key={`zone-${displayZone}`} zone={zone} services={zoneServices} reduce={reduce} />
-              )}
-            </AnimatePresence>
+            {mode === "list" ? (
+              <GroupedList reduce={reduce} onActiveZoneChange={setActiveZone} />
+            ) : (
+              <StackedZonePanels activeZone={activeZone} reduce={reduce} />
+            )}
           </div>
         </div>
       </div>
@@ -130,34 +145,57 @@ export function RitualExplorer() {
   );
 }
 
-/** Zone-mode content panel: tagline + that zone's services. */
-function ZonePanel({
-  zone,
-  services,
-  reduce,
-}: {
-  zone: (typeof site.zones)[number];
-  services: Service[];
-  reduce: boolean;
-}) {
+/**
+ * Zone-mode content: ALL FOUR zone panels render simultaneously, stacked in
+ * the same CSS grid cell (grid-area 1/1). The container's height is
+ * therefore always the height of the TALLEST panel — switching the active
+ * zone can never change the section's geometry, so there is nothing for a
+ * hover/click state change to shift under the cursor. Inactive panels use
+ * `visibility: hidden` (not just opacity) so they drop out of the tab order.
+ */
+function StackedZonePanels({ activeZone, reduce }: { activeZone: string; reduce: boolean }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: reduce ? 0 : 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: reduce ? 0 : -8 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <p className="font-display text-xl italic leading-snug text-charcoal/80">{zone.tagline}</p>
-      <ul className="mt-6 flex flex-col gap-4">
-        {services.map((s) => (
-          <ServiceRow key={s.name} service={s} description={s.plain} />
-        ))}
-      </ul>
-    </motion.div>
+    <div className="grid">
+      {ZONE_ORDER.map((id) => {
+        const zone = site.zones.find((z) => z.id === id)!;
+        const services = zone.services.map((n) => byName[n]).filter(Boolean) as Service[];
+        const isActive = id === activeZone;
+        return (
+          <div
+            key={id}
+            aria-hidden={!isActive}
+            style={{
+              gridArea: "1 / 1",
+              opacity: isActive ? 1 : 0,
+              visibility: isActive ? "visible" : "hidden",
+              transition: reduce
+                ? "none"
+                : isActive
+                  ? "opacity 0.3s ease"
+                  : "opacity 0.3s ease, visibility 0s 0.3s",
+              pointerEvents: isActive ? "auto" : "none",
+            }}
+          >
+            <p className="font-display text-xl italic leading-snug text-charcoal/80">
+              {zone.tagline}
+            </p>
+            <ul className="mt-6 flex flex-col gap-4">
+              {services.map((s) => (
+                <ServiceRow key={s.name} service={s} description={s.plain} />
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
   );
 }
 
-/** List-mode content: every ritual, grouped by zone, scroll-spy driven. */
+/**
+ * List-mode content: every ritual, grouped by zone, scroll-spy driven.
+ * Unchanged from the previous round — already layout-neutral (all zones
+ * always render; only the mini-body highlight/label reacts to scroll).
+ */
 function GroupedList({
   reduce,
   onActiveZoneChange,
@@ -188,7 +226,6 @@ function GroupedList({
     <motion.div
       initial={{ opacity: 0, y: reduce ? 0 : 12 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
     >
       <AttributeLegend legend={site.explorer.legend} scale={site.explorer.legendScale} />
