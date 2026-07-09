@@ -25,7 +25,7 @@ export default function ParatiPage() {
     path.join(process.cwd(), "public/projects/parati/New_body.svg"),
     "utf8"
   );
-  const bodySvgMarkup = withZoneOpacity(rawBodySvg, "cuerpo");
+  const bodySvgMarkup = withZoneOpacity(rawBodySvg, "rostro");
 
   return (
     <>

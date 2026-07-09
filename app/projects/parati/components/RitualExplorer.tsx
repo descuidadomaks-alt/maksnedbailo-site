@@ -29,8 +29,11 @@ type Mode = "zone" | "list";
  * content-height change → cursor lands on a different element → repeat).
  */
 export function RitualExplorer({ bodySvgMarkup }: { bodySvgMarkup: string }) {
-  const [mode, setMode] = useState<Mode>("zone");
-  const [activeZone, setActiveZone] = useState<string>("cuerpo");
+  // Default to the full list — a single button/first-zone view invites people
+  // to scroll past too fast. Entering "Por zona" always starts at the first
+  // zone (Rostro), never wherever the scroll-spy last landed.
+  const [mode, setMode] = useState<Mode>("list");
+  const [activeZone, setActiveZone] = useState<string>(ZONE_ORDER[0]);
   const reduce = !!useReducedMotion();
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -74,7 +77,10 @@ export function RitualExplorer({ bodySvgMarkup }: { bodySvgMarkup: string }) {
               type="button"
               role="tab"
               aria-selected={mode === "zone"}
-              onClick={() => setMode("zone")}
+              onClick={() => {
+                setMode("zone");
+                setActiveZone(ZONE_ORDER[0]);
+              }}
               className={`min-h-11 rounded-full px-4 font-jost text-xs uppercase tracking-label transition-colors ${
                 mode === "zone"
                   ? "bg-gold text-ivory"
@@ -87,7 +93,10 @@ export function RitualExplorer({ bodySvgMarkup }: { bodySvgMarkup: string }) {
               type="button"
               role="tab"
               aria-selected={mode === "list"}
-              onClick={() => setMode("list")}
+              onClick={() => {
+                setMode("list");
+                setActiveZone(ZONE_ORDER[0]);
+              }}
               className={`min-h-11 rounded-full px-4 font-jost text-xs uppercase tracking-label transition-colors ${
                 mode === "list"
                   ? "bg-gold text-ivory"
