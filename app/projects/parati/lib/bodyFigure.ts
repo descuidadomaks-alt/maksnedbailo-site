@@ -1,12 +1,12 @@
 /**
  * Maps ritual-explorer zones to the named groups inside New_body.svg
  * (public/projects/parati/New_body.svg). The artwork ships four
- * pre-composed anatomical groups — Head, Shoulders, Body, legs — each
- * faint by default (10%; Head at 50%), sitting under a permanent
- * full-detail outline layer that always stays at full opacity.
+ * pre-composed anatomical groups — Head, Shoulders, Body, legs — sitting
+ * under a permanent full-detail outline layer that always stays at full
+ * opacity.
  *
- * Highlighting a zone means raising ONLY that zone's group(s) to full
- * opacity while the rest stay faint — no separate glow overlay needed.
+ * Highlighting a zone means raising ONLY that zone's group(s) to 60%
+ * opacity while the rest sit at 10% — no separate glow overlay needed.
  */
 export const BODY_GROUP_IDS = ["Head", "Shoulders", "Body", "legs"] as const;
 export type BodyGroupId = (typeof BODY_GROUP_IDS)[number];
@@ -18,8 +18,8 @@ export const ZONE_GROUP_MAP: Record<string, BodyGroupId[]> = {
   cuerpo: ["Head", "Shoulders", "Body", "legs"],
 };
 
-const FAINT_OPACITY = 0.12;
-const ACTIVE_OPACITY = 1;
+const FAINT_OPACITY = 0.1;
+const ACTIVE_OPACITY = 0.6;
 
 /**
  * Injects an inline `style="opacity:…"` on each named group's opening tag,
