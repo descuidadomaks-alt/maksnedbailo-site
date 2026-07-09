@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocationGeo } from "./LocationContext";
-import { trackPixelEvent } from "./MetaPixel";
+import { trackPixelEvent, trackCustomPixelEvent } from "./MetaPixel";
 import { EMPTY_ANSWERS, QUIZ_STEPS, type QuizAnswers } from "../lib/quizSteps";
 
 /**
@@ -13,7 +13,7 @@ import { EMPTY_ANSWERS, QUIZ_STEPS, type QuizAnswers } from "../lib/quizSteps";
  * reopening it from a different CTA resumes exactly where the visitor left
  * off.
  *
- * stepIndex 0..QUIZ_STEPS.length-1 = the 8 questions; stepIndex ===
+ * stepIndex 0..QUIZ_STEPS.length-1 = the 10 questions; stepIndex ===
  * QUIZ_STEPS.length = the success screen. `unlocked` gates the video in
  * VideoForm.tsx — it's set the instant the quiz completes, independent of
  * whether the modal is still open, so the video is already unlocked behind
@@ -108,7 +108,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     utmRef.current = captureUtm();
   }, []);
 
-  const openQuiz = () => setModalOpen(true);
+  const openQuiz = () => {
+    setModalOpen(true);
+    trackCustomPixelEvent("QuizOpen", { page: "oh5" });
+  };
   const closeModal = () => setModalOpen(false);
   const goBack = () => setStepIndex((i) => Math.max(0, i - 1));
 
@@ -122,11 +125,13 @@ export function QuizProvider({ children }: { children: ReactNode }) {
       name: finalAnswers.name,
       email: finalAnswers.email,
       phone: finalAnswers.phone,
+      website: finalAnswers.website,
       trade: finalAnswers.trade,
+      biggestImpact: finalAnswers.biggestImpact,
+      leadsPerMonth: finalAnswers.leadsPerMonth,
       phoneCoverage: finalAnswers.phoneCoverage,
-      missedCalls: finalAnswers.missedCalls,
+      eliminate: finalAnswers.eliminate,
       timeline: finalAnswers.timeline,
-      revenue: finalAnswers.revenue,
       location: { city: geo.city ?? "", region: geo.region ?? "" },
       utm: utmRef.current,
       page: "oh5",

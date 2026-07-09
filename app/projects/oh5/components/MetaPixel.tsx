@@ -19,6 +19,13 @@ export function trackPixelEvent(event: string) {
   fbq?.("track", event);
 }
 
+/** Custom (non-standard) event, e.g. QuizOpen/QuizStep for the step-drop funnel. */
+export function trackCustomPixelEvent(event: string, params?: Record<string, unknown>) {
+  if (!PIXEL_ENABLED || typeof window === "undefined") return;
+  const fbq = (window as unknown as { fbq?: FbqFn }).fbq;
+  fbq?.("trackCustom", event, params);
+}
+
 /** Base snippet — fires the standard PageView on load. Mounted once in layout.tsx. */
 export function MetaPixel() {
   if (!PIXEL_ENABLED) return null;

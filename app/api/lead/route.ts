@@ -1,11 +1,15 @@
 /**
- * Lead capture — oh4 quiz funnel. POST { name, email, phone, trade,
- * phoneCoverage, missedCalls, timeline, revenue, location, utm, page, ts,
- * honeypot } → scores HOT/WARM/COLD → fans out to a Google Sheet, Telegram,
- * and email via Promise.allSettled, so a failing notification never blocks
- * the response (the visitor already has the demo by the time this runs).
- * Every integration below no-ops with a console.warn if its env var isn't
- * set — nothing throws just because a service isn't configured yet.
+ * Lead capture — shared by oh4 and oh5's quiz funnels. Both POST here; the
+ * `page` field picks which payload shape/scoring/notification format
+ * applies, so oh4 (legacy 8-step quiz: trade, phoneCoverage, missedCalls,
+ * timeline, revenue) keeps working unchanged while oh5 (10-step quiz:
+ * trade, biggestImpact, leadsPerMonth, phoneCoverage, eliminate, timeline,
+ * website) gets its own scoring + notification text. Fans out to a Google
+ * Sheet, Telegram, and email via Promise.allSettled, so a failing
+ * notification never blocks the response (the visitor already has the demo
+ * by the time this runs). Every integration below no-ops with a
+ * console.warn if its env var isn't set — nothing throws just because a
+ * service isn't configured yet.
  *
  * SETUP
  *
@@ -18,11 +22,17 @@
  *       has access "Anyone".
  *    c. Copy the deployment's web app URL into GAS_WEBHOOK_URL.
  *
+ *    New columns for oh5 (biggestImpact, leadsPerMonth, eliminate, website)
+ *    are APPENDED after the original oh4 columns — existing rows/formulas
+ *    that reference the old column order are unaffected; oh4 leads simply
+ *    leave the new columns blank.
+ *
  *    function doPost(e){var d=JSON.parse(e.postData.contents);
  *    SpreadsheetApp.openById('SHEET_ID').getSheetByName('Leads').appendRow(
- *    [new Date(),d.score,d.name,d.phone,d.email,d.trade,d.missedCalls,d.phoneCoverage,
- *    d.timeline,d.revenue,(d.location&&d.location.city)||'',(d.location&&d.location.region)||'',
- *    (d.utm&&d.utm.utm_source)||'',(d.utm&&d.utm.utm_campaign)||'',(d.utm&&d.utm.fbclid)||'']);
+ *    [new Date(),d.score,d.name,d.phone,d.email,d.trade,d.missedCalls||'',d.phoneCoverage||'',
+ *    d.timeline,d.revenue||'',(d.location&&d.location.city)||'',(d.location&&d.location.region)||'',
+ *    (d.utm&&d.utm.utm_source)||'',(d.utm&&d.utm.utm_campaign)||'',(d.utm&&d.utm.fbclid)||'',
+ *    d.biggestImpact||'',d.leadsPerMonth||'',d.eliminate||'',d.website||'']);
  *    return ContentService.createTextOutput('ok')}
  *
  * 2. Telegram (TG_BOT_TOKEN, TG_CHAT_ID) — instant alert for Maks
@@ -46,7 +56,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 type Score = "HOT" | "WARM" | "COLD";
 
-type LeadPayload = {
+type LegacyLeadPayload = {
   name: string;
   email: string;
   phone: string;
@@ -62,13 +72,35 @@ type LeadPayload = {
   honeypot?: string;
 };
 
+type Oh5LeadPayload = {
+  name: string;
+  email: string;
+  phone: string;
+  website: string;
+  trade: string;
+  biggestImpact: string;
+  leadsPerMonth: string;
+  phoneCoverage: string;
+  eliminate: string;
+  timeline: string;
+  location: { city: string; region: string };
+  utm: { utm_source?: string; utm_medium?: string; utm_campaign?: string; fbclid?: string };
+  page: "oh5";
+  ts: string;
+  honeypot?: string;
+};
+
+type LeadPayload = LegacyLeadPayload | Oh5LeadPayload;
+
 type EnrichedLead = LeadPayload & { score: Score };
 
 const NOT_HOME_SERVICE = "I'm not a home-service business";
 
-function isValidLeadPayload(body: unknown): body is LeadPayload {
-  if (!body || typeof body !== "object") return false;
-  const b = body as Record<string, unknown>;
+function isOh5Payload(lead: LeadPayload): lead is Oh5LeadPayload {
+  return lead.page === "oh5";
+}
+
+function isValidLegacyPayload(b: Record<string, unknown>): b is LegacyLeadPayload {
   const requiredStrings = ["name", "email", "phone", "trade", "timeline", "revenue"];
   for (const key of requiredStrings) {
     if (typeof b[key] !== "string" || (b[key] as string).trim() === "") return false;
@@ -76,6 +108,31 @@ function isValidLeadPayload(body: unknown): body is LeadPayload {
   return true;
 }
 
+function isValidOh5Payload(b: Record<string, unknown>): b is Oh5LeadPayload {
+  const requiredStrings = [
+    "name",
+    "email",
+    "phone",
+    "trade",
+    "biggestImpact",
+    "leadsPerMonth",
+    "phoneCoverage",
+    "eliminate",
+    "timeline",
+  ];
+  for (const key of requiredStrings) {
+    if (typeof b[key] !== "string" || (b[key] as string).trim() === "") return false;
+  }
+  return true;
+}
+
+function isValidLeadPayload(body: unknown): body is LeadPayload {
+  if (!body || typeof body !== "object") return false;
+  const b = body as Record<string, unknown>;
+  return b.page === "oh5" ? isValidOh5Payload(b) : isValidLegacyPayload(b);
+}
+
+// oh4 scoring — unchanged.
 function scoreLead(trade: string, timeline: string, revenue: string): Score {
   const notHomeService = trade === NOT_HOME_SERVICE;
   if (timeline === "Just researching" || notHomeService) return "COLD";
@@ -84,11 +141,21 @@ function scoreLead(trade: string, timeline: string, revenue: string): Score {
   return "WARM";
 }
 
+// oh5 scoring — leads/month replaces revenue as the volume signal.
+const HOT_LEADS_PER_MONTH = new Set(["20–50", "50–100", "100+"]);
+
+function scoreLeadOh5(trade: string, timeline: string, leadsPerMonth: string): Score {
+  const notHomeService = trade === NOT_HOME_SERVICE;
+  if (timeline === "Just researching" || notHomeService) return "COLD";
+  if (timeline === "ASAP — right now" && HOT_LEADS_PER_MONTH.has(leadsPerMonth)) return "HOT";
+  return "WARM";
+}
+
 function scoreEmoji(score: Score): string {
   return score === "HOT" ? "🔥" : score === "WARM" ? "👍" : "🧊";
 }
 
-function notificationText(lead: EnrichedLead): string {
+function notificationTextLegacy(lead: EnrichedLead & LegacyLeadPayload): string {
   const emoji = scoreEmoji(lead.score);
   const city = lead.location?.city || "";
   const region = lead.location?.region || "";
@@ -100,6 +167,26 @@ function notificationText(lead: EnrichedLead): string {
     `Misses ${lead.missedCalls}/wk · ${lead.phoneCoverage} answers · wants it ${lead.timeline} · ${lead.revenue}/mo` +
     (campaign ? `\n${campaign}` : "")
   );
+}
+
+function notificationTextOh5(lead: EnrichedLead & Oh5LeadPayload): string {
+  const emoji = scoreEmoji(lead.score);
+  const city = lead.location?.city || "";
+  const region = lead.location?.region || "";
+  const campaign = lead.utm?.utm_campaign || "";
+  const website = lead.website.trim() !== "" ? lead.website : "no website — upsell";
+  return (
+    `${emoji} ${lead.score} LEAD — Overtime Hunch\n` +
+    `${lead.name} · ${lead.trade} · ${city}, ${region}\n` +
+    `📞 ${lead.phone} ✉️ ${lead.email} 🌐 ${website}\n` +
+    `${lead.leadsPerMonth} leads/mo · ${lead.phoneCoverage} answers the phone\n` +
+    `Hot button: ${lead.biggestImpact} · Wants gone: ${lead.eliminate} · Timeline: ${lead.timeline}` +
+    (campaign ? `\n${campaign}` : "")
+  );
+}
+
+function notificationText(lead: EnrichedLead): string {
+  return isOh5Payload(lead) ? notificationTextOh5(lead) : notificationTextLegacy(lead);
 }
 
 async function sendToSheet(lead: EnrichedLead): Promise<void> {
@@ -174,7 +261,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const score = scoreLead(body.trade, body.timeline, body.revenue);
+  const score = isOh5Payload(body)
+    ? scoreLeadOh5(body.trade, body.timeline, body.leadsPerMonth)
+    : scoreLead(body.trade, body.timeline, body.revenue);
   const lead: EnrichedLead = { ...body, score };
 
   await Promise.allSettled([sendToSheet(lead), sendToTelegram(lead), sendToEmail(lead)]);

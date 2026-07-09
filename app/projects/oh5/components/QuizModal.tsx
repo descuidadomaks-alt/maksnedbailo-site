@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useQuiz } from "./QuizContext";
 import { Dot } from "./Dot";
+import { trackCustomPixelEvent } from "./MetaPixel";
 import {
   QUIZ_STEPS,
   QUIZ_HEADER_STEPS,
@@ -36,6 +37,18 @@ export function QuizModal() {
     };
   }, [modalOpen, closeModal]);
 
+  // Step-drop funnel — one QuizStep custom event per step number, fired once
+  // per session even if the visitor closes/reopens the modal or goes Back
+  // and forward again over the same step.
+  const firedStepsRef = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    if (!modalOpen || stepIndex >= QUIZ_STEPS.length) return;
+    const stepNumber = stepIndex + 1;
+    if (firedStepsRef.current.has(stepNumber)) return;
+    firedStepsRef.current.add(stepNumber);
+    trackCustomPixelEvent("QuizStep", { step: stepNumber, page: "oh5" });
+  }, [modalOpen, stepIndex]);
+
   if (!modalOpen) return null;
 
   const isSuccess = stepIndex >= QUIZ_STEPS.length;
@@ -43,6 +56,7 @@ export function QuizModal() {
   const progress = isSuccess ? 100 : step!.progress;
   const showHeader = !isSuccess && stepIndex < QUIZ_HEADER_STEPS;
   const showBack = stepIndex > 0 && !isSuccess;
+  const compact = !isSuccess && step!.type === "choice" && step!.options.length > 6;
 
   const handleWatchDemo = () => {
     closeModal();
@@ -85,26 +99,38 @@ export function QuizModal() {
           </p>
         )}
 
-        <div className="mt-4 flex items-center gap-3">
-          <div className="h-3 flex-1 overflow-hidden rounded-full bg-[#171e19]/10">
-            <div className="oh-quiz-progress-fill h-full rounded-full" style={{ width: `${progress}%` }} />
+        <div className="mt-4 h-7 w-full overflow-hidden rounded-full bg-[#171e19]/10 sm:h-8">
+          <div
+            className="oh-quiz-progress-fill flex h-full items-center justify-end rounded-full pr-3 sm:pr-4"
+            style={{ width: `${progress}%` }}
+          >
+            <span
+              className="oh-display text-xs tabular-nums text-white sm:text-sm"
+              style={{
+                textShadow:
+                  "-1px -1px 0 rgba(23,30,25,0.55), 1px -1px 0 rgba(23,30,25,0.55), -1px 1px 0 rgba(23,30,25,0.55), 1px 1px 0 rgba(23,30,25,0.55)",
+              }}
+            >
+              {progress}%
+            </span>
           </div>
-          <span className="oh-display shrink-0 text-xl tabular-nums text-[#171e19] sm:text-2xl">
-            {progress}%
-          </span>
         </div>
 
         <div className="mt-6 flex flex-1 flex-col justify-center overflow-y-auto">
           {!isSuccess && step!.type === "choice" && (
             <>
               <h3 className="oh-display text-center text-2xl text-[#171e19] sm:text-3xl">{step!.question}</h3>
-              <div className="mt-6 space-y-3">
+              <div className={compact ? "mt-4 space-y-2" : "mt-6 space-y-3"}>
                 {step!.options.map((opt) => (
                   <button
                     key={opt}
                     type="button"
                     onClick={() => selectChoice(step!.key, opt)}
-                    className="min-h-[52px] w-full rounded-lg border border-[#171e19]/15 bg-white px-5 py-3 text-left text-base font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
+                    className={
+                      compact
+                        ? "min-h-[44px] w-full rounded-lg border border-[#171e19]/15 bg-white px-4 py-2.5 text-left text-sm font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
+                        : "min-h-[52px] w-full rounded-lg border border-[#171e19]/15 bg-white px-5 py-3 text-left text-base font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
+                    }
                   >
                     {opt}
                   </button>
@@ -128,6 +154,12 @@ export function QuizModal() {
               onHoneypotChange={(v) => setAnswer("honeypot", v)}
               onAdvance={goNext}
               valid={isStepValid(step!, answers)}
+              skippable={step!.skippable}
+              skipLabel={step!.skipLabel}
+              onSkip={() => {
+                setAnswer(step!.key, "");
+                goNext();
+              }}
             />
           )}
 
@@ -177,10 +209,13 @@ function TextStepScreen({
   onHoneypotChange,
   onAdvance,
   valid,
+  skippable,
+  skipLabel,
+  onSkip,
 }: {
-  stepKey: "name" | "email" | "phone";
+  stepKey: "name" | "email" | "website" | "phone";
   question: string;
-  inputType: "text" | "email" | "tel";
+  inputType: "text" | "email" | "url" | "tel";
   placeholder: string;
   cta: string;
   big?: boolean;
@@ -190,6 +225,9 @@ function TextStepScreen({
   onHoneypotChange: (v: string) => void;
   onAdvance: () => void;
   valid: boolean;
+  skippable?: boolean;
+  skipLabel?: string;
+  onSkip?: () => void;
 }) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(stepKey === "phone" ? formatUsPhone(e.target.value) : e.target.value);
@@ -199,13 +237,17 @@ function TextStepScreen({
     if (e.key === "Enter" && valid) onAdvance();
   };
 
+  const autoComplete =
+    stepKey === "name" ? "name" : stepKey === "email" ? "email" : stepKey === "website" ? "url" : "tel";
+  const inputMode = inputType === "tel" ? "tel" : inputType === "email" ? "email" : inputType === "url" ? "url" : "text";
+
   return (
     <>
       <h3 className="oh-display text-center text-2xl text-[#171e19] sm:text-3xl">{question}</h3>
       <input
         type={inputType}
-        inputMode={inputType === "tel" ? "tel" : inputType === "email" ? "email" : "text"}
-        autoComplete={stepKey === "name" ? "name" : stepKey === "email" ? "email" : "tel"}
+        inputMode={inputMode}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         aria-label={question}
         value={value}
@@ -218,7 +260,7 @@ function TextStepScreen({
       {stepKey === "phone" && (
         <input
           type="text"
-          name="website"
+          name="hp_website"
           value={honeypot}
           onChange={(e) => onHoneypotChange(e.target.value)}
           autoComplete="off"
@@ -238,6 +280,16 @@ function TextStepScreen({
       >
         {cta}
       </button>
+
+      {skippable && (
+        <button
+          type="button"
+          onClick={onSkip}
+          className="mt-3 block w-full text-center text-sm font-medium text-[#171e19]/50 underline underline-offset-4 hover:text-[#171e19]"
+        >
+          {skipLabel}
+        </button>
+      )}
     </>
   );
 }
