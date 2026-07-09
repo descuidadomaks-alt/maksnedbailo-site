@@ -37,7 +37,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto grid max-w-content items-center gap-10 lg:min-h-[80svh] lg:grid-cols-12 lg:gap-6">
         {/* ── Content column (left, wider) ─────────────────────────── */}
-        <div className="lg:col-span-7 lg:pr-8">
+        <div className="flex flex-col items-center text-center lg:col-span-7 lg:items-start lg:pr-8 lg:text-left">
           <motion.span
             {...fade(0.15)}
             className="block font-jost text-[11px] uppercase tracking-label text-gold-deep"
@@ -64,7 +64,7 @@ export function Hero() {
             {site.hero.sub}
           </motion.p>
 
-          <motion.div {...fade(0.72)} className="mt-8 flex flex-col items-start gap-3">
+          <motion.div {...fade(0.72)} className="mt-8 flex flex-col items-center gap-3 lg:items-start">
             <WhatsAppButton href={waLink()} className="!px-8 !py-4 text-base">
               {site.hero.cta}
             </WhatsAppButton>

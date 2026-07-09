@@ -1,78 +1,65 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { BODY_GROUP_IDS, ZONE_GROUP_MAP, FAINT_OPACITY, ACTIVE_OPACITY } from "../lib/bodyFigure";
+
 /**
- * The body figure — 100% static/decorative. Uses the client-provided artwork
- * (public/projects/parati/body_svg.svg) as a plain <img>, completely
+ * The body figure — 100% static/decorative artwork (New_body.svg), fully
  * non-interactive (aria-hidden, no handlers, no cursor, not focusable).
  *
- * Zone "highlighting" is NOT done by touching the artwork's paths — it's a
- * soft absolutely-positioned gold glow overlaid on top, positioned per zone
- * as a percentage band of the figure's height. One-way data flow: the parent
- * owns `activeZone` state (set only by the text zone buttons) and this
- * component only ever reflects it.
+ * The artwork itself is pre-composed into four named groups (Head,
+ * Shoulders, Body, legs) sitting under a permanent full-detail outline
+ * layer. "Highlighting" a zone means raising ONLY that zone's group(s) to
+ * full opacity while the rest stay faint — no separate glow/overlay shapes.
  *
- * Color note: the artwork's native fill (#c2a15c) is already, to the eye,
- * identical to the brand gold (#C2A05B) — a 1-unit-per-channel difference.
- * No recolor filter is applied; forcing a CSS filter for a sub-pixel hex
- * difference risks introducing visible drift elsewhere in the image.
+ * `initialMarkup` arrives pre-processed server-side (see page.tsx) with the
+ * correct opacity for the DEFAULT zone already baked in as inline styles, so
+ * there's no flash-then-correct on first paint. Zone switches after that are
+ * plain DOM opacity writes on the already-mounted nodes — no re-render of
+ * the SVG string, no remount, no layout impact (opacity only).
+ *
+ * One-way data flow: the parent owns `activeZone` (set only by the text
+ * zone buttons) and this component only ever reflects it.
  */
-
-const ZONE_ORDER = ["rostro", "espalda", "cuerpo", "piernas"] as const;
-
-// Percentage bands (top / height) within the figure's bounding box, tuned
-// visually against the actual artwork proportions.
-const ZONE_BANDS: Record<string, { top: number; height: number }> = {
-  rostro: { top: 0, height: 15 },
-  espalda: { top: 9, height: 30 },
-  cuerpo: { top: 0, height: 100 },
-  piernas: { top: 46, height: 54 },
-};
-
 export function BodyFigure({
+  initialMarkup,
   activeZone,
   reduce,
   className = "",
 }: {
+  initialMarkup: string;
   activeZone: string;
   reduce: boolean;
   className?: string;
 }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = wrapRef.current;
+    if (!root) return;
+    const activeGroups = new Set(ZONE_GROUP_MAP[activeZone] ?? []);
+    for (const id of BODY_GROUP_IDS) {
+      const el = root.querySelector<SVGGElement>(`#${id}`);
+      if (!el) continue;
+      el.style.transition = reduce ? "none" : "opacity 0.4s ease";
+      el.style.opacity = String(activeGroups.has(id) ? ACTIVE_OPACITY : FAINT_OPACITY);
+    }
+  }, [activeZone, reduce]);
+
   return (
     <div
       aria-hidden="true"
       className={`relative select-none ${className}`}
-      style={{ aspectRatio: "479.45 / 1428.67" }}
+      style={{ aspectRatio: "479.46 / 1428.68" }}
     >
-      <img
-        src="/projects/parati/body_svg.svg"
-        alt=""
+      <div
+        ref={wrapRef}
         aria-hidden="true"
-        draggable={false}
-        className="pointer-events-none absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 h-full w-full [&>svg]:h-full [&>svg]:w-full"
         style={{ filter: "drop-shadow(0 14px 30px rgba(154,123,51,0.16))" }}
+        // Static, trusted, build-time asset (see lib/bodyFigure.ts) — not user input.
+        dangerouslySetInnerHTML={{ __html: initialMarkup }}
       />
-
-      {ZONE_ORDER.map((id) => {
-        const band = ZONE_BANDS[id];
-        const isActive = id === activeZone;
-        const isWhole = id === "cuerpo";
-        return (
-          <div
-            key={id}
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0"
-            style={{
-              top: `${band.top}%`,
-              height: `${band.height}%`,
-              opacity: isActive ? 1 : 0,
-              transition: reduce ? "none" : "opacity 0.4s ease",
-              background: isWhole
-                ? "linear-gradient(180deg, rgba(194,160,91,0.22), rgba(194,160,91,0.16) 50%, rgba(194,160,91,0.22))"
-                : "radial-gradient(ellipse 65% 60% at 50% 50%, rgba(194,160,91,0.45) 0%, rgba(194,160,91,0.18) 55%, rgba(194,160,91,0) 80%)",
-            }}
-          />
-        );
-      })}
     </div>
   );
 }

@@ -28,15 +28,24 @@ type Mode = "zone" | "list";
  * That was the root cause of the old scroll-jump loop (hover → state →
  * content-height change → cursor lands on a different element → repeat).
  */
-export function RitualExplorer() {
+export function RitualExplorer({ bodySvgMarkup }: { bodySvgMarkup: string }) {
   const [mode, setMode] = useState<Mode>("zone");
   const [activeZone, setActiveZone] = useState<string>("cuerpo");
   const reduce = !!useReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
 
   function handleSelectZone(id: string) {
     setActiveZone(id);
     if (mode === "list") {
       document.getElementById(`zone-${id}`)?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "start",
+      });
+    } else {
+      // Zone mode: bring the grid (body + cards) back to the top of the
+      // viewport so the newly selected zone's first card is visible, even
+      // if the user had scrolled mid-way through the previous zone's list.
+      gridRef.current?.scrollIntoView({
         behavior: reduce ? "auto" : "smooth",
         block: "start",
       });
@@ -53,23 +62,54 @@ export function RitualExplorer() {
           </p>
         </Reveal>
 
+        {/* Two-segment toggle — both states always visible, tap either side
+            to switch directly (not just "flip to the other one"). */}
         <div className="mt-5 flex justify-center sm:mt-8">
-          <button
-            type="button"
-            onClick={() => setMode((m) => (m === "zone" ? "list" : "zone"))}
-            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 font-jost text-xs uppercase tracking-label text-gold-deep transition-colors hover:border-gold-deep hover:bg-gold/10"
+          <div
+            role="tablist"
+            aria-label="Modo de exploración"
+            className="inline-flex rounded-full border border-gold/40 p-1"
           >
-            {mode === "list" ? site.explorer.mapToggle : site.explorer.listToggle}
-          </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === "zone"}
+              onClick={() => setMode("zone")}
+              className={`min-h-11 rounded-full px-4 font-jost text-xs uppercase tracking-label transition-colors ${
+                mode === "zone"
+                  ? "bg-gold text-ivory"
+                  : "text-gold-deep hover:bg-gold/10"
+              }`}
+            >
+              {site.explorer.toggleZone}
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={mode === "list"}
+              onClick={() => setMode("list")}
+              className={`min-h-11 rounded-full px-4 font-jost text-xs uppercase tracking-label transition-colors ${
+                mode === "list"
+                  ? "bg-gold text-ivory"
+                  : "text-gold-deep hover:bg-gold/10"
+              }`}
+            >
+              {site.explorer.toggleAll}
+            </button>
+          </div>
         </div>
 
         {/* Body column (sticky) + content column — shared skeleton for both modes.
             No `items-start`: grid cells stretch to the row height, so the inner
             `sticky` wrapper can pin the mini body while the cards scroll past. */}
-        <div className="mt-6 grid grid-cols-[30%_1fr] gap-4 sm:mt-10 sm:grid-cols-[26%_1fr] md:grid-cols-2 md:gap-14">
+        <div
+          ref={gridRef}
+          className="mt-6 grid scroll-mt-24 grid-cols-[30%_1fr] gap-4 sm:mt-10 sm:grid-cols-[26%_1fr] md:grid-cols-2 md:gap-14"
+        >
           <div>
             <div className="sticky top-24">
               <BodyFigure
+                initialMarkup={bodySvgMarkup}
                 activeZone={activeZone}
                 reduce={reduce}
                 className="mx-auto h-auto max-h-[36vh] w-full max-w-[150px] md:max-h-[64vh] md:max-w-[230px]"

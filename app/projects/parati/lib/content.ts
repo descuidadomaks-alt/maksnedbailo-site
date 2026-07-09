@@ -110,8 +110,8 @@ const es = {
     intro:
       "Toca la zona en la que sientes tensión, cansancio o ganas de cuidarte. Te muestro lo que puedo hacer por ti ahí — sin tecnicismos, explicado de forma sencilla.",
     hint: "Toca una zona del cuerpo",
-    listToggle: "Ver todos los rituales",
-    mapToggle: "Elegir por zona",
+    toggleZone: "Por zona",
+    toggleAll: "Todos los rituales",
     fullListHeading: "Carta de servicios",
     legend: "Presión · Objetivo · Duración · Para quién",
     legendScale: "● suave — ●●● firme",
