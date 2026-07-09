@@ -22,7 +22,7 @@ const CARDS: Card[] = [
     variant: "plain",
   },
   {
-    name: "Overtime Hunch",
+    name: "Overtime OS",
     body: "Your entire front office — website, calls, texts, follow-up, reviews — built, run, and tuned FOR you by a real team. And when you're ready to grow, we bring the customers too.",
     variant: "highlight",
   },

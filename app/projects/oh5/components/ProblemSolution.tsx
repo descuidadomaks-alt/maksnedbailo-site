@@ -1,7 +1,7 @@
 /**
  * Section — the signature contrast block. Left = the old way (charcoal,
- * red ✕, sage muted). Right = the Overtime Hunch way (#272727, yellow border,
- * yellow ✓, crisp white). Refined for the AI-front-desk base — no ads
+ * red ✕, sage muted). Right = the Overtime OS way (#272727, yellow border,
+ * yellow ✓, crisp white). Refined for the front-office base — no ads
  * language, adds the emergency-triage line. Final NEW row folds in the
  * anti-GoHighLevel-template message (the standalone section was removed).
  */
@@ -46,11 +46,11 @@ export function ProblemSolution() {
         </div>
       </div>
 
-      {/* THE OVERTIME HUNCH WAY */}
+      {/* THE OVERTIME OS WAY */}
       <div className="border-t-4 border-[#ffe17c] bg-[#272727] px-6 py-14 text-white lg:border-l-4 lg:border-t-0 sm:px-10 sm:py-20">
         <div className="mx-auto max-w-md lg:mr-auto lg:ml-0">
           <h2 className="oh-display text-4xl text-white sm:text-5xl">
-            The <span className="text-[#ffe17c]">Overtime Hunch</span> way
+            The <span className="text-[#ffe17c]">Overtime OS</span> way
           </h2>
           <ul className="mt-8 space-y-6">
             {NEW.map((line) => (

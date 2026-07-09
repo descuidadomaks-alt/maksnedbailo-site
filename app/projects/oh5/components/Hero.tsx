@@ -46,16 +46,22 @@ export function Hero() {
           className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-[#171e19]/70 sm:text-xs sm:tracking-[0.2em]"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-[#ffe17c] sm:h-2 sm:w-2" />
-          Done-for-you AI front office for home-service pros
+          Done-for-you front office for home-service pros
         </motion.span>
 
+        {/*
+          Alternate headlines — swap in if this one underperforms:
+          B: EVERY CALL ANSWERED. EVERY JOB BOOKED. NOBODY NEW TO HIRE.
+          C: STOP RUNNING THE OFFICE FROM YOUR TRUCK.
+        */}
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
           className="oh-display mx-auto mt-4 max-w-4xl text-[clamp(2.25rem,11.5vw,3rem)] text-[#171e19] sm:mt-6 sm:text-7xl lg:text-8xl"
         >
-          Your entire <Highlight>front office</Highlight> — built and run by AI<Dot />
+          Your entire front office — <Highlight>handled</Highlight>
+          <Dot />
         </motion.h1>
 
         <motion.p
@@ -64,9 +70,9 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.12 }}
           className="mx-auto mt-4 max-w-xl text-base leading-snug text-[#171e19]/70 sm:mt-6 sm:text-lg sm:leading-normal"
         >
-          Website, phones, texts, follow-up, reviews — one system that answers every lead,
-          books the jobs, and fills your calendar. We build it and run it for you. No new
-          software to learn, nobody to hire.
+          Calls answered, jobs booked, every lead chased, reviews stacked — we build it and
+          run it for you. Powered by AI, managed by real people. Nothing to learn, nobody
+          to hire.
         </motion.p>
 
         <motion.p

@@ -1,5 +1,5 @@
 /**
- * A colored trailing period for section titles — echoes the "Overtime Hunch."
+ * A colored trailing period for section titles — echoes the "Overtime OS."
  * wordmark convention (yellow period) across the page's headline sentences.
  * Use `white` on titles that sit on a yellow (#ffe17c) background section,
  * where a yellow period would disappear against it (e.g. FinalCTA).

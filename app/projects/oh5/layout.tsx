@@ -4,10 +4,11 @@ import { Anton } from "next/font/google";
 import { MetaPixel } from "./components/MetaPixel";
 
 /**
- * Overtime Hunch. — oh5 variant, self-contained paid-ad landing under
- * /projects/oh5. Full copy of /projects/oh3 (left untouched) re-gated for
- * the Carter campaign: locked demo video, IP-derived location copy, and
- * Meta Pixel. Self-hosted video lives at public/projects/oh5/demo.mp4.
+ * Overtime OS. — oh5 variant, self-contained paid-ad landing under
+ * /projects/oh5. Renamed from "Overtime Hunch" (oh4 and earlier keep the old
+ * brand). Full copy of /projects/oh3 (left untouched) re-gated for the
+ * Carter campaign: locked demo video, IP-derived location copy, and Meta
+ * Pixel. Self-hosted video lives at public/projects/oh5/demo.mp4.
  *
  * PORTFOLIO / campaign demo. Any dashboard-style numbers elsewhere in the
  * component tree are generic sample data — verify none render on this page.
@@ -26,11 +27,11 @@ const anton = Anton({
 });
 
 export const metadata: Metadata = {
-  title: "Overtime Hunch. — Every lead answered, qualified & booked in under 60 seconds",
+  title: "Overtime OS. — Your entire front office, handled",
   description:
-    "Done-for-you AI front office for home-service pros. One system that answers every call, text, and form in seconds, qualifies the job, and books it on your calendar. $499/mo, $0 setup.",
+    "Done-for-you front office for home-service pros. One system that answers every call, text, and form in seconds, qualifies the job, and books it on your calendar. $499/mo, $0 setup.",
   openGraph: {
-    title: "Overtime Hunch. — Every lead answered, qualified & booked",
+    title: "Overtime OS. — Your entire front office, handled",
     description:
       "One system answers every call, text, and form in seconds — qualifies the job and books it straight onto your calendar. 24/7.",
   },
@@ -92,20 +93,29 @@ export default function Oh5Layout({ children }: { children: ReactNode }) {
         @keyframes oh-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
         .oh-eq-bar { transform-origin: bottom; animation: oh-eq 0.9s ease-in-out infinite; }
 
-        /* Quiz progress bar — animated diagonal stripes, width transitions
-           per-step. */
+        /* Quiz progress bar — solid fill, smooth width transition, subtle
+           one-shot-feeling shimmer sweep (no repeating pattern/seams). */
         .oh-quiz-progress-fill {
-          background-image: repeating-linear-gradient(45deg, #171e19 0 6px, #ffe17c 6px 12px);
-          background-size: 24px 24px;
-          animation: oh-quiz-stripes 1s linear infinite;
-          transition: width 450ms cubic-bezier(0.4,0,0.2,1);
+          position: relative;
+          overflow: hidden;
+          background: #ffe17c;
+          transition: width 400ms ease-out;
         }
-        @keyframes oh-quiz-stripes { from { background-position: 0 0; } to { background-position: 24px 0; } }
+        .oh-quiz-progress-fill::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
+          transform: translateX(-100%);
+          animation: oh-quiz-shimmer 2.5s ease-in-out infinite;
+        }
+        @keyframes oh-quiz-shimmer { to { transform: translateX(100%); } }
 
         @media (prefers-reduced-motion: reduce) {
           .oh-scope .oh-card { transition: none; }
           .oh-scope .oh-dot, .oh-scope .oh-eq-bar { animation: none; }
-          .oh-scope .oh-quiz-progress-fill { animation: none; }
+          .oh-scope .oh-quiz-progress-fill { transition: none; }
+          .oh-scope .oh-quiz-progress-fill::after { animation: none; }
         }
       `,
         }}

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useQuiz } from "./QuizContext";
 import { Dot } from "./Dot";
+import { Highlight } from "./Highlight";
 import { trackCustomPixelEvent } from "./MetaPixel";
 import {
   QUIZ_STEPS,
@@ -91,28 +92,22 @@ export function QuizModal() {
         </div>
 
         {showHeader && (
-          <p className="mt-2 text-center text-base font-medium leading-snug text-[#171e19]/80 sm:text-lg">
-            {QUIZ_HEADER_TEXT}{" "}
-            <span className="whitespace-nowrap rounded bg-[#ffe17c] px-1.5 py-0.5 font-bold text-[#171e19]">
-              {QUIZ_HEADER_PRICE}
-            </span>
-          </p>
+          <div className="mt-6 text-center">
+            <p className="text-[15px] font-medium leading-snug text-[#171e19]/70 sm:text-base">
+              {QUIZ_HEADER_TEXT}
+            </p>
+            <p className="oh-display mt-1.5 text-2xl text-[#171e19]">
+              for <Highlight rotate={-2}>{QUIZ_HEADER_PRICE}</Highlight>
+            </p>
+          </div>
         )}
 
-        <div className="mt-4 h-7 w-full overflow-hidden rounded-full bg-[#171e19]/10 sm:h-8">
-          <div
-            className="oh-quiz-progress-fill flex h-full items-center justify-end rounded-full pr-3 sm:pr-4"
-            style={{ width: `${progress}%` }}
-          >
-            <span
-              className="oh-display text-xs tabular-nums text-white sm:text-sm"
-              style={{
-                textShadow:
-                  "-1px -1px 0 rgba(23,30,25,0.55), 1px -1px 0 rgba(23,30,25,0.55), -1px 1px 0 rgba(23,30,25,0.55), 1px 1px 0 rgba(23,30,25,0.55)",
-              }}
-            >
-              {progress}%
-            </span>
+        <div className="mt-4">
+          <p className="text-right text-xs font-medium tabular-nums text-[#171e19]/50">
+            {progress}%
+          </p>
+          <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-[#171e19]/[0.08]">
+            <div className="oh-quiz-progress-fill h-full rounded-full" style={{ width: `${progress}%` }} />
           </div>
         </div>
 

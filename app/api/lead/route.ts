@@ -176,7 +176,7 @@ function notificationTextOh5(lead: EnrichedLead & Oh5LeadPayload): string {
   const campaign = lead.utm?.utm_campaign || "";
   const website = lead.website.trim() !== "" ? lead.website : "no website — upsell";
   return (
-    `${emoji} ${lead.score} LEAD — Overtime Hunch\n` +
+    `${emoji} ${lead.score} LEAD — Overtime OS\n` +
     `${lead.name} · ${lead.trade} · ${city}, ${region}\n` +
     `📞 ${lead.phone} ✉️ ${lead.email} 🌐 ${website}\n` +
     `${lead.leadsPerMonth} leads/mo · ${lead.phoneCoverage} answers the phone\n` +
@@ -229,13 +229,15 @@ async function sendToEmail(lead: EnrichedLead): Promise<void> {
     .map((line) => `<p>${line}</p>`)
     .join("");
 
+  const fromName = isOh5Payload(lead) ? "Overtime OS" : "Overtime Hunch";
+
   await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       // TODO: swap for a verified sending domain in Resend — onboarding@resend.dev
       // only delivers to the account owner's own address.
-      from: "Overtime Hunch <onboarding@resend.dev>",
+      from: `${fromName} <onboarding@resend.dev>`,
       to: to.split(",").map((s) => s.trim()),
       subject: `${emoji} ${lead.score} lead: ${lead.name} — ${lead.trade} (${lead.location?.city || "unknown city"})`,
       html,

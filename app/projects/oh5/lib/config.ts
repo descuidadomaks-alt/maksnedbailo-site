@@ -1,5 +1,8 @@
 /**
- * Overtime Hunch. — oh5 landing page constants.
+ * Overtime OS. — oh5 landing page constants. Renamed from "Overtime Hunch"
+ * (oh4 and earlier keep the old brand; see app/api/lead/route.ts, which
+ * branches its notification copy on `page` so oh4's emails/Telegram alerts
+ * still say Overtime Hunch).
  *
  * oh5 is oh3 re-gated for the Carter ad campaign: the demo video is now
  * locked until the visitor submits the form (see components/VideoForm.tsx),
@@ -9,7 +12,7 @@
  * values before running this as a paid-ad destination.
  */
 
-export const BRAND = "Overtime Hunch.";
+export const BRAND = "Overtime OS.";
 
 // Location is resolved per-visitor (city → region → "your area"; see
 // LocationContext.tsx + app/api/geo/route.ts). The scarcity copy is

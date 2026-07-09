@@ -167,7 +167,7 @@ export const QUIZ_STEPS: QuizStep[] = [
 
 // Persistent header — shown only above steps 1–2 (index 0–1).
 export const QUIZ_HEADER_STEPS = 2;
-export const QUIZ_HEADER_TEXT = "We build & run a complete AI front office for home-service pros — for";
+export const QUIZ_HEADER_TEXT = "We build & run your whole front office for home-service pros";
 export const QUIZ_HEADER_PRICE = "$499/month";
 
 export function formatUsPhone(raw: string): string {

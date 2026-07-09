@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { BRAND } from "../lib/config";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Overtime Hunch.",
+  title: "Privacy Policy — Overtime OS.",
   robots: { index: false, follow: true },
 };
 
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
       <div className="mt-8 space-y-6 text-base leading-relaxed text-[#171e19]/80">
         <p>
           {BRAND} (&quot;we&quot;, &quot;us&quot;) operates this page as a landing page for
-          our done-for-you AI front-desk service. This policy explains what information
+          our done-for-you front office service. This policy explains what information
           the form on this page collects and how we use it.
         </p>
 
