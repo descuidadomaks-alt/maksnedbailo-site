@@ -14,11 +14,12 @@ export function About() {
         <Reveal className="order-1 md:order-none">
           <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-soft border border-gold/20 shadow-card">
             <Image
-              src="/projects/parati/portrait.jpg"
+              src="/projects/parati/portrait-new.jpg"
               alt={site.about.portraitAlt}
               fill
               sizes="(max-width: 768px) 90vw, 40vw"
               className="object-cover"
+              style={{ objectPosition: "50% 20%" }}
             />
           </div>
         </Reveal>

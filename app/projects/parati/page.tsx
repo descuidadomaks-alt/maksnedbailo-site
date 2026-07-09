@@ -1,6 +1,7 @@
 import { TopBar } from "./components/TopBar";
 import { Hero } from "./components/Hero";
 import { RitualExplorer } from "./components/RitualExplorer";
+import { Bonos } from "./components/Bonos";
 import { AvailabilityCue } from "./components/AvailabilityCue";
 import { About } from "./components/About";
 import { Reviews } from "./components/Reviews";
@@ -21,6 +22,7 @@ export default function ParatiPage() {
       <main>
         <Hero />
         <RitualExplorer />
+        <Bonos />
         <AvailabilityCue />
         <About />
         <Reviews />

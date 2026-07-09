@@ -5,8 +5,7 @@ import { InstagramGlyph } from "./Contact";
 
 /** Footer — wordmark, legal placeholder, IG + WhatsApp, © year. */
 export function Footer() {
-  // Static year avoids hydration mismatch; bump in TODO_PLACEHOLDERS if needed.
-  const year = 2025;
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-gold/20 bg-cream px-5 py-12 sm:px-8">
@@ -18,13 +17,13 @@ export function Footer() {
           {site.footer.tagline}
         </p>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center">
           <a
             href={waLink()}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="WhatsApp"
-            className="text-charcoal/60 transition-colors hover:text-gold-deep"
+            className="flex h-11 w-11 items-center justify-center text-charcoal/60 transition-colors hover:text-gold-deep"
           >
             <WhatsAppGlyph className="h-5 w-5" />
           </a>
@@ -33,7 +32,7 @@ export function Footer() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="text-charcoal/60 transition-colors hover:text-gold-deep"
+            className="flex h-11 w-11 items-center justify-center text-charcoal/60 transition-colors hover:text-gold-deep"
           >
             <InstagramGlyph className="h-5 w-5" />
           </a>

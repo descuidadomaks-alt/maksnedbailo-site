@@ -79,7 +79,7 @@ export function Contact() {
                 href={site.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-gold/40 px-5 py-3 font-jost text-sm text-gold-deep transition-colors hover:border-gold-deep hover:bg-gold/10"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-gold/40 px-5 py-3 font-jost text-sm text-gold-deep transition-colors hover:border-gold-deep hover:bg-gold/10"
               >
                 <InstagramGlyph className="h-4 w-4" />
                 {site.instagramHandle}

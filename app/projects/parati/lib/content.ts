@@ -4,15 +4,25 @@
  * i18n-readiness: every user-facing string lives inside the `es` object below.
  * Adding Ukrainian (uk) or English (en) later means duplicating this shape into
  * a sibling object and selecting by locale — no Spanish is hard-coded.
+ *
+ * Business-critical numbers (phone, rating, review count) are NOT defined
+ * here — they're imported from `config.ts`, the single source for those.
  */
+
+import { WHATSAPP_NUMBER, PHONE_DISPLAY, RATING, REVIEW_COUNT } from "./config";
+
+/** One of the five service-purpose icons (see components/AttributeIcons.tsx). */
+export type Objetivo = "relajacion" | "tension" | "circulacion" | "estetica" | "energia";
 
 export type Service = {
   name: string;
-  duration: string;
+  duration: string; // unified "NN min" format
   price: string;
-  benefit: string; // the warm, sensory one-liner
-  plain: string; // first-timer-friendly "what it actually is / does"
+  benefit: string; // short sensory line — used as the full-list description
+  plain: string; // longer first-timer-friendly "what it actually is / does"
   zones: string[]; // body-map zone ids this service belongs to
+  pressure: 1 | 2 | 3; // touch intensity, shown as filled dots
+  objetivo: Objetivo[]; // usually one icon, occasionally two
 };
 
 export type Review = {
@@ -41,13 +51,13 @@ const es = {
   region: "Cantabria",
   address: "C. Isabel la Católica, 10, 39007 Santander, Cantabria",
   geo: { lat: 43.4627201, lng: -3.8142308 },
-  whatsapp: "34611263063", // real booking number (from the printed carta)
-  phone: "+34 611 26 30 63",
+  whatsapp: WHATSAPP_NUMBER,
+  phone: PHONE_DISPLAY,
   instagram: "https://www.instagram.com/parati_masaje_santander/",
   instagramHandle: "@parati_masaje_santander",
   googleMaps: "https://maps.app.goo.gl/QkM4Wp29A1hSC1av9",
-  googleRating: "5.0",
-  reviewCount: 32,
+  googleRating: RATING,
+  reviewCount: REVIEW_COUNT,
 
   hours: [
     { day: "Lunes – Viernes", time: "9:30–13:30 · 16:00–20:00" },
@@ -59,6 +69,8 @@ const es = {
     generic: "Hola, me gustaría reservar una cita. ¿Qué disponibilidad tienes?",
     service: (name: string) =>
       `Hola, me gustaría reservar ${name}. ¿Qué disponibilidad tienes?`,
+    bono: (sessions: 5 | 10) =>
+      `Hola, me interesa el bono de ${sessions} sesiones. ¿Me cuentas cómo funciona?`,
   },
 
   nav: {
@@ -74,7 +86,6 @@ const es = {
   // ── Hero ────────────────────────────────────────────────────────────
   hero: {
     eyebrow: "Masaje · Estética · Bienestar · Santander",
-    // Editorial, split across lines for the asymmetric layout.
     headlineLines: ["Un ritual", "para ti,", "y para nadie", "más."],
     sub: "Masaje y bienestar en el corazón de Santander. Unas manos que deshacen la tensión, en un espacio pensado para que, por un rato, no tengas que ser nada ni nadie.",
     cta: "Reserva tu momento",
@@ -88,11 +99,13 @@ const es = {
     eyebrow: "Encuentra tu ritual",
     heading: "¿Por dónde te está pidiendo cuidado el cuerpo?",
     intro:
-      "Toca la zona en la que sientes tensión, cansancio o ganas de cuidarte. Te muestro lo que puedo hacer por ti ahí — sin nombres raros, en cristiano.",
+      "Toca la zona en la que sientes tensión, cansancio o ganas de cuidarte. Te muestro lo que puedo hacer por ti ahí — sin tecnicismos, explicado de forma sencilla.",
     hint: "Toca una zona del cuerpo",
-    listToggle: "Ver la carta completa",
-    mapToggle: "Volver al cuerpo",
+    listToggle: "Ver todos los rituales",
+    mapToggle: "Elegir por zona",
     fullListHeading: "Carta de servicios",
+    legend: "Presión · Objetivo · Duración",
+    legendScale: "● suave — ●●● firme",
     bookLabel: "Reservar",
     minutesLabel: "min",
   },
@@ -100,10 +113,6 @@ const es = {
   // ── Services ────────────────────────────────────────────────────────
   services: {
     cardCta: "Reservar este servicio",
-    bonos: [
-      "Bono 5 sesiones — la 5ª al 50%",
-      "Bono 10 sesiones — la 10ª gratis",
-    ],
     note: "Precios con IVA incluido.",
     items: [
       {
@@ -114,6 +123,8 @@ const es = {
         plain:
           "El más completo: masaje de cuerpo entero que combina técnicas para soltar tensión y recargar energía. 90 minutos solo para ti.",
         zones: ["cuerpo"],
+        pressure: 2,
+        objetivo: ["energia", "relajacion"],
       },
       {
         name: "Luxury Detox Flow",
@@ -123,6 +134,8 @@ const es = {
         plain:
           "Masaje suave y rítmico que activa la circulación y reduce hinchazón y retención de líquidos. Ideal si te sientes pesada o hinchada.",
         zones: ["cuerpo", "piernas"],
+        pressure: 1,
+        objetivo: ["circulacion"],
       },
       {
         name: "Signature Balance",
@@ -132,6 +145,8 @@ const es = {
         plain:
           "El masaje relajante de toda la vida, de cuerpo entero. Perfecto si es tu primera vez y quieres desconectar sin más.",
         zones: ["cuerpo"],
+        pressure: 1,
+        objetivo: ["relajacion"],
       },
       {
         name: "Imperial Gold Ritual",
@@ -141,6 +156,8 @@ const es = {
         plain:
           "Masaje envolvente centrado en espalda, cuello y hombros — donde más se acumula el estrés del día.",
         zones: ["espalda"],
+        pressure: 2,
+        objetivo: ["tension", "relajacion"],
       },
       {
         name: "Deep Recovery",
@@ -150,6 +167,8 @@ const es = {
         plain:
           "Masaje más firme, de descarga, para músculos cargados y contracturas: espalda, cuello, piernas. Alivia dolor y rigidez.",
         zones: ["espalda", "piernas"],
+        pressure: 3,
+        objetivo: ["tension"],
       },
       {
         name: "Silk Steps",
@@ -159,6 +178,8 @@ const es = {
         plain:
           "Masaje de piernas y pies que quita el cansancio y la pesadez. Un pequeño momento con un gran alivio.",
         zones: ["piernas"],
+        pressure: 1,
+        objetivo: ["circulacion"],
       },
       {
         name: "Diamond Face Sculpt",
@@ -168,35 +189,54 @@ const es = {
         plain:
           "Masaje facial que reafirma y define los rasgos. La piel queda descansada, luminosa y más firme, sin agujas.",
         zones: ["rostro"],
+        pressure: 1,
+        objetivo: ["estetica"],
       },
       {
         name: "Golden Skin Microneedling",
-        duration: "Tratamiento facial",
+        duration: "45 min",
         price: "90€",
         benefit: "Piel renovada, firme y luminosa desde dentro.",
         plain:
           "Microagujas finísimas que estimulan tu piel para producir colágeno: más firmeza, textura y luz. Resultados que van a más con el tiempo.",
         zones: ["rostro"],
+        pressure: 1,
+        objetivo: ["estetica"],
       },
       {
         name: "Lifting de pestañas",
-        duration: "Tratamiento estético",
+        duration: "45 min",
         price: "35€",
         benefit: "Mirada abierta y curvada, sin extensiones.",
         plain:
           "Se curvan y elevan tus propias pestañas desde la raíz. Mirada más despierta durante semanas, sin poner pestañas postizas.",
         zones: ["rostro"],
+        pressure: 1,
+        objetivo: ["estetica"],
       },
       {
         name: "Lifting de cejas con tinte y forma",
-        duration: "Tratamiento estético",
+        duration: "30 min",
         price: "40€",
         benefit: "Cejas definidas, con forma y color a tu medida.",
         plain:
           "Se peinan, fijan y tintan tus cejas para darles forma y densidad. Mirada más definida y armónica durante semanas.",
         zones: ["rostro"],
+        pressure: 1,
+        objetivo: ["estetica"],
       },
     ] as Service[],
+  },
+
+  // ── Bonos y regalos — own visual block, own CTAs ────────────────────
+  bonos: {
+    heading: "Bonos y regalos",
+    cta: "Quiero este bono",
+    giftLine: "También como tarjeta regalo — pregúntame por WhatsApp.",
+    items: [
+      { sessions: 5 as const, label: "Bono 5 sesiones", desc: "la 5ª al 50%" },
+      { sessions: 10 as const, label: "Bono 10 sesiones", desc: "la 10ª gratis" },
+    ],
   },
 
   // ── Body-map zones ──────────────────────────────────────────────────
@@ -246,15 +286,15 @@ const es = {
       "Recibo a una sola persona cada vez, sin prisas y sin ruido. Solo tú, mis manos y el tiempo que te dedicas. Que salgas más ligera de como entraste — ese es todo mi trabajo.",
     ],
     signature: "— Oksana, Para Ti",
-    portraitAlt: "Oksana, terapeuta de Para Ti en Santander",
+    portraitAlt: "Oksana, terapeuta y fundadora de Para Ti, en su estudio de Santander",
   },
 
   // ── Reseñas (real Google reviews) ───────────────────────────────────
   reviews: {
     eyebrow: "Reseñas reales",
-    heading: "5,0 ★ en Google, con el corazón",
+    heading: (rating: string) => `${rating} ★ en Google, con el corazón`,
     pullQuote: "Unas manos prodigiosas.",
-    moreLink: "Leer las 32 reseñas en Google",
+    moreLink: (count: number) => `Leer las ${count} reseñas en Google`,
     items: [
       {
         name: "Emely Roque",
@@ -274,6 +314,18 @@ const es = {
         stars: 5,
         quote:
           "Un masaje excepcional, súper completo. He salido súper relajada, todo muy limpio y un ambiente de paz. Tiene unas manos prodigiosas.",
+      },
+      {
+        name: "Svetlana Savchenko",
+        stars: 5,
+        quote:
+          "Se nota un alto nivel de profesionalidad y una actitud atenta y delicada. Oksana trabaja con el corazón: sentí un cuidado sincero, calidez y atención a mi estado.",
+      },
+      {
+        name: "Olivia",
+        stars: 5,
+        quote:
+          "Muchas gracias al salón Para Ti por el maravilloso masaje. Todo fue perfecto y muy relajante. Recomiendo mucho a la masajista, es una gran profesional. ¡Volveré!",
       },
     ] as Review[],
   },

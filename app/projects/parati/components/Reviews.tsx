@@ -1,11 +1,12 @@
 import { site } from "../lib/content";
+import { RATING, REVIEW_COUNT } from "../lib/config";
 import { SectionHeading } from "./SectionHeading";
-import { ReviewCard } from "./ReviewCard";
-import { RevealGroup, Reveal } from "./Reveal";
+import { ReviewsSlider } from "./ReviewsSlider";
+import { Reveal } from "./Reveal";
 
 /**
- * Reseñas — the 3 real Google reviews (verbatim, from context.md).
- * Pull-quote accent + a small link out to the Google Maps profile.
+ * Reseñas — real Google reviews as a swipeable slider.
+ * Pull-quote accent + a link out to the Google Maps profile (new tab).
  */
 export function Reviews() {
   return (
@@ -13,7 +14,7 @@ export function Reviews() {
       <div className="mx-auto max-w-content">
         <SectionHeading
           eyebrow={site.reviews.eyebrow}
-          title={site.reviews.heading}
+          title={site.reviews.heading(RATING)}
         />
 
         <Reveal className="mt-8 text-center">
@@ -22,11 +23,9 @@ export function Reviews() {
           </p>
         </Reveal>
 
-        <RevealGroup className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {site.reviews.items.map((review) => (
-            <ReviewCard key={review.name} review={review} />
-          ))}
-        </RevealGroup>
+        <Reveal delay={0.1} className="mt-12">
+          <ReviewsSlider reviews={[...site.reviews.items]} />
+        </Reveal>
 
         <Reveal className="mt-10 text-center">
           <a
@@ -35,7 +34,7 @@ export function Reviews() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 font-jost text-sm text-gold-deep underline-offset-4 transition-colors hover:text-charcoal hover:underline"
           >
-            {site.reviews.moreLink}
+            {site.reviews.moreLink(REVIEW_COUNT)}
             <span aria-hidden>→</span>
           </a>
         </Reveal>

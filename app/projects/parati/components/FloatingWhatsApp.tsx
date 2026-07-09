@@ -23,7 +23,7 @@ export function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={site.floatingWhatsAppLabel}
-      className={`fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-ivory shadow-soft transition-all duration-500 hover:bg-gold-deep sm:bottom-7 sm:right-7 ${
+      className={`pt-fab fixed z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gold text-ivory shadow-soft transition-all duration-500 hover:bg-gold-deep ${
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       }`}
     >

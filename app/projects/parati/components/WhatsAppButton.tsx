@@ -31,7 +31,7 @@ export function WhatsAppButton({
   className?: string;
 }) {
   const base =
-    "inline-flex items-center justify-center gap-2.5 rounded-full font-jost text-sm font-medium transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep";
+    "inline-flex min-h-11 items-center justify-center gap-2.5 rounded-full font-jost text-sm font-medium transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-deep";
 
   const styles =
     variant === "primary"
