@@ -1,15 +1,15 @@
 /**
- * Lead capture — shared by oh4 and oh5's quiz funnels. Both POST here; the
- * `page` field picks which payload shape/scoring/notification format
+ * Lead capture — shared by oh4, oh5, and oh6's quiz funnels. Both POST here;
+ * the `page` field picks which payload shape/scoring/notification format
  * applies, so oh4 (legacy 8-step quiz: trade, phoneCoverage, missedCalls,
- * timeline, revenue) keeps working unchanged while oh5 (10-step quiz:
+ * timeline, revenue) keeps working unchanged while oh5/oh6 (10-step quiz:
  * trade, biggestImpact, leadsPerMonth, phoneCoverage, eliminate, timeline,
- * website) gets its own scoring + notification text. Fans out to a Google
- * Sheet, Telegram, and email via Promise.allSettled, so a failing
- * notification never blocks the response (the visitor already has the demo
- * by the time this runs). Every integration below no-ops with a
- * console.warn if its env var isn't set — nothing throws just because a
- * service isn't configured yet.
+ * website — "platform" schema, PLATFORM_PAGES below) get their own scoring +
+ * notification text. Fans out to a Google Sheet, Telegram, and email via
+ * Promise.allSettled, so a failing notification never blocks the response
+ * (the visitor already has the demo by the time this runs). Every
+ * integration below no-ops with a console.warn if its env var isn't set —
+ * nothing throws just because a service isn't configured yet.
  *
  * SETUP
  *
@@ -22,10 +22,10 @@
  *       has access "Anyone".
  *    c. Copy the deployment's web app URL into GAS_WEBHOOK_URL.
  *
- *    New columns for oh5 (biggestImpact, leadsPerMonth, eliminate, website)
- *    are APPENDED after the original oh4 columns — existing rows/formulas
- *    that reference the old column order are unaffected; oh4 leads simply
- *    leave the new columns blank.
+ *    New columns for the platform schema (biggestImpact, leadsPerMonth,
+ *    eliminate, website) are APPENDED after the original oh4 columns —
+ *    existing rows/formulas that reference the old column order are
+ *    unaffected; oh4 leads simply leave the new columns blank.
  *
  *    function doPost(e){var d=JSON.parse(e.postData.contents);
  *    SpreadsheetApp.openById('SHEET_ID').getSheetByName('Leads').appendRow(
@@ -72,7 +72,10 @@ type LegacyLeadPayload = {
   honeypot?: string;
 };
 
-type Oh5LeadPayload = {
+// oh5/oh6 share this shape — both run the same 10-step quiz, just under
+// different positioning copy. Add new page slugs to PLATFORM_PAGES below,
+// not a new payload type, unless the quiz steps themselves diverge.
+type PlatformLeadPayload = {
   name: string;
   email: string;
   phone: string;
@@ -85,19 +88,20 @@ type Oh5LeadPayload = {
   timeline: string;
   location: { city: string; region: string };
   utm: { utm_source?: string; utm_medium?: string; utm_campaign?: string; fbclid?: string };
-  page: "oh5";
+  page: "oh5" | "oh6";
   ts: string;
   honeypot?: string;
 };
 
-type LeadPayload = LegacyLeadPayload | Oh5LeadPayload;
+type LeadPayload = LegacyLeadPayload | PlatformLeadPayload;
 
 type EnrichedLead = LeadPayload & { score: Score };
 
 const NOT_HOME_SERVICE = "I'm not a home-service business";
+const PLATFORM_PAGES = new Set(["oh5", "oh6"]);
 
-function isOh5Payload(lead: LeadPayload): lead is Oh5LeadPayload {
-  return lead.page === "oh5";
+function isPlatformPayload(lead: LeadPayload): lead is PlatformLeadPayload {
+  return PLATFORM_PAGES.has(lead.page);
 }
 
 function isValidLegacyPayload(b: Record<string, unknown>): b is LegacyLeadPayload {
@@ -108,7 +112,7 @@ function isValidLegacyPayload(b: Record<string, unknown>): b is LegacyLeadPayloa
   return true;
 }
 
-function isValidOh5Payload(b: Record<string, unknown>): b is Oh5LeadPayload {
+function isValidPlatformPayload(b: Record<string, unknown>): b is PlatformLeadPayload {
   const requiredStrings = [
     "name",
     "email",
@@ -129,7 +133,7 @@ function isValidOh5Payload(b: Record<string, unknown>): b is Oh5LeadPayload {
 function isValidLeadPayload(body: unknown): body is LeadPayload {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
-  return b.page === "oh5" ? isValidOh5Payload(b) : isValidLegacyPayload(b);
+  return PLATFORM_PAGES.has(b.page as string) ? isValidPlatformPayload(b) : isValidLegacyPayload(b);
 }
 
 // oh4 scoring — unchanged.
@@ -141,10 +145,10 @@ function scoreLead(trade: string, timeline: string, revenue: string): Score {
   return "WARM";
 }
 
-// oh5 scoring — leads/month replaces revenue as the volume signal.
+// oh5/oh6 scoring — leads/month replaces revenue as the volume signal.
 const HOT_LEADS_PER_MONTH = new Set(["20–50", "50–100", "100+"]);
 
-function scoreLeadOh5(trade: string, timeline: string, leadsPerMonth: string): Score {
+function scoreLeadPlatform(trade: string, timeline: string, leadsPerMonth: string): Score {
   const notHomeService = trade === NOT_HOME_SERVICE;
   if (timeline === "Just researching" || notHomeService) return "COLD";
   if (timeline === "ASAP — right now" && HOT_LEADS_PER_MONTH.has(leadsPerMonth)) return "HOT";
@@ -169,7 +173,7 @@ function notificationTextLegacy(lead: EnrichedLead & LegacyLeadPayload): string 
   );
 }
 
-function notificationTextOh5(lead: EnrichedLead & Oh5LeadPayload): string {
+function notificationTextPlatform(lead: EnrichedLead & PlatformLeadPayload): string {
   const emoji = scoreEmoji(lead.score);
   const city = lead.location?.city || "";
   const region = lead.location?.region || "";
@@ -186,7 +190,7 @@ function notificationTextOh5(lead: EnrichedLead & Oh5LeadPayload): string {
 }
 
 function notificationText(lead: EnrichedLead): string {
-  return isOh5Payload(lead) ? notificationTextOh5(lead) : notificationTextLegacy(lead);
+  return isPlatformPayload(lead) ? notificationTextPlatform(lead) : notificationTextLegacy(lead);
 }
 
 async function sendToSheet(lead: EnrichedLead): Promise<void> {
@@ -229,7 +233,7 @@ async function sendToEmail(lead: EnrichedLead): Promise<void> {
     .map((line) => `<p>${line}</p>`)
     .join("");
 
-  const fromName = isOh5Payload(lead) ? "Overtime OS" : "Overtime Hunch";
+  const fromName = isPlatformPayload(lead) ? "Overtime OS" : "Overtime Hunch";
 
   await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -263,8 +267,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const score = isOh5Payload(body)
-    ? scoreLeadOh5(body.trade, body.timeline, body.leadsPerMonth)
+  const score = isPlatformPayload(body)
+    ? scoreLeadPlatform(body.trade, body.timeline, body.leadsPerMonth)
     : scoreLead(body.trade, body.timeline, body.revenue);
   const lead: EnrichedLead = { ...body, score };
 
