@@ -26,14 +26,42 @@ const anton = Anton({
   preload: true,
 });
 
+// Root layout (app/layout.tsx) sets Care Less/WhatsApp-branded keywords,
+// openGraph, and twitter metadata for maksnedbailo.site. Next.js merges
+// metadata objects per top-level key but does NOT scope that merge inside
+// nested objects — so openGraph/twitter here must each restate every field
+// (title, description, images, siteName, url) or the missing ones (e.g.
+// images, siteName) silently fall back to the root's. Same for keywords and
+// alternates.canonical: both are cleared/overridden explicitly below so
+// nothing about this page reads as the root site when shared or run as ads.
+const OG_TITLE = "Overtime OS — The AI operating system that runs your entire business";
+const OG_DESCRIPTION =
+  "Every call, text, and form answered in seconds, qualified, and booked on your calendar. $499/mo, $0 setup.";
+const OG_IMAGE = "/projects/oh6/og-image.png";
+const CANONICAL_URL = "https://maksnedbailo.site/projects/oh6"; // TODO: swap to overtimeos.com once live
+
 export const metadata: Metadata = {
   title: "Overtime OS. — Your entire front office, handled",
   description:
     "The AI operating system that runs your entire business. One system that answers every call, text, and form in seconds, qualifies the job, and books it on your calendar. $499/mo, $0 setup.",
+  keywords: [],
+  alternates: {
+    canonical: CANONICAL_URL,
+  },
   openGraph: {
-    title: "Overtime OS. — Your entire front office, handled",
-    description:
-      "One system answers every call, text, and form in seconds — qualifies the job and books it straight onto your calendar. 24/7.",
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    type: "website",
+    url: CANONICAL_URL,
+    siteName: "Overtime OS",
+    locale: "en_US",
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: OG_TITLE }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: OG_TITLE,
+    description: OG_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   // Campaign/demo page — keep it out of the index.
   robots: { index: false, follow: true },

@@ -23,7 +23,7 @@ const CARDS: Card[] = [
   },
   {
     name: "Overtime OS",
-    body: "The operating system for your whole front office — website, calls, texts, follow-up, reviews, all running from one system we build and manage for you. And when you're ready to grow, it grows with you.",
+    body: "Your entire front office — website, calls, texts, follow-up, reviews — one operating system, built and run for you by a real team. And when you're ready to grow, we bring the customers too.",
     variant: "highlight",
   },
   {
