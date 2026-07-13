@@ -1,11 +1,14 @@
 /**
- * Lead capture — shared by oh4, oh5, and oh6's quiz funnels. Both POST here;
- * the `page` field picks which payload shape/scoring/notification format
- * applies, so oh4 (legacy 8-step quiz: trade, phoneCoverage, missedCalls,
- * timeline, revenue) keeps working unchanged while oh5/oh6 (10-step quiz:
- * trade, biggestImpact, leadsPerMonth, phoneCoverage, eliminate, timeline,
- * website — "platform" schema, PLATFORM_PAGES below) get their own scoring +
- * notification text. Fans out to a Google Sheet, Telegram, and email via
+ * Lead capture — shared by oh4, oh5, oh6, and oos's quiz funnels. Both POST
+ * here; the `page` field picks which payload shape/scoring/notification
+ * format applies, so oh4 (legacy 8-step quiz: trade, phoneCoverage,
+ * missedCalls, timeline, revenue) keeps working unchanged while oh5/oh6/oos
+ * (10-step quiz: trade, biggestImpact, leadsPerMonth, phoneCoverage,
+ * eliminate, timeline, website — "platform" schema, PLATFORM_PAGES below)
+ * get their own scoring + notification text. oos is the launch route — its
+ * leads land in the same sheet/Telegram/email pipeline, just tagged
+ * page:"oos" so rows/alerts attribute correctly. Fans out to a Google
+ * Sheet, Telegram, and email via
  * Promise.allSettled, so a failing notification never blocks the response
  * (the visitor already has the demo by the time this runs). Every
  * integration below no-ops with a console.warn if its env var isn't set —
@@ -72,7 +75,7 @@ type LegacyLeadPayload = {
   honeypot?: string;
 };
 
-// oh5/oh6 share this shape — both run the same 10-step quiz, just under
+// oh5/oh6/oos share this shape — all run the same 10-step quiz, just under
 // different positioning copy. Add new page slugs to PLATFORM_PAGES below,
 // not a new payload type, unless the quiz steps themselves diverge.
 type PlatformLeadPayload = {
@@ -88,7 +91,7 @@ type PlatformLeadPayload = {
   timeline: string;
   location: { city: string; region: string };
   utm: { utm_source?: string; utm_medium?: string; utm_campaign?: string; fbclid?: string };
-  page: "oh5" | "oh6";
+  page: "oh5" | "oh6" | "oos";
   ts: string;
   honeypot?: string;
 };
@@ -98,7 +101,7 @@ type LeadPayload = LegacyLeadPayload | PlatformLeadPayload;
 type EnrichedLead = LeadPayload & { score: Score };
 
 const NOT_HOME_SERVICE = "I'm not a home-service business";
-const PLATFORM_PAGES = new Set(["oh5", "oh6"]);
+const PLATFORM_PAGES = new Set(["oh5", "oh6", "oos"]);
 
 function isPlatformPayload(lead: LeadPayload): lead is PlatformLeadPayload {
   return PLATFORM_PAGES.has(lead.page);
