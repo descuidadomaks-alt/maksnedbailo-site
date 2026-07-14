@@ -5,15 +5,22 @@ import { useQuiz } from "./QuizContext";
 import { ClockMark } from "./ClockMark";
 
 /**
- * Fixed nav, h-20, white/90 blur. Mark + wordmark left (yellow period), one
+ * Sticky nav, h-20, white/90 blur. Mark + wordmark left (yellow period), one
  * pill CTA right that opens the quiz. No other links on mobile — keep the
  * thumb on one job.
+ *
+ * `sticky` (not `fixed`) on purpose: TradesBar sits right above this in
+ * normal document flow, so on first paint the two stack (bar, then nav)
+ * exactly like static content. As the page scrolls, the bar scrolls away
+ * while this sticks to the top the instant its natural position reaches
+ * y:0 — pure CSS, no scroll listener, no layout jump. Hero.tsx's height
+ * math depends on this staying h-20 (80px).
  */
 export function Nav() {
   const { openQuiz } = useQuiz();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-[#171e19]/10 bg-white/90 backdrop-blur">
+    <header className="sticky inset-x-0 top-0 z-50 h-20 border-b border-[#171e19]/10 bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-5">
         <a href="#top" className="inline-flex items-center gap-2">
           <ClockMark className="h-7 w-7 sm:h-8 sm:w-8" />

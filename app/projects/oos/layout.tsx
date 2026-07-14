@@ -138,11 +138,31 @@ export default function OosLayout({ children }: { children: ReactNode }) {
         }
         @keyframes oh-quiz-shimmer { to { transform: translateX(100%); } }
 
+        /* Trades marquee (TradesBar.tsx) — track is absolute + shrink-wrapped
+           to its own (doubled) content width, so translateX(-50%) always
+           lands on exactly one full copy regardless of how wide the content
+           is. Reduced motion switches to the standard unknown-width centering
+           trick (left:50% + static translateX(-50%)) instead of running the
+           keyframe — same element, no separate static markup. */
+        .oh-marquee-track {
+          position: absolute;
+          top: 0;
+          left: 0;
+          animation: oh-marquee 40s linear infinite;
+          will-change: transform;
+        }
+        @keyframes oh-marquee { to { transform: translateX(-50%); } }
+
         @media (prefers-reduced-motion: reduce) {
           .oh-scope .oh-card { transition: none; }
           .oh-scope .oh-dot, .oh-scope .oh-eq-bar { animation: none; }
           .oh-scope .oh-quiz-progress-fill { transition: none; }
           .oh-scope .oh-quiz-progress-fill::after { animation: none; }
+          .oh-scope .oh-marquee-track {
+            animation: none;
+            left: 50%;
+            transform: translateX(-50%);
+          }
         }
       `,
         }}

@@ -1,6 +1,7 @@
 import { QuizProvider } from "./components/QuizContext";
 import { LocationProvider } from "./components/LocationContext";
 import { QuizModal } from "./components/QuizModal";
+import { TradesBar } from "./components/TradesBar";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { VideoForm } from "./components/VideoForm";
@@ -45,6 +46,7 @@ export default function OosPage() {
   return (
     <LocationProvider>
       <QuizProvider>
+        <TradesBar />
         <Nav />
         <main>
           <Hero />
