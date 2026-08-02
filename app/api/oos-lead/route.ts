@@ -50,16 +50,30 @@ type LeadPayload = {
   page: "oos_v2" | "oos_v3";
   pageUrl: string;
   honeypot?: string;
+  // Set only by the exit-intent popup ("exit_phone") so this can be
+  // filtered/flagged in GHL — absent (undefined) for normal quiz
+  // submissions. Optional and additive; nothing else about this route
+  // changes based on it.
+  leadType?: string;
 };
 
 const VALID_PAGES = new Set(["oos_v2", "oos_v3"]);
 
+// The quiz was cut from 10 steps to 3 (trade, biggestImpact, contact) —
+// leadsPerMonth/phoneCoverage/eliminate/timeline/website are no longer
+// asked and arrive here as "". The exit-intent popup collects only phone
+// (+ optional name) — trade/biggestImpact/email arrive as "" from that
+// source. `phone` is the one field every real lead source actually
+// populates, so it's the only one still required non-empty; everything
+// else just has to be the right TYPE (never trust unvalidated shapes into
+// the GHL payload below).
 function isValidPayload(b: Record<string, unknown>): b is LeadPayload {
   if (!VALID_PAGES.has(b.page as string)) return false;
-  const requiredStrings = [
+  const stringFields = [
     "name",
     "email",
     "phone",
+    "website",
     "trade",
     "biggestImpact",
     "leadsPerMonth",
@@ -67,7 +81,10 @@ function isValidPayload(b: Record<string, unknown>): b is LeadPayload {
     "eliminate",
     "timeline",
   ];
-  return requiredStrings.every((key) => typeof b[key] === "string" && (b[key] as string).trim() !== "");
+  if (!stringFields.every((key) => typeof b[key] === "string")) return false;
+  if (typeof b.consent !== "boolean") return false;
+  if (b.leadType !== undefined && typeof b.leadType !== "string") return false;
+  return (b.phone as string).trim() !== "";
 }
 
 function firstName(fullName: string): string {
@@ -120,6 +137,7 @@ export async function POST(request: NextRequest) {
     consent_ip: consentIp,
     page: lead.page,
     page_url: lead.pageUrl ?? "",
+    ...(lead.leadType ? { lead_type: lead.leadType } : {}),
     ...Object.fromEntries(Object.entries(lead.utm ?? {}).filter(([, v]) => typeof v === "string" && v)),
   };
 

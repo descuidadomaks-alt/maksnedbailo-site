@@ -1,6 +1,7 @@
 import { QuizProvider } from "./components/QuizContext";
 import { LocationProvider } from "./components/LocationContext";
 import { QuizModal } from "./components/QuizModal";
+import { ExitIntentPopup } from "./components/ExitIntentPopup";
 import { TradesBar } from "./components/TradesBar";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
@@ -46,6 +47,7 @@ export default function OosV2Page() {
         <Footer />
         <StickyCTA />
         <QuizModal />
+        <ExitIntentPopup />
       </QuizProvider>
     </LocationProvider>
   );

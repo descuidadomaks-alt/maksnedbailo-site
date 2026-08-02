@@ -151,7 +151,7 @@ export function Hero() {
             onClick={() => openQuiz("hero_primary")}
             className="oh-display oh-card inline-block w-full rounded-lg bg-[#ffe17c] px-6 py-3.5 text-lg text-[#171e19] shadow-xl hover:scale-[1.02] min-h-[52px] sm:w-auto sm:px-8 sm:py-3 sm:text-xl"
           >
-            Watch it book a real job
+            See it answer a real call →
           </button>
           <p className="mt-2 text-xs text-[#171e19]/60 sm:text-sm">
             See it answer and book a real lead — live.

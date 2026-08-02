@@ -119,7 +119,7 @@ export function TiersSection() {
             return (
               <div
                 key={t.name}
-                className={`oh-card relative flex min-h-[560px] flex-col rounded-2xl p-7 ${
+                className={`oh-card relative flex flex-col rounded-2xl p-7 md:min-h-[560px] ${
                   dark
                     ? "border border-[#b7c6c2]/10 bg-[#171e19] text-white shadow-2xl"
                     : highlight
@@ -182,9 +182,9 @@ export function TiersSection() {
                     <p className="text-xs font-bold uppercase tracking-wide text-[#171e19]">Included free:</p>
                     <ul className="mt-2 space-y-1.5">
                       {TIER1_BONUS_ITEMS.map((b) => (
-                        <li key={b.text} className="flex items-baseline justify-between gap-2 text-sm text-[#171e19]/85">
+                        <li key={b.text} className="flex items-start justify-between gap-3 text-sm text-[#171e19]/85">
                           <span>🎁 {b.text}</span>
-                          <span className="flex-none text-xs font-bold">— {fmt(b.value)} value</span>
+                          <span className="flex-none text-xs font-bold">{fmt(b.value)} value</span>
                         </li>
                       ))}
                     </ul>
@@ -207,7 +207,7 @@ export function TiersSection() {
                       {t.price}
                     </span>
                     <span className={`text-sm font-bold ${dark ? "text-white/60" : "text-[#171e19]/55"}`}>
-                      {t.priceNote}
+                      $0 setup · cancel anytime
                     </span>
                   </div>
                   <button

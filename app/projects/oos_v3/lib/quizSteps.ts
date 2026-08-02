@@ -57,13 +57,29 @@ export type TextStep = {
   showConsent?: boolean;
 };
 
-export type QuizStep = ChoiceStep | TextStep;
+// Merged final step — first name + phone + email + consent, all on one
+// screen, submitted together. Replaces what used to be 4 separate text
+// steps (name, email, website, phone) as part of the 10→3 step reduction.
+export type ContactStep = {
+  type: "contact";
+  key: "contact";
+  progress: number;
+  question: string;
+  cta: string;
+};
 
+export type QuizStep = ChoiceStep | TextStep | ContactStep;
+
+// Reduced from 10 steps to 3 (trade, biggestImpact, contact) to cut
+// drop-off. leadsPerMonth/phoneCoverage/eliminate/timeline/website are no
+// longer asked — QuizAnswers/EMPTY_ANSWERS below still carry those keys
+// (always "") so the /api/oos-lead payload shape is unchanged; see
+// QuizContext.tsx's finishQuiz(), which is untouched.
 export const QUIZ_STEPS: QuizStep[] = [
   {
     type: "choice",
     key: "trade",
-    progress: 50,
+    progress: 45,
     question: "What kind of work do you do?",
     options: [
       "Roofing",
@@ -79,7 +95,7 @@ export const QUIZ_STEPS: QuizStep[] = [
   {
     type: "choice",
     key: "biggestImpact",
-    progress: 56,
+    progress: 75,
     question: "Which of these would have the biggest impact on your business?",
     options: [
       "Never miss another lead",
@@ -93,80 +109,11 @@ export const QUIZ_STEPS: QuizStep[] = [
     ],
   },
   {
-    type: "choice",
-    key: "leadsPerMonth",
-    progress: 62,
-    question: "Approximately how many inbound leads do you get each month?",
-    options: ["Under 20", "20–50", "50–100", "100+"],
-  },
-  {
-    type: "choice",
-    key: "phoneCoverage",
-    progress: 68,
-    question: "Who answers your phone right now?",
-    options: ["Me, between jobs", "Office staff", "Mostly voicemail", "An answering service"],
-  },
-  {
-    type: "choice",
-    key: "eliminate",
-    progress: 74,
-    question: "If you could eliminate ONE thing, what would it be?",
-    options: [
-      "Missed calls",
-      "Playing phone tag",
-      "Hiring office staff",
-      "Manual follow-up",
-      "Scheduling appointments",
-      "Qualifying leads",
-      "All of the above",
-    ],
-  },
-  {
-    type: "choice",
-    key: "timeline",
-    progress: 80,
-    question: "How soon do you want every lead answered?",
-    options: ["ASAP — right now", "Next 1–3 months", "Just researching"],
-  },
-  {
-    type: "text",
-    key: "name",
-    progress: 86,
-    question: "Your name",
-    inputType: "text",
-    placeholder: "First and last name",
-    cta: "Continue",
-  },
-  {
-    type: "text",
-    key: "email",
-    progress: 90,
-    question: "Your email",
-    inputType: "email",
-    placeholder: "you@business.com",
-    cta: "Continue",
-  },
-  {
-    type: "text",
-    key: "website",
-    progress: 94,
-    question: "Your website — if you have one",
-    inputType: "url",
-    placeholder: "yourcompany.com (optional)",
-    cta: "Continue",
-    skippable: true,
-    skipLabel: "I don't have a website",
-  },
-  {
-    type: "text",
-    key: "phone",
-    progress: 98,
-    question: "Your mobile phone",
-    inputType: "tel",
-    placeholder: "(555) 123-4567",
+    type: "contact",
+    key: "contact",
+    progress: 95,
+    question: "Almost there — where should we send it?",
     cta: "YES — SHOW ME THE DEMO",
-    big: true,
-    showConsent: true,
   },
 ];
 
@@ -188,12 +135,19 @@ export function formatUsPhone(raw: string): string {
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 }
 
-export function isStepValid(step: QuizStep, answers: QuizAnswers): boolean {
-  if (step.type === "choice") return true;
-  if (step.key === "website") return true;
-  const value = answers[step.key];
-  if (step.key === "name") return value.trim() !== "";
-  if (step.key === "email") return /\S+@\S+\.\S+/.test(value);
-  if (step.key === "phone") return value.replace(/\D/g, "").length >= 10;
+export function isNameValid(value: string): boolean {
   return value.trim() !== "";
+}
+
+export function isEmailValid(value: string): boolean {
+  return /\S+@\S+\.\S+/.test(value);
+}
+
+export function isPhoneValid(value: string): boolean {
+  return value.replace(/\D/g, "").length >= 10;
+}
+
+/** All three contact fields must be valid before the merged step's CTA enables. */
+export function isContactStepValid(answers: QuizAnswers): boolean {
+  return isNameValid(answers.name) && isPhoneValid(answers.phone) && isEmailValid(answers.email);
 }

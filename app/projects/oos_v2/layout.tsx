@@ -119,6 +119,12 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
         }
         @keyframes oh-marquee { to { transform: translateX(-50%); } }
 
+        /* Exit-intent popup entrance — see ExitIntentPopup.tsx. */
+        @keyframes exitPopIn {
+          from { opacity: 0; transform: scale(0.96); }
+          to { opacity: 1; transform: scale(1); }
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .oh-scope .oh-card { transition: none; }
           .oh-scope .oh-dot, .oh-scope .oh-eq-bar { animation: none; }
@@ -129,6 +135,7 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
             left: 50%;
             transform: translateX(-50%);
           }
+          .oh-scope [class*="exitPopIn"] { animation: none; }
         }
       `,
         }}

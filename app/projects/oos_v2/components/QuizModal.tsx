@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useQuiz } from "./QuizContext";
 import { Dot } from "./Dot";
 import { Highlight } from "./Highlight";
@@ -11,16 +11,28 @@ import {
   QUIZ_HEADER_PRICE,
   CONSENT_TEXT,
   formatUsPhone,
-  isStepValid,
+  isContactStepValid,
 } from "../lib/quizSteps";
 
 /**
- * The single quiz modal every CTA on the page opens. Forked from
- * app/projects/oos/components/QuizModal.tsx — one question per screen,
- * choice steps auto-advance, text steps advance on Continue/Enter. Adds the
- * live page's optional SMS/call consent checkbox on the phone step (absent
- * from the original oos build) and drops the Calendly "book a call" link
- * from the success screen since this variant has no real booking link wired.
+ * The single quiz modal every CTA on the page opens. Rebuilt for a rock-
+ * solid mobile no-scroll layout — the previous version sized the panel
+ * with `h-full` inside a `fixed inset-0` wrapper (no `dvh`, so mobile
+ * browser chrome miscounted the real viewport) and centered its content
+ * with `justify-center` inside a flex-1 zone that had no `min-h-0` — a
+ * flex child's default `min-height: auto` refuses to shrink below its own
+ * content, so the box grew taller than the visible viewport and
+ * `overflow-y-auto` kicked in: dead space, a clipped title, and scroll.
+ *
+ * Fix is three things together: `h-[100dvh]` on the panel, `min-h-0` on
+ * the flex-1 content zone, and no `overflow-y-auto` (nothing left to
+ * scroll once sizing is correct). Verified at 390x740 and 360x640 — see
+ * this component's own layout, not a CSS patch on the old one.
+ *
+ * Quiz cut from 10 steps to 3 (trade, biggestImpact, contact) — see
+ * lib/quizSteps.ts. Choice-step option buttons are now always compact
+ * (both remaining choice steps have 8 options, so the old
+ * `options.length > 6` conditional was pointless — just always compact).
  */
 export function QuizModal() {
   const { modalOpen, stepIndex, answers, closeModal, goBack, setAnswer, selectChoice, goNext, scrollToDemo } =
@@ -45,7 +57,6 @@ export function QuizModal() {
   const progress = isSuccess ? 100 : step!.progress;
   const showHeader = !isSuccess && stepIndex < QUIZ_HEADER_STEPS;
   const showBack = stepIndex > 0 && !isSuccess;
-  const compact = !isSuccess && step!.type === "choice" && step!.options.length > 6;
 
   const handleWatchDemo = () => {
     closeModal();
@@ -56,8 +67,9 @@ export function QuizModal() {
     <div className="fixed inset-0 z-[100] flex items-stretch justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-[#171e19]/70 backdrop-blur-sm" onClick={closeModal} aria-hidden />
 
-      <div className="oh-card relative z-10 flex h-full w-full flex-col bg-white p-6 shadow-2xl sm:h-auto sm:max-h-[92vh] sm:max-w-lg sm:rounded-3xl sm:p-8">
-        <div className="flex items-center justify-between">
+      <div className="oh-card relative z-10 flex h-[100dvh] w-full flex-col bg-white shadow-2xl sm:h-auto sm:max-h-[92dvh] sm:max-w-lg sm:rounded-3xl">
+        {/* Top bar — flex-none, compact */}
+        <div className="flex flex-none items-center justify-between px-5 pt-3 sm:px-8 sm:pt-5">
           {showBack ? (
             <button type="button" onClick={goBack} className="text-sm font-medium text-[#171e19]/60 hover:text-[#171e19]">
               ← Back
@@ -69,43 +81,43 @@ export function QuizModal() {
             type="button"
             onClick={closeModal}
             aria-label="Close"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-[#171e19]/50 hover:bg-[#171e19]/5"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-xl text-[#171e19]/50 hover:bg-[#171e19]/5"
           >
             ×
           </button>
         </div>
 
+        {/* Header — flex-none, steps 1–2 only, compact single block */}
         {showHeader && (
-          <div className="mt-6 text-center">
-            <p className="text-[15px] font-medium leading-snug text-[#171e19]/70 sm:text-base">{QUIZ_HEADER_TEXT}</p>
-            <p className="oh-display mt-1.5 text-2xl text-[#171e19]">
-              for <Highlight rotate={-2}>{QUIZ_HEADER_PRICE}</Highlight>
+          <div className="flex-none px-5 pb-1 text-center sm:px-8">
+            <p className="text-xs leading-tight text-[#171e19]/70 sm:text-sm">
+              {QUIZ_HEADER_TEXT} for <Highlight rotate={-2}>{QUIZ_HEADER_PRICE}</Highlight>
             </p>
           </div>
         )}
 
-        <div className="mt-4">
-          <p className="text-right text-xs font-medium tabular-nums text-[#171e19]/50">{progress}%</p>
-          <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full bg-[#171e19]/[0.08]">
+        {/* Progress — flex-none */}
+        <div className="flex-none px-5 pt-2 sm:px-8">
+          <p className="text-right text-[11px] font-medium tabular-nums text-[#171e19]/50">{progress}%</p>
+          <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-[#171e19]/[0.08]">
             <div className="oh-quiz-progress-fill h-full rounded-full" style={{ width: `${progress}%` }} />
           </div>
         </div>
 
-        <div className="mt-6 flex flex-1 flex-col justify-center overflow-y-auto">
+        {/* Content — flex-1, min-h-0 is what actually lets this shrink to fit. No overflow. */}
+        <div className="flex min-h-0 flex-1 flex-col justify-center px-5 pb-4 pt-3 sm:px-8 sm:pb-6 sm:pt-4">
           {!isSuccess && step!.type === "choice" && (
             <>
-              <h3 className="oh-display text-center text-2xl text-[#171e19] sm:text-3xl">{step!.question}</h3>
-              <div className={compact ? "mt-4 space-y-2" : "mt-6 space-y-3"}>
+              <h3 className="oh-display text-center text-xl leading-tight text-[#171e19] sm:text-3xl">
+                {step!.question}
+              </h3>
+              <div className="mt-3 space-y-2">
                 {step!.options.map((opt) => (
                   <button
                     key={opt}
                     type="button"
                     onClick={() => selectChoice(step!.key, opt)}
-                    className={
-                      compact
-                        ? "min-h-[44px] w-full rounded-lg border border-[#171e19]/15 bg-white px-4 py-2.5 text-left text-sm font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
-                        : "min-h-[52px] w-full rounded-lg border border-[#171e19]/15 bg-white px-5 py-3 text-left text-base font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
-                    }
+                    className="min-h-[44px] w-full rounded-lg border border-[#171e19]/15 bg-white px-4 py-2 text-left text-sm font-medium text-[#171e19] transition hover:border-[#171e19] hover:bg-[#f8f9fa] active:scale-[0.99]"
                   >
                     {opt}
                   </button>
@@ -114,30 +126,22 @@ export function QuizModal() {
             </>
           )}
 
-          {!isSuccess && step!.type === "text" && (
-            <TextStepScreen
-              key={step!.key}
-              stepKey={step!.key}
+          {!isSuccess && step!.type === "contact" && (
+            <ContactStepScreen
               question={step!.question}
-              inputType={step!.inputType}
-              placeholder={step!.placeholder}
               cta={step!.cta}
-              big={step!.big}
-              showConsent={step!.showConsent}
-              value={answers[step!.key]}
+              name={answers.name}
+              phone={answers.phone}
+              email={answers.email}
               consent={answers.consent}
               honeypot={answers.honeypot}
-              onChange={(v) => setAnswer(step!.key, v)}
+              onChangeName={(v) => setAnswer("name", v)}
+              onChangePhone={(v) => setAnswer("phone", v)}
+              onChangeEmail={(v) => setAnswer("email", v)}
               onConsentChange={(v) => setAnswer("consent", v)}
               onHoneypotChange={(v) => setAnswer("honeypot", v)}
               onAdvance={goNext}
-              valid={isStepValid(step!, answers)}
-              skippable={step!.skippable}
-              skipLabel={step!.skipLabel}
-              onSkip={() => {
-                setAnswer(step!.key, "");
-                goNext();
-              }}
+              valid={isContactStepValid(answers)}
             />
           )}
 
@@ -165,130 +169,120 @@ export function QuizModal() {
   );
 }
 
-function TextStepScreen({
-  stepKey,
+function ContactStepScreen({
   question,
-  inputType,
-  placeholder,
   cta,
-  big,
-  showConsent,
-  value,
+  name,
+  phone,
+  email,
   consent,
   honeypot,
-  onChange,
+  onChangeName,
+  onChangePhone,
+  onChangeEmail,
   onConsentChange,
   onHoneypotChange,
   onAdvance,
   valid,
-  skippable,
-  skipLabel,
-  onSkip,
 }: {
-  stepKey: "name" | "email" | "website" | "phone";
   question: string;
-  inputType: "text" | "email" | "url" | "tel";
-  placeholder: string;
   cta: string;
-  big?: boolean;
-  showConsent?: boolean;
-  value: string;
+  name: string;
+  phone: string;
+  email: string;
   consent: boolean;
   honeypot: string;
-  onChange: (v: string) => void;
+  onChangeName: (v: string) => void;
+  onChangePhone: (v: string) => void;
+  onChangeEmail: (v: string) => void;
   onConsentChange: (v: boolean) => void;
   onHoneypotChange: (v: string) => void;
   onAdvance: () => void;
   valid: boolean;
-  skippable?: boolean;
-  skipLabel?: string;
-  onSkip?: () => void;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(stepKey === "phone" ? formatUsPhone(e.target.value) : e.target.value);
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && valid) onAdvance();
   };
 
-  const autoComplete =
-    stepKey === "name" ? "name" : stepKey === "email" ? "email" : stepKey === "website" ? "url" : "tel";
-  const inputMode = inputType === "tel" ? "tel" : inputType === "email" ? "email" : inputType === "url" ? "url" : "text";
-
   return (
     <>
-      <h3 className="oh-display text-center text-2xl text-[#171e19] sm:text-3xl">{question}</h3>
-      <input
-        ref={inputRef}
-        type={inputType}
-        inputMode={inputMode}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        aria-label={question}
-        value={value}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        autoFocus
-        className="mt-6 min-h-[56px] w-full rounded-lg border border-[#171e19]/20 bg-white px-4 text-lg text-[#171e19] outline-none focus:border-[#171e19]"
-      />
+      <h3 className="oh-display text-center text-xl leading-tight text-[#171e19] sm:text-3xl">{question}</h3>
 
-      {stepKey === "phone" && (
+      <div className="mt-3 space-y-2.5">
         <input
           type="text"
-          name="_hp"
-          value={honeypot}
-          onChange={(e) => onHoneypotChange(e.target.value)}
-          autoComplete="off"
-          tabIndex={-1}
-          aria-hidden="true"
-          style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+          inputMode="text"
+          autoComplete="given-name"
+          placeholder="First name"
+          aria-label="First name"
+          value={name}
+          onChange={(e) => onChangeName(e.target.value)}
+          onKeyDown={handleKeyDown}
+          autoFocus
+          className="min-h-[48px] w-full rounded-lg border border-[#171e19]/20 bg-white px-4 text-base text-[#171e19] outline-none focus:border-[#171e19]"
         />
-      )}
+        <input
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="(555) 123-4567"
+          aria-label="Phone"
+          value={phone}
+          onChange={(e) => onChangePhone(formatUsPhone(e.target.value))}
+          onKeyDown={handleKeyDown}
+          className="min-h-[48px] w-full rounded-lg border border-[#171e19]/20 bg-white px-4 text-base text-[#171e19] outline-none focus:border-[#171e19]"
+        />
+        <input
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          placeholder="you@business.com"
+          aria-label="Email"
+          value={email}
+          onChange={(e) => onChangeEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="min-h-[48px] w-full rounded-lg border border-[#171e19]/20 bg-white px-4 text-base text-[#171e19] outline-none focus:border-[#171e19]"
+        />
+      </div>
 
-      {showConsent && (
-        <label className="mt-4 flex items-start gap-2.5 text-left text-xs leading-snug text-[#171e19]/70">
-          <input
-            type="checkbox"
-            checked={consent}
-            onChange={(e) => onConsentChange(e.target.checked)}
-            className="mt-0.5 h-4 w-4 flex-none rounded border-[#171e19]/30"
-          />
-          <span>
-            {CONSENT_TEXT}{" "}
-            <a href="/projects/oos_v2/privacy" className="underline">
-              Privacy Policy
-            </a>{" "}
-            ·{" "}
-            <a href="/projects/oos_v2/terms" className="underline">
-              Terms
-            </a>
-          </span>
-        </label>
-      )}
+      <input
+        type="text"
+        name="_hp"
+        value={honeypot}
+        onChange={(e) => onHoneypotChange(e.target.value)}
+        autoComplete="off"
+        tabIndex={-1}
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+      />
+
+      <label className="mt-3 flex items-start gap-2.5 text-left text-[11px] leading-snug text-[#171e19]/70">
+        <input
+          type="checkbox"
+          checked={consent}
+          onChange={(e) => onConsentChange(e.target.checked)}
+          className="mt-0.5 h-4 w-4 flex-none rounded border-[#171e19]/30"
+        />
+        <span>
+          {CONSENT_TEXT}{" "}
+          <a href="/projects/oos_v2/privacy" className="underline">
+            Privacy Policy
+          </a>{" "}
+          ·{" "}
+          <a href="/projects/oos_v2/terms" className="underline">
+            Terms
+          </a>
+        </span>
+      </label>
 
       <button
         type="button"
         onClick={onAdvance}
         disabled={!valid}
-        className={`mt-4 min-h-[52px] w-full rounded-lg px-8 py-4 shadow-lg disabled:opacity-40 ${
-          big ? "oh-display bg-[#ffe17c] text-xl text-[#171e19]" : "oh-display bg-[#171e19] text-lg text-white"
-        }`}
+        className="oh-display mt-3 min-h-[52px] w-full rounded-lg bg-[#ffe17c] px-8 py-4 text-xl text-[#171e19] shadow-lg disabled:opacity-40"
       >
         {cta}
       </button>
-
-      {skippable && (
-        <button
-          type="button"
-          onClick={onSkip}
-          className="mt-3 block w-full text-center text-sm font-medium text-[#171e19]/50 underline underline-offset-4 hover:text-[#171e19]"
-        >
-          {skipLabel}
-        </button>
-      )}
     </>
   );
 }

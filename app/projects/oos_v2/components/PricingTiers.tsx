@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  Megaphone,
+  MousePointerClick,
+  MessagesSquare,
+  PhoneCall,
+  RefreshCw,
+  Wallet,
+  LifeBuoy,
+  TrendingUp,
+  type LucideIcon,
+} from "lucide-react";
 import { useQuiz } from "./QuizContext";
 import { useScarcityLine } from "./LocationContext";
 import { GeoPin } from "./GeoPin";
@@ -32,6 +43,7 @@ const GEO_BENEFIT =
 const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
 
 type LineItem = { text: string; sub?: string; value?: number };
+type AddOnItem = { text: string; value?: number; icon?: LucideIcon };
 
 const TIER1_ITEMS: LineItem[] = [
   { text: "24/7 AI office — answers calls, texts & website chat", value: 3460 },
@@ -46,19 +58,22 @@ const TIER1_BONUS_ITEMS: { text: string; value: number }[] = [
   { text: "Done-for-you build & setup", value: 961 },
 ];
 
-const TIER2_ITEMS: LineItem[] = [
-  { text: "Facebook ad campaigns — we build and run them", value: 650 },
-  { text: "A high-converting landing page", value: 780 },
-  { text: "AI office on your site, socials + SMS", value: 540 },
-  { text: "Premium voice agent (tuned, higher call volume)", value: 420 },
-  { text: "Advanced follow-up + re-engagement", value: 310 },
+// Icon per item per the brief's exact mapping. "You cover your ad spend"
+// has no mapped icon — it's a cost caveat, not added value, so it stays
+// unmapped and renders in the plain fallback style (see AddOnItemRow).
+const TIER2_ITEMS: AddOnItem[] = [
+  { text: "Facebook ad campaigns — we build and run them", value: 650, icon: Megaphone },
+  { text: "A high-converting landing page", value: 780, icon: MousePointerClick },
+  { text: "AI office on your site, socials + SMS", value: 540, icon: MessagesSquare },
+  { text: "Premium voice agent (tuned, higher call volume)", value: 420, icon: PhoneCall },
+  { text: "Advanced follow-up + re-engagement", value: 310, icon: RefreshCw },
   { text: "You cover your ad spend" },
 ];
 
-const TIER3_ITEMS: LineItem[] = [
-  { text: "Your starter ad budget — included (no separate ad bill)" },
-  { text: "Priority support", value: 200 },
-  { text: "Monthly optimization call", value: 350 },
+const TIER3_ITEMS: AddOnItem[] = [
+  { text: "Your starter ad budget — included (no separate ad bill)", icon: Wallet },
+  { text: "Priority support", value: 200, icon: LifeBuoy },
+  { text: "Monthly optimization call", value: 350, icon: TrendingUp },
 ];
 
 const sumValues = (items: LineItem[]) => items.reduce((sum, i) => sum + (i.value ?? 0), 0);
@@ -109,9 +124,9 @@ function BonusBlock({ dark }: { dark: boolean }) {
       </p>
       <ul className="mt-2 space-y-1.5">
         {TIER1_BONUS_ITEMS.map((b) => (
-          <li key={b.text} className={`flex items-baseline justify-between gap-2 text-sm ${dark ? "text-white/85" : "text-[#171e19]/85"}`}>
+          <li key={b.text} className={`flex items-start justify-between gap-3 text-sm ${dark ? "text-white/85" : "text-[#171e19]/85"}`}>
             <span>🎁 {b.text}</span>
-            <span className="flex-none text-xs font-bold">— {fmt(b.value)} value</span>
+            <span className="flex-none text-xs font-bold">{fmt(b.value)} value</span>
           </li>
         ))}
       </ul>
@@ -120,6 +135,49 @@ function BonusBlock({ dark }: { dark: boolean }) {
         doesn&apos;t change either way.
       </p>
     </div>
+  );
+}
+
+// Tier 2/3 "add-on" rows — visually distinct from Tier 1's neutral
+// checkmark rows (colored/tinted card, icon, small "Add-on" pill) so the
+// step-up in price visibly reads as more value. Items with no mapped icon
+// (only "You cover your ad spend" — not in the brief's icon list) fall
+// back to a plain row, since it's a cost caveat, not added value.
+function AddOnItemRow({ item, dark }: { item: AddOnItem; dark: boolean }) {
+  if (!item.icon) {
+    return (
+      <li className="flex items-start justify-between gap-3 px-1 py-1.5">
+        <span className={`text-sm ${dark ? "text-white/60" : "text-[#171e19]/60"}`}>{item.text}</span>
+      </li>
+    );
+  }
+
+  const Icon = item.icon;
+  return (
+    <li
+      className={`flex items-start gap-3 rounded-lg border px-3 py-2.5 ${
+        dark ? "border-[#ffe17c]/25 bg-[#ffe17c]/[0.06]" : "border-[#ffe17c]/50 bg-[#ffe17c]/15"
+      }`}
+    >
+      <Icon aria-hidden className="mt-0.5 h-5 w-5 flex-none text-[#ffe17c]" />
+      <span className="min-w-0 flex-1">
+        <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className={`text-sm font-medium ${dark ? "text-white/90" : "text-[#171e19]/90"}`}>{item.text}</span>
+          <span
+            className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${
+              dark ? "bg-[#ffe17c]/20 text-[#ffe17c]" : "bg-[#171e19] text-[#ffe17c]"
+            }`}
+          >
+            Add-on
+          </span>
+        </span>
+      </span>
+      {item.value != null && (
+        <span className={`flex-none text-xs font-bold line-through ${dark ? "text-white/40" : "text-[#171e19]/45"}`}>
+          {fmt(item.value)}
+        </span>
+      )}
+    </li>
   );
 }
 
@@ -144,7 +202,7 @@ export function PricingTiers() {
 
         <div className="mt-12 grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
           {/* Tier 1 */}
-          <div className={`oh-card relative flex min-h-[640px] flex-col rounded-2xl p-7 ${cardClasses("plain")}`}>
+          <div className={`oh-card relative flex flex-col rounded-2xl p-7 md:min-h-[640px] ${cardClasses("plain")}`}>
             <h3 className="oh-display text-2xl text-white sm:text-3xl">The Front Office</h3>
             <ul className="mt-5 space-y-2.5">
               {TIER1_ITEMS.map((item) => (
@@ -155,7 +213,7 @@ export function PricingTiers() {
             <div className="mt-auto pt-6 text-center">
               <p className="text-sm font-bold text-white/45 line-through">Total value: {fmt(TIER1_TOTAL)}</p>
               <p className="oh-display mt-2 text-3xl text-[#ffe17c]">Today: $499/mo</p>
-              <p className="mt-1 text-xs font-medium text-white/70">$0 setup</p>
+              <p className="mt-1 text-xs font-medium text-white/70">$0 setup · cancel anytime</p>
               <p className="mx-auto mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-[#ffe17c]">
                 <GeoPin />
                 {scarcityLine}
@@ -171,7 +229,7 @@ export function PricingTiers() {
           </div>
 
           {/* Tier 2 */}
-          <div className={`oh-card relative flex min-h-[640px] flex-col rounded-2xl p-7 ${cardClasses("highlight")}`}>
+          <div className={`oh-card relative flex flex-col rounded-2xl p-7 md:min-h-[640px] ${cardClasses("highlight")}`}>
             <span className="absolute -top-3 left-7 rounded-full bg-[#ffe17c] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#171e19] shadow">
               Most popular
             </span>
@@ -181,13 +239,13 @@ export function PricingTiers() {
             </p>
             <ul className="mt-4 space-y-2.5">
               {TIER2_ITEMS.map((item) => (
-                <ItemRow key={item.text} item={item} dark={false} />
+                <AddOnItemRow key={item.text} item={item} dark={false} />
               ))}
             </ul>
             <div className="mt-auto pt-6 text-center">
               <p className="text-sm font-bold text-[#171e19]/45 line-through">Total value: {fmt(TIER2_TOTAL)}</p>
               <p className="oh-display mt-2 text-3xl text-[#171e19]">Today: $999/mo</p>
-              <p className="mt-1 text-xs font-medium text-[#171e19]/55">$0 setup</p>
+              <p className="mt-1 text-xs font-medium text-[#171e19]/55">$0 setup · cancel anytime</p>
               <button
                 type="button"
                 onClick={() => openQuiz("tier_2")}
@@ -199,7 +257,7 @@ export function PricingTiers() {
           </div>
 
           {/* Tier 3 */}
-          <div className={`oh-card relative flex min-h-[640px] flex-col rounded-2xl p-7 ${cardClasses("dark")}`}>
+          <div className={`oh-card relative flex flex-col rounded-2xl p-7 md:min-h-[640px] ${cardClasses("dark")}`}>
             <span className="absolute -top-3 left-7 rounded-full bg-[#ffe17c] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#171e19] shadow">
               Best value
             </span>
@@ -209,13 +267,13 @@ export function PricingTiers() {
             </p>
             <ul className="mt-4 space-y-2.5">
               {TIER3_ITEMS.map((item) => (
-                <ItemRow key={item.text} item={item} dark />
+                <AddOnItemRow key={item.text} item={item} dark />
               ))}
             </ul>
             <div className="mt-auto pt-6 text-center">
               <p className="text-sm font-bold text-white/45 line-through">Total value: {fmt(TIER3_TOTAL)}</p>
               <p className="oh-display mt-2 text-3xl text-[#ffe17c]">Today: $1,489/mo</p>
-              <p className="mt-1 text-xs font-medium text-white/70">$0 setup</p>
+              <p className="mt-1 text-xs font-medium text-white/70">$0 setup · cancel anytime</p>
               <button
                 type="button"
                 onClick={() => openQuiz("tier_3")}
