@@ -4,7 +4,7 @@ import { QuizModal } from "./components/QuizModal";
 import { TradesBar } from "./components/TradesBar";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { OfferPricingMorph } from "./components/OfferPricingMorph";
+import { PricingTiers } from "./components/PricingTiers";
 import { FinalCTA } from "./components/FinalCTA";
 import { Footer } from "./components/Footer";
 import { StickyCTA } from "./components/StickyCTA";
@@ -23,9 +23,10 @@ import { StickyCTA } from "./components/StickyCTA";
  *     ("the old way" / "the Overtime OS way") are dropped to shorten the
  *     page — everything else keeps its live-page order and copy.
  *
- * OfferPricingMorph replaces OfferStack + TiersSection: the value stack
- * scroll-reveals into Tier 1, Tier 2/3 render alongside it in the same
- * grid. See that component's own comment for the animation mechanic.
+ * PricingTiers replaces OfferStack + TiersSection: the value stack lives
+ * as Tier 1's static card content (no scroll animation — see that
+ * component's own comment), alongside Tier 2/3 in the same equal-height
+ * grid, with escalating struck-through total-value anchors per tier.
  *
  * Leads POST to /api/oos-lead (tagged page:"oos_v2"), which forwards to
  * the same GoHighLevel webhook the live overtimeos.com page uses — see
@@ -39,7 +40,7 @@ export default function OosV2Page() {
         <Nav />
         <main>
           <Hero />
-          <OfferPricingMorph />
+          <PricingTiers />
           <FinalCTA />
         </main>
         <Footer />

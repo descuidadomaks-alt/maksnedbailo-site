@@ -114,7 +114,7 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
           position: absolute;
           top: 0;
           left: 0;
-          animation: oh-marquee 40s linear infinite;
+          animation: oh-marquee 70s linear infinite;
           will-change: transform;
         }
         @keyframes oh-marquee { to { transform: translateX(-50%); } }

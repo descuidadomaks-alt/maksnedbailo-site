@@ -9,6 +9,7 @@ import { Dot } from "./Dot";
 import { GeoPin } from "./GeoPin";
 import { SETUP, TERMS, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
 import { track } from "../lib/track";
+import { DeliverablesRow } from "./DeliverablesRow";
 
 /**
  * Hero + demo video, merged into one section — the mobile-first fold
@@ -178,6 +179,7 @@ export function Hero() {
             operating system runs it all. Managed by real people. Nothing to learn. Nobody to
             hire.
           </p>
+          <DeliverablesRow />
         </div>
       </div>
     </section>

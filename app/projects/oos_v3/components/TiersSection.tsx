@@ -12,6 +12,15 @@ import { Dot } from "./Dot";
  * not sourced from the live page — flagged in the build notes for the
  * user to verify or adjust. No bonus line items were invented (anti-
  * fabrication rule); every item below is exact live-page copy.
+ *
+ * Edit pass: Tier 1's "Custom AI website + hosting" moved out of the main
+ * item list into a dedicated bonus block, joined there by a "Done-for-you
+ * build & setup — $961 value" bonus line (that $961 figure is the same
+ * "Done-for-you build & onboarding" item OfferStack.tsx already shows
+ * elsewhere on this page — not a new invented figure, just newly
+ * represented in this card too, per the brief's shared-fix instruction to
+ * match v2's bonus block exactly). Price moved from the top of each card
+ * to directly above its CTA, appearing exactly once per card.
  */
 
 type Variant = "plain" | "highlight" | "dark";
@@ -34,6 +43,12 @@ const GEO_BENEFIT =
 
 const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
 
+// Tier 1's bonus block — same copy/values as oos_v2's PricingTiers.tsx.
+const TIER1_BONUS_ITEMS: { text: string; value: number }[] = [
+  { text: "Custom AI website + hosting", value: 2470 },
+  { text: "Done-for-you build & setup", value: 961 },
+];
+
 const TIERS: Tier[] = [
   {
     name: "The Front Office",
@@ -41,7 +56,6 @@ const TIERS: Tier[] = [
     priceNote: "$0 setup",
     variant: "plain",
     items: [
-      { text: "Custom AI website + hosting", value: 2470 },
       { text: "24/7 AI office — answers calls, texts & website chat", value: 3460 },
       { text: "Emergency Triage — books real jobs, filters tire-kickers", value: 640 },
       { text: "Instant reply + 3–5 touch follow-up", value: 580 },
@@ -98,9 +112,10 @@ export function TiersSection() {
         </p>
 
         <div className="mt-12 grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
-          {TIERS.map((t) => {
+          {TIERS.map((t, i) => {
             const dark = t.variant === "dark";
             const highlight = t.variant === "highlight";
+            const isTier1 = i === 0;
             return (
               <div
                 key={t.name}
@@ -121,15 +136,6 @@ export function TiersSection() {
                 <h3 className={`oh-display text-2xl sm:text-3xl ${dark ? "text-white" : "text-[#171e19]"}`}>
                   {t.name}
                 </h3>
-
-                <div className="mt-4 flex flex-wrap items-baseline gap-x-2">
-                  <span className={`oh-display text-4xl ${dark ? "text-[#ffe17c]" : "text-[#171e19]"}`}>
-                    {t.price}
-                  </span>
-                  <span className={`text-sm font-bold ${dark ? "text-white/60" : "text-[#171e19]/55"}`}>
-                    {t.priceNote}
-                  </span>
-                </div>
 
                 {t.intro && (
                   <p className={`mt-5 text-sm font-bold ${dark ? "text-white" : "text-[#171e19]"}`}>{t.intro}</p>
@@ -171,21 +177,49 @@ export function TiersSection() {
                   ))}
                 </ul>
 
+                {isTier1 && (
+                  <div className="mt-4 rounded-xl border border-[#ffe17c]/40 bg-[#ffe17c]/10 px-4 py-4">
+                    <p className="text-xs font-bold uppercase tracking-wide text-[#171e19]">Included free:</p>
+                    <ul className="mt-2 space-y-1.5">
+                      {TIER1_BONUS_ITEMS.map((b) => (
+                        <li key={b.text} className="flex items-baseline justify-between gap-2 text-sm text-[#171e19]/85">
+                          <span>🎁 {b.text}</span>
+                          <span className="flex-none text-xs font-bold">— {fmt(b.value)} value</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-3 text-xs leading-snug text-[#171e19]/60">
+                      Already have a site? We&apos;ll rebuild it to convert — or keep yours. Your
+                      price doesn&apos;t change either way.
+                    </p>
+                  </div>
+                )}
+
                 {t.guarantee && (
                   <p className="mt-4 inline-flex items-start gap-2 rounded-lg bg-[#ffe17c]/20 px-3 py-2 text-sm font-medium text-[#171e19]">
                     <span aria-hidden>✓</span> {t.guarantee}
                   </p>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() => openQuiz(`tier_${t.name}`)}
-                  className={`oh-display oh-card mt-auto w-full rounded-lg px-6 py-4 text-lg shadow-lg hover:scale-[1.02] min-h-[52px] ${
-                    dark || highlight ? "bg-[#ffe17c] text-[#171e19]" : "bg-[#171e19] text-white"
-                  }`}
-                >
-                  Book your free call
-                </button>
+                <div className="mt-auto pt-6 text-center">
+                  <div className="flex flex-wrap items-baseline justify-center gap-x-2">
+                    <span className={`oh-display text-3xl ${dark ? "text-[#ffe17c]" : "text-[#171e19]"}`}>
+                      {t.price}
+                    </span>
+                    <span className={`text-sm font-bold ${dark ? "text-white/60" : "text-[#171e19]/55"}`}>
+                      {t.priceNote}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => openQuiz(`tier_${t.name}`)}
+                    className={`oh-display oh-card mt-4 w-full rounded-lg px-6 py-4 text-lg shadow-lg hover:scale-[1.02] min-h-[52px] ${
+                      dark || highlight ? "bg-[#ffe17c] text-[#171e19]" : "bg-[#171e19] text-white"
+                    }`}
+                  >
+                    Book your free call
+                  </button>
+                </div>
               </div>
             );
           })}

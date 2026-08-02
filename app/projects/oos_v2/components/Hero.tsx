@@ -9,6 +9,7 @@ import { Dot } from "./Dot";
 import { GeoPin } from "./GeoPin";
 import { SETUP, TERMS, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
 import { track } from "../lib/track";
+import { DeliverablesRow } from "./DeliverablesRow";
 
 /**
  * Hero + demo video, merged into one section — the mobile-first fold
@@ -25,6 +26,29 @@ import { track } from "../lib/track";
  * poster + play button pre-quiz, autoplay + native controls once
  * `unlocked` flips true from ANY CTA on the page.
  */
+
+// Single clearly-marked constant — kept easy to swap for a future test.
+// Trailing period stripped at render time in favor of the site's yellow
+// <Dot/> accent (same treatment every other headline on this page uses);
+// the word highlighted (HEADLINE_HIGHLIGHT) isn't specified in the brief —
+// picked to match the previous headline's "answers every call" emphasis.
+const HEADLINE =
+  "We turn missed calls into booked jobs for home-service businesses — 24/7, even when you're on-site.";
+const HEADLINE_HIGHLIGHT = "booked jobs";
+
+function renderHeadline() {
+  const text = HEADLINE.endsWith(".") ? HEADLINE.slice(0, -1) : HEADLINE;
+  const idx = text.indexOf(HEADLINE_HIGHLIGHT);
+  if (idx === -1) return text;
+  return (
+    <>
+      {text.slice(0, idx)}
+      <Highlight>{HEADLINE_HIGHLIGHT}</Highlight>
+      {text.slice(idx + HEADLINE_HIGHLIGHT.length)}
+    </>
+  );
+}
+
 export function Hero() {
   const { openQuiz, unlocked } = useQuiz();
   const scarcityLine = useScarcityLine();
@@ -46,7 +70,7 @@ export function Hero() {
     <section id="top" className="oh-grid-bg relative overflow-hidden bg-white">
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/40 via-transparent to-white" />
 
-      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-4 px-5 pb-8 pt-5 text-center sm:gap-5 sm:pb-16 sm:pt-10">
+      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center gap-3 px-5 pb-6 pt-4 text-center sm:gap-5 sm:pb-16 sm:pt-10">
         <motion.span
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,10 +85,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="oh-display max-w-2xl text-[clamp(1.5rem,7.2vw,2.75rem)] leading-[0.98] text-[#171e19] sm:text-6xl sm:leading-[0.92]"
+          className="oh-display max-w-2xl text-[clamp(1.25rem,6.4vw,2.5rem)] leading-[0.98] text-[#171e19] sm:text-6xl sm:leading-[0.92]"
         >
-          Your custom AI front office — <Highlight>answers every call</Highlight>, books every
-          job. 24/7<Dot />
+          {renderHeadline()}
+          <Dot />
         </motion.h1>
 
         <motion.p
@@ -169,15 +193,15 @@ export function Hero() {
           <h2 className="oh-display text-2xl text-[#171e19] sm:text-4xl">
             Watch it book a real job<Dot />
           </h2>
-          <p className="mt-3 text-sm text-[#171e19]/70 sm:text-base">
-            A real call, answered, qualified, and booked — while the owner keeps working. And
-            the call is just one piece — your demo walks the whole system.
-          </p>
           <p className="mt-4 text-xs leading-snug text-[#171e19]/70 sm:text-base sm:leading-normal">
             Calls, texts, website leads, scheduling, follow-up, and reviews — one custom AI
             operating system runs it all. Managed by real people. Nothing to learn. Nobody to
             hire.
           </p>
+          <p className="mt-3 text-xs font-semibold leading-snug text-[#171e19] sm:text-base">
+            We build it custom for your business, then run it for you — start to finish.
+          </p>
+          <DeliverablesRow />
         </div>
       </div>
     </section>
