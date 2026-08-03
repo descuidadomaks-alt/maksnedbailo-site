@@ -47,7 +47,7 @@ type LeadPayload = {
   timeline: string;
   consent: boolean;
   utm: UtmData;
-  page: "oos_v2" | "oos_v3";
+  page: "oos_v2" | "oos_v3" | "oos_v2_1";
   pageUrl: string;
   honeypot?: string;
   // Set only by the exit-intent popup ("exit_phone") so this can be
@@ -57,7 +57,7 @@ type LeadPayload = {
   leadType?: string;
 };
 
-const VALID_PAGES = new Set(["oos_v2", "oos_v3"]);
+const VALID_PAGES = new Set(["oos_v2", "oos_v3", "oos_v2_1"]);
 
 // The quiz was cut from 10 steps to 3 (trade, biggestImpact, contact) —
 // leadsPerMonth/phoneCoverage/eliminate/timeline/website are no longer
