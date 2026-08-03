@@ -1,23 +1,24 @@
 "use client";
 
 import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
 import { Dot } from "./Dot";
-
-const EXCLUSIVITY = "Once you're in, we won't take on your direct competition.";
 
 /**
  * Final risk-free-guarantee close — forked from oos_v2's FinalCTA.tsx.
- * Scarcity line is now static (see EXCLUSIVITY above). Title keeps its
- * original tight line-height explicitly (inline style, not the
- * `leading-[0.9]` Tailwind class it used to have — that class was never
- * actually in control, since the shared `.oh-display` rule in layout.tsx
- * wins the cascade tie against any same-specificity Tailwind `leading-[]`
- * utility; only an inline style reliably overrides it) — the site-wide
+ * Scarcity line is geo-derived (LocationContext), same placement as the
+ * live overtimeos.com page's guarantee section. Title keeps its original
+ * tight line-height explicitly (inline style, not the `leading-[0.9]`
+ * Tailwind class it used to have — that class was never actually in
+ * control, since the shared `.oh-display` rule in layout.tsx wins the
+ * cascade tie against any same-specificity Tailwind `leading-[]` utility;
+ * only an inline style reliably overrides it) — the site-wide
  * line-height standardization landed on `.oh-display` doesn't touch this
  * title, per instruction to keep it exactly as it was.
  */
 export function FinalCTA() {
   const { openQuiz } = useQuiz();
+  const scarcityLine = useScarcityLine();
 
   return (
     <section className="relative overflow-hidden bg-[#ffe17c] py-20 sm:py-28">
@@ -38,7 +39,7 @@ export function FinalCTA() {
           asked. $0 setup. No contract. Cancel anytime.
         </p>
 
-        <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/80">{EXCLUSIVITY}</p>
+        <p className="mx-auto mt-5 max-w-xl text-sm font-medium text-[#171e19]/80">{scarcityLine}</p>
 
         <button
           type="button"

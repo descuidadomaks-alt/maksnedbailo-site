@@ -194,7 +194,7 @@ export function ExitIntentPopup() {
 
         {!submitted ? (
           <>
-            <h3 className="oh-display pr-8 text-2xl leading-tight text-[#171e19]">
+            <h3 className="oh-display pr-8 text-2xl text-[#171e19]">
               Leaving? Get a 5-minute callback instead.
             </h3>
             <p className="mt-2 text-sm text-[#171e19]/70">

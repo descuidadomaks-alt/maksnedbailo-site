@@ -1,14 +1,16 @@
 "use client";
 
 import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
+import { GeoPin } from "./GeoPin";
 
 /**
  * Single-offer pricing — replaces oos_v2's three-tier PricingTiers.tsx.
  * One centered card, same value-stack items/bonus block/price as oos_v2's
  * Tier 1 (nothing invented, same $499/mo, same $8,741 total value), no
- * "Most popular"/"Best value" badge since there's only one option. The
- * scarcity line is a static honest sentence — no LocationContext/GeoPin,
- * per the anti-fabrication removal in page.tsx.
+ * "Most popular"/"Best value" badge since there's only one option.
+ * Scarcity line is geo-derived (LocationContext) — same placement as the
+ * live overtimeos.com page's value-stack section.
  */
 
 const GEO_BENEFIT =
@@ -33,8 +35,6 @@ const BONUS_ITEMS: { text: string; value: number }[] = [
 
 const TOTAL_VALUE =
   CORE_ITEMS.reduce((sum, i) => sum + (i.value ?? 0), 0) + BONUS_ITEMS.reduce((sum, i) => sum + i.value, 0); // 8,741
-
-const EXCLUSIVITY = "Once you're in, we won't take on your direct competition.";
 
 function ItemRow({ item }: { item: LineItem }) {
   return (
@@ -80,6 +80,7 @@ function BonusBlock() {
 
 export function PricingCard() {
   const { openQuiz } = useQuiz();
+  const scarcityLine = useScarcityLine();
 
   return (
     <section className="bg-[#171e19] py-16 text-white sm:py-24">
@@ -100,7 +101,10 @@ export function PricingCard() {
             <p className="text-sm font-bold text-white/45 line-through">Total value: {fmt(TOTAL_VALUE)}</p>
             <p className="oh-display mt-2 text-4xl text-[#ffe17c]">Today: $499/mo</p>
             <p className="mt-1 text-xs font-medium text-white/70">$0 setup · cancel anytime</p>
-            <p className="mt-3 text-xs font-bold text-[#ffe17c]">{EXCLUSIVITY}</p>
+            <p className="mx-auto mt-3 flex items-center justify-center gap-1.5 text-xs font-bold text-[#ffe17c]">
+              <GeoPin />
+              {scarcityLine}
+            </p>
             <button
               type="button"
               onClick={() => openQuiz("pricing_card")}

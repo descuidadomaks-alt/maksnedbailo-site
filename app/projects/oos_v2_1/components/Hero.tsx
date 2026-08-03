@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuiz } from "./QuizContext";
+import { useScarcityLine } from "./LocationContext";
 import { Highlight } from "./Highlight";
 import { Dot } from "./Dot";
+import { GeoPin } from "./GeoPin";
 import { SETUP, TERMS, VIDEO_SRC, VIDEO_POSTER } from "../lib/config";
 import { track } from "../lib/track";
 import { DeliverablesRow } from "./DeliverablesRow";
@@ -14,9 +16,9 @@ import { DeliverablesRow } from "./DeliverablesRow";
  * as oos_v2 (headline, one supporting line, the video, and the primary
  * CTA all visible together on a 390px phone with no scroll). Forked from
  * oos_v2's Hero.tsx: concrete headline/subhead (was more general), the
- * vague eyebrow line above the headline is gone, and the scarcity line is
- * now a static honest sentence — no LocationContext/GeoPin, no geo-IP
- * lookup, no per-visitor city injection. See page.tsx for why.
+ * vague eyebrow line above the headline is gone. Geo-derived scarcity
+ * line restored (matches the live overtimeos.com page's same placement —
+ * see page.tsx) after being temporarily removed in an earlier pass.
  */
 
 // Single clearly-marked constant — kept easy to swap for a future test.
@@ -29,7 +31,6 @@ const HEADLINE =
   "We Help Home-Service Pros Get More Jobs With AI, a Custom Website, and 5-Star Reviews";
 const HEADLINE_HIGHLIGHT = "More Jobs";
 const SUBHEAD = "Every lead answered, every job booked, every customer reminded, done for you — 24/7.";
-const EXCLUSIVITY = "Once you're in, we won't take on your direct competition.";
 
 function renderHeadline() {
   const text = HEADLINE.endsWith(".") ? HEADLINE.slice(0, -1) : HEADLINE;
@@ -46,6 +47,7 @@ function renderHeadline() {
 
 export function Hero() {
   const { openQuiz, unlocked } = useQuiz();
+  const scarcityLine = useScarcityLine();
   const videoRef = useRef<HTMLVideoElement>(null);
   const hasAutoplayed = useRef(false);
   const hasFiredPlay = useRef(false);
@@ -168,7 +170,10 @@ export function Hero() {
           {SETUP} <span className="text-[#171e19]/30">·</span> {TERMS.replace("No contract · ", "")}
         </p>
 
-        <p className="text-[10px] font-bold text-[#171e19]/80 sm:text-sm">{EXCLUSIVITY}</p>
+        <p className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#171e19]/80 sm:text-sm">
+          <GeoPin />
+          {scarcityLine}
+        </p>
 
         <div className="mt-2 max-w-xl border-t border-[#171e19]/10 pt-6 sm:mt-4">
           <h2 className="oh-display text-2xl text-[#171e19] sm:text-4xl">

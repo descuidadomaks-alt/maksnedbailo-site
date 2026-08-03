@@ -1,4 +1,5 @@
 import { QuizProvider } from "./components/QuizContext";
+import { LocationProvider } from "./components/LocationContext";
 import { QuizModal } from "./components/QuizModal";
 import { ExitIntentPopup } from "./components/ExitIntentPopup";
 import { TradesBar } from "./components/TradesBar";
@@ -20,10 +21,10 @@ import { StickyCTA } from "./components/StickyCTA";
  *     eyebrow line above the headline is gone.
  *  3. DeliverablesRow drops the add-on icon row — with no upper tiers,
  *     there's nothing to upsell to.
- *  4. The fake-scarcity/geo-city mechanism (LocationProvider,
- *     LocationContext, GeoPin, lib/geoScarcity.ts) is removed entirely —
- *     not forked into this page at all. Hero/PricingCard/FinalCTA each
- *     show a static honest line instead of a location-derived one.
+ *  4. Geo-derived scarcity line (LocationProvider/LocationContext/
+ *     GeoPin/lib/geoScarcity.ts) — same mechanism and placement (hero,
+ *     pricing card, guarantee section) as the live overtimeos.com page.
+ *     Was briefly removed in an earlier pass; restored here.
  *
  * Hero + demo video merge, and the AppComparison/ProblemSolution
  * removal, are unchanged from oos_v2 — see that page's own comment for
@@ -36,18 +37,20 @@ import { StickyCTA } from "./components/StickyCTA";
  */
 export default function OosV2_1Page() {
   return (
-    <QuizProvider>
-      <TradesBar />
-      <Nav />
-      <main>
-        <Hero />
-        <PricingCard />
-        <FinalCTA />
-      </main>
-      <Footer />
-      <StickyCTA />
-      <QuizModal />
-      <ExitIntentPopup />
-    </QuizProvider>
+    <LocationProvider>
+      <QuizProvider>
+        <TradesBar />
+        <Nav />
+        <main>
+          <Hero />
+          <PricingCard />
+          <FinalCTA />
+        </main>
+        <Footer />
+        <StickyCTA />
+        <QuizModal />
+        <ExitIntentPopup />
+      </QuizProvider>
+    </LocationProvider>
   );
 }
