@@ -7,8 +7,14 @@ const EXCLUSIVITY = "Once you're in, we won't take on your direct competition.";
 
 /**
  * Final risk-free-guarantee close — forked from oos_v2's FinalCTA.tsx.
- * Only change: a static exclusivity line instead of useScarcityLine() —
- * no LocationContext/geo-IP lookup in this page at all.
+ * Scarcity line is now static (see EXCLUSIVITY above). Title keeps its
+ * original tight line-height explicitly (inline style, not the
+ * `leading-[0.9]` Tailwind class it used to have — that class was never
+ * actually in control, since the shared `.oh-display` rule in layout.tsx
+ * wins the cascade tie against any same-specificity Tailwind `leading-[]`
+ * utility; only an inline style reliably overrides it) — the site-wide
+ * line-height standardization landed on `.oh-display` doesn't touch this
+ * title, per instruction to keep it exactly as it was.
  */
 export function FinalCTA() {
   const { openQuiz } = useQuiz();
@@ -23,7 +29,7 @@ export function FinalCTA() {
       </span>
 
       <div className="relative mx-auto max-w-3xl px-5 text-center">
-        <h2 className="oh-display text-5xl leading-[0.9] text-[#171e19] sm:text-7xl lg:text-8xl">
+        <h2 className="oh-display text-5xl text-[#171e19] sm:text-7xl lg:text-8xl" style={{ lineHeight: 0.9 }}>
           Try it risk-free for 30 days<Dot white />
         </h2>
 

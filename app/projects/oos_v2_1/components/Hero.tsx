@@ -69,8 +69,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="oh-display max-w-2xl text-[clamp(1.15rem,6vw,2.375rem)] text-[#171e19] sm:text-5xl"
-          style={{ lineHeight: 1.14 }}
+          className="oh-display max-w-2xl text-4xl text-[#171e19] sm:text-6xl"
         >
           {renderHeadline()}
           <Dot />

@@ -71,10 +71,20 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
         }
         .oh-scope ::selection { background: rgba(255,225,124,0.5); color: var(--oh-charcoal); }
 
+        /* line-height 1 (was 0.9) — standardized across every oh-display
+           title site-wide (hero, pricing, quiz, nav) per the correction
+           pass: noticeably less cramped than the bare 0.9 default, but
+           still tighter than the hero's old one-off 1.14 override, which
+           is gone now that this is the single shared value. FinalCTA's
+           "Try it risk-free for 30 days." is the one exception — it
+           protects its original 0.9 with an inline style (higher
+           precedence than this class), since a Tailwind leading-[] utility
+           of equal specificity to this rule loses the cascade tie (this
+           block is emitted after Tailwind's own stylesheet). */
         .oh-display {
           font-family: var(--font-oh-display), 'Arial Narrow', sans-serif;
           text-transform: uppercase;
-          line-height: 0.9;
+          line-height: 1;
           font-weight: 400;
           letter-spacing: 0.01em;
         }
