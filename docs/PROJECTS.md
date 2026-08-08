@@ -17,6 +17,7 @@
 | [Nailsoftheday reorder tool](#nailsoftheday-reorder-tool) | Internal tool (client) | **Demo / not extracted** | `maksnedbailo-site/app/projects/notd` | Vercel (via hub) | none — shared as a link |
 | [Roman Shiglo real estate site](#roman-shiglo-real-estate-site) | Client landing site | **Live** (standalone) | `roman-shiglo-site` (standalone) | Vercel | roman.maksnedbailo.com |
 | [Para Ti massage salon demo](#para-ti-massage-salon-demo) | Client demo | **Demo, unclear if sold** | `maksnedbailo-site/app/projects/parati` | Vercel (via hub) | none |
+| [Eufloria floral assistant demo](#eufloria-floral-assistant-demo) | Client AI demo | **Live** | `maksnedbailo-site/app/projects/eufloria` | Vercel (via hub) | maksnedbailo.site/projects/eufloria |
 | [Automations prospect demos](#automations-prospect-demos) | Sales demo pages | **Live** (per-prospect) | `maksnedbailo-site/app/automations/[slug]` | Vercel (via hub) | maksnedbailo.site/automations/* |
 | [Partner channel pages](#partner-channel-pages) | Referral funnel | **Live** | `maksnedbailo-site/app/partners/[slug]` | Vercel (via hub) | maksnedbailo.site/partners/* |
 | [Care Less — UK locksmith offer](#care-less--uk-locksmith-offer) | Sub-offer / campaign | **Planned/early** | `maksnedbailo-site` (docs + API route only) | Vercel (via hub) | TBD |
@@ -67,6 +68,10 @@ Editorial luxury landing page for Roman Shiglo, independent real estate investme
 ## Para Ti massage salon demo
 
 Cream massage-salon demo landing page. Cormorant Garamond + Jost, cream/gold/charcoal/sage palette. Lives at `maksnedbailo-site/app/projects/parati/`. Status unclear — built as a demo; no record here of whether it converted to a paying client or a standalone deploy. Confirm with the user before assuming it's dormant.
+
+## Eufloria floral assistant demo
+
+Live, noindex client demonstration of Eufloria Santander's GoHighLevel Conversation AI agent. The route lives at `app/projects/eufloria/`, embeds the dedicated Floral Live Chat widget, and is intentionally isolated from SMS, WhatsApp, Instagram, and Facebook. Last touched: 2026-08-08.
 
 ## Automations prospect demos
 
