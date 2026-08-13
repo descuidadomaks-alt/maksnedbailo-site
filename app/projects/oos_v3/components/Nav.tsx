@@ -1,16 +1,16 @@
 "use client";
 
 import { BRAND } from "../lib/config";
-import { useQuiz } from "./QuizContext";
+import { useAudit } from "./AuditContext";
 import { ClockMark } from "./ClockMark";
 
 /**
- * Sticky nav — forked from app/projects/oos/components/Nav.tsx unchanged
- * except the CTA now tags its openQuiz() call with a source for quiz_open
- * tracking. Logo scrolls to #top only, never opens the quiz.
+ * Sticky nav — same shell as the sibling pages' Nav.tsx, wired to
+ * AuditContext instead of QuizContext. Logo scrolls to #top only, never
+ * opens the audit modal.
  */
 export function Nav() {
-  const { openQuiz } = useQuiz();
+  const { openAudit } = useAudit();
 
   return (
     <header className="sticky inset-x-0 top-0 z-50 h-20 border-b border-[#171e19]/10 bg-white/90 backdrop-blur">
@@ -25,10 +25,10 @@ export function Nav() {
 
         <button
           type="button"
-          onClick={() => openQuiz("nav")}
+          onClick={() => openAudit("nav")}
           className="oh-card rounded-full bg-[#171e19] px-5 py-2.5 text-sm font-medium text-white hover:scale-105 sm:px-6 sm:text-base min-h-[44px]"
         >
-          See The Demo
+          Free Audit
         </button>
       </div>
     </header>

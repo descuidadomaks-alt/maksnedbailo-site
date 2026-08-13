@@ -1,16 +1,12 @@
 /**
- * oos_v3 — Overtime OS landing-page variant B ("standard tiers, no morph").
- * Hosted here so it can be iterated on without redeploying the live
- * overtimeos.com ad page (a separate repo). Copy for every section below
- * except the hero headline is locked to the live page's verbatim text —
- * see the Task 1 inventory in this session for the source.
+ * oos_v3 — Overtime OS "anti-SaaS" landing-page variant. No price anywhere
+ * on this page (see FinalCTA.tsx / Hero.tsx) — deliberately the opposite
+ * bet from oos_v2 / oos_v2_1, which lead with $499/mo. Copy is new for this
+ * variant; only the video source and the brand/tracking plumbing are
+ * reused from the sibling pages.
  */
 
 export const BRAND = "Overtime OS.";
-
-export const PRICE = "$499/mo";
-export const SETUP = "$0 setup";
-export const TERMS = "No contract · cancel anytime";
 
 // Reused directly from the live page — no video was downloaded/rehosted
 // into this repo, this links straight to overtimeos.com's own asset.

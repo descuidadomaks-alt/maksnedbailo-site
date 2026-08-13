@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 
 /**
  * Minimal terms stub — the footer needs a Terms link but neither the live
- * page's full terms text nor app/projects/oos/ (which only ever linked
- * Privacy) gave us real terms copy to reuse. This is a plain-language stub
- * covering only what's true of this page itself, not a substitute for real
- * legal terms of service — flagged in the build notes for the user to
- * replace with real terms before this runs as a paid-ad destination.
+ * page's full terms text nor the sibling pages gave us real terms copy to
+ * reuse. This is a plain-language stub covering only what's true of this
+ * page itself, not a substitute for real legal terms of service — flagged
+ * for the user to replace with real terms before this runs as a paid-ad
+ * destination.
  */
 export default function TermsPage() {
   return (
@@ -22,14 +22,12 @@ export default function TermsPage() {
 
       <div className="mt-8 space-y-6 text-base leading-relaxed text-[#171e19]/80">
         <p>
-          This page is a demo landing page for {BRAND}, an AI operating system for home-service
-          businesses. Completing the quiz on this page does not create a contract or purchase —
-          it books a call to discuss the service and pricing shown here.
+          This page is a demo landing page for {BRAND}, a done-for-you AI front office for
+          home-service businesses. Requesting the free missed-call audit on this page does not
+          create a contract or purchase — it books a call to your business line for the audit and,
+          if you&apos;re interested, a follow-up conversation about the service.
         </p>
-        <p>
-          Pricing shown on this page is current as of the last-updated date above and is subject
-          to change. The demo video and any figures shown are for illustration.
-        </p>
+        <p>The demo video and any figures shown on this page are for illustration.</p>
         <section>
           <h2 className="oh-display text-xl text-[#171e19]">Contact</h2>
           <p className="mt-2">

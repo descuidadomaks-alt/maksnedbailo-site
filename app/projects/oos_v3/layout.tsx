@@ -4,11 +4,11 @@ import { Anton } from "next/font/google";
 
 /**
  * Overtime OS. — oos_v3 landing-page variant, self-contained under
- * /projects/oos_v3. Forked from app/projects/oos/layout.tsx: same scoped
- * styling (oh-scope wrapper, Anton display font, Satoshi body font via
- * Fontshare) so this never touches the rest of the dark maksnedbailo.site.
- * No Meta Pixel here (unlike oos/) — this variant only needs the guarded
- * gtag/clarity/fbq calls in lib/track.ts, not a real pixel base snippet.
+ * /projects/oos_v3. Same scoped styling (oh-scope wrapper, Anton display
+ * font, Satoshi body font via Fontshare) as the sibling pages so this never
+ * touches the rest of maksnedbailo.site. No price anywhere in metadata —
+ * this variant's whole bet is the opposite of oos_v2/oos_v2_1's price-led
+ * framing.
  */
 
 const anton = Anton({
@@ -19,14 +19,15 @@ const anton = Anton({
   preload: true,
 });
 
-const OG_TITLE = "Overtime OS — The job goes to whoever answers first";
-const OG_DESCRIPTION = "Every lead answered, booked, and followed up. $499/mo, $0 setup.";
+const OG_TITLE = "Overtime OS — Call your own business right now. See what your customer hears.";
+const OG_DESCRIPTION =
+  "A free missed-call audit: we call your business line after hours and send you the recording.";
 const CANONICAL_URL = "https://maksnedbailo.site/projects/oos_v3";
 
 export const metadata: Metadata = {
-  title: "Overtime OS. — The job goes to whoever answers first",
+  title: "Overtime OS. — Free Missed-Call Audit",
   description:
-    "The AI operating system that runs your entire business. One system that answers every call, text, and form in seconds, qualifies the job, and books it on your calendar. $499/mo, $0 setup.",
+    "See what your customers hear when they call after hours. Overtime OS answers every call, text, and website lead, qualifies it, and books it straight to your calendar — managed by real people. Get a free missed-call audit.",
   keywords: [],
   alternates: {
     canonical: CANONICAL_URL,
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function OosV2Layout({ children }: { children: ReactNode }) {
+export default function OosV3Layout({ children }: { children: ReactNode }) {
   return (
     <div className={`oh-scope ${anton.variable}`}>
       <link
@@ -74,7 +75,7 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
         .oh-display {
           font-family: var(--font-oh-display), 'Arial Narrow', sans-serif;
           text-transform: uppercase;
-          line-height: 0.9;
+          line-height: 1;
           font-weight: 400;
           letter-spacing: 0.01em;
         }
@@ -91,25 +92,6 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
         @keyframes oh-blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
         .oh-dot { animation: oh-blink 1.2s infinite; }
 
-        @keyframes oh-eq { 0%, 100% { transform: scaleY(0.3); } 50% { transform: scaleY(1); } }
-        .oh-eq-bar { transform-origin: bottom; animation: oh-eq 0.9s ease-in-out infinite; }
-
-        .oh-quiz-progress-fill {
-          position: relative;
-          overflow: hidden;
-          background: #ffe17c;
-          transition: width 400ms ease-out;
-        }
-        .oh-quiz-progress-fill::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent);
-          transform: translateX(-100%);
-          animation: oh-quiz-shimmer 2.5s ease-in-out infinite;
-        }
-        @keyframes oh-quiz-shimmer { to { transform: translateX(100%); } }
-
         .oh-marquee-track {
           position: absolute;
           top: 0;
@@ -119,23 +101,14 @@ export default function OosV2Layout({ children }: { children: ReactNode }) {
         }
         @keyframes oh-marquee { to { transform: translateX(-50%); } }
 
-        /* Exit-intent popup entrance — see ExitIntentPopup.tsx. */
-        @keyframes exitPopIn {
-          from { opacity: 0; transform: scale(0.96); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
         @media (prefers-reduced-motion: reduce) {
           .oh-scope .oh-card { transition: none; }
-          .oh-scope .oh-dot, .oh-scope .oh-eq-bar { animation: none; }
-          .oh-scope .oh-quiz-progress-fill { transition: none; }
-          .oh-scope .oh-quiz-progress-fill::after { animation: none; }
+          .oh-scope .oh-dot { animation: none; }
           .oh-scope .oh-marquee-track {
             animation: none;
             left: 50%;
             transform: translateX(-50%);
           }
-          .oh-scope [class*="exitPopIn"] { animation: none; }
         }
       `,
         }}

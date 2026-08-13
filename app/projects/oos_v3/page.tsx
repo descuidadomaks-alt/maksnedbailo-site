@@ -1,55 +1,51 @@
-import { QuizProvider } from "./components/QuizContext";
-import { LocationProvider } from "./components/LocationContext";
-import { QuizModal } from "./components/QuizModal";
-import { ExitIntentPopup } from "./components/ExitIntentPopup";
+import { AuditProvider } from "./components/AuditContext";
+import { AuditModal } from "./components/AuditModal";
 import { TradesBar } from "./components/TradesBar";
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { OfferStack } from "./components/OfferStack";
-import { TiersSection } from "./components/TiersSection";
+import { ProblemSection } from "./components/ProblemSection";
+import { HowItWorks } from "./components/HowItWorks";
+import { Deliverables } from "./components/Deliverables";
+import { WhyNotSoftware } from "./components/WhyNotSoftware";
 import { FinalCTA } from "./components/FinalCTA";
 import { Footer } from "./components/Footer";
 import { StickyCTA } from "./components/StickyCTA";
 
 /**
- * oos_v3 — Overtime OS A/B variant "standard tiers, no morph". Forked from
- * app/projects/oos/page.tsx (untouched). Two deliberate deviations from
- * that base, per the brief:
+ * oos_v3 — "anti-SaaS" Overtime OS landing-page variant. Opposite bet from
+ * oos_v2 / oos_v2_1: no price anywhere, positioned as a premium done-for-you
+ * managed service, single CTA (a free missed-call audit) instead of
+ * self-serve pricing. No testimonials exist yet, so belief comes from the
+ * demo video (plays freely, not gated behind the lead form — see Hero.tsx)
+ * and the mechanism walkthrough (HowItWorks), not social proof.
  *
- *  1. Hero + demo video are merged into one component (Hero.tsx) so
- *     headline, one supporting line, the video, and the primary CTA all
- *     sit above the fold on a 390px phone — the original oos build never
- *     needs to fit a video in the first viewport, since Hero and VideoForm
- *     are two separate near-full-viewport sections there.
- *  2. AppComparison ("don't confuse us with an app") and ProblemSolution
- *     ("the old way" / "the Overtime OS way") are dropped to shorten the
- *     page — everything else keeps its live-page order and copy.
+ * One capture flow only (AuditContext/AuditModal — a single-step form, not
+ * the sibling pages' multi-step quiz) and no exit-intent popup, per the
+ * brief's "one offer, one path, no choice overload." No geo spot-count
+ * scarcity either (LocationContext/geoScarcity.ts) — that mechanism reads
+ * too close to fake scarcity for this page's honesty bar; the only
+ * exclusivity claim here is the flat, honest line in FinalCTA.tsx.
  *
- * Unlike oos_v2, OfferStack and TiersSection stay two separate static
- * sections (no scroll morph) — TiersSection just adds small struck-through
- * per-item values where the live page didn't have one.
- *
- * Leads POST to /api/oos-lead (tagged page:"oos_v3"), which forwards to
- * the same GoHighLevel webhook the live overtimeos.com page uses — see
- * that route for the field mapping.
+ * Leads POST to /api/oos-lead (tagged page:"oos_v3", leadType:"audit"),
+ * the same GoHighLevel webhook oos_v2/oos_v2_1 use — see that route, which
+ * already whitelists both fields and needed no changes.
  */
 export default function OosV3Page() {
   return (
-    <LocationProvider>
-      <QuizProvider>
-        <TradesBar />
-        <Nav />
-        <main>
-          <Hero />
-          <OfferStack />
-          <TiersSection />
-          <FinalCTA />
-        </main>
-        <Footer />
-        <StickyCTA />
-        <QuizModal />
-        <ExitIntentPopup />
-      </QuizProvider>
-    </LocationProvider>
+    <AuditProvider>
+      <TradesBar />
+      <Nav />
+      <main>
+        <Hero />
+        <ProblemSection />
+        <HowItWorks />
+        <Deliverables />
+        <WhyNotSoftware />
+        <FinalCTA />
+      </main>
+      <Footer />
+      <StickyCTA />
+      <AuditModal />
+    </AuditProvider>
   );
 }
