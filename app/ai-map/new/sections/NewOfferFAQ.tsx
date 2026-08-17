@@ -1,0 +1,67 @@
+"use client";
+
+import { useState } from "react";
+import type { NewOfferCopy } from "../lib/copy";
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden
+      style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease", flexShrink: 0 }}>
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  );
+}
+
+/**
+ * Trimmed FAQ — drops the price/deadline questions from DirectFAQ (the
+ * "free? what's the catch" answer no longer needs a July date) and the
+ * revenue-size ICP question ("€3–10M/year, owner-led business") per the
+ * brief's instruction not to publicly gate on company size.
+ */
+export default function NewOfferFAQ({ d }: { d: NewOfferCopy }) {
+  const [open, setOpen] = useState<Set<number>>(new Set());
+  const toggle = (i: number) => setOpen((prev) => { const next = new Set(prev); next.has(i) ? next.delete(i) : next.add(i); return next; });
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: d.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
+  return (
+    <section className="section-divider py-14 md:py-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <div className="max-w-3xl mx-auto px-6">
+
+        <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>{d.faq.label}</p>
+        <h2 data-reveal className="font-playfair font-normal text-fg mb-12" style={{ fontSize: "clamp(24px, 3.2vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.022em" }}>{d.faq.headline}</h2>
+
+        <div data-reveal className="flex flex-col">
+          {d.faq.items.map((item, i) => {
+            const isOpen = open.has(i);
+            return (
+              <div key={i} className="border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+                <button className="w-full flex items-center justify-between py-5 text-left gap-6 transition-opacity duration-150 hover:opacity-75" onClick={() => toggle(i)} aria-expanded={isOpen}>
+                  <span className="font-sora text-fg/72" style={{ fontSize: "15px", lineHeight: 1.5 }}>{item.q}</span>
+                  <span className="text-fg/55 flex-shrink-0"><ChevronIcon open={isOpen} /></span>
+                </button>
+                <div style={{ maxHeight: isOpen ? "600px" : "0", overflow: "hidden", transition: "max-height 0.38s cubic-bezier(0.16,1,0.3,1)" }}>
+                  <div className="pb-6">
+                    <p className="font-sora font-light text-fg/62 leading-[1.88]" style={{ fontSize: "14px", maxWidth: "62ch" }}>
+                      {item.a}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+    </section>
+  );
+}
