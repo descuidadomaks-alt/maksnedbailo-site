@@ -127,13 +127,16 @@ export default function V2Cases({ d }: { d: V2Copy }) {
                 style={{ minHeight: "350px" }}
               >
                 <div className="flex items-center justify-between">
+                  {/* Neutral, not accent. The accent is the CTA colour and
+                      should not be spent on a taxonomy label. */}
                   <span
-                    className="font-label text-accent/75"
+                    className="font-label"
                     style={{
                       fontSize: "9px",
                       letterSpacing: "1.8px",
                       textTransform: "uppercase",
-                      border: "1px solid rgba(212,255,43,0.22)",
+                      color: "rgba(240,236,230,0.5)",
+                      border: "1px solid rgba(255,255,255,0.12)",
                       borderRadius: "999px",
                       padding: "3px 9px",
                     }}
@@ -152,7 +155,9 @@ export default function V2Cases({ d }: { d: V2Copy }) {
 
                 <div className="flex flex-col gap-3 flex-1">
                   <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-playfair font-normal text-fg/75" style={{ fontSize: "clamp(14px, 1.3vw, 16px)", lineHeight: 1.3 }}>
+                    {/* Full-strength white and a size up — the case name is
+                        the thing to read first in the card. */}
+                    <h3 className="font-playfair font-normal text-fg" style={{ fontSize: "clamp(16px, 1.5vw, 19px)", lineHeight: 1.25 }}>
                       {c.name}
                     </h3>
                     <span className="shrink-0 text-fg/55 group-hover:text-fg/62 transition-colors duration-200 mt-0.5">

@@ -51,21 +51,20 @@ export default function WeekGrid({ d }: { d: V2Copy["fix"]["weekGrid"] }) {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-4">
+        <span className="flex items-center gap-2">
           <span className="shrink-0 rounded-sm" style={{ width: "9px", height: "9px", background: "rgba(240,236,230,0.15)" }} />
-          <span className="font-sora font-light text-fg/50" style={{ fontSize: "12px" }}>
-            <span className="font-playfair text-fg/70" style={{ fontSize: "16px" }}>{ADMIN_BLOCKS}h</span> {d.adminLabel}
+          <span className="font-sora font-light text-fg/45" style={{ fontSize: "12px" }}>
+            {ADMIN_BLOCKS}h {d.adminLabel}
           </span>
-        </div>
-        {/* Punchline — matched in weight to the other two cards' closing lines. */}
-        <div className="flex items-center gap-2.5">
-          <span className="shrink-0 rounded-sm" style={{ width: "9px", height: "9px", background: "rgba(212,255,43,0.6)" }} />
-          <span className="font-sora text-accent leading-[1.35]" style={{ fontSize: "16px", fontWeight: 500 }}>
-            <span className="font-playfair" style={{ fontSize: "22px" }}>{TOTAL_BLOCKS - ADMIN_BLOCKS}h</span> {d.earnLabel}
-          </span>
-        </div>
+        </span>
       </div>
+
+      {/* Punchline — identical structure to CapacityGap and LeakFunnel:
+          accent numeral at 22px, label at 16px, one line, nothing else. */}
+      <p className="font-sora leading-[1.35]" style={{ fontSize: "16px", fontWeight: 500, color: "rgba(212,255,43,0.95)" }}>
+        <span className="font-playfair" style={{ fontSize: "22px" }}>{TOTAL_BLOCKS - ADMIN_BLOCKS}h</span> {d.earnLabel}
+      </p>
     </div>
   );
 }

@@ -23,9 +23,12 @@ import type { ReactNode } from "react";
 import { NewLocaleProvider } from "./lib/locale";
 import V2Header from "./_v2/components/V2Header";
 
-const TITLE = "Find Out What Your Business Is Losing | Care Less";
+// Framed on the gain, not the loss. "Find out what you're losing" tested as
+// a negative-sounding promise next to competitors who all lead with upside,
+// and buries the fact that we cover finance and back-office work too.
+const TITLE = "Win More Work, With Less Admin | AI Systems for Sales, Service & Finance Ops";
 const DESCRIPTION =
-  "We find where your business is losing time and money, then build the system that stops it. The diagnosis is free. You pay for the build once it works.";
+  "We build AI systems that answer every enquiry in seconds, follow up until customers reply, and take invoicing, bookkeeping and repetitive admin off your team. Free 90-minute AI Map first. You pay once it works.";
 
 export const metadata: Metadata = {
   title: TITLE,

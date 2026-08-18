@@ -1,6 +1,7 @@
 "use client";
 
 import type { V2Copy } from "../lib/copy";
+import { FUNDER_LOCKUPS } from "../components/BrandLockups";
 
 /**
  * One icon per pain, drawn to match the moment described rather than a
@@ -172,27 +173,21 @@ export default function V2Problem({ d }: { d: V2Copy }) {
                       {tile.body}
                     </p>
 
-                    {/* Funder wordmarks, set in the page's mono face rather
-                        than as third-party logo files. */}
+                    {/* Funder lockups, all rendered at one height in a single
+                        dimmed tone so the row reads as a credit line. */}
                     {tile.funders && (
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-4">
-                        {tile.funders.map((f) => (
-                          <span
-                            key={f}
-                            className="font-label"
-                            style={{
-                              fontSize: "9.5px",
-                              letterSpacing: "0.8px",
-                              textTransform: "uppercase",
-                              color: "rgba(240,236,230,0.6)",
-                              border: "1px solid rgba(255,255,255,0.1)",
-                              borderRadius: "999px",
-                              padding: "4px 10px",
-                            }}
-                          >
-                            {f}
-                          </span>
-                        ))}
+                      <div
+                        className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-5 pt-4"
+                        style={{ borderTop: "1px solid rgba(255,255,255,0.08)", color: "rgba(240,236,230,0.55)" }}
+                      >
+                        {tile.funders.map((f) => {
+                          const Lockup = FUNDER_LOCKUPS[f];
+                          return Lockup ? (
+                            <Lockup key={f} style={{ height: "13px", width: "auto" }} />
+                          ) : (
+                            <span key={f} className="font-label" style={{ fontSize: "10px" }}>{f}</span>
+                          );
+                        })}
                       </div>
                     )}
 

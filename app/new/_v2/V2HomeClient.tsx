@@ -19,11 +19,18 @@
  * produced the stutter (dots visible mid-section, then a jump, then half a
  * section with no field at all).
  *
- * The wrapper must stay well over 200vh on both breakpoints:
+ * The wrapper must stay well over 200vh on both breakpoints. All three
+ * sections inside are transparent so the field runs continuously from the
+ * photo band above straight through to the closing CTA — no solid section
+ * chopping it into disconnected pieces.
  *
- *   V2Start     TRANSPARENT     -> dots drift behind the offer panel
- *   V2FAQ       solid var(--bg) -> occludes the field, adds travel
- *   V2FinalCTA  TRANSPARENT     -> dots still moving under the closing ask
+ * cameraOffset / cameraSpan matter as much as the height. The camera
+ * travels PLANES_Y = 40..1140 in world units, and near either end it sits
+ * outside the floor planes, so the field is empty there. With the default
+ * (offset 0, span 1) the top of this wrapper started in that void, which is
+ * the blank stretch under the photo. Offset 0.3 / span 0.5 confines the
+ * sweep to the middle of the shaft, so dots are visible for the entire
+ * scroll while still drifting with it.
  *
  * V2FinalCTA has to live INSIDE the wrapper. Outside it, the canvas had
  * already stopped updating by the time that section scrolled in, so the
@@ -66,8 +73,10 @@ export default function V2HomeClient() {
         <VoiceProof d={d} />
         <V2HumanAi d={d} />
 
-        {/* Read the header comment before changing what sits in here. */}
-        <ElevatorField>
+        {/* Read the header comment before changing what sits in here.
+            cameraOffset/cameraSpan keep the camera inside the dense middle
+            of the shaft for the whole scroll — see the comment above. */}
+        <ElevatorField cameraOffset={0.3} cameraSpan={0.5}>
           <V2Start d={d} ctaHref={ctaHref} />
           <V2FAQ d={d} />
           <V2FinalCTA d={d} ctaHref={ctaHref} />

@@ -26,6 +26,14 @@ function WhatsAppIcon() {
 export default function V2FinalCTA({ d, ctaHref }: { d: V2Copy; ctaHref: string }) {
   return (
     <section className="section-divider relative overflow-hidden py-20 md:py-32">
+      {/* Dark scrim over the dot field so the closing copy keeps its
+          contrast, plus the hero's accent glow on top of it. Without the
+          scrim the dots ran straight through the headline. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "radial-gradient(ellipse 70% 62% at 50% 50%, rgba(6,6,8,0.96) 0%, rgba(6,6,8,0.82) 45%, rgba(6,6,8,0) 100%)" }}
+      />
       <div aria-hidden className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none" style={{ width: "600px", height: "400px", background: "radial-gradient(ellipse, rgba(212,255,43,0.055) 0%, transparent 68%)" }} />
       <div className="relative max-w-lg mx-auto px-6 text-center">
         <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>

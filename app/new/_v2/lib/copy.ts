@@ -57,7 +57,7 @@ export interface V2Copy {
     basisCaption: string;
     rows: { title: string; body: string }[];
     capacityGap: { capacityLabel: string; wonLabel: string; gapLabel: string };
-    leakFunnel: { steps: { label: string; count: number }[]; lostLabel: string };
+    leakFunnel: { steps: { label: string; count: number }[]; lostValue: string; lostLabel: string };
     weekGrid: { adminLabel: string; earnLabel: string };
   };
 
@@ -95,6 +95,7 @@ export interface V2Copy {
     headline: string;
     body: string[];
     steps: string[];
+    stepDetails: string[];
     trustLine: string;
     cta: string;
     ctaMicrocopy: string;
@@ -129,9 +130,9 @@ export interface V2Copy {
 
 const en: V2Copy = {
   hero: {
-    eyebrow: "Sales. Service. Operations.",
+    eyebrow: "Sales · Service · Admin & Finance",
     headline: "Your customer already bought from whoever answered first.",
-    sub: "We find where your business is losing work, then build the system that stops it. The diagnosis is free. You only pay for the build once it is live and working.",
+    sub: "We build the systems that answer every enquiry in seconds, chase quotes until they reply, and take invoicing and repetitive admin off your team. We find what is worth building first, for free, and you only pay once it is live and working.",
     primaryCta: "Get your free AI Map",
     primaryMicrocopy: "Up to 90 minutes, usually less. Yours to keep either way.",
     anim: {
@@ -172,12 +173,14 @@ const en: V2Copy = {
         body: "of people buy from the business that responds first.",
         source: "Moneypenny, 2026. 2,000 consumers.",
         accent: true,
+        image: "/proof/conversation.jpg",
       },
       {
         value: "$1.5B",
         body: "went into one new firm that installs AI inside billion-dollar companies. We do the same job, at the size where it is still your own money.",
         source: "May 2026.",
         funders: ["Anthropic", "Blackstone", "Goldman Sachs", "Hellman & Friedman"],
+        image: "/proof/whales.jpg",
       },
     ],
   },
@@ -198,7 +201,7 @@ const en: V2Copy = {
       },
       {
         title: "Operate",
-        body: "Repetitive admin gone. Your team gets answers instantly instead of digging for them.",
+        body: "Invoices, bookkeeping prep, reports and data entry handled. Your team stops digging for answers.",
       },
     ],
     capacityGap: {
@@ -213,7 +216,8 @@ const en: V2Copy = {
         { label: "Followed up", count: 41 },
         { label: "Booked", count: 11 },
       ],
-      lostLabel: "89 never became customers",
+      lostValue: "89",
+      lostLabel: "never became customers",
     },
     weekGrid: {
       adminLabel: "Repetitive admin",
@@ -307,21 +311,27 @@ const en: V2Copy = {
 
   start: {
     label: "How We Start",
-    headline: "Ninety minutes to find out exactly what it is costing you.",
+    headline: "90 minutes to find out exactly what it is costing you.",
     body: [
-      "We go through how your business actually runs. Where work comes in, where it stalls, where it dies.",
+      "We go through how your business actually runs. Where enquiries come in, where quotes stall, where invoices and admin eat the week.",
       "You get one page back. What is bleeding, roughly what it costs you a year, and what to fix first, in order. Yours to keep, whether you hire us or not.",
     ],
     steps: ["Understand", "Find", "Rank", "Build"],
+    stepDetails: [
+      "We walk your business end to end, in plain language.",
+      "We name the places work is stalling or dying.",
+      "We put a rough yearly cost on each one and order them.",
+      "You decide if anything is worth building. Often one thing is.",
+    ],
     trustLine: "If there is nothing worth building, we say so and you keep the page.",
     cta: "Get your free AI Map",
     ctaMicrocopy: "Free. No card. Up to 90 minutes, usually less.",
-    paymentLabel: "How paying works",
+    paymentLabel: "You only pay once it works",
     paymentSteps: [
-      "The map is free. No card, no catch, no obligation after it.",
+      "The map costs nothing. No card, no catch, no obligation after it.",
       "If something is worth building, you get a fixed price before anything starts.",
-      "We build the first piece on your own business data. You try it yourself before you commit.",
-      "Only then does a payment cover the build and the first month. Monthly after that, or three to six months at a lower rate.",
+      "We build the first piece on your own business data, and you try it yourself.",
+      "Only then does anything get paid. Monthly after that, or three to six months at a lower rate.",
     ],
   },
 
@@ -384,9 +394,9 @@ const en: V2Copy = {
 
 const es: V2Copy = {
   hero: {
-    eyebrow: "Ventas. Atención. Operaciones.",
+    eyebrow: "Ventas · Atención · Admin y Finanzas",
     headline: "Tu cliente ya le compró al que respondió primero.",
-    sub: "Encontramos por dónde tu negocio está perdiendo trabajo y construimos el sistema que lo frena. El diagnóstico es gratis. Solo pagas la construcción cuando ya está funcionando.",
+    sub: "Construimos los sistemas que responden cada consulta en segundos, persiguen los presupuestos hasta que contestan, y le quitan a tu equipo la facturación y el admin repetitivo. Primero encontramos qué merece la pena construir, gratis, y solo pagas cuando ya está funcionando.",
     primaryCta: "Consigue tu AI Map gratis",
     primaryMicrocopy: "Hasta 90 minutos, normalmente menos. Es tuyo pase lo que pase.",
     anim: {
@@ -427,12 +437,14 @@ const es: V2Copy = {
         body: "de la gente le compra al negocio que responde primero.",
         source: "Moneypenny, 2026. 2.000 consumidores.",
         accent: true,
+        image: "/proof/conversation.jpg",
       },
       {
         value: "$1.5B",
         body: "fueron a una nueva firma que instala IA dentro de empresas de mil millones. Nosotros hacemos el mismo trabajo, al tamaño donde el dinero todavía es tuyo.",
         source: "Mayo de 2026.",
         funders: ["Anthropic", "Blackstone", "Goldman Sachs", "Hellman & Friedman"],
+        image: "/proof/whales.jpg",
       },
     ],
   },
@@ -453,7 +465,7 @@ const es: V2Copy = {
       },
       {
         title: "Operar",
-        body: "Se acabó el admin repetitivo. Tu equipo obtiene respuestas al instante en vez de buscarlas.",
+        body: "Facturas, preparación contable, informes y entrada de datos resueltos. Tu equipo deja de buscar respuestas.",
       },
     ],
     capacityGap: {
@@ -468,7 +480,8 @@ const es: V2Copy = {
         { label: "Con seguimiento", count: 41 },
         { label: "Reservadas", count: 11 },
       ],
-      lostLabel: "89 nunca llegaron a ser clientes",
+      lostValue: "89",
+      lostLabel: "nunca llegaron a ser clientes",
     },
     weekGrid: {
       adminLabel: "Admin repetitivo",
@@ -562,21 +575,27 @@ const es: V2Copy = {
 
   start: {
     label: "Cómo Empezamos",
-    headline: "Noventa minutos para saber exactamente qué te está costando.",
+    headline: "90 minutos para saber exactamente qué te está costando.",
     body: [
-      "Repasamos cómo funciona tu negocio de verdad. Por dónde entra el trabajo, dónde se atasca, dónde se muere.",
+      "Repasamos cómo funciona tu negocio de verdad. Por dónde entran las consultas, dónde se atascan los presupuestos, dónde se comen la semana las facturas y el admin.",
       "Te devolvemos una página. Qué se está desangrando, más o menos cuánto te cuesta al año, y qué arreglar primero, en orden. Es tuya, nos contrates o no.",
     ],
     steps: ["Entender", "Encontrar", "Priorizar", "Construir"],
+    stepDetails: [
+      "Recorremos tu negocio de punta a punta, en lenguaje llano.",
+      "Señalamos dónde el trabajo se atasca o se muere.",
+      "Le ponemos un coste anual aproximado a cada punto y los ordenamos.",
+      "Tú decides si algo merece la pena. Casi siempre hay una cosa que sí.",
+    ],
     trustLine: "Si no hay nada que merezca la pena construir, te lo decimos y te quedas la página.",
     cta: "Consigue tu AI Map gratis",
     ctaMicrocopy: "Gratis. Sin tarjeta. Hasta 90 minutos, normalmente menos.",
-    paymentLabel: "Cómo funciona el pago",
+    paymentLabel: "Solo pagas cuando funciona",
     paymentSteps: [
-      "El mapa es gratis. Sin tarjeta, sin trampa, sin obligación después.",
+      "El mapa no cuesta nada. Sin tarjeta, sin trampa, sin obligación después.",
       "Si algo merece la pena construirlo, recibes un precio fijo antes de empezar.",
-      "Construimos la primera pieza con los datos de tu negocio. La pruebas tú antes de comprometerte.",
-      "Solo entonces un pago cubre la construcción y el primer mes. Mensual después, o de tres a seis meses a un precio menor.",
+      "Construimos la primera pieza con los datos de tu negocio, y la pruebas tú.",
+      "Solo entonces se paga algo. Mensual después, o de tres a seis meses a un precio menor.",
     ],
   },
 

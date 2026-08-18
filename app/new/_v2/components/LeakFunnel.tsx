@@ -48,9 +48,10 @@ export default function LeakFunnel({ d }: { d: V2Copy["fix"]["leakFunnel"] }) {
         })}
       </div>
 
-      {/* Punchline — matched in weight to CapacityGap's closing line. */}
+      {/* Punchline — identical structure across all three Fix visuals:
+          numeral at 22px, label at 16px, one line. */}
       <p className="font-sora leading-[1.35] mt-1" style={{ fontSize: "16px", fontWeight: 500, color: "rgba(248,113,113,0.9)" }}>
-        {d.lostLabel}
+        <span className="font-playfair" style={{ fontSize: "22px" }}>{d.lostValue}</span> {d.lostLabel}
       </p>
     </div>
   );

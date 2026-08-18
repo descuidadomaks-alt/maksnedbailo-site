@@ -1,6 +1,7 @@
 "use client";
 
 import type { V2Copy } from "../lib/copy";
+import { PROOF_LOCKUPS } from "../components/BrandLockups";
 
 /**
  * Section 4b — WORLD PROOF. Sits directly under the cases (V2Cases), no
@@ -47,27 +48,43 @@ export default function V2WorldProof({ d }: { d: V2Copy }) {
               style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
             >
               <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10">
-                <h4
-                  className="font-playfair font-normal text-fg shrink-0 md:w-44"
-                  style={{ fontSize: "clamp(19px, 2vw, 24px)", lineHeight: 1.2, letterSpacing: "-0.02em" }}
-                >
-                  {item.name}
-                </h4>
+                <div className="shrink-0 md:w-44" style={{ color: "rgba(240,236,230,0.8)" }}>
+                  {(() => {
+                    const Lockup = PROOF_LOCKUPS[item.name];
+                    return Lockup ? (
+                      <Lockup style={{ height: "20px", width: "auto" }} />
+                    ) : (
+                      <h4 className="font-playfair font-normal text-fg" style={{ fontSize: "22px" }}>{item.name}</h4>
+                    );
+                  })()}
+                </div>
 
                 <div className="flex-1">
-                  {/* Stats first — this is the part people actually read. */}
-                  <div className="flex flex-wrap gap-x-8 gap-y-4 mb-5">
-                    {item.stats.map((s) => (
+                  {/* One lead stat, then supporting ones at half the weight.
+                      Three equal-sized accent numbers gave the row no entry
+                      point and nothing to read first. */}
+                  <div className="flex flex-wrap items-end gap-x-8 gap-y-4 mb-5">
+                    {item.stats.map((s, si) => (
                       <div key={s.label}>
                         <span
-                          className="font-playfair font-normal text-accent block"
-                          style={{ fontSize: "clamp(22px, 2.4vw, 30px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                          className="font-playfair font-normal block"
+                          style={{
+                            fontSize: si === 0 ? "clamp(28px, 3.2vw, 40px)" : "clamp(17px, 1.8vw, 22px)",
+                            lineHeight: 1.05,
+                            letterSpacing: "-0.025em",
+                            color: si === 0 ? "var(--accent)" : "rgba(240,236,230,0.82)",
+                          }}
                         >
                           {s.value}
                         </span>
                         <span
-                          className="font-sora font-light text-fg/45 block mt-1"
-                          style={{ fontSize: "11.5px", lineHeight: 1.35, maxWidth: "20ch" }}
+                          className="font-sora font-light block mt-1.5"
+                          style={{
+                            fontSize: "11px",
+                            lineHeight: 1.35,
+                            maxWidth: "20ch",
+                            color: si === 0 ? "rgba(212,255,43,0.6)" : "rgba(240,236,230,0.4)",
+                          }}
                         >
                           {s.label}
                         </span>

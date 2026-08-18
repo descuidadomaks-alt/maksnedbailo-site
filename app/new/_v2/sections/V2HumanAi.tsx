@@ -35,15 +35,13 @@ export default function V2HumanAi({ d }: { d: V2Copy }) {
           ))}
         </div>
 
-        <div
-          data-reveal
-          className="mx-auto mt-8 pl-4 text-left"
-          style={{ maxWidth: "46ch", borderLeft: "2px solid rgba(212,255,43,0.2)" }}
-        >
-          <p className="font-sora font-light italic text-fg/55 leading-[1.6]" style={{ fontSize: "13px" }}>
+        {/* Centred to match everything else in this section — a left rule
+            here pulled the quote off the section's axis. */}
+        <div data-reveal className="mx-auto mt-9 pt-6 text-center" style={{ maxWidth: "48ch", borderTop: "1px solid rgba(212,255,43,0.16)" }}>
+          <p className="font-sora font-light italic text-fg/55 leading-[1.6]" style={{ fontSize: "13.5px" }}>
             &ldquo;{d.humanAi.quote}&rdquo;
           </p>
-          <p className="font-label mt-1.5" style={{ fontSize: "10px", letterSpacing: "1px", color: "rgba(240,236,230,0.35)" }}>
+          <p className="font-label mt-2" style={{ fontSize: "10px", letterSpacing: "1px", color: "rgba(240,236,230,0.35)" }}>
             {d.humanAi.quoteAttr}
           </p>
         </div>

@@ -51,61 +51,95 @@ export default function V2Start({ d, ctaHref }: { d: V2Copy; ctaHref: string }) 
             ))}
           </div>
 
-          {/* Process — Understand -> Find -> Rank -> Build */}
-          <div className="flex items-center justify-center gap-1.5 xs:gap-2.5 mb-8 flex-wrap">
+          {/* Process — a numbered ladder with a real explanation per step.
+              The previous version was four bare pills in a row, which said
+              nothing and looked like placeholder chrome. */}
+          <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 mb-9 text-left">
             {d.start.steps.map((step, i) => (
-              <div key={step} className="flex items-center gap-1.5 xs:gap-2.5">
+              <div key={step} className="flex items-start gap-3.5">
                 <span
-                  className="font-label"
+                  className="shrink-0 font-playfair"
                   style={{
-                    fontSize: "10px",
-                    letterSpacing: "1.4px",
-                    textTransform: "uppercase",
-                    color: "rgba(240,236,230,0.72)",
-                    border: "1px solid rgba(212,255,43,0.22)",
-                    borderRadius: "999px",
-                    padding: "7px 14px",
-                    whiteSpace: "nowrap",
+                    fontSize: "26px",
+                    lineHeight: 1,
+                    color: "rgba(212,255,43,0.32)",
+                    minWidth: "30px",
                   }}
                 >
-                  {step}
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                {i < d.start.steps.length - 1 && <span className="text-accent/40" aria-hidden>→</span>}
+                <div>
+                  <p
+                    className="font-label mb-1"
+                    style={{ fontSize: "10.5px", letterSpacing: "1.8px", textTransform: "uppercase", color: "rgba(240,236,230,0.9)" }}
+                  >
+                    {step}
+                  </p>
+                  <p className="font-sora font-light text-fg/55 leading-[1.5]" style={{ fontSize: "12.5px" }}>
+                    {d.start.stepDetails[i]}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
 
           {/* How paying works */}
+          {/* The risk-reversal block. Headed as a promise ("you only pay
+              once it works"), not as a mechanic, and the steps are a
+              connected timeline with a visible spine rather than four dim
+              numerals nobody reads. */}
           <div
-            className="w-full rounded-xl mb-8"
-            style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.02)", padding: "20px 22px" }}
+            className="w-full rounded-xl mb-8 text-left"
+            style={{ border: "1px solid rgba(212,255,43,0.22)", background: "rgba(212,255,43,0.035)", padding: "22px 24px" }}
           >
-            <p className="font-label text-accent/70 mb-4" style={{ fontSize: "9.5px", letterSpacing: "2px", textTransform: "uppercase" }}>
+            <p
+              className="font-playfair text-accent mb-5"
+              style={{ fontSize: "clamp(16px, 1.7vw, 20px)", lineHeight: 1.2, letterSpacing: "-0.015em" }}
+            >
               {d.start.paymentLabel}
             </p>
-            {/* The numbered steps stay left-aligned inside the centred panel:
-                a centred ragged list of four sentences is unreadable. */}
-            <ol className="flex flex-col gap-2.5 text-left">
-              {d.start.paymentSteps.map((step, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span
-                    className="shrink-0 font-label flex items-center justify-center rounded-full"
-                    style={{
-                      width: "17px",
-                      height: "17px",
-                      fontSize: "9px",
-                      color: "rgba(6,6,8,0.9)",
-                      background: "rgba(212,255,43,0.78)",
-                      marginTop: "2px",
-                    }}
-                  >
-                    {i + 1}
-                  </span>
-                  <span className="font-sora font-light text-fg/75 leading-[1.55]" style={{ fontSize: "12.5px" }}>
-                    {step}
-                  </span>
-                </li>
-              ))}
+
+            <ol className="flex flex-col">
+              {d.start.paymentSteps.map((step, i) => {
+                const last = i === d.start.paymentSteps.length - 1;
+                return (
+                  <li key={i} className="flex items-start gap-3.5 relative" style={{ paddingBottom: last ? 0 : "16px" }}>
+                    {/* connecting spine */}
+                    {!last && (
+                      <span
+                        aria-hidden
+                        className="absolute"
+                        style={{ left: "9px", top: "20px", bottom: "0", width: "1px", background: "rgba(212,255,43,0.22)" }}
+                      />
+                    )}
+                    <span
+                      className="shrink-0 flex items-center justify-center rounded-full font-label relative"
+                      style={{
+                        width: "19px",
+                        height: "19px",
+                        fontSize: "9.5px",
+                        marginTop: "1px",
+                        color: last ? "rgba(6,6,8,0.92)" : "rgba(212,255,43,0.95)",
+                        background: last ? "var(--accent)" : "rgba(212,255,43,0.1)",
+                        border: last ? "none" : "1px solid rgba(212,255,43,0.45)",
+                        zIndex: 1,
+                      }}
+                    >
+                      {i + 1}
+                    </span>
+                    <span
+                      className="font-sora leading-[1.55]"
+                      style={{
+                        fontSize: "13px",
+                        color: last ? "rgba(240,236,230,0.92)" : "rgba(240,236,230,0.7)",
+                        fontWeight: last ? 500 : 300,
+                      }}
+                    >
+                      {step}
+                    </span>
+                  </li>
+                );
+              })}
             </ol>
           </div>
 
