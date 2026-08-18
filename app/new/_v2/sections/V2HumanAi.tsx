@@ -2,94 +2,72 @@
 
 import Image from "next/image";
 import type { V2Copy } from "../lib/copy";
-import { CRM_SCREENSHOT_SRC } from "../../lib/config";
+import { STAGE_PHOTO_SRC } from "../../lib/config";
 
 /**
- * Section 6 — HUMAN + AI. Two-column on desktop (photo left, copy right),
- * stacked on mobile with the photo first. The photo is a person breaking
- * out of a CRM dashboard full of overdue tasks — it must never let the
- * (AI-garbled) dashboard UI text become legible, so it's cropped tight to
- * the figure, biased toward the upper-middle of the frame to cut the top
- * nav bar and the bottom deal list, then scrimmed hard at every edge.
+ * Section 6 — HUMAN + AI. Copy first, then a full-width photo band of a
+ * real room full of real people (STAGE_PHOTO_SRC, 1400x450).
+ *
+ * This section argues that people matter, so the image has to BE people.
+ * The previous build used the CRM-dashboard composite here, which argued
+ * the opposite of the copy sitting next to it.
  */
 export default function V2HumanAi({ d }: { d: V2Copy }) {
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-24">
-      <div className="relative max-w-5xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
-          <div className="w-full md:w-[42%] shrink-0" data-reveal>
-            <div
-              className="relative mx-auto rounded-2xl overflow-hidden"
-              style={{
-                aspectRatio: "3 / 4",
-                maxWidth: "380px",
-                border: "1px solid rgba(255,255,255,0.06)",
-                background: "var(--bg)",
-              }}
-            >
-              <Image
-                src={CRM_SCREENSHOT_SRC}
-                alt=""
-                fill
-                sizes="(max-width: 768px) 80vw, 380px"
-                quality={82}
-                style={{ objectFit: "cover", objectPosition: "50% 32%" }}
-              />
-              {/* Radial scrim — fades the surrounding dashboard UI into the
-                  page background so no label is ever readable. */}
-              <div
-                aria-hidden
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 58% 52% at 50% 42%, rgba(6,6,8,0) 0%, rgba(6,6,8,0.5) 58%, rgba(6,6,8,0.95) 100%)",
-                }}
-              />
-              {/* Edge scrim — belt and braces on top/bottom/sides. */}
-              <div
-                aria-hidden
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0) 26%, rgba(6,6,8,0) 66%, rgba(6,6,8,0.92) 100%), linear-gradient(90deg, rgba(6,6,8,0.75) 0%, rgba(6,6,8,0) 18%, rgba(6,6,8,0) 82%, rgba(6,6,8,0.75) 100%)",
-                }}
-              />
-            </div>
-          </div>
+    <section className="section-divider relative overflow-hidden pt-16 md:pt-24">
+      <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
+          {d.humanAi.label}
+        </p>
+        <h2
+          data-reveal
+          className="font-playfair font-normal text-accent mx-auto mb-7"
+          style={{ fontSize: "clamp(24px, 3vw, 42px)", lineHeight: 1.16, letterSpacing: "-0.02em", maxWidth: "14ch" }}
+        >
+          {d.humanAi.headline}
+        </h2>
 
-          <div className="w-full md:flex-1 text-center md:text-left">
-            <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
-              {d.humanAi.label}
+        <div className="flex flex-col gap-4 mx-auto" style={{ maxWidth: "58ch" }}>
+          {d.humanAi.body.map((p, i) => (
+            <p key={i} data-reveal={`d${i % 4}`} className="font-sora font-light text-fg/62 leading-[1.8]" style={{ fontSize: "14.5px" }}>
+              {p}
             </p>
-            <h2
-              data-reveal
-              className="font-playfair font-normal text-accent mx-auto md:mx-0 mb-6"
-              style={{ fontSize: "clamp(24px, 3vw, 42px)", lineHeight: 1.16, letterSpacing: "-0.02em", maxWidth: "14ch" }}
-            >
-              {d.humanAi.headline}
-            </h2>
-            <div className="flex flex-col gap-4 mx-auto md:mx-0" style={{ maxWidth: "52ch" }}>
-              {d.humanAi.body.map((p, i) => (
-                <p key={i} data-reveal={`d${i % 4}`} className="font-sora font-light text-fg/62 leading-[1.8]" style={{ fontSize: "14.5px" }}>
-                  {p}
-                </p>
-              ))}
-            </div>
-
-            <div
-              data-reveal
-              className="mx-auto md:mx-0 mt-7 pl-4"
-              style={{ maxWidth: "52ch", borderLeft: "2px solid rgba(212,255,43,0.18)" }}
-            >
-              <p className="font-sora font-light italic text-fg/50 leading-[1.6]" style={{ fontSize: "13px" }}>
-                &ldquo;{d.humanAi.quote}&rdquo;
-              </p>
-              <p className="font-label mt-1.5" style={{ fontSize: "10px", letterSpacing: "1px", color: "rgba(240,236,230,0.35)" }}>
-                {d.humanAi.quoteAttr}
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
+
+        <div
+          data-reveal
+          className="mx-auto mt-8 pl-4 text-left"
+          style={{ maxWidth: "46ch", borderLeft: "2px solid rgba(212,255,43,0.2)" }}
+        >
+          <p className="font-sora font-light italic text-fg/55 leading-[1.6]" style={{ fontSize: "13px" }}>
+            &ldquo;{d.humanAi.quote}&rdquo;
+          </p>
+          <p className="font-label mt-1.5" style={{ fontSize: "10px", letterSpacing: "1px", color: "rgba(240,236,230,0.35)" }}>
+            {d.humanAi.quoteAttr}
+          </p>
+        </div>
+      </div>
+
+      {/* Full-bleed photo band — real room, real people. */}
+      <div data-reveal className="relative w-full mt-14 md:mt-20" style={{ height: "clamp(190px, 26vw, 340px)" }}>
+        <Image
+          src={STAGE_PHOTO_SRC}
+          alt="Maks Nedbailo speaking to a room of business owners"
+          fill
+          sizes="100vw"
+          quality={82}
+          style={{ objectFit: "cover", objectPosition: "center 42%" }}
+        />
+        {/* Feather the band into the page on all four edges. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.15) 26%, rgba(6,6,8,0.2) 70%, rgba(6,6,8,1) 100%), linear-gradient(90deg, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0) 22%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.9) 100%)",
+          }}
+        />
       </div>
     </section>
   );

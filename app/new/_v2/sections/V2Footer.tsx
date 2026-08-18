@@ -59,13 +59,16 @@ export default function V2Footer({ d, ctaHref }: { d: V2Copy; ctaHref: string })
         className="w-full flex justify-center overflow-hidden select-none"
         style={{ height: "clamp(50px, 11.5vw, 165px)" }}
       >
+        {/* font-label = Roboto Mono, the display face this page uses for every
+            heading. Playfair here read as a different brand entirely. */}
         <span
-          className="font-playfair font-normal"
+          className="font-label"
           style={{
-            fontSize: "clamp(72px, 17vw, 240px)",
+            fontSize: "clamp(64px, 15.5vw, 220px)",
+            fontWeight: 700,
             lineHeight: 0.86,
-            letterSpacing: "-0.04em",
-            color: "rgba(240,236,230,0.055)",
+            letterSpacing: "-0.045em",
+            color: "rgba(240,236,230,0.07)",
             whiteSpace: "nowrap",
           }}
         >

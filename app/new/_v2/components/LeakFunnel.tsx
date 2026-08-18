@@ -2,45 +2,54 @@
 
 import type { V2Copy } from "../lib/copy";
 
-const COUNTS = [100, 68, 41, 18, 11];
-
 /**
- * Serve-tier visual — five stacked, shrinking bars forming a funnel.
- * Left-aligned so the loss shows on the right, each drop annotated in
- * red. Illustrative numbers — see the caption rendered by the parent row.
+ * Serve-tier visual, compact — a real tapering funnel (centred trapezoid
+ * bands) rather than four left-aligned bars, so the shape itself reads as
+ * "leaking" before any label is read.
  */
 export default function LeakFunnel({ d }: { d: V2Copy["fix"]["leakFunnel"] }) {
+  const steps = d.steps;
+  const max = steps[0]?.count || 100;
+
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="flex flex-col gap-3">
-        {d.steps.map((step, i) => (
-          <div key={step.label}>
-            <div className="flex items-baseline justify-between mb-1.5">
-              <span className="font-sora font-light text-fg/70" style={{ fontSize: "12.5px" }}>
+    <div className="w-full flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        {steps.map((step, i) => {
+          const pct = (step.count / max) * 100;
+          const isLast = i === steps.length - 1;
+          return (
+            <div key={step.label} className="flex items-center gap-3">
+              <span
+                className="font-sora font-light text-fg/55 shrink-0 text-right"
+                style={{ fontSize: "11px", width: "76px" }}
+              >
                 {step.label}
               </span>
-              <span className="font-label text-fg/55" style={{ fontSize: "12px" }}>{COUNTS[i]}</span>
+              <div className="flex-1 flex justify-center">
+                <span
+                  style={{
+                    display: "block",
+                    width: `${pct}%`,
+                    height: "17px",
+                    borderRadius: "3px",
+                    background: isLast ? "var(--accent)" : `rgba(240,236,230,${0.2 - i * 0.035})`,
+                    border: isLast ? "none" : "1px solid rgba(255,255,255,0.07)",
+                  }}
+                />
+              </div>
+              <span
+                className="font-label shrink-0 text-right"
+                style={{ fontSize: "11px", width: "26px", color: isLast ? "var(--accent)" : "rgba(240,236,230,0.5)" }}
+              >
+                {step.count}
+              </span>
             </div>
-            <div className="w-full rounded-full overflow-hidden" style={{ height: "9px", background: "rgba(255,255,255,0.05)" }}>
-              <div
-                className="h-full rounded-full"
-                style={{
-                  width: `${COUNTS[i]}%`,
-                  background: i === d.steps.length - 1 ? "var(--accent)" : "rgba(255,255,255,0.18)",
-                }}
-              />
-            </div>
-            {step.dropNote && (
-              <p className="mt-1.5 text-right font-sora font-light" style={{ fontSize: "11px", color: "rgba(248,113,113,0.65)" }}>
-                {step.dropNote}
-              </p>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <p className="font-sora font-light text-fg/62 leading-[1.6]" style={{ fontSize: "13px" }}>
-        {d.note}
+      <p className="font-sora font-light" style={{ fontSize: "11.5px", color: "rgba(248,113,113,0.7)" }}>
+        {d.lostLabel}
       </p>
     </div>
   );
