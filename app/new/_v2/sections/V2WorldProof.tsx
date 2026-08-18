@@ -48,11 +48,11 @@ export default function V2WorldProof({ d }: { d: V2Copy }) {
               style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
             >
               <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10">
-                <div className="shrink-0 md:w-44" style={{ color: "rgba(240,236,230,0.8)" }}>
+                <div className="shrink-0 md:w-44" style={{ color: "rgba(240,236,230,0.8)", opacity: 0.85 }}>
                   {(() => {
                     const Lockup = PROOF_LOCKUPS[item.name];
                     return Lockup ? (
-                      <Lockup style={{ height: "20px", width: "auto" }} />
+                      <Lockup height={22} />
                     ) : (
                       <h4 className="font-playfair font-normal text-fg" style={{ fontSize: "22px" }}>{item.name}</h4>
                     );

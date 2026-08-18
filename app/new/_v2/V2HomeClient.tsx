@@ -8,36 +8,34 @@
  * -> [ ElevatorField: cost of not looking -> how we start -> FAQ ] ->
  * final CTA -> footer. See docs/NEW-HOMEPAGE-V3-BRIEF.md.
  *
- * ── The ElevatorField block, and why it is shaped like this ──
- * ElevatorField renders a `position: sticky`, 100vh canvas that is pulled
- * out of flow with `margin-bottom: -100vh` (see .elevator-canvas in
- * globals.css). A sticky element only travels while its WRAPPER is taller
- * than the viewport: getCameraY() computes
- *     scrollable = wrapper.height - window.innerHeight
- * and falls back to a degenerate whole-viewport-pass formula when that is
- * <= 0. Wrapping a single 100vh section therefore pinned the camera and
- * produced the stutter (dots visible mid-section, then a jump, then half a
- * section with no field at all).
+ * ── The ElevatorField block ──
+ * EXACTLY ONE section gets the dot field: V2Start. V2FAQ and V2FinalCTA
+ * paint their own solid var(--bg) and must keep doing so, so nothing shows
+ * through behind them.
  *
- * The wrapper must stay well over 200vh on both breakpoints. All three
- * sections inside are transparent so the field runs continuously from the
- * photo band above straight through to the closing CTA — no solid section
- * chopping it into disconnected pieces.
+ * `clip` is the key prop. ElevatorField has two modes:
  *
- * cameraOffset / cameraSpan matter as much as the height. The camera
- * travels PLANES_Y = 40..1140 in world units, and near either end it sits
- * outside the floor planes, so the field is empty there. With the default
- * (offset 0, span 1) the top of this wrapper started in that void, which is
- * the blank stretch under the photo. Offset 0.3 / span 0.5 confines the
- * sweep to the middle of the shaft, so dots are visible for the entire
- * scroll while still drifting with it.
+ *   default  a `position: sticky` 100vh canvas pulled out of flow with
+ *            margin-bottom:-100vh. It only travels while the WRAPPER is
+ *            much taller than the viewport, so it needs several stacked
+ *            sections. Used by the live homepage.
+ *   clip     an `position: absolute; inset: 0` canvas that fills the
+ *            wrapper and is clipped to it. The field's vanishing point is
+ *            the canvas centre, so it lands on THIS SECTION's own centre,
+ *            and no dots leak into the neighbours.
  *
- * V2FinalCTA has to live INSIDE the wrapper. Outside it, the canvas had
- * already stopped updating by the time that section scrolled in, so the
- * dots behind it were frozen.
+ * clip is the correct mode for a single section and is what the /ai-map
+ * Problem section already uses. It also changes how progress is computed:
+ * with a wrapper shorter than the scrollable range, getCameraY falls back
+ * to progress across the section's pass through the viewport, which is
+ * exactly the wanted behaviour — dots are already drifting the moment the
+ * section's top edge appears, keep moving all the way through, and are
+ * gone with the section.
  *
- * The band above (V2HumanAi's photo) has no bottom scrim, so the shaft
- * opens directly off the edge of the photograph.
+ * cameraOffset/cameraSpan keep the sweep inside the floor planes
+ * (PLANES_Y spans 40..1140 in world units; the default 0/1 sweep runs
+ * -20..1200 and so starts and ends in empty space, which was the blank
+ * stretch). 0.3/0.5 confines it to roughly 346..956.
  */
 import { useNewLocale } from "../lib/locale";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -73,14 +71,14 @@ export default function V2HomeClient() {
         <VoiceProof d={d} />
         <V2HumanAi d={d} />
 
-        {/* Read the header comment before changing what sits in here.
-            cameraOffset/cameraSpan keep the camera inside the dense middle
-            of the shaft for the whole scroll — see the comment above. */}
-        <ElevatorField cameraOffset={0.3} cameraSpan={0.5}>
+        {/* Read the header comment before changing this. ONLY V2Start goes
+            inside, and `clip` is required — see above. */}
+        <ElevatorField clip cameraOffset={0.3} cameraSpan={0.5}>
           <V2Start d={d} ctaHref={ctaHref} />
-          <V2FAQ d={d} />
-          <V2FinalCTA d={d} ctaHref={ctaHref} />
         </ElevatorField>
+
+        <V2FAQ d={d} />
+        <V2FinalCTA d={d} ctaHref={ctaHref} />
       </main>
       <V2Footer d={d} ctaHref={ctaHref} />
       <FloatingWhatsApp />

@@ -138,22 +138,28 @@ export default function V2Problem({ d }: { d: V2Copy }) {
               >
                 {/* Optional photograph, under a heavy scrim so the numerals
                     and body copy keep their contrast. */}
+                {/* Photo at full strength, hidden behind a LEFT-TO-RIGHT
+                    scrim: near-solid over the numerals and body copy on the
+                    left, clearing toward the right so the image is actually
+                    visible there. A flat overlay across the whole tile just
+                    made the photo look like a printing fault. */}
                 {tile.image && (
                   <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={tile.image}
                       alt=""
                       aria-hidden
                       className="absolute inset-0 w-full h-full"
-                      style={{ objectFit: "cover", opacity: tile.accent ? 0.3 : 0.42 }}
+                      style={{ objectFit: "cover", objectPosition: "70% 50%" }}
                     />
                     <div
                       aria-hidden
                       className="absolute inset-0"
                       style={{
                         background: tile.accent
-                          ? "linear-gradient(160deg, rgba(212,255,43,0.86) 0%, rgba(212,255,43,0.62) 100%)"
-                          : "linear-gradient(160deg, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0.62) 55%, rgba(6,6,8,0.88) 100%)",
+                          ? "linear-gradient(90deg, var(--accent) 0%, var(--accent) 34%, rgba(212,255,43,0.94) 52%, rgba(212,255,43,0.66) 78%, rgba(212,255,43,0.42) 100%)"
+                          : "linear-gradient(90deg, rgba(6,6,8,0.98) 0%, rgba(6,6,8,0.96) 34%, rgba(6,6,8,0.86) 55%, rgba(6,6,8,0.6) 80%, rgba(6,6,8,0.4) 100%)",
                       }}
                     />
                   </>
@@ -178,12 +184,12 @@ export default function V2Problem({ d }: { d: V2Copy }) {
                     {tile.funders && (
                       <div
                         className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-5 pt-4"
-                        style={{ borderTop: "1px solid rgba(255,255,255,0.08)", color: "rgba(240,236,230,0.55)" }}
+                        style={{ borderTop: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,236,230,0.6)", opacity: 0.7 }}
                       >
                         {tile.funders.map((f) => {
                           const Lockup = FUNDER_LOCKUPS[f];
                           return Lockup ? (
-                            <Lockup key={f} style={{ height: "13px", width: "auto" }} />
+                            <Lockup key={f} height={15} />
                           ) : (
                             <span key={f} className="font-label" style={{ fontSize: "10px" }}>{f}</span>
                           );

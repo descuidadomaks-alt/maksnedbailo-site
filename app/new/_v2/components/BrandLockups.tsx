@@ -1,80 +1,64 @@
+"use client";
+
 /**
- * Monochrome brand lockups for the proof and funder rows.
+ * Real brand logo files, referenced nominatively to identify the companies
+ * in the proof and funder rows. Sources are the official SVGs on Wikimedia
+ * Commons, stored under /public/logos.
  *
- * Hand-set typographic wordmarks, NOT copies of the companies' official
- * logo files — the same approach already used in
- * app/new/components/BrandWordmarks.tsx. They render in currentColor so the
- * page can dim them to a uniform tone, which is what stops a row of
- * third-party marks reading as clip art (the previous coloured chips did).
- *
- * Each viewBox is sized to its own text so the marks optically match when
- * laid out at a shared height.
+ * They are rendered white via a CSS `brightness(0) invert(1)` filter and
+ * then dimmed by the caller's opacity, so a row of six different brand
+ * palettes reads as one uniform credit line instead of clip art. Hellman &
+ * Friedman has no Commons SVG, so it falls back to a text lockup — the
+ * `Lockup` component below handles both cases with one API.
  */
 
 interface LockupProps {
+  /** Rendered height in px. Width is automatic. */
+  height?: number;
   className?: string;
-  style?: React.CSSProperties;
 }
 
-function Wordmark({
-  text,
-  width,
-  weight = 700,
-  tracking = 0,
-  family = "Helvetica, Arial, sans-serif",
-  className,
-  style,
-}: LockupProps & { text: string; width: number; weight?: number; tracking?: number; family?: string }) {
+function ImageLockup({ src, alt, height = 18, className }: LockupProps & { src: string; alt: string }) {
   return (
-    <svg
-      aria-hidden
-      viewBox={`0 0 ${width} 28`}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
       className={className}
-      style={style}
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <text
-        x="0"
-        y="21"
-        fontFamily={family}
-        fontWeight={weight}
-        fontSize="24"
-        letterSpacing={tracking}
-        fill="currentColor"
-      >
-        {text}
-      </text>
-    </svg>
+      style={{
+        height: `${height}px`,
+        width: "auto",
+        // Flatten every brand palette to pure white; the parent controls
+        // the final tone with opacity.
+        filter: "brightness(0) invert(1)",
+      }}
+    />
   );
 }
 
-export function IkeaLockup(p: LockupProps) {
-  return <Wordmark {...p} text="IKEA" width={70} weight={800} tracking={1} />;
+function TextLockup({ text, height = 18, className }: LockupProps & { text: string }) {
+  return (
+    <span
+      className={`font-label ${className ?? ""}`}
+      style={{
+        fontSize: `${Math.round(height * 0.62)}px`,
+        letterSpacing: "0.4px",
+        whiteSpace: "nowrap",
+        color: "currentColor",
+      }}
+    >
+      {text}
+    </span>
+  );
 }
 
-export function OctopusLockup(p: LockupProps) {
-  return <Wordmark {...p} text="Octopus" width={104} weight={700} tracking={-0.4} />;
-}
-
-export function VodafoneLockup(p: LockupProps) {
-  return <Wordmark {...p} text="vodafone" width={124} weight={700} tracking={-0.6} />;
-}
-
-export function AnthropicLockup(p: LockupProps) {
-  return <Wordmark {...p} text="Anthropic" width={118} weight={500} tracking={-0.3} />;
-}
-
-export function BlackstoneLockup(p: LockupProps) {
-  return <Wordmark {...p} text="Blackstone" width={134} weight={600} tracking={-0.2} family="Georgia, serif" />;
-}
-
-export function GoldmanLockup(p: LockupProps) {
-  return <Wordmark {...p} text="Goldman Sachs" width={176} weight={500} tracking={-0.2} family="Georgia, serif" />;
-}
-
-export function HellmanLockup(p: LockupProps) {
-  return <Wordmark {...p} text="Hellman &amp; Friedman" width={222} weight={500} tracking={-0.2} family="Georgia, serif" />;
-}
+export const IkeaLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/ikea.svg" alt="IKEA" />;
+export const OctopusLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/octopus.svg" alt="Octopus Energy" />;
+export const VodafoneLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/vodafone.svg" alt="Vodafone" />;
+export const AnthropicLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/anthropic.svg" alt="Anthropic" />;
+export const BlackstoneLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/blackstone.svg" alt="Blackstone" />;
+export const GoldmanLockup = (p: LockupProps) => <ImageLockup {...p} src="/logos/goldman.svg" alt="Goldman Sachs" />;
+export const HellmanLockup = (p: LockupProps) => <TextLockup {...p} text="Hellman &amp; Friedman" />;
 
 /** Proof-row marks, keyed by the company name used in copy.ts. */
 export const PROOF_LOCKUPS: Record<string, (p: LockupProps) => JSX.Element> = {

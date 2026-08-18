@@ -31,10 +31,9 @@ export default function V2FAQ({ d }: { d: V2Copy }) {
     });
 
   return (
-    // Transparent — sits inside the shared ElevatorField so the dot shaft
-    // runs continuously behind it. A solid fill here cut the field into two
-    // disconnected halves.
-    <section className="section-divider relative overflow-hidden py-16 md:py-24">
+    // Solid var(--bg) on purpose. This section sits AFTER the clipped
+    // ElevatorField and must show nothing behind it.
+    <section className="section-divider relative overflow-hidden py-16 md:py-24" style={{ background: "var(--bg)" }}>
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
