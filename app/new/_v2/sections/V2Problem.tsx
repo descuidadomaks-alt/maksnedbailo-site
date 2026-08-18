@@ -189,7 +189,7 @@ export default function V2Problem({ d }: { d: V2Copy }) {
                         {tile.funders.map((f) => {
                           const Lockup = FUNDER_LOCKUPS[f];
                           return Lockup ? (
-                            <Lockup key={f} height={15} />
+                            <Lockup key={f} />
                           ) : (
                             <span key={f} className="font-label" style={{ fontSize: "10px" }}>{f}</span>
                           );

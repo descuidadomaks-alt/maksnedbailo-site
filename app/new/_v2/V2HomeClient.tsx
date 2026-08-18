@@ -8,34 +8,33 @@
  * -> [ ElevatorField: cost of not looking -> how we start -> FAQ ] ->
  * final CTA -> footer. See docs/NEW-HOMEPAGE-V3-BRIEF.md.
  *
- * ── The ElevatorField block ──
- * EXACTLY ONE section gets the dot field: V2Start. V2FAQ and V2FinalCTA
- * paint their own solid var(--bg) and must keep doing so, so nothing shows
- * through behind them.
+ * ── The ElevatorField block — copied from how the live "/" homepage does it ──
  *
- * `clip` is the key prop. ElevatorField has two modes:
+ * Measured on "/" at 1280x900: sticky canvas, wrapper 2840px (3.16
+ * viewports), 1940px of scroll travel, and its three children run
+ * SOLID (793px) -> TRANSPARENT (900px) -> SOLID (1147px). Dots are only
+ * ever visible through the transparent middle child; the wrapper is tall
+ * purely so the sticky canvas has room to move smoothly. That works out
+ * to ~0.63 camera units per pixel of scroll, which is the number that
+ * makes the motion feel continuous.
  *
- *   default  a `position: sticky` 100vh canvas pulled out of flow with
- *            margin-bottom:-100vh. It only travels while the WRAPPER is
- *            much taller than the viewport, so it needs several stacked
- *            sections. Used by the live homepage.
- *   clip     an `position: absolute; inset: 0` canvas that fills the
- *            wrapper and is clipped to it. The field's vanishing point is
- *            the canvas centre, so it lands on THIS SECTION's own centre,
- *            and no dots leak into the neighbours.
+ * Two earlier attempts got this wrong:
+ *  - `clip` mode (absolute canvas sized to one section) gave a 259px
+ *    scroll range for the full camera sweep, i.e. ~4.7 units/px. Progress
+ *    clamps at 0 and 1 outside that range, which is precisely the
+ *    "static, then a violent rush, then static again" behaviour.
+ *  - Making the FAQ transparent turned the neighbours into windows too.
  *
- * clip is the correct mode for a single section and is what the /ai-map
- * Problem section already uses. It also changes how progress is computed:
- * with a wrapper shorter than the scrollable range, getCameraY falls back
- * to progress across the section's pass through the viewport, which is
- * exactly the wanted behaviour — dots are already drifting the moment the
- * section's top edge appears, keep moving all the way through, and are
- * gone with the section.
+ * So: the wrapper spans all three sections for TRAVEL, but only V2Start is
+ * transparent, so only V2Start shows the field. V2FAQ and V2FinalCTA paint
+ * solid var(--bg) and must keep doing so. Because the sticky canvas is
+ * 100vh and V2Start is 100vh, the field lands exactly on that section.
  *
- * cameraOffset/cameraSpan keep the sweep inside the floor planes
- * (PLANES_Y spans 40..1140 in world units; the default 0/1 sweep runs
- * -20..1200 and so starts and ends in empty space, which was the blank
- * stretch). 0.3/0.5 confines it to roughly 346..956.
+ * cameraSpan 0.86 over ~1806px of travel gives ~0.58 units/px, within a
+ * tenth of the live page's 0.629; cameraOffset 0.07 keeps the sweep
+ * (65..1115) inside the floor planes, which span 40..1140. If the section
+ * heights change materially, re-measure travel and retune both so the rate
+ * stays near 0.6 and the sweep stays inside 40..1140.
  */
 import { useNewLocale } from "../lib/locale";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -71,14 +70,15 @@ export default function V2HomeClient() {
         <VoiceProof d={d} />
         <V2HumanAi d={d} />
 
-        {/* Read the header comment before changing this. ONLY V2Start goes
-            inside, and `clip` is required — see above. */}
-        <ElevatorField clip cameraOffset={0.3} cameraSpan={0.5}>
+        {/* Read the header comment before changing this. All three sections
+            are inside for scroll TRAVEL, but only V2Start is transparent, so
+            only V2Start shows the dot field. Do not add `clip` and do not
+            make V2FAQ or V2FinalCTA transparent. */}
+        <ElevatorField cameraOffset={0.07} cameraSpan={0.86}>
           <V2Start d={d} ctaHref={ctaHref} />
+          <V2FAQ d={d} />
+          <V2FinalCTA d={d} ctaHref={ctaHref} />
         </ElevatorField>
-
-        <V2FAQ d={d} />
-        <V2FinalCTA d={d} ctaHref={ctaHref} />
       </main>
       <V2Footer d={d} ctaHref={ctaHref} />
       <FloatingWhatsApp />

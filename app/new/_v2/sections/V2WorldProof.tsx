@@ -52,7 +52,7 @@ export default function V2WorldProof({ d }: { d: V2Copy }) {
                   {(() => {
                     const Lockup = PROOF_LOCKUPS[item.name];
                     return Lockup ? (
-                      <Lockup height={22} />
+                      <Lockup />
                     ) : (
                       <h4 className="font-playfair font-normal text-fg" style={{ fontSize: "22px" }}>{item.name}</h4>
                     );
