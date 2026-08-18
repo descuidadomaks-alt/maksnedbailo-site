@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import type { V2Copy } from "../lib/copy";
+import FlowDiagram from "../components/FlowDiagram";
 
 /**
- * Section 1 — HERO. Eyebrow -> headline -> sub -> dual CTA. No photo band,
- * no scroll-pan — kept deliberately light so the page feels fast, per the
- * "much shorter homepage" brief. Ambient radial glow only (no gradients
- * everywhere, no glow-heavy AI aesthetic).
+ * Section 1 — HERO. Eyebrow -> headline -> sub -> dual CTA -> flow diagram.
+ * The diagram answers "what do you actually do" in three seconds for a
+ * cold, non-technical visitor: same inputs, two outcomes (today vs with
+ * the system). Auto height on mobile so the CTA stays above the fold —
+ * only min-height on desktop, where there's room for both.
  */
 export default function V2Hero({
   d,
@@ -17,17 +19,17 @@ export default function V2Hero({
   primaryCtaHref: string;
 }) {
   return (
-    <section className="relative overflow-hidden" style={{ minHeight: "86svh", display: "flex", alignItems: "center" }}>
+    <section className="relative overflow-hidden" style={{ display: "flex", alignItems: "center" }}>
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 900px 560px at 50% 30%, rgba(212,255,43,0.05) 0%, transparent 68%)" }}
+        style={{ background: "radial-gradient(ellipse 900px 560px at 50% 20%, rgba(212,255,43,0.05) 0%, transparent 68%)" }}
       />
 
-      <div className="relative w-full max-w-4xl mx-auto px-6 py-10 md:py-16 text-center">
+      <div className="relative w-full max-w-4xl mx-auto px-6 pt-10 pb-14 md:pt-16 md:pb-20 text-center">
         <div
           data-reveal
-          className="inline-flex items-center gap-2.5 mb-8"
+          className="inline-flex items-center gap-2.5 mb-7 md:mb-8"
           style={{
             fontFamily: "var(--font-roboto-mono)",
             fontSize: "9.5px",
@@ -47,7 +49,7 @@ export default function V2Hero({
         <h1
           data-reveal="d1"
           className="font-playfair font-normal text-fg mx-auto"
-          style={{ fontSize: "clamp(34px, 5.4vw, 64px)", lineHeight: 1.08, letterSpacing: "-0.026em", maxWidth: "17ch", marginBottom: "clamp(20px, 2.6vw, 30px)" }}
+          style={{ fontSize: "clamp(30px, 5vw, 58px)", lineHeight: 1.1, letterSpacing: "-0.026em", maxWidth: "17ch", marginBottom: "clamp(16px, 2.2vw, 24px)" }}
         >
           {d.hero.headline}
         </h1>
@@ -55,12 +57,12 @@ export default function V2Hero({
         <p
           data-reveal="d2"
           className="font-sora font-light text-fg/60 mx-auto"
-          style={{ fontSize: "clamp(15px, 1.7vw, 19px)", lineHeight: 1.65, maxWidth: "54ch", marginBottom: "clamp(32px, 3.6vw, 44px)" }}
+          style={{ fontSize: "clamp(14px, 1.6vw, 18px)", lineHeight: 1.6, maxWidth: "54ch", marginBottom: "clamp(26px, 3vw, 36px)" }}
         >
           {d.hero.sub}
         </p>
 
-        <div data-reveal="d3" className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div data-reveal="d3" className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 md:mb-16">
           <div>
             <Link
               href={primaryCtaHref}
@@ -84,6 +86,10 @@ export default function V2Hero({
             {d.hero.secondaryCta}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
           </a>
+        </div>
+
+        <div data-reveal="d3">
+          <FlowDiagram d={d.hero.diagram} />
         </div>
       </div>
     </section>

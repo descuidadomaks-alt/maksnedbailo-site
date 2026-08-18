@@ -23,9 +23,9 @@ import type { ReactNode } from "react";
 import { NewLocaleProvider } from "./lib/locale";
 import V2Header from "./_v2/components/V2Header";
 
-const TITLE = "Find the Work Your Business Shouldn't Be Doing Manually | Care Less";
+const TITLE = "Find Out What Your Business Is Losing | Care Less";
 const DESCRIPTION =
-  "We find the expensive gaps in sales and operations, then build AI systems to remove them. Free, permanent AI Map — 90 minutes, ranked by ROI, no pitch.";
+  "We find where your business is losing time and money, then build the system that stops it. The diagnosis is free. You pay for the build once it works.";
 
 export const metadata: Metadata = {
   title: TITLE,

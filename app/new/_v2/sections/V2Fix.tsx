@@ -1,6 +1,9 @@
 "use client";
 
 import type { V2Copy } from "../lib/copy";
+import CapacityGap from "../components/CapacityGap";
+import LeakFunnel from "../components/LeakFunnel";
+import WeekGrid from "../components/WeekGrid";
 
 const ICONS = [
   // Sell — arrow into target
@@ -29,13 +32,22 @@ const ICONS = [
 
 /**
  * Section 3 — WHAT WE FIX. Three business outcomes (Sell/Serve/Operate),
- * not a generic services grid. Deliberately just three concise cards.
+ * each a full row with its own data visual instead of a generic services
+ * grid: capacity gap, service funnel leakage, and the admin-vs-earning
+ * week. Rows alternate sides on desktop, stack (text, then visual) on
+ * mobile.
  */
 export default function V2Fix({ d }: { d: V2Copy }) {
+  const rows = [
+    { copy: d.fix.rows[0], visual: <CapacityGap d={d.fix.capacityGap} /> },
+    { copy: d.fix.rows[1], visual: <LeakFunnel d={d.fix.leakFunnel} /> },
+    { copy: d.fix.rows[2], visual: <WeekGrid d={d.fix.weekGrid} /> },
+  ];
+
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-24">
-      <div className="relative max-w-6xl mx-auto px-6">
-        <div className="max-w-2xl mb-12 text-center mx-auto">
+      <div className="relative max-w-5xl mx-auto px-6">
+        <div className="max-w-2xl mb-16 text-center mx-auto">
           <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
             {d.fix.label}
           </p>
@@ -47,26 +59,42 @@ export default function V2Fix({ d }: { d: V2Copy }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {d.fix.cards.map((card, i) => (
+        <div className="flex flex-col gap-14 md:gap-20">
+          {rows.map((row, i) => (
             <div
-              key={card.title}
-              data-reveal={`d${i}`}
-              className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-7 flex flex-col gap-4 hover:border-white/[0.1] hover:bg-white/[0.022] transition-all duration-300"
+              key={row.copy.title}
+              data-reveal
+              className={`flex flex-col gap-8 md:gap-14 items-center ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"}`}
             >
-              <span
-                className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
-                style={{ border: "1px solid rgba(212,255,43,0.22)", background: "rgba(212,255,43,0.05)" }}
-                aria-hidden
-              >
-                {ICONS[i]}
-              </span>
-              <h3 className="font-playfair font-normal text-fg" style={{ fontSize: "clamp(18px, 1.8vw, 22px)", lineHeight: 1.2 }}>
-                {card.title}
-              </h3>
-              <p className="font-sora font-light text-fg/62 leading-[1.65]" style={{ fontSize: "14px" }}>
-                {card.body}
-              </p>
+              <div className="w-full md:w-[38%] shrink-0">
+                <span
+                  className="inline-flex shrink-0 w-10 h-10 rounded-full items-center justify-center mb-5"
+                  style={{ border: "1px solid rgba(212,255,43,0.22)", background: "rgba(212,255,43,0.05)" }}
+                  aria-hidden
+                >
+                  {ICONS[i]}
+                </span>
+                <h3 className="font-playfair font-normal text-fg mb-3" style={{ fontSize: "clamp(20px, 2vw, 26px)", lineHeight: 1.2 }}>
+                  {row.copy.title}
+                </h3>
+                <p className="font-sora font-light text-fg/62 leading-[1.65]" style={{ fontSize: "14.5px" }}>
+                  {row.copy.body}
+                </p>
+              </div>
+
+              <div className="w-full md:flex-1">
+                <div
+                  className="rounded-2xl border border-white/[0.05] bg-white/[0.012] p-6 md:p-8"
+                >
+                  {row.visual}
+                </div>
+                <p
+                  className="font-label text-fg/40 mt-3"
+                  style={{ fontSize: "10px", letterSpacing: "0.5px" }}
+                >
+                  {d.fix.illustrativeCaption}
+                </p>
+              </div>
             </div>
           ))}
         </div>

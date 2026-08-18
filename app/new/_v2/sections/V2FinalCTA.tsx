@@ -14,20 +14,30 @@ function WhatsAppIcon() {
 }
 
 /**
- * Section 7 — FINAL CTA. Human, not a procurement funnel. Single primary
- * CTA + a WhatsApp escape hatch for people who'd rather talk first.
+ * Section 9 — FINAL CTA. Deliberately quiet. The closing line under the
+ * button is the whole point of the section: it names the cost of doing
+ * nothing without ever telling the reader what to conclude from it.
  */
 export default function V2FinalCTA({ d, ctaHref }: { d: V2Copy; ctaHref: string }) {
   return (
     <section className="section-divider relative overflow-hidden py-16 md:py-28">
       <div aria-hidden className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none" style={{ width: "600px", height: "400px", background: "radial-gradient(ellipse, rgba(212,255,43,0.055) 0%, transparent 68%)" }} />
       <div className="relative max-w-lg mx-auto px-6 text-center">
-        <h2 data-reveal className="font-playfair font-normal text-fg mb-4" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>
+        <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>
           {d.finalCta.headline}
         </h2>
-        <p data-reveal className="font-sora font-light text-fg/55 mb-12" style={{ fontSize: "clamp(15px, 1.6vw, 18px)", lineHeight: 1.55 }}>
-          {d.finalCta.sub}
-        </p>
+        <div className="flex flex-col gap-2.5 mb-12">
+          {d.finalCta.sub.map((p, i) => (
+            <p
+              key={i}
+              data-reveal={`d${i}`}
+              className="font-sora font-light leading-[1.55]"
+              style={{ fontSize: "clamp(14px, 1.5vw, 17px)", color: i === 0 ? "rgba(240,236,230,0.62)" : "rgba(240,236,230,0.45)" }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
 
         <div data-reveal="d1" className="flex flex-col items-center gap-4">
           <Link
@@ -39,18 +49,25 @@ export default function V2FinalCTA({ d, ctaHref }: { d: V2Copy; ctaHref: string 
             {d.finalCta.primaryCta}
             <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
           </Link>
+          <p className="font-sora font-light text-fg/55" style={{ fontSize: "12px" }}>
+            {d.finalCta.microcopy}
+          </p>
 
           <a
             href={WA_BOTTLENECK_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80"
+            className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80 mt-2"
             style={{ fontSize: "14px", color: "rgba(74,222,128,0.8)", letterSpacing: "-0.01em" }}
           >
             <WhatsAppIcon />
             {d.finalCta.whatsapp}
           </a>
         </div>
+
+        <p data-reveal className="font-sora font-light text-fg/40 mt-10" style={{ fontSize: "13px" }}>
+          {d.finalCta.closingLine}
+        </p>
       </div>
     </section>
   );

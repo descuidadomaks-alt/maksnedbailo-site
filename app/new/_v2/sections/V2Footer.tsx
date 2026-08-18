@@ -7,15 +7,16 @@ import { WA_LINK } from "@/lib/content";
 const YEAR = new Date().getFullYear();
 
 /**
- * Slim V2 footer — logo, tagline, nav, WhatsApp, copyright. Deliberately
- * simpler than the shared NewFooter (city links, full NewPageDict) since
- * V2's information architecture doesn't include the city SEO pages or the
- * Bottleneck Score.
+ * Slim V2 footer — logo, tagline, nav, WhatsApp, copyright, plus a huge
+ * clipped "Care Less" wordmark bleeding off the bottom edge (reference:
+ * the client's attached footer example). Decorative only, aria-hidden —
+ * the real brand name already lives in the logo and the copyright line.
+ * No /score link — the Bottleneck Score has been retired from this page.
  */
 export default function V2Footer({ d, ctaHref }: { d: V2Copy; ctaHref: string }) {
   return (
-    <footer className="section-divider pt-20 pb-32 md:pt-24 md:pb-16" style={{ background: "var(--bg)" }}>
-      <div className="max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center">
+    <footer className="section-divider relative overflow-hidden pt-20 md:pt-24" style={{ background: "var(--bg)" }}>
+      <div className="relative z-10 max-w-6xl mx-auto px-6 flex flex-col items-center gap-6 text-center pb-14 md:pb-16">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo.svg" alt="Care Less" width={28} height={28} className="w-auto shrink-0 opacity-80" style={{ height: "28px" }} />
 
@@ -50,6 +51,26 @@ export default function V2Footer({ d, ctaHref }: { d: V2Copy; ctaHref: string })
         <p className="font-sora text-[11px] text-fg/55">
           © {YEAR} Care Less AI Automation · Santander, Spain
         </p>
+      </div>
+
+      {/* Giant clipped wordmark — bleeds off the bottom edge of the page. */}
+      <div
+        aria-hidden="true"
+        className="w-full flex justify-center overflow-hidden select-none"
+        style={{ height: "clamp(50px, 11.5vw, 165px)" }}
+      >
+        <span
+          className="font-playfair font-normal"
+          style={{
+            fontSize: "clamp(72px, 17vw, 240px)",
+            lineHeight: 0.86,
+            letterSpacing: "-0.04em",
+            color: "rgba(240,236,230,0.055)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {d.footer.wordmark}
+        </span>
       </div>
     </footer>
   );
