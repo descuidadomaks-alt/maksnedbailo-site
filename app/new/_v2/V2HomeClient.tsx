@@ -16,19 +16,21 @@
  *     scrollable = wrapper.height - window.innerHeight
  * and falls back to a degenerate whole-viewport-pass formula when that is
  * <= 0. Wrapping a single 100vh section therefore pinned the camera and
- * produced the reported stutter (dots visible mid-section, then a jump,
- * then half a section with no field at all).
+ * produced the stutter (dots visible mid-section, then a jump, then half a
+ * section with no field at all).
  *
- * So the wrapper must span roughly three screens, exactly like the live
- * homepage's <ElevatorField><Belief /><BottleneckMap /></ElevatorField>:
+ * The wrapper must stay well over 200vh on both breakpoints:
  *
- *   V2Bridge  solid var(--bg)  -> occludes the field, gives travel above
- *   V2Start   TRANSPARENT      -> the one window the dots show through
- *   V2FAQ     solid var(--bg)  -> occludes the field, gives travel below
+ *   V2Start     TRANSPARENT     -> dots drift behind the offer panel
+ *   V2FAQ       solid var(--bg) -> occludes the field, adds travel
+ *   V2FinalCTA  TRANSPARENT     -> dots still moving under the closing ask
  *
- * If you add or remove a section here, keep that solid / transparent /
- * solid sandwich and keep the wrapper well over 200vh on both breakpoints,
- * or the scroll-linked camera will break again.
+ * V2FinalCTA has to live INSIDE the wrapper. Outside it, the canvas had
+ * already stopped updating by the time that section scrolled in, so the
+ * dots behind it were frozen.
+ *
+ * The band above (V2HumanAi's photo) has no bottom scrim, so the shaft
+ * opens directly off the edge of the photograph.
  */
 import { useNewLocale } from "../lib/locale";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -43,7 +45,6 @@ import V2Cases from "./sections/V2Cases";
 import V2WorldProof from "./sections/V2WorldProof";
 import VoiceProof from "./sections/VoiceProof";
 import V2HumanAi from "./sections/V2HumanAi";
-import V2Bridge from "./sections/V2Bridge";
 import V2Start from "./sections/V2Start";
 import V2FAQ from "./sections/V2FAQ";
 import V2FinalCTA from "./sections/V2FinalCTA";
@@ -67,12 +68,10 @@ export default function V2HomeClient() {
 
         {/* Read the header comment before changing what sits in here. */}
         <ElevatorField>
-          <V2Bridge d={d} />
           <V2Start d={d} ctaHref={ctaHref} />
           <V2FAQ d={d} />
+          <V2FinalCTA d={d} ctaHref={ctaHref} />
         </ElevatorField>
-
-        <V2FinalCTA d={d} ctaHref={ctaHref} />
       </main>
       <V2Footer d={d} ctaHref={ctaHref} />
       <FloatingWhatsApp />

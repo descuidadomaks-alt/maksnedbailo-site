@@ -53,27 +53,23 @@ export default function V2Footer({ d, ctaHref }: { d: V2Copy; ctaHref: string })
         </p>
       </div>
 
-      {/* Giant clipped wordmark — bleeds off the bottom edge of the page. */}
+      {/* Giant clipped wordmark — the real brand lockup (public/care_less.svg,
+          1100x178, white paths), bled off the bottom edge of the page and
+          dimmed to a watermark. Clipping is done by the wrapper's fixed
+          height + overflow-hidden, so roughly the bottom fifth of the
+          letterforms is cut by the page edge. */}
       <div
         aria-hidden="true"
-        className="w-full flex justify-center overflow-hidden select-none"
-        style={{ height: "clamp(50px, 11.5vw, 165px)" }}
+        className="w-full overflow-hidden select-none px-6"
+        style={{ height: "clamp(46px, 10vw, 132px)" }}
       >
-        {/* font-label = Roboto Mono, the display face this page uses for every
-            heading. Playfair here read as a different brand entirely. */}
-        <span
-          className="font-label"
-          style={{
-            fontSize: "clamp(64px, 15.5vw, 220px)",
-            fontWeight: 700,
-            lineHeight: 0.86,
-            letterSpacing: "-0.045em",
-            color: "rgba(240,236,230,0.07)",
-            whiteSpace: "nowrap",
-          }}
-        >
-          {d.footer.wordmark}
-        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/care_less.svg"
+          alt=""
+          className="w-full block"
+          style={{ opacity: 0.08, maxWidth: "1200px", margin: "0 auto" }}
+        />
       </div>
     </footer>
   );

@@ -123,30 +123,86 @@ export default function V2Problem({ d }: { d: V2Copy }) {
               <div
                 key={tile.value}
                 data-reveal={`d${i}`}
-                className="rounded-2xl p-7 md:p-9 flex flex-col justify-between"
+                className="relative rounded-2xl overflow-hidden flex flex-col justify-between"
                 style={{
-                  minHeight: "230px",
-                  border: tile.accent ? "1px solid rgba(212,255,43,0.5)" : "1px solid rgba(255,255,255,0.06)",
-                  background: tile.accent ? "var(--accent)" : "rgba(255,255,255,0.014)",
+                  minHeight: "270px",
+                  border: tile.accent ? "1px solid rgba(212,255,43,0.5)" : "1px solid rgba(255,255,255,0.07)",
+                  // Accent tile: flat brand green. Dark tile: a soft mesh so
+                  // it reads as a designed surface rather than an empty box
+                  // even before a photograph is dropped in.
+                  background: tile.accent
+                    ? "var(--accent)"
+                    : "radial-gradient(ellipse 90% 120% at 12% 0%, rgba(34,158,217,0.11) 0%, transparent 62%), radial-gradient(ellipse 80% 100% at 100% 100%, rgba(212,255,43,0.07) 0%, transparent 60%), rgba(255,255,255,0.016)",
                 }}
               >
-                <StatNumber value={tile.value} accent={tile.accent} />
-                <div className="mt-5">
-                  <p
-                    className="font-sora font-light leading-[1.55]"
-                    style={{
-                      fontSize: tile.accent ? "17px" : "14px",
-                      color: tile.accent ? "rgba(6,6,8,0.85)" : "rgba(240,236,230,0.66)",
-                    }}
-                  >
-                    {tile.body}
-                  </p>
-                  <p
-                    className="font-label mt-3"
-                    style={{ fontSize: "10px", letterSpacing: "1px", color: tile.accent ? "rgba(6,6,8,0.5)" : "rgba(240,236,230,0.32)" }}
-                  >
-                    {tile.source}
-                  </p>
+                {/* Optional photograph, under a heavy scrim so the numerals
+                    and body copy keep their contrast. */}
+                {tile.image && (
+                  <>
+                    <img
+                      src={tile.image}
+                      alt=""
+                      aria-hidden
+                      className="absolute inset-0 w-full h-full"
+                      style={{ objectFit: "cover", opacity: tile.accent ? 0.3 : 0.42 }}
+                    />
+                    <div
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background: tile.accent
+                          ? "linear-gradient(160deg, rgba(212,255,43,0.86) 0%, rgba(212,255,43,0.62) 100%)"
+                          : "linear-gradient(160deg, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0.62) 55%, rgba(6,6,8,0.88) 100%)",
+                      }}
+                    />
+                  </>
+                )}
+
+                <div className="relative p-7 md:p-9 flex flex-col justify-between h-full">
+                  <StatNumber value={tile.value} accent={tile.accent} />
+
+                  <div className="mt-5">
+                    <p
+                      className="font-sora font-light leading-[1.55]"
+                      style={{
+                        fontSize: tile.accent ? "17px" : "14px",
+                        color: tile.accent ? "rgba(6,6,8,0.85)" : "rgba(240,236,230,0.68)",
+                      }}
+                    >
+                      {tile.body}
+                    </p>
+
+                    {/* Funder wordmarks, set in the page's mono face rather
+                        than as third-party logo files. */}
+                    {tile.funders && (
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-4">
+                        {tile.funders.map((f) => (
+                          <span
+                            key={f}
+                            className="font-label"
+                            style={{
+                              fontSize: "9.5px",
+                              letterSpacing: "0.8px",
+                              textTransform: "uppercase",
+                              color: "rgba(240,236,230,0.6)",
+                              border: "1px solid rgba(255,255,255,0.1)",
+                              borderRadius: "999px",
+                              padding: "4px 10px",
+                            }}
+                          >
+                            {f}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <p
+                      className="font-label mt-3"
+                      style={{ fontSize: "10px", letterSpacing: "1px", color: tile.accent ? "rgba(6,6,8,0.5)" : "rgba(240,236,230,0.32)" }}
+                    >
+                      {tile.source}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}

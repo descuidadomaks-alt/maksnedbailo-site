@@ -33,7 +33,21 @@ export interface V2Copy {
     headline: string;
     items: { title: string; body: string }[];
     factGridLabel: string;
-    factGrid: { value: string; body: string; source: string; accent?: boolean }[];
+    /**
+     * `image` is an optional photo behind the tile, rendered under a heavy
+     * gradient scrim (see V2Problem). Drop a file in /public and set the
+     * path here to switch a tile from the gradient-only treatment to a
+     * photographic one. Leave undefined and the tile still looks finished.
+     * `funders` renders a small mono wordmark row along the tile's base.
+     */
+    factGrid: {
+      value: string;
+      body: string;
+      source: string;
+      accent?: boolean;
+      image?: string;
+      funders?: string[];
+    }[];
   };
 
   fix: {
@@ -57,7 +71,8 @@ export interface V2Copy {
 
   worldProof: {
     label: string;
-    items: { name: string; line: string; source: string }[];
+    headline: string;
+    items: { name: string; stats: { value: string; label: string }[]; line: string; source: string }[];
   };
 
   voice: {
@@ -73,14 +88,6 @@ export interface V2Copy {
     body: string[];
     quote: string;
     quoteAttr: string;
-  };
-
-  bridge: {
-    label: string;
-    headline: string;
-    body: string[];
-    statValue: string;
-    statLine: string;
   };
 
   start: {
@@ -168,8 +175,9 @@ const en: V2Copy = {
       },
       {
         value: "$1.5B",
-        body: "Anthropic, Blackstone and Goldman Sachs just funded one firm to put AI inside mid-size companies. Not tech startups. Companies like yours.",
+        body: "went into one new firm that installs AI inside billion-dollar companies. We do the same job, at the size where it is still your own money.",
         source: "May 2026.",
+        funders: ["Anthropic", "Blackstone", "Goldman Sachs", "Hellman & Friedman"],
       },
     ],
   },
@@ -178,7 +186,7 @@ const en: V2Copy = {
     label: "What We Fix",
     headline: "We sell outcomes, not technology.",
     sub: "Almost everything we build lands in one of three places.",
-    basisCaption: "Numbers below show an average week in a 10 to 30 person company.",
+    basisCaption: "Numbers above show an average week in a 10 to 30 person company.",
     rows: [
       {
         title: "Sell",
@@ -245,21 +253,36 @@ const en: V2Copy = {
 
   worldProof: {
     label: "The Same Pattern, At Scale",
+    headline: "They handed the repetitive half to software. Their customers got happier, not angrier.",
     items: [
       {
-        name: "Klarna",
-        line: "Their AI assistant took two-thirds of all customer chats in its first month. Resolution went from 11 minutes to under 2.",
-        source: "Klarna, 2024.",
-      },
-      {
         name: "IKEA",
-        line: "Automated the routine questions, then retrained call-centre staff into advisory roles that pay better.",
-        source: "Industry, in production.",
+        stats: [
+          { value: "74%", label: "of queries handled" },
+          { value: "60% → 89%", label: "customer satisfaction" },
+          { value: "8,500", label: "staff retrained, none cut" },
+        ],
+        line: "Their bot took the opening hours, order updates and returns. The call centre staff became interior design advisors, and that remote sales channel now turns over 1.25 billion euros.",
+        source: "Fortune, 2026.",
       },
       {
         name: "Octopus Energy",
-        line: "AI drafts replies in the company's own voice. A person reviews and sends. Speed of a machine, judgment of a human.",
-        source: "Industry, in production.",
+        stats: [
+          { value: "34%", label: "of queries answered" },
+          { value: "80% vs 65%", label: "satisfaction, AI vs human" },
+          { value: "250", label: "people's worth of work" },
+        ],
+        line: "AI drafts the reply in the company's own voice. A person reviews it and sends it. Customers rated those answers higher than the ones written by hand.",
+        source: "Greg Jackson, CEO, in The Times.",
+      },
+      {
+        name: "Vodafone",
+        stats: [
+          { value: "15% → 60%", label: "solved on first contact" },
+          { value: "+14", label: "points of net promoter score" },
+        ],
+        line: "Replacing the old chatbot with a proper one meant four times as many people got an answer straight away instead of joining a queue.",
+        source: "Vodafone, on SuperTOBi.",
       },
     ],
   },
@@ -276,22 +299,10 @@ const en: V2Copy = {
     headline: "AI should remove work, not humanity.",
     body: [
       "Nobody started a business so their people could retype addresses into a spreadsheet.",
-      "Right now someone on your team is doing work they are bad at, that they hate, that goes wrong when they are tired. And the work only a human can do, the call that needs judgment, the customer about to leave, waits until Friday. Or never.",
-      "We take the repetitive half. Most of what we build needs no training from anyone, because we run it.",
+      "We take the repetitive half. The call that needs judgment, the customer about to leave, the work that actually grows this quarter, those stay with your people. And most of what we build needs no training at all, because we run it.",
     ],
     quote: "Most people will lose their job to somebody who uses AI.",
     quoteAttr: "Jensen Huang, Nvidia CEO, April 2026",
-  },
-
-  bridge: {
-    label: "The Cost Of Not Looking",
-    headline: "You can feel it leaking. You just cannot point at where.",
-    body: [
-      "It shows up as a week that fills itself, a month that costs more than it should, and the feeling of being flat out without moving forward.",
-      "The leak never announces itself. It quietly takes the same amount every month, and it has been doing that for a while.",
-    ],
-    statValue: "83%",
-    statLine: "of your customers go with whoever answered first. Every week you wait, that keeps happening.",
   },
 
   start: {
@@ -419,8 +430,9 @@ const es: V2Copy = {
       },
       {
         value: "$1.5B",
-        body: "Anthropic, Blackstone y Goldman Sachs acaban de financiar una firma para meter IA dentro de empresas medianas. No startups tecnológicas. Empresas como la tuya.",
+        body: "fueron a una nueva firma que instala IA dentro de empresas de mil millones. Nosotros hacemos el mismo trabajo, al tamaño donde el dinero todavía es tuyo.",
         source: "Mayo de 2026.",
+        funders: ["Anthropic", "Blackstone", "Goldman Sachs", "Hellman & Friedman"],
       },
     ],
   },
@@ -429,7 +441,7 @@ const es: V2Copy = {
     label: "Lo Que Arreglamos",
     headline: "Vendemos resultados, no tecnología.",
     sub: "Casi todo lo que construimos cae en uno de estos tres lugares.",
-    basisCaption: "Los números de abajo son una semana media en una empresa de 10 a 30 personas.",
+    basisCaption: "Los números de arriba son una semana media en una empresa de 10 a 30 personas.",
     rows: [
       {
         title: "Vender",
@@ -496,21 +508,36 @@ const es: V2Copy = {
 
   worldProof: {
     label: "El Mismo Patrón, A Escala",
+    headline: "Le dieron la mitad repetitiva al software. Sus clientes acabaron más contentos, no más enfadados.",
     items: [
       {
-        name: "Klarna",
-        line: "Su asistente de IA gestionó dos tercios de todos los chats de clientes en su primer mes. La resolución pasó de 11 minutos a menos de 2.",
-        source: "Klarna, 2024.",
-      },
-      {
         name: "IKEA",
-        line: "Automatizó las preguntas rutinarias y reconvirtió a su personal de call center en roles de asesoría mejor pagados.",
-        source: "Industria, en producción.",
+        stats: [
+          { value: "74%", label: "de consultas resueltas" },
+          { value: "60% → 89%", label: "satisfacción del cliente" },
+          { value: "8.500", label: "empleados reconvertidos, cero despidos" },
+        ],
+        line: "Su bot se quedó con los horarios, el estado de los pedidos y las devoluciones. El personal del call center pasó a asesorar en diseño de interiores, y ese canal de venta remota ya factura 1.250 millones de euros.",
+        source: "Fortune, 2026.",
       },
       {
         name: "Octopus Energy",
-        line: "La IA redacta respuestas con la voz de la empresa. Una persona las revisa y las envía. Velocidad de máquina, criterio humano.",
-        source: "Industria, en producción.",
+        stats: [
+          { value: "34%", label: "de consultas respondidas" },
+          { value: "80% vs 65%", label: "satisfacción, IA frente a humano" },
+          { value: "250", label: "personas de trabajo equivalente" },
+        ],
+        line: "La IA redacta la respuesta con la voz de la empresa. Una persona la revisa y la envía. Los clientes puntuaron esas respuestas mejor que las escritas a mano.",
+        source: "Greg Jackson, CEO, en The Times.",
+      },
+      {
+        name: "Vodafone",
+        stats: [
+          { value: "15% → 60%", label: "resuelto en el primer contacto" },
+          { value: "+14", label: "puntos de net promoter score" },
+        ],
+        line: "Cambiar el chatbot viejo por uno de verdad hizo que cuatro veces más gente obtuviera respuesta al momento en lugar de entrar en una cola.",
+        source: "Vodafone, sobre SuperTOBi.",
       },
     ],
   },
@@ -527,22 +554,10 @@ const es: V2Copy = {
     headline: "La IA debería quitar trabajo, no humanidad.",
     body: [
       "Nadie montó un negocio para que su equipo retipeara direcciones en una hoja de cálculo.",
-      "Ahora mismo alguien de tu equipo hace un trabajo en el que es malo, que odia, que sale mal cuando está cansado. Y el trabajo que solo una persona puede hacer, la llamada que necesita criterio, el cliente a punto de irse, espera hasta el viernes. O nunca.",
-      "Nosotros nos quedamos con la parte repetitiva. Casi todo lo que construimos no necesita formación de nadie, porque lo operamos nosotros.",
+      "Nosotros nos quedamos con la parte repetitiva. La llamada que necesita criterio, el cliente a punto de irse, el trabajo que de verdad hace crecer el trimestre, eso se queda con tu gente. Y casi nada de lo que construimos necesita formación, porque lo operamos nosotros.",
     ],
     quote: "La mayoría perderá su trabajo frente a alguien que usa IA.",
     quoteAttr: "Jensen Huang, CEO de Nvidia, abril de 2026",
-  },
-
-  bridge: {
-    label: "Lo Que Cuesta No Mirar",
-    headline: "Notas que se escapa. Pero no sabes señalar por dónde.",
-    body: [
-      "Se nota en una semana que se llena sola, en un mes que cuesta más de lo que debería, y en la sensación de ir a tope sin avanzar.",
-      "La fuga nunca se anuncia. Se lleva la misma cantidad cada mes, en silencio, y lleva bastante tiempo haciéndolo.",
-    ],
-    statValue: "83%",
-    statLine: "de tus clientes se van con quien respondió primero. Cada semana que esperas, eso sigue pasando.",
   },
 
   start: {

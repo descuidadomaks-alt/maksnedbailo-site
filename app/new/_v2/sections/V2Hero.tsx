@@ -18,17 +18,22 @@ export default function V2Hero({
   primaryCtaHref: string;
 }) {
   return (
+    // marginTop cancels the 76px spacer app/new/layout.tsx puts above the
+    // page, so this section's background runs UP behind the fixed glass
+    // header. Without it the header sat on flat body black and the hero's
+    // radial glow started at a hard horizontal seam 76px down the page.
+    // paddingTop puts the content back below the header.
     <section
       className="relative overflow-hidden flex items-center"
-      style={{ minHeight: "calc(100svh - 76px)" }}
+      style={{ minHeight: "100svh", marginTop: "-76px", paddingTop: "76px" }}
     >
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse 900px 560px at 50% 24%, rgba(212,255,43,0.055) 0%, transparent 68%)" }}
+        style={{ background: "radial-gradient(ellipse 1100px 620px at 50% 30%, rgba(212,255,43,0.055) 0%, transparent 70%)" }}
       />
 
-      <div className="relative w-full max-w-4xl mx-auto px-6 py-8 md:py-10 text-center">
+      <div className="relative w-full max-w-5xl mx-auto px-6 py-6 md:py-8 text-center">
         <div
           data-reveal
           className="inline-flex items-center gap-2.5 mb-5 md:mb-6"
@@ -52,10 +57,12 @@ export default function V2Hero({
           data-reveal="d1"
           className="font-playfair font-normal text-fg mx-auto"
           style={{
-            fontSize: "clamp(27px, 4.4vw, 52px)",
+            fontSize: "clamp(27px, 4.4vw, 54px)",
             lineHeight: 1.12,
             letterSpacing: "-0.026em",
-            maxWidth: "19ch",
+            // ~29ch lets the headline settle onto two lines at desktop
+            // widths instead of three, which buys back vertical space.
+            maxWidth: "29ch",
             marginBottom: "clamp(14px, 1.8vw, 20px)",
           }}
         >
@@ -68,14 +75,14 @@ export default function V2Hero({
           style={{
             fontSize: "clamp(13.5px, 1.5vw, 17px)",
             lineHeight: 1.6,
-            maxWidth: "56ch",
-            marginBottom: "clamp(20px, 2.4vw, 30px)",
+            maxWidth: "68ch",
+            marginBottom: "clamp(20px, 2.4vw, 28px)",
           }}
         >
           {d.hero.sub}
         </p>
 
-        <div data-reveal="d3" className="flex flex-col items-center mb-8 md:mb-11">
+        <div data-reveal="d3" className="flex flex-col items-center mb-7 md:mb-9">
           <Link
             href={primaryCtaHref}
             data-primary-cta

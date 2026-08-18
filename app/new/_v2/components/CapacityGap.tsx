@@ -41,8 +41,10 @@ export default function CapacityGap({ d }: { d: V2Copy["fix"]["capacityGap"] }) 
         <span className="font-label text-accent" style={{ fontSize: "11.5px" }}>{WON}</span>
       </div>
 
-      <p className="font-sora font-light" style={{ fontSize: "11.5px", color: "rgba(248,113,113,0.7)" }}>
-        {CAPACITY - WON} {d.gapLabel}
+      {/* The punchline of the card. Sized up so it competes with the visual
+          instead of trailing off underneath it. */}
+      <p className="font-sora leading-[1.35] mt-1" style={{ fontSize: "16px", fontWeight: 500, color: "rgba(248,113,113,0.9)" }}>
+        <span className="font-playfair" style={{ fontSize: "22px" }}>{CAPACITY - WON}</span> {d.gapLabel}
       </p>
     </div>
   );

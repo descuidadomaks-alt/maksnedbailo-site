@@ -48,7 +48,8 @@ export default function LeakFunnel({ d }: { d: V2Copy["fix"]["leakFunnel"] }) {
         })}
       </div>
 
-      <p className="font-sora font-light" style={{ fontSize: "11.5px", color: "rgba(248,113,113,0.7)" }}>
+      {/* Punchline — matched in weight to CapacityGap's closing line. */}
+      <p className="font-sora leading-[1.35] mt-1" style={{ fontSize: "16px", fontWeight: 500, color: "rgba(248,113,113,0.9)" }}>
         {d.lostLabel}
       </p>
     </div>

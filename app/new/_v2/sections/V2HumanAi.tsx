@@ -22,7 +22,7 @@ export default function V2HumanAi({ d }: { d: V2Copy }) {
         <h2
           data-reveal
           className="font-playfair font-normal text-accent mx-auto mb-7"
-          style={{ fontSize: "clamp(24px, 3vw, 42px)", lineHeight: 1.16, letterSpacing: "-0.02em", maxWidth: "14ch" }}
+          style={{ fontSize: "clamp(24px, 3vw, 42px)", lineHeight: 1.16, letterSpacing: "-0.02em", maxWidth: "24ch" }}
         >
           {d.humanAi.headline}
         </h2>
@@ -49,23 +49,35 @@ export default function V2HumanAi({ d }: { d: V2Copy }) {
         </div>
       </div>
 
-      {/* Full-bleed photo band — real room, real people. */}
-      <div data-reveal className="relative w-full mt-14 md:mt-20" style={{ height: "clamp(190px, 26vw, 340px)" }}>
+      {/* Full-bleed photo band — real room, real people.
+          objectPosition is left-biased because the speaker stands at the far
+          left of the 1400x450 frame: a centred crop on a narrow viewport cut
+          him out entirely and left only the audience. 22% keeps him in shot
+          on mobile, 34% on desktop where more of the width survives.
+          No bottom scrim — the ElevatorField shaft starts immediately after
+          this band and should meet the photo edge directly. */}
+      <div data-reveal className="relative w-full mt-14 md:mt-20 v3-stage-band" style={{ height: "clamp(200px, 26vw, 340px)" }}>
+        <style>{`
+          .v3-stage-band img { object-position: 22% 42% !important; }
+          @media (min-width: 768px) {
+            .v3-stage-band img { object-position: 34% 40% !important; }
+          }
+        `}</style>
         <Image
           src={STAGE_PHOTO_SRC}
           alt="Maks Nedbailo speaking to a room of business owners"
           fill
           sizes="100vw"
           quality={82}
-          style={{ objectFit: "cover", objectPosition: "center 42%" }}
+          style={{ objectFit: "cover" }}
         />
-        {/* Feather the band into the page on all four edges. */}
+        {/* Feather only the top and sides into the page. */}
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.15) 26%, rgba(6,6,8,0.2) 70%, rgba(6,6,8,1) 100%), linear-gradient(90deg, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0) 22%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.9) 100%)",
+              "linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.12) 24%, rgba(6,6,8,0) 100%), linear-gradient(90deg, rgba(6,6,8,0.85) 0%, rgba(6,6,8,0) 24%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.85) 100%)",
           }}
         />
       </div>

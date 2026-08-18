@@ -90,8 +90,8 @@ export default function V2Fix({ d }: { d: V2Copy }) {
 
         <p
           data-reveal
-          className="font-label text-fg/32 text-center mt-6"
-          style={{ fontSize: "10px", letterSpacing: "0.5px" }}
+          className="font-label text-center mt-6"
+          style={{ fontSize: "10px", letterSpacing: "0.5px", color: "rgba(240,236,230,0.28)" }}
         >
           {d.fix.basisCaption}
         </p>

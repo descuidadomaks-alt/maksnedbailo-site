@@ -17,10 +17,15 @@ function WhatsAppIcon() {
  * Section 9 — FINAL CTA. Deliberately quiet. The closing line under the
  * button is the whole point of the section: it names the cost of doing
  * nothing without ever telling the reader what to conclude from it.
+ *
+ * Rendered INSIDE the shared ElevatorField (see V2HomeClient) and left
+ * transparent on purpose, so the dot shaft keeps drifting behind it. When
+ * this sat outside the wrapper the field had already stopped updating and
+ * the leftover dots behind this section were frozen, which read as broken.
  */
 export default function V2FinalCTA({ d, ctaHref }: { d: V2Copy; ctaHref: string }) {
   return (
-    <section className="section-divider relative overflow-hidden py-16 md:py-28">
+    <section className="section-divider relative overflow-hidden py-20 md:py-32">
       <div aria-hidden className="absolute left-1/2 -translate-x-1/2 top-0 pointer-events-none" style={{ width: "600px", height: "400px", background: "radial-gradient(ellipse, rgba(212,255,43,0.055) 0%, transparent 68%)" }} />
       <div className="relative max-w-lg mx-auto px-6 text-center">
         <h2 data-reveal className="font-playfair font-normal text-fg mb-6" style={{ fontSize: "clamp(24px, 3.6vw, 50px)", lineHeight: 1.1, letterSpacing: "-0.024em" }}>
