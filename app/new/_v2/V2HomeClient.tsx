@@ -10,31 +10,42 @@
  *
  * ── The ElevatorField block — copied from how the live "/" homepage does it ──
  *
- * Measured on "/" at 1280x900: sticky canvas, wrapper 2840px (3.16
- * viewports), 1940px of scroll travel, and its three children run
- * SOLID (793px) -> TRANSPARENT (900px) -> SOLID (1147px). Dots are only
- * ever visible through the transparent middle child; the wrapper is tall
- * purely so the sticky canvas has room to move smoothly. That works out
- * to ~0.63 camera units per pixel of scroll, which is the number that
- * makes the motion feel continuous.
+ * The live page's wrapper holds three children in this order:
+ *   SOLID 697px  ->  TRANSPARENT 805px  ->  SOLID 1144px
+ * and the dots are only ever visible through the transparent middle child.
+ * The leading SOLID child is the part that matters and the part two earlier
+ * attempts here missed.
  *
- * Two earlier attempts got this wrong:
- *  - `clip` mode (absolute canvas sized to one section) gave a 259px
- *    scroll range for the full camera sweep, i.e. ~4.7 units/px. Progress
- *    clamps at 0 and 1 outside that range, which is precisely the
- *    "static, then a violent rush, then static again" behaviour.
- *  - Making the FAQ transparent turned the neighbours into windows too.
+ * getCameraY derives progress from `-rect.top / (wrapperHeight - vh)` and
+ * CLAMPS it to 0 while the wrapper's top is still below the viewport top.
+ * So for the first viewport-height of the wrapper's approach the camera does
+ * not move at all. On the live page that clamped stretch is spent behind the
+ * leading solid section, and by the time the transparent window crosses the
+ * viewport bottom the wrapper is already pinned and the camera is already
+ * sweeping — you see motion the instant the window opens.
  *
- * So: the wrapper spans all three sections for TRAVEL, but only V2Start is
- * transparent, so only V2Start shows the field. V2FAQ and V2FinalCTA paint
- * solid var(--bg) and must keep doing so. Because the sticky canvas is
- * 100vh and V2Start is 100vh, the field lands exactly on that section.
+ * When the transparent section was the FIRST child here, that same clamped
+ * stretch landed on the window itself. Measured at 1280x720: 720px of scroll
+ * with progress pinned at 0, and the first ~320px of the window rendering
+ * ZERO dots — the reported "big gap of black before anything happens".
  *
- * cameraSpan 0.86 over ~1806px of travel gives ~0.58 units/px, within a
- * tenth of the live page's 0.629; cameraOffset 0.07 keeps the sweep
- * (65..1115) inside the floor planes, which span 40..1140. If the section
- * heights change materially, re-measure travel and retune both so the rate
- * stays near 0.6 and the sweep stays inside 40..1140.
+ * Fix: V2HumanAi moves inside the wrapper as the leading SOLID child, which
+ * reproduces the live page's shape exactly:
+ *   V2HumanAi SOLID  ->  V2Start TRANSPARENT  ->  V2FAQ SOLID
+ * V2FinalCTA stays outside; leaving it in stretched the wrapper to 3591px
+ * and dropped the camera rate to 0.43 units per scroll pixel against the
+ * live page's 0.633. With it outside, travel is 2127px and the rate is
+ * 0.574 — and cameraOffset/cameraSpan go back to the live page's plain
+ * defaults (0 and 1) instead of tuned constants.
+ *
+ * Measured after the change, against "/" as the reference: at the first 80px
+ * of the window being visible the live page draws 259 dots and this page
+ * draws 228, and the dot-density curve tracks it the whole way down.
+ *
+ * If the section heights change materially, re-measure. The invariants are:
+ * a full-height SOLID child must come first, exactly one child may be
+ * transparent, and the camera sweep must stay inside the floor planes at
+ * 40..1140.
  */
 import { useNewLocale } from "../lib/locale";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
@@ -68,17 +79,19 @@ export default function V2HomeClient() {
         <V2Cases d={d} />
         <V2WorldProof d={d} />
         <VoiceProof d={d} />
-        <V2HumanAi d={d} />
-
-        {/* Read the header comment before changing this. All three sections
-            are inside for scroll TRAVEL, but only V2Start is transparent, so
-            only V2Start shows the dot field. Do not add `clip` and do not
-            make V2FAQ or V2FinalCTA transparent. */}
-        <ElevatorField cameraOffset={0.07} cameraSpan={0.86}>
+        {/* Read the header comment before changing this.
+            V2HumanAi is the SOLID lead-in and must stay the first child —
+            it is what stops the camera being frozen while the window
+            scrolls into view. Only V2Start is transparent. Do not add
+            `clip`, do not make V2FAQ transparent, and do not move
+            V2FinalCTA back inside. */}
+        <ElevatorField>
+          <V2HumanAi d={d} />
           <V2Start d={d} ctaHref={ctaHref} />
           <V2FAQ d={d} />
-          <V2FinalCTA d={d} ctaHref={ctaHref} />
         </ElevatorField>
+
+        <V2FinalCTA d={d} ctaHref={ctaHref} />
       </main>
       <V2Footer d={d} ctaHref={ctaHref} />
       <FloatingWhatsApp />

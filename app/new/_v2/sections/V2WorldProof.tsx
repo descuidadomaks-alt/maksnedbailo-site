@@ -14,9 +14,9 @@ import { PROOF_LOCKUPS } from "../components/BrandLockups";
  * worse"), so cases that ended in a public walk-back are deliberately not
  * used, however famous they are.
  *
- * No brand logos. The previous version paired a coloured wordmark chip
- * with the company name and rendered both, which read as clip art and
- * duplicated the text. The numbers carry the section instead.
+ * Each case is identified by its wordmark alone, not wordmark + name —
+ * rendering both read as clip art and duplicated the text. The marks are
+ * white-on-transparent and optically size-matched; see BrandLockups.
  */
 export default function V2WorldProof({ d }: { d: V2Copy }) {
   return (
@@ -48,7 +48,9 @@ export default function V2WorldProof({ d }: { d: V2Copy }) {
               style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
             >
               <div className="flex flex-col md:flex-row md:items-start gap-5 md:gap-10">
-                <div className="shrink-0 md:w-44" style={{ color: "rgba(240,236,230,0.8)", opacity: 0.85 }}>
+                {/* No opacity here — each lockup carries its own, so the
+                    two would otherwise multiply and dim the marks twice. */}
+                <div className="shrink-0 md:w-44">
                   {(() => {
                     const Lockup = PROOF_LOCKUPS[item.name];
                     return Lockup ? (

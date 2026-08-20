@@ -179,19 +179,25 @@ export default function V2Problem({ d }: { d: V2Copy }) {
                       {tile.body}
                     </p>
 
-                    {/* Funder lockups, all rendered at one height in a single
-                        dimmed tone so the row reads as a credit line. */}
+                    {/* Funder credit line, laid out 2-up rather than 4-up.
+                        The row is only ~406px wide and these four marks have
+                        very different proportions (Anthropic's wordmark is
+                        8.9:1, Goldman's is a 2.6:1 two-line stack), so a
+                        single row either overflowed or forced every mark
+                        down to ~10px tall. Two columns give each mark its
+                        natural optical size and read as a deliberate block.
+                        Sizing itself lives in BrandLockups. */}
                     {tile.funders && (
                       <div
-                        className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-5 pt-4"
-                        style={{ borderTop: "1px solid rgba(255,255,255,0.1)", color: "rgba(240,236,230,0.6)", opacity: 0.7 }}
+                        className="grid grid-cols-2 gap-x-6 gap-y-4 items-center mt-5 pt-4"
+                        style={{ borderTop: "1px solid rgba(255,255,255,0.1)" }}
                       >
                         {tile.funders.map((f) => {
                           const Lockup = FUNDER_LOCKUPS[f];
                           return Lockup ? (
                             <Lockup key={f} />
                           ) : (
-                            <span key={f} className="font-label" style={{ fontSize: "10px" }}>{f}</span>
+                            <span key={f} className="font-label" style={{ fontSize: "10px", color: "#fff", opacity: 0.75 }}>{f}</span>
                           );
                         })}
                       </div>

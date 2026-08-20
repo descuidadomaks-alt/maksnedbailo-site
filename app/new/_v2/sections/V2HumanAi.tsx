@@ -11,10 +11,20 @@ import { STAGE_PHOTO_SRC } from "../../lib/config";
  * This section argues that people matter, so the image has to BE people.
  * The previous build used the CRM-dashboard composite here, which argued
  * the opposite of the copy sitting next to it.
+ *
+ * It is also the leading SOLID child of the ElevatorField wrapper (see
+ * V2HomeClient), which is why the background is set explicitly. Inside that
+ * wrapper the dot canvas sits behind the children, so a transparent section
+ * becomes a window onto the field. This one must not be — its job is to
+ * occlude the shaft while the camera spins up, so that the window below it
+ * is already in motion when it reaches the viewport.
  */
 export default function V2HumanAi({ d }: { d: V2Copy }) {
   return (
-    <section className="section-divider relative overflow-hidden pt-16 md:pt-24">
+    <section
+      className="section-divider relative overflow-hidden pt-16 md:pt-24"
+      style={{ background: "var(--bg)" }}
+    >
       <div className="relative max-w-3xl mx-auto px-6 text-center">
         <p data-reveal className="font-label text-fg/55 mb-5" style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}>
           {d.humanAi.label}
@@ -48,15 +58,15 @@ export default function V2HumanAi({ d }: { d: V2Copy }) {
       </div>
 
       {/* Full-bleed photo band — real room, real people.
-          objectPosition is left-biased because the speaker stands at the far
-          left of the 1400x450 frame: a centred crop on a narrow viewport cut
-          him out entirely and left only the audience. 22% keeps him in shot
-          on mobile, 34% on desktop where more of the width survives.
+          The speaker stands at the far LEFT of the 1400x450 frame, so on a
+          phone the crop is anchored to the image's own left edge (0%) — at
+          22% he was already being shaved off the side. Desktop keeps 34%,
+          where the viewport is wide enough to hold him and the room.
           No bottom scrim — the ElevatorField shaft starts immediately after
           this band and should meet the photo edge directly. */}
       <div data-reveal className="relative w-full mt-14 md:mt-20 v3-stage-band" style={{ height: "clamp(200px, 26vw, 340px)" }}>
         <style>{`
-          .v3-stage-band img { object-position: 22% 42% !important; }
+          .v3-stage-band img { object-position: 0% 42% !important; }
           @media (min-width: 768px) {
             .v3-stage-band img { object-position: 34% 40% !important; }
           }
@@ -69,15 +79,29 @@ export default function V2HumanAi({ d }: { d: V2Copy }) {
           quality={82}
           style={{ objectFit: "cover" }}
         />
-        {/* Feather only the top and sides into the page. */}
+        {/* Feather the top and sides into the page. The side feather is
+            asymmetric on mobile: with the crop anchored at 0% the speaker is
+            now hard against the left edge, and the old 0.85 scrim over the
+            first 24% covered him. Mobile gets a short, light left edge and
+            keeps the full right one. */}
         <div
           aria-hidden
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.12) 24%, rgba(6,6,8,0) 100%), linear-gradient(90deg, rgba(6,6,8,0.85) 0%, rgba(6,6,8,0) 24%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.85) 100%)",
-          }}
+          className="absolute inset-0 pointer-events-none v3-stage-scrim"
         />
+        <style>{`
+          .v3-stage-scrim {
+            background:
+              linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.12) 24%, rgba(6,6,8,0) 100%),
+              linear-gradient(90deg, rgba(6,6,8,0.45) 0%, rgba(6,6,8,0) 12%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.85) 100%);
+          }
+          @media (min-width: 768px) {
+            .v3-stage-scrim {
+              background:
+                linear-gradient(180deg, rgba(6,6,8,1) 0%, rgba(6,6,8,0.12) 24%, rgba(6,6,8,0) 100%),
+                linear-gradient(90deg, rgba(6,6,8,0.85) 0%, rgba(6,6,8,0) 24%, rgba(6,6,8,0) 78%, rgba(6,6,8,0.85) 100%);
+            }
+          }
+        `}</style>
       </div>
     </section>
   );
