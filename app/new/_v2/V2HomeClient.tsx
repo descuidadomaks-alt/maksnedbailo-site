@@ -52,6 +52,7 @@ import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import { getV2Copy } from "./lib/copy";
 import { CTA_TARGET, CTA_TARGET_ES } from "./lib/config";
 import ElevatorField from "../components/ElevatorField";
+import GlitchInterrupt from "./components/GlitchInterrupt";
 
 import V2Hero from "./sections/V2Hero";
 import V2Problem from "./sections/V2Problem";
@@ -74,6 +75,11 @@ export default function V2HomeClient() {
     <>
       <main data-short-page>
         <V2Hero d={d} primaryCtaHref={ctaHref} />
+
+        {/* Fires once, at the hero/section-two seam. Renders a zero-height
+            sentinel here and nothing else until it triggers. */}
+        <GlitchInterrupt />
+
         <V2Problem d={d} />
         <V2Fix d={d} />
         <V2Cases d={d} />
