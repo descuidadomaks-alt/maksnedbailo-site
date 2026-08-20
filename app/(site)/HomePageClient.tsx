@@ -26,10 +26,10 @@ const BRIDGE = {
     es: "¿No estás seguro de que un chatbot sea lo que necesitas?",
   },
   body: {
-    en: "Most businesses don't have a chatbot problem. They have a \"nobody's mapped where the money actually leaks\" problem. Before you automate anything, see the whole picture — every AI opportunity in your business, ranked by ROI, in 90 minutes.",
+    en: "Most businesses don't have a chatbot problem. They have a \"nobody's mapped where the money actually leaks\" problem. Before you automate anything, see the whole picture: every AI opportunity in your business, ranked by ROI, in 90 minutes.",
     es: 'La mayoría de los negocios no tienen un problema de chatbot. Tienen un problema de "nadie ha mapeado por dónde se escapa el dinero". Antes de automatizar nada, ve el panorama completo: cada oportunidad de IA en tu negocio, priorizada por ROI, en 90 minutos.',
   },
-  cta: { en: "Map my operation →", es: "Mapear mi operación →" },
+  cta: { en: "Map my operation", es: "Mapear mi operación" },
 };
 
 function t(obj: { en: string; es: string }, lang: string): string {

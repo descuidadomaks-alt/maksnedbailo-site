@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { SCORE_TARGET } from "../lib/config";
+import { CTA_TARGET } from "../lib/config";
 
 /**
  * Mobile-only sticky bottom bar — appears once the user scrolls past the
@@ -22,10 +22,10 @@ export default function MobileCtaBar() {
   return (
     <div className={`mobile-cta-bar ${visible ? "is-visible" : ""}`}>
       <p className="font-sora font-light text-fg/65" style={{ fontSize: "12.5px" }}>
-        Bottleneck Score — 2 min, free
+        Free AI Map: 90 min
       </p>
       <Link
-        href={SCORE_TARGET}
+        href={CTA_TARGET}
         className="bg-accent text-bg shrink-0 inline-flex items-center gap-1.5 font-sora font-semibold rounded-lg transition-transform duration-200 hover:scale-[1.03]"
         style={{ fontSize: "12.5px", padding: "9px 16px", letterSpacing: "-0.01em" }}
       >

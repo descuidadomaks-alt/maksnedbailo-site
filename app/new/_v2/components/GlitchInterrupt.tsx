@@ -121,6 +121,17 @@ export default function GlitchInterrupt() {
               inset: auto 0 auto 0;
               opacity: 0;
             }
+            /* Half the slices carry the brand colour instead of plain
+               inverted white. The lime is a translucent background ON the
+               slice, which paints on top of the backdrop the filter already
+               produced: invert turns the near-black page light, then this
+               wash tints that light band lime. No blend mode needed, and the
+               band stays a real displacement of the page rather than a
+               coloured bar floating over it.
+               s2 and s4 are the accent pair, s1 and s3 stay white, so the
+               burst reads roughly half and half at every hit. */
+            .v3-glitch-slice.accent { background: rgba(212,255,43,0.55); }
+
             .v3-glitch-slice.s1 { top: 7%;  height: 9%;  animation: v3-gl-s1 ${DURATION_MS}ms linear forwards; }
             .v3-glitch-slice.s2 { top: 29%; height: 6%;  animation: v3-gl-s2 ${DURATION_MS}ms linear forwards; }
             .v3-glitch-slice.s3 { top: 47%; height: 14%; animation: v3-gl-s3 ${DURATION_MS}ms linear forwards; }
@@ -240,6 +251,23 @@ export default function GlitchInterrupt() {
               45.01%,50%  { opacity: 0.7; }
               50.01%,100% { opacity: 0; }
             }
+            /* Brand-colour flash. Deliberately offset from v3-gl-drop so a
+               lime pop and a blackout never land on the same frame. */
+            .v3-glitch-flash {
+              background: rgba(212,255,43,0.42);
+              opacity: 0;
+              animation: v3-gl-flash ${DURATION_MS}ms steps(1,end) forwards;
+            }
+            @keyframes v3-gl-flash {
+              0%,7%       { opacity: 0; }
+              7.01%,11%   { opacity: 1; }
+              11.01%,23%  { opacity: 0; }
+              23.01%,28%  { opacity: 1; }
+              28.01%,56%  { opacity: 0; }
+              56.01%,61%  { opacity: 1; }
+              61.01%,100% { opacity: 0; }
+            }
+
             .v3-glitch-tear {
               background: rgba(212,255,43,0.9);
               inset: auto 0 auto 0;
@@ -260,13 +288,14 @@ export default function GlitchInterrupt() {
 
           <div className="v3-glitch-drop" />
           <div className="v3-glitch-slice s1" />
-          <div className="v3-glitch-slice s2" />
+          <div className="v3-glitch-slice s2 accent" />
           <div className="v3-glitch-slice s3" />
-          <div className="v3-glitch-slice s4" />
+          <div className="v3-glitch-slice s4 accent" />
           <div className="v3-glitch-rgb r" />
           <div className="v3-glitch-rgb c" />
           <div className="v3-glitch-noise" />
           <div className="v3-glitch-scan" />
+          <div className="v3-glitch-flash" />
           <div className="v3-glitch-tear" />
         </div>
       )}

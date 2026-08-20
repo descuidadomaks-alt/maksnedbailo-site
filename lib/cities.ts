@@ -63,26 +63,26 @@ const CITIES: Record<string, CityData> = {
       tag: "Para salones, spas y clínicas de Cantabria que pierden citas por no poder atender el móvil",
       h1: "Estás con una Clienta. Te Entra un Mensaje.",
       h1accent: "¿Quién Agenda la Siguiente Cita?",
-      sub: "Configuramos asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos — gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
+      sub: "Configuramos asistentes inteligentes para salones de belleza, spas y clínicas en Santander que responden en menos de 60 segundos, gestionan citas, preguntas sobre tratamientos y listas de espera en WhatsApp o tu web. Empieza con un AI Map gratuito de 90 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For beauty salons, spas & clinics in Cantabria missing bookings while serving clients",
       h1: "You're With a Client. Someone Messages.",
       h1accent: "Who Books the Next Appointment?",
-      sub: "We set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds — handling bookings, treatment questions and waiting lists on WhatsApp or your website. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
+      sub: "We set up AI assistants for beauty salons, spas and clinics in Santander that reply in under 60 seconds, handling bookings, treatment questions and waiting lists on WhatsApp or your website. Start with a free 90-minute AI Map. Builds come with 30 days risk-free.",
     },
     meta: {
       title: "IA para Salones y Spas en Santander | Care Less",
       description:
-        "Asistente IA para salones, spas y clínicas en Santander. Responde a clientes y gestiona citas en segundos, 24/7. Bottleneck Score gratis, 2 min.",
+        "Asistente IA para salones, spas y clínicas en Santander. Responde a clientes y gestiona citas en segundos, 24/7. AI Map gratis, 90 min.",
     },
     metaEn: {
       title: "AI Lead Response for Salons & Spas in Santander | Care Less",
       description:
-        "AI assistant for beauty salons, spas and clinics in Santander. Replies to clients and books appointments in seconds, 24/7. Free 2-min Bottleneck Score.",
+        "AI assistant for beauty salons, spas and clinics in Santander. Replies to clients and books appointments in seconds, 24/7. Free 90-min AI Map.",
     },
     schema: {
-      name: "Care Less AI Automation — Santander, Cantabria",
+      name: "Care Less AI Automation: Santander, Cantabria",
       description:
         "Asistente de IA para salones de belleza, spas y clínicas en Santander y Cantabria. Gestiona citas y responde clientes en menos de 60 segundos, 24/7.",
       areaServed: "Santander, Cantabria, España",
@@ -91,11 +91,11 @@ const CITIES: Record<string, CityData> = {
     faqItems: [
       {
         q: "Soy esteticista y no puedo coger el móvil mientras hago un tratamiento. ¿Qué pasa con esas llamadas perdidas?",
-        a: "Exactamente para eso está diseñado. Cuando estás haciendo una depilación, un masaje o una limpieza facial, el asistente responde automáticamente a los mensajes de WhatsApp, resuelve preguntas sobre tratamientos y agenda la siguiente cita — sin que tú interrumpas lo que estás haciendo.",
+        a: "Exactamente para eso está diseñado. Cuando estás haciendo una depilación, un masaje o una limpieza facial, el asistente responde automáticamente a los mensajes de WhatsApp, resuelve preguntas sobre tratamientos y agenda la siguiente cita, sin que tú interrumpas lo que estás haciendo.",
       },
       {
         q: "¿Puede gestionar la agenda de mi salón de belleza y las listas de espera?",
-        a: "Sí. El asistente se integra con tu sistema de reservas (o gestiona las citas directamente por WhatsApp si no usas ninguno). Gestiona cancelaciones, reagendaciones, y añade clientes a listas de espera cuando no hay huecos disponibles — todo de forma automática.",
+        a: "Sí. El asistente se integra con tu sistema de reservas (o gestiona las citas directamente por WhatsApp si no usas ninguno). Gestiona cancelaciones, reagendaciones, y añade clientes a listas de espera cuando no hay huecos disponibles, todo de forma automática.",
       },
       {
         q: "¿Puede responder a turistas en inglés, francés o alemán?",
@@ -103,25 +103,25 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "¿Cuánto tiempo tarda en estar activo para mi negocio?",
-        a: "48 horas desde que nos das la información de tu negocio. No tocas ninguna tecnología — lo configuramos, lo probamos y lo ponemos en marcha. Tú sigues con tus clientes.",
+        a: "48 horas desde que nos das la información de tu negocio. No tocas ninguna tecnología, lo configuramos, lo probamos y lo ponemos en marcha. Tú sigues con tus clientes.",
       },
       {
         q: "¿Funciona con el WhatsApp Business que ya tengo?",
-        a: "Sí, se integra directamente con tu número de WhatsApp Business actual. No cambias de número, no pierdes historial de conversaciones, y tus clientes no notan ninguna diferencia — solo que ahora respondes en segundos.",
+        a: "Sí, se integra directamente con tu número de WhatsApp Business actual. No cambias de número, no pierdes historial de conversaciones, y tus clientes no notan ninguna diferencia, solo que ahora respondes en segundos.",
       },
       {
         q: "¿Cuánto cuesta? ¿Hay permanencia?",
-        a: "Sin permanencia. Los primeros 30 días son completamente gratuitos — si no te genera resultados, no pagas nada. A partir del mes 2, el coste mensual es menos que el salario semanal de un empleado a media jornada.",
+        a: "Sin permanencia. Los primeros 30 días son completamente gratuitos, si no te genera resultados, no pagas nada. A partir del mes 2, el coste mensual es menos que el salario semanal de un empleado a media jornada.",
       },
     ],
     faqItemsEn: [
       {
         q: "I'm a beautician and can't answer my phone during treatments. What happens to those missed messages?",
-        a: "That's exactly what this is built for. While you're doing a facial, massage or wax, the assistant automatically replies to WhatsApp messages, answers questions about treatments and books the next appointment — without you interrupting what you're doing.",
+        a: "That's exactly what this is built for. While you're doing a facial, massage or wax, the assistant automatically replies to WhatsApp messages, answers questions about treatments and books the next appointment, without you interrupting what you're doing.",
       },
       {
         q: "Can it manage my salon's booking diary and waiting lists?",
-        a: "Yes. The assistant integrates with your booking system (or manages appointments directly via WhatsApp if you don't use one). It handles cancellations, rescheduling, and adds clients to waiting lists when there are no available slots — all automatically.",
+        a: "Yes. The assistant integrates with your booking system (or manages appointments directly via WhatsApp if you don't use one). It handles cancellations, rescheduling, and adds clients to waiting lists when there are no available slots, all automatically.",
       },
       {
         q: "Can it reply to tourists in English, French or German?",
@@ -129,15 +129,15 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "How long does it take to go live for my business?",
-        a: "48 hours from when you give us your business information. You don't touch any technology — we configure it, test it and launch it. You carry on with your clients.",
+        a: "48 hours from when you give us your business information. You don't touch any technology, we configure it, test it and launch it. You carry on with your clients.",
       },
       {
         q: "Does it work with my existing WhatsApp Business number?",
-        a: "Yes, it integrates directly with your current WhatsApp Business number. You don't change numbers, you don't lose conversation history, and your clients notice no difference — except that you now reply in seconds.",
+        a: "Yes, it integrates directly with your current WhatsApp Business number. You don't change numbers, you don't lose conversation history, and your clients notice no difference, except that you now reply in seconds.",
       },
       {
         q: "How much does it cost? Is there a contract?",
-        a: "No contract. The first 30 days are completely free — if it doesn't generate results, you pay nothing. From month 2, the monthly cost is less than a week's wage for a part-time employee.",
+        a: "No contract. The first 30 days are completely free, if it doesn't generate results, you pay nothing. From month 2, the monthly cost is less than a week's wage for a part-time employee.",
       },
     ],
     testimonials: [
@@ -169,26 +169,26 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Madrid que pierden clientes por no responder primero",
       h1: "En Madrid, el Primero que Responde",
       h1accent: "se Queda con el Cliente.",
-      sub: "Configuramos asistentes de IA para negocios madrileños que responden en menos de 60 segundos — mientras estás con otro cliente, en reunión, o desconectado. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios madrileños que responden en menos de 60 segundos: mientras estás con otro cliente, en reunión, o desconectado. Empieza con un AI Map gratuito de 90 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Madrid businesses losing clients to whoever responds first",
       h1: "In Madrid, the First to Reply",
       h1accent: "Keeps the Client.",
-      sub: "We set up AI assistants for Madrid businesses that reply in under 60 seconds — while you're with another client, in a meeting, or off. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
+      sub: "We set up AI assistants for Madrid businesses that reply in under 60 seconds: while you're with another client, in a meeting, or off. Start with a free 90-minute AI Map. Builds come with 30 days risk-free.",
     },
     meta: {
       title: "Automatización IA para Pymes en Madrid | Care Less",
       description:
-        "Asistente de IA para pymes de Madrid. Responde a cada cliente en segundos por WhatsApp y web. Bottleneck Score gratis, 2 minutos.",
+        "Asistente de IA para pymes de Madrid. Responde a cada cliente en segundos por WhatsApp y web. AI Map gratis, 90 minutos.",
     },
     metaEn: {
       title: "AI Lead Response for Madrid Businesses | Care Less",
       description:
-        "AI assistant for Madrid businesses. Replies to every client in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
+        "AI assistant for Madrid businesses. Replies to every client in seconds on WhatsApp and your website. Free 90-min AI Map, no contracts.",
     },
     schema: {
-      name: "Care Less AI Automation — Madrid",
+      name: "Care Less AI Automation, Madrid",
       description:
         "Consultor de automatización IA para pymes de Madrid. Asistente que responde a clientes en menos de 60 segundos en WhatsApp y web, 24/7.",
       areaServed: "Madrid, Comunidad de Madrid, España",
@@ -197,19 +197,19 @@ const CITIES: Record<string, CityData> = {
     faqItems: [
       {
         q: "¿Por qué es más crítico responder rápido en Madrid que en otras ciudades?",
-        a: "En Madrid, la competencia es mucho más densa. Un cliente que no recibe respuesta en 5-10 minutos tiene literalmente decenas de alternativas a un clic. La velocidad de respuesta no es una ventaja competitiva en Madrid — es el precio de entrada al mercado.",
+        a: "En Madrid, la competencia es mucho más densa. Un cliente que no recibe respuesta en 5-10 minutos tiene literalmente decenas de alternativas a un clic. La velocidad de respuesta no es una ventaja competitiva en Madrid, es el precio de entrada al mercado.",
       },
       {
         q: "Tengo una clínica en Madrid. ¿Cómo funciona para mi consulta?",
-        a: "El asistente responde consultas sobre servicios, precios y disponibilidad, y dirige a los pacientes al proceso de reserva. Nunca da consejo médico — para eso deriva al equipo. Pero elimina las llamadas perdidas y los mensajes sin responder que hacen que los pacientes vayan a otra clínica.",
+        a: "El asistente responde consultas sobre servicios, precios y disponibilidad, y dirige a los pacientes al proceso de reserva. Nunca da consejo médico, para eso deriva al equipo. Pero elimina las llamadas perdidas y los mensajes sin responder que hacen que los pacientes vayan a otra clínica.",
       },
       {
         q: "¿Puedo usarlo para capturar leads de pisos en alquiler o venta?",
-        a: "Sí, y es uno de los usos más potentes en Madrid. Las consultas inmobiliarias llegan a cualquier hora — muchos compradores miran portales a las 11 de la noche. El asistente captura el contacto, cualifica el interés y propone una visita, mientras tú duermes.",
+        a: "Sí, y es uno de los usos más potentes en Madrid. Las consultas inmobiliarias llegan a cualquier hora, muchos compradores miran portales a las 11 de la noche. El asistente captura el contacto, cualifica el interés y propone una visita, mientras tú duermes.",
       },
       {
         q: "¿Cuánto tiempo tardaré en ver resultados en un mercado tan exigente?",
-        a: "La mayoría de clientes en Madrid ven su primer lead capturado automáticamente en las primeras 48 horas de activación. El ROI real — clientes convertidos que antes se perdían — suele aparecer en la primera semana.",
+        a: "La mayoría de clientes en Madrid ven su primer lead capturado automáticamente en las primeras 48 horas de activación. El ROI real, clientes convertidos que antes se perdían, suele aparecer en la primera semana.",
       },
       {
         q: "¿Cómo sé que el asistente no va a dar información incorrecta sobre mi negocio?",
@@ -223,19 +223,19 @@ const CITIES: Record<string, CityData> = {
     faqItemsEn: [
       {
         q: "Why is fast response more critical in Madrid than other cities?",
-        a: "In Madrid, competition is far denser. A client who doesn't get a reply within 5-10 minutes has literally dozens of alternatives one click away. Response speed in Madrid isn't a competitive advantage — it's the entry price to the market.",
+        a: "In Madrid, competition is far denser. A client who doesn't get a reply within 5-10 minutes has literally dozens of alternatives one click away. Response speed in Madrid isn't a competitive advantage, it's the entry price to the market.",
       },
       {
         q: "I have a clinic in Madrid. How does it work for my practice?",
-        a: "The assistant answers questions about services, pricing and availability, and guides patients towards booking. It never gives medical advice — it escalates those to your team. But it eliminates missed calls and unanswered messages that send patients to a competitor.",
+        a: "The assistant answers questions about services, pricing and availability, and guides patients towards booking. It never gives medical advice, it escalates those to your team. But it eliminates missed calls and unanswered messages that send patients to a competitor.",
       },
       {
         q: "Can I use it to capture property rental or sale leads?",
-        a: "Yes, and it's one of the most powerful use cases in Madrid. Property enquiries come at any hour — many buyers browse listings at 11pm. The assistant captures the contact, qualifies the interest and proposes a viewing, while you sleep.",
+        a: "Yes, and it's one of the most powerful use cases in Madrid. Property enquiries come at any hour, many buyers browse listings at 11pm. The assistant captures the contact, qualifies the interest and proposes a viewing, while you sleep.",
       },
       {
         q: "How quickly will I see results in such a demanding market?",
-        a: "Most Madrid clients see their first automatically captured lead within 48 hours of activation. Real ROI — converted clients who would have been lost — typically appears within the first week.",
+        a: "Most Madrid clients see their first automatically captured lead within 48 hours of activation. Real ROI, converted clients who would have been lost, typically appears within the first week.",
       },
       {
         q: "How do I know the assistant won't give incorrect information about my business?",
@@ -276,26 +276,26 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Barcelona que no pueden permitirse perder clientes internacionales",
       h1: "Barcelona No Espera.",
       h1accent: "Tus Clientes Tampoco.",
-      sub: "Configuramos asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos — en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Barcelona que responden en menos de 60 segundos, en español, inglés o catalán. Capta turistas, cualifica leads y agenda citas automáticamente. Empieza con un AI Map gratuito de 90 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Barcelona businesses that can't afford to miss international clients",
       h1: "Barcelona Doesn't Wait.",
       h1accent: "Neither Do Your Clients.",
-      sub: "We set up AI assistants for Barcelona businesses that reply in under 60 seconds — in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
+      sub: "We set up AI assistants for Barcelona businesses that reply in under 60 seconds, in Spanish, English or Catalan. Capture tourists, qualify leads and book appointments automatically. Start with a free 90-minute AI Map. Builds come with 30 days risk-free.",
     },
     meta: {
       title: "Automatización IA para Negocios en Barcelona | Care Less",
       description:
-        "Asistente IA para negocios en Barcelona. Responde en español, inglés y catalán en segundos. Bottleneck Score gratis, 2 minutos.",
+        "Asistente IA para negocios en Barcelona. Responde en español, inglés y catalán en segundos. AI Map gratis, 90 minutos.",
     },
     metaEn: {
       title: "AI Lead Response for Barcelona Businesses | Care Less",
       description:
-        "AI assistant for Barcelona businesses. Replies in Spanish, English and Catalan in seconds, capturing international clients. Free 2-min Bottleneck Score.",
+        "AI assistant for Barcelona businesses. Replies in Spanish, English and Catalan in seconds, capturing international clients. Free 90-min AI Map.",
     },
     schema: {
-      name: "Care Less AI Automation — Barcelona, Cataluña",
+      name: "Care Less AI Automation: Barcelona, Cataluña",
       description:
         "Asistente de IA para pymes de Barcelona. Responde en español, inglés y catalán en menos de 60 segundos, 24/7.",
       areaServed: "Barcelona, Cataluña, España",
@@ -304,7 +304,7 @@ const CITIES: Record<string, CityData> = {
     faqItems: [
       {
         q: "Mi negocio en Barcelona tiene muchos clientes extranjeros. ¿El asistente les puede atender?",
-        a: "Sí. El asistente detecta el idioma del mensaje —inglés, francés, alemán, italiano— y responde automáticamente en ese idioma. En Barcelona, donde el turismo internacional es parte del negocio, esto supone capturar clientes que antes se perdían simplemente por la barrera del idioma.",
+        a: "Sí. El asistente detecta el idioma del mensaje, inglés, francés, alemán, italiano, y responde automáticamente en ese idioma. En Barcelona, donde el turismo internacional es parte del negocio, esto supone capturar clientes que antes se perdían simplemente por la barrera del idioma.",
       },
       {
         q: "¿Puede responder en catalán además de en español?",
@@ -312,7 +312,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "Tengo un restaurante en Barcelona. ¿Para qué me sirve exactamente?",
-        a: "Para gestionar reservas, responder preguntas sobre el menú, horarios, alérgenos y precios, y capturar grupos para eventos privados — todo en cualquier idioma. Sin que tú o tu equipo tengáis que dejar las mesas para mirar el móvil.",
+        a: "Para gestionar reservas, responder preguntas sobre el menú, horarios, alérgenos y precios, y capturar grupos para eventos privados, todo en cualquier idioma. Sin que tú o tu equipo tengáis que dejar las mesas para mirar el móvil.",
       },
       {
         q: "¿Cuánto tiempo tarda en estar activo?",
@@ -330,7 +330,7 @@ const CITIES: Record<string, CityData> = {
     faqItemsEn: [
       {
         q: "My Barcelona business has many foreign clients. Can the assistant handle them?",
-        a: "Yes. The assistant detects the message language — English, French, German, Italian — and replies automatically in that language. In Barcelona, where international tourism is part of the business, this means capturing clients who were previously lost simply due to the language barrier.",
+        a: "Yes. The assistant detects the message language, English, French, German, Italian, and replies automatically in that language. In Barcelona, where international tourism is part of the business, this means capturing clients who were previously lost simply due to the language barrier.",
       },
       {
         q: "Can it reply in Catalan as well as Spanish?",
@@ -338,7 +338,7 @@ const CITIES: Record<string, CityData> = {
       },
       {
         q: "I have a restaurant in Barcelona. What exactly does it do for me?",
-        a: "It manages reservations, answers questions about the menu, opening hours, allergens and prices, and captures groups for private events — all in any language. Without you or your team having to step away from tables to check your phone.",
+        a: "It manages reservations, answers questions about the menu, opening hours, allergens and prices, and captures groups for private events, all in any language. Without you or your team having to step away from tables to check your phone.",
       },
       {
         q: "How long does it take to go live?",
@@ -383,26 +383,26 @@ const CITIES: Record<string, CityData> = {
       tag: "Para negocios en Valencia que responden tarde y pierden clientes al momento",
       h1: "En Valencia, Cada Minuto sin Responder",
       h1accent: "es un Cliente que se Va.",
-      sub: "Configuramos asistentes de IA para negocios en Valencia que responden en menos de 60 segundos — en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Empieza con un Bottleneck Score gratuito de 2 minutos. Las implementaciones llegan con 30 días sin riesgo.",
+      sub: "Configuramos asistentes de IA para negocios en Valencia que responden en menos de 60 segundos, en WhatsApp, tu web o los dos. Gestionan reservas, cualifican leads y atienden a clientes nacionales e internacionales. Empieza con un AI Map gratuito de 90 minutos. Las implementaciones llegan con 30 días sin riesgo.",
     },
     heroEn: {
       tag: "For Valencia businesses losing clients to slow response times",
       h1: "In Valencia, Every Minute Without a Reply",
       h1accent: "Is a Client Gone.",
-      sub: "We set up AI assistants for Valencia businesses that reply in under 60 seconds — on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Start with a free 2-minute Bottleneck Score. Builds come with 30 days risk-free.",
+      sub: "We set up AI assistants for Valencia businesses that reply in under 60 seconds, on WhatsApp, your website or both. They manage bookings, qualify leads and serve local and international clients. Start with a free 90-minute AI Map. Builds come with 30 days risk-free.",
     },
     meta: {
       title: "Automatización IA para Pymes en Valencia | Care Less",
       description:
-        "Asistente de IA para negocios en Valencia. Responde en segundos por WhatsApp y web. Bottleneck Score gratis, 2 minutos. Sin contratos.",
+        "Asistente de IA para negocios en Valencia. Responde en segundos por WhatsApp y web. AI Map gratis, 90 minutos. Sin contratos.",
     },
     metaEn: {
       title: "AI Lead Response for Valencia Businesses | Care Less",
       description:
-        "AI assistant for Valencia businesses. Replies in seconds on WhatsApp and your website. Free 2-min Bottleneck Score, no contracts.",
+        "AI assistant for Valencia businesses. Replies in seconds on WhatsApp and your website. Free 90-min AI Map, no contracts.",
     },
     schema: {
-      name: "Care Less AI Automation — Valencia, Comunitat Valenciana",
+      name: "Care Less AI Automation: Valencia, Comunitat Valenciana",
       description:
         "Asistente de IA para pymes de Valencia. Responde a clientes en menos de 60 segundos en WhatsApp y web, 24/7.",
       areaServed: "Valencia, Comunitat Valenciana, España",
@@ -411,11 +411,11 @@ const CITIES: Record<string, CityData> = {
     faqItems: [
       {
         q: "Tengo un negocio de hostelería en Valencia. ¿Qué me aporta exactamente?",
-        a: "Gestiona reservas, responde preguntas sobre menús, horarios y alérgenos, y capta grupos para eventos. En temporada de Fallas u otros eventos, el volumen de consultas puede multiplicarse por diez — el asistente lo absorbe todo sin que tú tengas que estar pegado al móvil.",
+        a: "Gestiona reservas, responde preguntas sobre menús, horarios y alérgenos, y capta grupos para eventos. En temporada de Fallas u otros eventos, el volumen de consultas puede multiplicarse por diez, el asistente lo absorbe todo sin que tú tengas que estar pegado al móvil.",
       },
       {
         q: "¿Puede atender a turistas internacionales?",
-        a: "Sí. El asistente detecta el idioma del mensaje y responde en ese mismo idioma automáticamente. Para negocios en Valencia con turismo internacional —especialmente en verano— esto supone capturar clientes que antes se perdían por la barrera del idioma.",
+        a: "Sí. El asistente detecta el idioma del mensaje y responde en ese mismo idioma automáticamente. Para negocios en Valencia con turismo internacional, especialmente en verano, esto supone capturar clientes que antes se perdían por la barrera del idioma.",
       },
       {
         q: "¿Cuánto tiempo tarda en estar operativo?",
@@ -437,11 +437,11 @@ const CITIES: Record<string, CityData> = {
     faqItemsEn: [
       {
         q: "I run a hospitality business in Valencia. What does it do for me exactly?",
-        a: "It manages bookings, answers questions about menus, opening hours and allergens, and captures groups for events. During Fallas or other peak periods, enquiry volume can increase tenfold — the assistant absorbs all of it without you being glued to your phone.",
+        a: "It manages bookings, answers questions about menus, opening hours and allergens, and captures groups for events. During Fallas or other peak periods, enquiry volume can increase tenfold, the assistant absorbs all of it without you being glued to your phone.",
       },
       {
         q: "Can it handle international tourists?",
-        a: "Yes. The assistant detects the language of the message and replies in that language automatically. For Valencia businesses with international tourism — especially in summer — this means capturing clients who were previously lost due to the language barrier.",
+        a: "Yes. The assistant detects the language of the message and replies in that language automatically. For Valencia businesses with international tourism, especially in summer, this means capturing clients who were previously lost due to the language barrier.",
       },
       {
         q: "How quickly can it go live?",

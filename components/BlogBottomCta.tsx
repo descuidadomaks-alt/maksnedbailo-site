@@ -6,11 +6,11 @@ import { useLang } from "@/lib/LanguageContext";
 const COPY = {
   en: {
     question: "Want to see how this would work for your business?",
-    cta: "Get your Bottleneck Score →",
+    cta: "Get your free AI Map",
   },
   es: {
     question: "¿Quieres ver cómo funcionaría en tu negocio?",
-    cta: "Consigue tu Bottleneck Score →",
+    cta: "Consigue tu AI Map gratis",
   },
 };
 
@@ -25,7 +25,7 @@ export default function BlogBottomCta() {
           {d.question}
         </p>
         <Link
-          href="/score"
+          href="/ai-map"
           className="inline-block bg-accent text-bg font-bold px-8 py-4 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200"
         >
           {d.cta}

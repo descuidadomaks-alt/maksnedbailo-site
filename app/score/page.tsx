@@ -1,83 +1,26 @@
 /**
- * /score — The Bottleneck Score quiz.
+ * /score - 308 redirect to /ai-map.
  *
- * Self-contained lead magnet, no external quiz SaaS. Same design system as
- * /new (data-short-page → Roboto Mono titles/labels + IBM Plex Sans body).
+ * The Bottleneck Score quiz is retired. Its job, gathering a few facts and
+ * handing back an initial estimate, moves to the Scout voice agent, so a
+ * second self-serve diagnostic on the site would compete with the AI Map
+ * rather than feed it.
  *
- * Flow: Intro → Q1–Q8 (progress bar, keyboard 1–4 + tap) → soft gate
- * (name + email/WhatsApp via Web3Forms) → result.
+ * Redirect rather than delete: /score was indexed, carried priority 0.9 in
+ * the sitemap, and was linked from the city landing pages and every blog
+ * post. A 308 folds that signal into /ai-map, which is the closest offer,
+ * instead of turning it into a 404. Those internal links were repointed at
+ * /ai-map directly in the same change, so nothing on the site relies on this
+ * hop; it exists for external links and for anything already in the index.
  *
- * Shareable results: completing the gate encodes answers into ?a=XXXXXXXX
- * (8 digits, 0–3) via history.replaceState. Loading /score?a=... with a
- * valid code jumps straight to the result screen, gate-free.
+ * app/score/layout.tsx was deleted with this change. app/score/lib/ and
+ * app/score/components/ are deliberately KEPT and are no longer imported by
+ * anything, so they add nothing to the bundle. quiz.ts holds the eight
+ * questions, the tier thresholds and the revenue multipliers behind the
+ * monthly-cost estimate, which is the model Scout needs to reproduce.
  */
-"use client";
-
-import { useState, useEffect, useCallback } from "react";
-import { QUESTIONS, encodeAnswers, decodeAnswers } from "./lib/quiz";
-import QuizProgress from "./components/QuizProgress";
-import Intro from "./components/Intro";
-import QuestionScreen from "./components/QuestionScreen";
-import SoftGate from "./components/SoftGate";
-import Computing from "./components/Computing";
-import ResultScreen from "./components/ResultScreen";
-
-type Step = "intro" | number | "gate" | "computing" | "result";
+import { permanentRedirect } from "next/navigation";
 
 export default function ScorePage() {
-  const [step, setStep] = useState<Step>("intro");
-  const [answers, setAnswers] = useState<number[]>(() => Array(QUESTIONS.length).fill(-1));
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const a = params.get("a");
-    const decoded = a ? decodeAnswers(a) : null;
-    if (decoded) {
-      setAnswers(decoded);
-      setStep("result");
-    }
-  }, []);
-
-  const selectAnswer = useCallback((value: number) => {
-    setStep((current) => {
-      if (typeof current !== "number") return current;
-      setAnswers((prev) => {
-        const next = [...prev];
-        next[current] = value;
-        return next;
-      });
-      return current < QUESTIONS.length - 1 ? current + 1 : "gate";
-    });
-  }, []);
-
-  const goBack = useCallback(() => {
-    setStep((current) => {
-      if (typeof current === "number" && current > 0) return current - 1;
-      if (current === "gate") return QUESTIONS.length - 1;
-      return current;
-    });
-  }, []);
-
-  function handleGateSuccess() {
-    const encoded = encodeAnswers(answers);
-    window.history.replaceState(null, "", `/score?a=${encoded}`);
-    setStep("computing");
-  }
-
-  return (
-    <main data-short-page className="flex flex-col bg-bg" style={{ minHeight: "100dvh" }}>
-      {typeof step === "number" && (
-        <QuizProgress current={step} total={QUESTIONS.length} />
-      )}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 md:py-24">
-        {step === "intro" && <Intro onStart={() => setStep(0)} />}
-        {typeof step === "number" && (
-          <QuestionScreen key={step} index={step} onSelect={selectAnswer} onBack={goBack} />
-        )}
-        {step === "gate" && <SoftGate key="gate" answers={answers} onSuccess={handleGateSuccess} />}
-        {step === "computing" && <Computing key="computing" onDone={() => setStep("result")} />}
-        {step === "result" && <ResultScreen key="result" answers={answers} />}
-      </div>
-    </main>
-  );
+  permanentRedirect("/ai-map");
 }

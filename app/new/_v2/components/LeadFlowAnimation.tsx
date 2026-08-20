@@ -17,7 +17,7 @@ import type { V2Copy } from "../lib/copy";
  */
 
 const LANE_DOTS = 7;
-const CYCLE = 7; // seconds — one full pass of the stream
+const CYCLE = 7; // seconds, one full pass of the stream
 
 /** Fraction of the lane each "by hand" dot survives before it drops out. */
 const DECAY_AT = [0.34, 0.52, 1, 0.42, 0.7, 1, 0.28];

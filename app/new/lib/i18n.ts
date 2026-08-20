@@ -643,10 +643,10 @@ const en: NewPageDict = {
   footer: {
     credit: "Care Less AI Automation",
     location: "Santander, Spain",
-    tagline: "ROI-first AI diagnosis for owner-led businesses. Honest about where AI helps — and where it doesn't.",
+    tagline: "ROI-first AI diagnosis for owner-led businesses. Honest about where AI helps, and where it doesn't.",
     waLabel: "Quick question? Message me on WhatsApp",
     navHome: "Home",
-    navScore: "Bottleneck Score",
+    navScore: "AI Map",
     locationsLabel: "Locations",
   },
 };
@@ -981,10 +981,10 @@ const es: NewPageDict = {
   footer: {
     credit: "Care Less AI Automation",
     location: "Santander, España",
-    tagline: "Diagnóstico de IA ROI-primero para negocios dirigidos por su dueño. Honesto sobre dónde ayuda la IA — y dónde no.",
+    tagline: "Diagnóstico de IA ROI-primero para negocios dirigidos por su dueño. Honesto sobre dónde ayuda la IA, y dónde no.",
     waLabel: "¿Una duda rápida? Escríbeme por WhatsApp",
     navHome: "Inicio",
-    navScore: "Bottleneck Score",
+    navScore: "AI Map",
     locationsLabel: "Ciudades",
   },
 };

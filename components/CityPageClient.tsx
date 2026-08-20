@@ -137,12 +137,12 @@ function CityFAQItem({
             </p>
             <p className="pb-5 pr-8">
               <Link
-                href="/score"
+                href="/ai-map"
                 className="font-sora text-[12px] text-accent/70 hover:text-accent underline underline-offset-4 decoration-accent/30 transition-colors"
               >
                 {lang === "es"
-                  ? "¿Quieres ver cómo funcionaría en tu negocio? → Bottleneck Score"
-                  : "Want to see how this would work for your business? → Bottleneck Score"}
+                  ? "¿Quieres ver cómo funcionaría en tu negocio? Consigue tu AI Map gratis"
+                  : "Want to see how this would work for your business? Get your free AI Map"}
               </Link>
             </p>
           </motion.div>
@@ -239,12 +239,12 @@ export default function CityPageClient({
             className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-3"
           >
             <Link
-              href="/score"
+              href="/ai-map"
               className="bg-accent text-bg font-semibold px-7 py-3 md:py-3.5 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
             >
               {lang === "es"
-                ? "Consigue tu Bottleneck Score — 2 min, gratis →"
-                : "Get your Bottleneck Score — 2 min, free →"}
+                ? "Consigue tu AI Map: 90 min, gratis"
+                : "Get your AI Map: 90 min, free"}
             </Link>
             <a
               href={WA_LINK}
@@ -285,8 +285,8 @@ export default function CityPageClient({
                 num: "73%",
                 label:
                   lang === "es"
-                    ? `de los clientes en ${city.name} compran al primero que responde — no al mejor`
-                    : `of clients in ${city.name} buy from whoever responds first — not the best`,
+                    ? `de los clientes en ${city.name} compran al primero que responde, no al mejor`
+                    : `of clients in ${city.name} buy from whoever responds first, not the best`,
               },
               {
                 num: "19h",
@@ -347,7 +347,7 @@ export default function CityPageClient({
                   {
                     num: "01",
                     title: "Diagnóstico de Fugas",
-                    desc: `Haz el Bottleneck Score de 2 minutos y luego hablamos 15 minutos — gratis. Te muestro exactamente dónde se están escapando las citas en ${city.name} y cuánto te cuesta al mes.`,
+                    desc: `Reserva tu AI Map gratuito de 90 minutos. Te muestro exactamente dónde se están escapando las citas en ${city.name} y cuánto te cuesta al mes.`,
                   },
                   {
                     num: "02",
@@ -364,7 +364,7 @@ export default function CityPageClient({
                   {
                     num: "01",
                     title: "Leak Check",
-                    desc: "Take the 2-minute Bottleneck Score, then we talk for 15 minutes — free. I show you exactly where bookings are leaking and what it costs per month.",
+                    desc: "Book your free 90-minute AI Map. I show you exactly where bookings are leaking and what it costs per month.",
                   },
                   {
                     num: "02",
@@ -439,7 +439,7 @@ export default function CityPageClient({
                 >
                   <StarRow />
                   <blockquote className="font-sora font-light text-[14px] text-fg/70 leading-relaxed mb-4">
-                    &ldquo;{t.text}&rdquo;
+                    &quot;{t.text}&quot;
                   </blockquote>
                   <p className="font-sora text-[12px] font-semibold text-fg/70">{t.author}</p>
                   <p className="font-sora text-[11px] text-fg/30 mt-0.5">{t.role}</p>
@@ -499,15 +499,15 @@ export default function CityPageClient({
           </h2>
           <p className="font-sora font-light text-[15px] text-fg/45 leading-relaxed mb-10 max-w-lg mx-auto">
             {lang === "es"
-              ? "El Score tarda 2 minutos. La llamada de seguimiento, 15. Ambos son gratis — y obtienes una cifra concreta en €/mes de lo que te están costando las respuestas lentas."
-              : "The Score takes 2 minutes. The follow-up call takes 15. Both free — and you get a concrete €/month number for what slow responses are costing you."}
+              ? "El AI Map dura 90 minutos y es gratis. Y obtienes una cifra concreta en €/mes de lo que te están costando las respuestas lentas."
+              : "The AI Map takes 90 minutes and it is free. And you get a concrete €/month number for what slow responses are costing you."}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/score"
+              href="/ai-map"
               className="bg-accent text-bg font-semibold px-8 py-4 rounded-lg text-sm hover:bg-accent/90 transition-all duration-200 w-full sm:w-auto text-center"
             >
-              {lang === "es" ? "Consigue tu Bottleneck Score →" : "Get your Bottleneck Score →"}
+              {lang === "es" ? "Consigue tu AI Map gratis" : "Get your free AI Map"}
             </Link>
             <a
               href={WA_LINK}

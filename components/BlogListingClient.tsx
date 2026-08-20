@@ -8,15 +8,15 @@ import type { PostMeta } from "@/lib/blog";
 const headings = {
   en: {
     tag: "Insights",
-    title: "What the data says about losing — and keeping — customers.",
+    title: "What the data says about losing customers, and keeping them.",
     empty: "No posts yet. Check back soon.",
-    readMore: "Read more →",
+    readMore: "Read more",
   },
   es: {
     tag: "Artículos",
-    title: "Lo que dicen los datos sobre perder — y retener — clientes.",
+    title: "Lo que dicen los datos sobre perder clientes, y retenerlos.",
     empty: "Sin artículos todavía. Vuelve pronto.",
-    readMore: "Leer más →",
+    readMore: "Leer más",
   },
 };
 

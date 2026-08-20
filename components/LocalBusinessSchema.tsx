@@ -30,7 +30,7 @@ export default function LocalBusinessSchema({ city }: { city: CityData }) {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: `Bottleneck Score — Respuesta al Cliente en ${city.name}`,
+            name: `AI Map: Respuesta al Cliente en ${city.name}`,
             description: `Diagnóstico gratuito de 2 minutos para negocios en ${city.name}: dónde pierdes leads y cuánto te cuesta al mes.`,
           },
         },
@@ -38,7 +38,7 @@ export default function LocalBusinessSchema({ city }: { city: CityData }) {
           "@type": "Offer",
           itemOffered: {
             "@type": "Service",
-            name: `Asistente IA para WhatsApp y Web — ${city.name}`,
+            name: `Asistente IA para WhatsApp y Web en ${city.name}`,
             description: `Asistente personalizado para pymes en ${city.region} que responde en menos de 60 segundos, 24/7.`,
           },
         },
@@ -46,8 +46,8 @@ export default function LocalBusinessSchema({ city }: { city: CityData }) {
     },
     potentialAction: {
       "@type": "ReserveAction",
-      target: "https://maksnedbailo.site/score",
-      name: "Hacer el Bottleneck Score",
+      target: "https://maksnedbailo.site/ai-map",
+      name: "Reservar el AI Map",
     },
     sameAs: [`https://wa.me/${WA_LINK.replace("https://wa.me/", "")}`],
   };

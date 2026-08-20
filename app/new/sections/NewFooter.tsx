@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { NewPageDict } from "../lib/i18n";
 import { WA_LINK } from "@/lib/content";
-import { SCORE_TARGET } from "../lib/config";
+import { CTA_TARGET } from "../lib/config";
 import { useCtaTarget, useNewLocale, type NewLocale } from "../lib/locale";
 
 const YEAR = new Date().getFullYear();
@@ -50,7 +50,7 @@ export default function NewFooter({ d, locale: localeProp, ctaTarget: ctaTargetP
           <Link href={ctaTarget} className="font-sora text-[12px] text-fg/55 hover:text-fg/70 transition-colors">
             {d.header.aiMapLabel}
           </Link>
-          <Link href={SCORE_TARGET} className="font-sora text-[12px] text-fg/55 hover:text-fg/70 transition-colors">
+          <Link href={CTA_TARGET} className="font-sora text-[12px] text-fg/55 hover:text-fg/70 transition-colors">
             {d.footer.navScore}
           </Link>
           <a
@@ -81,7 +81,7 @@ export default function NewFooter({ d, locale: localeProp, ctaTarget: ctaTargetP
         </div>
 
         <p className="font-sora text-[11px] text-fg/55">
-          © {YEAR} {d.footer.credit} · {d.footer.location}
+          © {YEAR} {d.footer.credit}. {d.footer.location}
         </p>
       </div>
     </footer>

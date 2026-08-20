@@ -64,7 +64,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://maksnedbailo.site"),
   title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
   description:
-    "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
+    "Your clients message while you're with a client. An AI assistant replies in seconds, built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
   keywords: [
     "AI chatbot for small business",
     "WhatsApp automation",
@@ -90,7 +90,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
     description:
-      "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
+      "Your clients message while you're with a client. An AI assistant replies in seconds, built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     type: "website",
     url: "https://maksnedbailo.site",
     siteName: "Care Less AI Automation",
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
         url: "/maks-stage2.jpg",
         width: 1400,
         height: 450,
-        alt: "Maks Nedbailo — Care Less AI Automation",
+        alt: "Maks Nedbailo, Care Less AI Automation",
       },
     ],
   },
@@ -108,7 +108,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "AI Chatbot & WhatsApp Automation for Small Business | Care Less AI Automation",
     description:
-      "Your clients message while you're with a client. An AI assistant replies in seconds — built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
+      "Your clients message while you're with a client. An AI assistant replies in seconds, built after a real diagnosis, not another tool. Free 2-min Bottleneck Score.",
     images: ["/maks-stage2.jpg"],
   },
   verification: {
