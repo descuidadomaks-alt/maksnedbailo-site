@@ -1,43 +1,16 @@
 /**
- * /ai-map/new — corrected offer page: the AI Map is free, permanently.
+ * /ai-map/new - 308 redirect to /ai-map.
  *
- * Renders inside the existing app/ai-map/layout.tsx segment chrome
- * (DirectLocaleWrapper → shared header, Plausible + Clarity scripts,
- * ScrollReveal) — no separate layout.tsx here, which would double the
- * header. See app/ai-map/new/NewOfferClient.tsx for the page content.
+ * This page was promoted to /ai-map (see app/ai-map/page.tsx), which imports
+ * NewOfferClient from this folder directly. The redirect is permanent so any
+ * links already pointing at /ai-map/new fold their crawl signal into the
+ * real page, and so this route can never be indexed as a duplicate of it.
  *
- * Noindexed for now: this is a companion experiment alongside /ai-map
- * (which still carries the old "Free until July 31 — normally €1,470,
- * 10k guarantee" framing, out of scope for this task per
- * docs/NEW-HOMEPAGE-V2-BRIEF.md). Once reviewed, either promote this over
- * /ai-map or fold its copy back in — both are separate follow-up calls.
+ * Everything else in this folder is live source for /ai-map and must stay:
+ *   NewOfferClient.tsx, sections/, lib/copy.ts
  */
-import type { Metadata } from "next";
-import NewOfferClient from "./NewOfferClient";
-
-const TITLE = "Free AI Map — 90 Minutes, No Deadline | Care Less AI Automation";
-const DESCRIPTION =
-  "A 90-minute working session that maps where your business is losing time and money, ranked by impact. Free, permanently — one-page document delivered within 48 hours.";
-
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: "https://maksnedbailo.site/ai-map/new" },
-  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
-  openGraph: {
-    title: TITLE,
-    description: DESCRIPTION,
-    url: "https://maksnedbailo.site/ai-map/new",
-    type: "website",
-    siteName: "Care Less AI Automation",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: TITLE,
-    description: DESCRIPTION,
-  },
-};
+import { permanentRedirect } from "next/navigation";
 
 export default function AiMapNewPage() {
-  return <NewOfferClient />;
+  permanentRedirect("/ai-map");
 }

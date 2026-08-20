@@ -1,38 +1,47 @@
 /**
- * Homepage — the Care Less "Bottleneck Map" page, promoted from /new.
+ * Homepage - the Care Less V3 page, promoted from /new.
  *
  * Lives at the app root (NOT inside the (site) route group) so it does not
- * inherit app/(site)/layout.tsx — that layout adds AnnouncementBar + NavNew,
- * which would duplicate this page's own fixed header (NewHeader).
+ * inherit app/(site)/layout.tsx, which adds AnnouncementBar + NavNew and
+ * would duplicate this page's own fixed header (V2Header -> NewHeader).
  *
- * The previous homepage is archived at /old2 (app/(site)/old2/page.tsx).
- * /new now 301-redirects here (app/new/page.tsx).
+ * Content is app/new/_v2/V2HomeClient.tsx. The `_v2` folder is underscore
+ * prefixed, so Next treats it as private and never routes to it; it is only
+ * ever imported, which is what lets the page body live under app/new/ while
+ * being served from "/".
  *
- * Per the locked positioning doc, the following phrases are banned on this
- * page and must never reappear: "500+ businesses", "34+ countries",
- * "Free audit", "30-day guarantee", "under 60 seconds".
+ * Archives, oldest to newest, all noindex and all absent from the sitemap:
+ *   /old   original site
+ *   /old3  first Care Less homepage (HomePageClient)
+ *   /old2  the "Bottleneck Map" homepage this page replaced
+ * /new 308-redirects here (app/new/page.tsx).
+ *
+ * Copy rule for this page and everything it renders: no em dashes, en
+ * dashes, curly quotes, ellipsis characters, middots or arrow glyphs in
+ * anything a crawler can read. They are the cheapest tell that text was
+ * machine written. Use a full stop, a colon, a comma, or the word ("4 to 6",
+ * "2 to 3 weeks"). scratchpad/tells.py and htmltells.js check the source and
+ * the served HTML respectively.
  */
 import type { Metadata } from "next";
 import { NewLocaleProvider } from "./new/lib/locale";
-import NewHeader from "./new/components/NewHeader";
-import NewHomeClient from "./new/NewHomeClient";
-// Reuse the partner-page ScrollReveal (identical IntersectionObserver logic).
+import V2Header from "./new/_v2/components/V2Header";
+import V2HomeClient from "./new/_v2/V2HomeClient";
 import ScrollReveal from "@/app/partners/[slug]/components/ScrollReveal";
 
-const TITLE = "Bottleneck Map: Find Your #1 Cost Leak | Care Less AI Automation";
+const TITLE = "Win More Work, With Less Admin | AI Systems for Sales, Service & Finance Ops";
 const DESCRIPTION =
-  "Diagnose your founder bottlenecks in 90 minutes. Map your highest-ROI AI automation fixes (WhatsApp agents, lead systems) with an operator, not a consultant.";
+  "We build AI systems that answer every enquiry in seconds, follow up until customers reply, and take invoicing, bookkeeping and repetitive admin off your team. Free 90-minute AI Map first. You pay once it works.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   keywords: [
-    "bottleneck map",
-    "founder bottleneck",
-    "business process audit",
-    "AI automation audit",
-    "operations audit for founders",
-    "where is my business losing money",
+    "AI automation for small business",
+    "sales follow-up automation",
+    "AI front office",
+    "operations automation",
+    "AI Map",
     "Care Less",
     "Maks Nedbailo",
   ],
@@ -52,7 +61,7 @@ export const metadata: Metadata = {
         url: "/maks-stage2.jpg",
         width: 1400,
         height: 450,
-        alt: "Maks Nedbailo — Care Less AI automation",
+        alt: "Maks Nedbailo - Care Less AI automation",
       },
     ],
   },
@@ -72,10 +81,10 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <NewLocaleProvider>
-      <NewHeader />
+      <V2Header />
       {/* top padding so the fixed header doesn't overlap content */}
       <div style={{ paddingTop: "76px" }}>
-        <NewHomeClient />
+        <V2HomeClient />
       </div>
       <ScrollReveal />
     </NewLocaleProvider>

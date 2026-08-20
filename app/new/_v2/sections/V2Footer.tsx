@@ -49,7 +49,7 @@ export default function V2Footer({ d, ctaHref }: { d: V2Copy; ctaHref: string })
         </nav>
 
         <p className="font-sora text-[11px] text-fg/55">
-          © {YEAR} Care Less AI Automation · Santander, Spain
+          © {YEAR} Care Less AI Automation. Santander, Spain
         </p>
       </div>
 

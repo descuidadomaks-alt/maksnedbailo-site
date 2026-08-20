@@ -115,7 +115,13 @@ export default async function ArticlePage({
               href="/blog"
               className="inline-flex items-center gap-2 font-sora text-[13px] text-fg/35 hover:text-fg/70 transition-colors mb-8"
             >
-              ← Insights
+              {/* SVG rather than a left-arrow glyph: the character is
+                  non-ASCII in indexed body text, which is the pattern we
+                  strip everywhere a crawler reads. Renders identically. */}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M19 12H6M12 5l-7 7 7 7" />
+              </svg>
+              Insights
             </Link>
 
             <div className="flex items-center gap-3 mb-5">

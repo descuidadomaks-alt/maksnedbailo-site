@@ -70,7 +70,7 @@ export default function SoftGate({
         estimate_low_eur: estimate.low,
         estimate_high_eur: estimate.high,
         top_leak_category: leakCategory,
-        answers: QUESTIONS.map((q, i) => `${q.question} → ${q.options[answers[i]]}`).join(" | "),
+        answers: QUESTIONS.map((q, i) => `${q.question} -> ${q.options[answers[i]]}`).join(" | "),
         page_url: window.location.href,
       };
 
@@ -140,21 +140,19 @@ export default function SoftGate({
           {submitting ? (
             <>
               <Spinner />
-              Sending…
+              Sending...
             </>
           ) : (
             <>
               Show my numbers
-              <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>
-                →
-              </span>
+              <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h13M12 5l7 7-7 7" /></svg></span>
             </>
           )}
         </button>
       </form>
 
       <p className="font-sora font-light text-fg/28 mt-4" style={{ fontSize: "12px", lineHeight: 1.6 }}>
-        I&apos;ll also send you the breakdown. No sequence, no spam — I don&apos;t even
+        I&apos;ll also send you the breakdown. No sequence, no spam. I don&apos;t even
         have a newsletter.
       </p>
     </div>

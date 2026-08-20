@@ -92,7 +92,7 @@ export default function QuestionScreen({
             className="font-sora text-fg/30 hover:text-fg/60 transition-colors duration-200"
             style={{ fontSize: "13px" }}
           >
-            ← Back
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M19 12H6M12 5l-7 7 7 7" /></svg> Back
           </button>
         ) : null}
       </div>

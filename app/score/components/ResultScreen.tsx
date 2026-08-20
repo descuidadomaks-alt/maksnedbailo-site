@@ -65,7 +65,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
         className="font-numeral font-semibold text-fg mb-2"
         style={{ fontSize: "clamp(36px, 7vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}
       >
-        {formatEUR(estimate.low)}–{formatEUR(estimate.high)}
+        {formatEUR(estimate.low)}-{formatEUR(estimate.high)}
         <span className="font-sora font-light text-fg/35" style={{ fontSize: "0.35em" }}>
           /mo
         </span>
@@ -74,7 +74,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
         Estimated monthly cost of the founder bottleneck
       </p>
       <p className="font-numeral text-fg/28 mb-6" style={{ fontSize: "13px" }}>
-        (~{formatEUR(annualLow)}–{formatEUR(annualHigh)}/year)
+        (~{formatEUR(annualLow)}-{formatEUR(annualHigh)}/year)
       </p>
 
       <div className="rounded-2xl border border-white/[0.07] bg-white/[0.015] p-5 mb-6 text-left">
@@ -93,7 +93,7 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
         className="font-sora font-light italic text-fg/35 mb-6 mx-auto"
         style={{ fontSize: "13px", lineHeight: 1.6, maxWidth: "44ch" }}
       >
-        This is an estimate from 8 questions. The Bottleneck Map makes it exact — 90
+        This is an estimate from 8 questions. The Bottleneck Map makes it exact. 90
         minutes, your real numbers, ROI-ranked.
       </p>
 
@@ -101,11 +101,11 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
       {isContained ? (
         <div className="flex flex-col items-center gap-4">
           <p className="font-sora font-light text-fg/55 mx-auto" style={{ fontSize: "14px", lineHeight: 1.6, maxWidth: "40ch" }}>
-            Nice — you&apos;re not the bottleneck. Most founders aren&apos;t this far
+            Nice, you&apos;re not the bottleneck. Most founders aren&apos;t this far
             ahead. If you ever feel the ceiling, you know where I am.
           </p>
           <a
-            href={waLink(`Hi Maks, I just took the Bottleneck Score — I'm in the '${tier}' zone. Can we talk?`)}
+            href={waLink(`Hi Maks, I just took the Bottleneck Score. I'm in the '${tier}' zone. Can we talk?`)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80"
@@ -118,14 +118,14 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
       ) : isUnderOneMillion ? (
         <div className="flex flex-col items-center gap-3">
           <p className="font-sora font-light text-fg/55 mx-auto" style={{ fontSize: "13px", lineHeight: 1.6, maxWidth: "44ch" }}>
-            At your stage the Map usually isn&apos;t worth the fee yet — here&apos;s the
+            At your stage the Map usually isn&apos;t worth the fee yet. Here&apos;s the
             one thing to fix first:
           </p>
           <p className="font-sora font-light text-fg/65 leading-[1.6] mx-auto" style={{ fontSize: "13.5px", maxWidth: "44ch" }}>
             {LEAK_CATEGORY_TIPS[leakCategory]}
           </p>
           <a
-            href={waLink(`Hi Maks, I just took the Bottleneck Score — I'm in the '${tier}' zone. Can we talk?`)}
+            href={waLink(`Hi Maks, I just took the Bottleneck Score. I'm in the '${tier}' zone. Can we talk?`)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80 mt-1"
@@ -144,13 +144,11 @@ export default function ResultScreen({ answers }: { answers: number[] }) {
             className="group inline-flex items-center justify-center gap-2.5 bg-accent text-bg font-sora font-semibold rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_60px_rgba(212,255,43,0.22)] w-full sm:w-auto"
             style={{ fontSize: "15px", padding: "18px 32px", minHeight: "58px", letterSpacing: "-0.01em" }}
           >
-            Book your AI Map — {FOUNDING_RATE} {FOUNDING_DEADLINE_EN}
-            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>
-              →
-            </span>
+            Book your AI Map, {FOUNDING_RATE} {FOUNDING_DEADLINE_EN}
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h13M12 5l7 7-7 7" /></svg></span>
           </a>
           <a
-            href={waLink(`Hi Maks, I just took the Bottleneck Score — I'm in the '${tier}' zone (${formatEUR(estimate.low)}–${formatEUR(estimate.high)}/mo). Can we talk?`)}
+            href={waLink(`Hi Maks, I just took the Bottleneck Score. I'm in the '${tier}' zone (${formatEUR(estimate.low)}-${formatEUR(estimate.high)}/mo). Can we talk?`)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 font-sora font-light transition-opacity duration-200 hover:opacity-80"

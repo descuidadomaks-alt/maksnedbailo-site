@@ -5,9 +5,16 @@
  *  slot count) that V2 explicitly does not use.
  */
 
-/** Primary CTA target — the free, permanent AI Map booking page. */
-export const CTA_TARGET = "/ai-map/new";
-export const CTA_TARGET_ES = "/ai-map/new?lang=es";
+/**
+ * Primary CTA target: the free, permanent AI Map booking page.
+ *
+ * Points at /ai-map, NOT /ai-map/new. That page was promoted to /ai-map and
+ * /ai-map/new is now a 308 redirect, so leaving the old path here would send
+ * every homepage CTA through a needless extra hop, which costs the visitor a
+ * round trip and spends crawl budget on a redirect.
+ */
+export const CTA_TARGET = "/ai-map";
+export const CTA_TARGET_ES = "/ai-map?lang=es";
 
 /**
  * Voice agent proof section — off until the real agent is built and wired

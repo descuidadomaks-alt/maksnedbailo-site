@@ -8,7 +8,7 @@ export default function Intro({ onStart }: { onStart: () => void }) {
         className="font-label text-accent/70 mb-6"
         style={{ fontSize: "10px", letterSpacing: "3px", textTransform: "uppercase" }}
       >
-        Free · 2 minutes
+        Free / 2 minutes
       </p>
       <h1
         className="font-playfair font-normal text-fg mb-5"
@@ -21,7 +21,7 @@ export default function Intro({ onStart }: { onStart: () => void }) {
         style={{ fontSize: "16px", lineHeight: 1.65, maxWidth: "42ch" }}
       >
         8 questions. 2 minutes. Find out what being the bottleneck is costing you per
-        month — before you spend a cent fixing it.
+        month, before you spend a cent fixing it.
       </p>
       <button
         onClick={onStart}
@@ -30,7 +30,7 @@ export default function Intro({ onStart }: { onStart: () => void }) {
       >
         Start
         <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>
-          →
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h13M12 5l7 7-7 7" /></svg>
         </span>
       </button>
       <p className="font-sora font-light text-fg/28 mt-5" style={{ fontSize: "12px" }}>

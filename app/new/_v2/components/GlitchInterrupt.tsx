@@ -113,8 +113,8 @@ export default function GlitchInterrupt() {
               will-change: opacity, transform;
             }
 
-            /* ── Displaced slices: the page itself, inverted and shoved
-                  sideways. These carry the effect; the rest is seasoning. ── */
+            /* Displaced slices: the page itself, inverted and shoved
+                  sideways. These carry the effect; the rest is seasoning. */
             .v3-glitch-slice {
               -webkit-backdrop-filter: invert(1) hue-rotate(150deg) saturate(1.6);
               backdrop-filter: invert(1) hue-rotate(150deg) saturate(1.6);
@@ -162,9 +162,9 @@ export default function GlitchInterrupt() {
               84.01%,100% { opacity: 0; transform: translate3d(0,0,0); }
             }
 
-            /* ── Chromatic fringe: two tinted layers pulled apart. A cheap
-                  stand-in for a real channel split — at this speed the eye
-                  reads it the same way. ── */
+            /* Chromatic fringe: two tinted layers pulled apart. A cheap
+                  stand-in for a real channel split. At this speed the eye
+                  reads it the same way. */
             .v3-glitch-rgb { mix-blend-mode: screen; opacity: 0; }
             .v3-glitch-rgb.r { background: rgba(255,0,72,0.20);  animation: v3-gl-rgbr ${DURATION_MS}ms linear forwards; }
             .v3-glitch-rgb.c { background: rgba(0,236,255,0.17); animation: v3-gl-rgbc ${DURATION_MS}ms linear forwards; }
@@ -189,8 +189,8 @@ export default function GlitchInterrupt() {
               84.01%,100% { opacity: 0; transform: none; }
             }
 
-            /* ── Scanlines + roll. The roll is the only thing here that moves
-                  continuously; it is what says "a display", not "a filter". ── */
+            /* Scanlines + roll. The roll is the only thing here that moves
+                  continuously; it is what says "a display", not "a filter". */
             .v3-glitch-scan {
               background: repeating-linear-gradient(
                 0deg,
@@ -209,7 +209,7 @@ export default function GlitchInterrupt() {
               67.01%,100% { opacity: 0; }
             }
 
-            /* ── Static. feTurbulence rendered once into a small tile. ── */
+            /* Static. feTurbulence rendered once into a small tile. */
             .v3-glitch-noise {
               background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
               mix-blend-mode: overlay;
@@ -227,8 +227,8 @@ export default function GlitchInterrupt() {
               84.01%,100% { opacity: 0; }
             }
 
-            /* ── Signal drop, plus a single accent tear. The lime is the brand
-                  colour, so even the break still looks like it belongs. ── */
+            /* Signal drop, plus a single accent tear. The lime is the brand
+                  colour, so even the break still looks like it belongs. */
             .v3-glitch-drop {
               background: #060608;
               opacity: 0;

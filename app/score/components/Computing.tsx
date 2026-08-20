@@ -65,7 +65,7 @@ export default function Computing({ onDone }: { onDone: () => void }) {
                   color: "var(--bg)",
                 }}
               >
-                {done ? "✓" : active ? <span className="text-fg/70"><Spinner /></span> : null}
+                {done ? <><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M20 6L9 17l-5-5" /></svg></> : active ? <span className="text-fg/70"><Spinner /></span> : null}
               </span>
               <span className={done ? "text-fg/55" : "text-fg"}>{label}</span>
             </li>

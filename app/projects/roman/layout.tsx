@@ -2,7 +2,19 @@ import type { ReactNode } from 'react'
 import { Cormorant_Garamond, IBM_Plex_Sans } from 'next/font/google'
 import type { Metadata } from 'next'
 
+/**
+ * Client demo, same as every other page under /projects. noindex to match
+ * them: it was the only one missing a robots field, so it was the only one
+ * Google could index.
+ *
+ * It matters more here than for the other demos. This page is a
+ * Russian-language Phuket real-estate site for a different person, so an
+ * indexed copy under maksnedbailo.site tells Google the domain is partly
+ * about overseas property, which works directly against the AI-automation
+ * terms the homepage and /ai-map are trying to rank for.
+ */
 export const metadata: Metadata = {
+  robots: { index: false, follow: false },
   title: 'Roman Shiglo — Инвестиции в недвижимость Пхукета',
   description: 'Независимый советник по инвестициям в недвижимость. Пхукет · Дубай. Проверенные off-plan объекты, юридическая защита, полное сопровождение.',
 }

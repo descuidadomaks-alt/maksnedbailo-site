@@ -90,7 +90,7 @@ export default function V2Hero({
             style={{ fontSize: "15px", padding: "18px 34px", minHeight: "60px", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}
           >
             {d.hero.primaryCta}
-            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden>→</span>
+            <span className="group-hover:translate-x-0.5 transition-transform duration-200 inline-block" aria-hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12h13M12 5l7 7-7 7" /></svg></span>
           </Link>
           <p className="font-sora font-light text-fg/55 mt-2.5" style={{ fontSize: "12px" }}>
             {d.hero.primaryMicrocopy}

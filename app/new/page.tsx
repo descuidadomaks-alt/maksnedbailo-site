@@ -1,14 +1,23 @@
 /**
- * /new — experimental homepage, V2 positioning.
+ * /new - 308 redirect to "/".
  *
- * Renders app/new/_v2/V2HomeClient.tsx. Used to permanently redirect to "/"
- * (the live homepage lives at app/page.tsx and imports its own components
- * from app/new/** directly — it does not depend on this file). This route
- * segment is used only by /new; see app/new/layout.tsx for confirmation
- * that nothing else imports it.
+ * This page WAS the V3 homepage. It was promoted to "/" (see app/page.tsx),
+ * which imports app/new/_v2/V2HomeClient directly, so nothing here renders
+ * any more. The redirect is permanent to fold any accumulated links and
+ * crawl signal into the homepage instead of stranding them, and to make it
+ * impossible for /new to be indexed as a duplicate of "/".
+ *
+ * app/new/layout.tsx was deleted with this change: it existed to give /new
+ * its own locale provider, header and noindex metadata, all of which now
+ * belong to app/page.tsx. Everything else under app/new/ is still live
+ * source, imported by "/" and by /old2, and must not be removed:
+ *   _v2/        the current homepage
+ *   sections/   the archived Bottleneck Map homepage, served at /old2
+ *   components/ shared header, ticker and dot field used by both
+ *   lib/        shared locale context and i18n
  */
-import V2HomeClient from "./_v2/V2HomeClient";
+import { permanentRedirect } from "next/navigation";
 
 export default function NewPage() {
-  return <V2HomeClient />;
+  permanentRedirect("/");
 }

@@ -17,7 +17,7 @@ function ChatMock() {
     <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="px-3 py-2 flex items-center gap-2 border-b border-white/[0.05]">
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
-        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP · AMIRA</span>
+        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>WHATSAPP / AMIRA</span>
       </div>
       <div className="px-3 pt-3 pb-4 flex flex-col gap-1.5 flex-1 justify-end">
         <div className="self-start max-w-[82%] rounded-lg rounded-bl-sm px-2.5 py-1.5" style={{ background: "rgba(255,255,255,0.05)" }}>
@@ -27,7 +27,7 @@ function ChatMock() {
         </div>
         <div className="self-end max-w-[82%] rounded-lg rounded-br-sm px-2.5 py-1.5" style={{ background: "rgba(212,255,43,0.1)" }}>
           <p className="font-sora text-fg/75" style={{ fontSize: "11px", lineHeight: 1.4 }}>
-            Yes! I have Tuesday 2pm or Thursday 10am — which works better for you?
+            Yes! I have Tuesday 2pm or Thursday 10am. Which works better for you?
           </p>
         </div>
         <span className="font-label text-accent/55 self-end" style={{ fontSize: "9px", letterSpacing: "1px" }}>
@@ -47,8 +47,8 @@ function BookingMock() {
         <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
       <div className="px-3 pt-3 pb-4 flex flex-col gap-2.5 flex-1 justify-end">
-        <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room · 2 nights</p>
-        <p className="font-sora text-fg/62" style={{ fontSize: "11px" }}>Check-in Fri 14 — Check-out Sun 16</p>
+        <p className="font-numeral text-fg/72 font-semibold" style={{ fontSize: "12.5px" }}>Deluxe Spa Room, 2 nights</p>
+        <p className="font-sora text-fg/62" style={{ fontSize: "11px" }}>Check-in Fri 14, check-out Sun 16</p>
         <div className="flex items-center justify-between pt-2.5" style={{ borderTop: "1px dashed rgba(255,255,255,0.08)" }}>
           <span className="font-sora text-fg/55" style={{ fontSize: "10px" }}>Confirmed via WhatsApp</span>
           <span className="font-numeral font-bold text-accent" style={{ fontSize: "12px" }}>#EH-2291</span>
@@ -68,7 +68,7 @@ function DashboardMock() {
   return (
     <div className="h-full flex flex-col rounded-xl overflow-hidden border border-white/[0.06] px-3 pt-3 pb-3" style={{ background: "rgba(255,255,255,0.02)" }}>
       <div className="flex items-center justify-between mb-2.5">
-        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>OVERTIME OS · TODAY</span>
+        <span className="font-label text-fg/55" style={{ fontSize: "9px", letterSpacing: "1.5px" }}>OVERTIME OS / TODAY</span>
         <span className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0" style={{ background: "rgb(74,222,128)" }} />
       </div>
       <div className="flex-1 grid grid-cols-3 gap-2 items-end">

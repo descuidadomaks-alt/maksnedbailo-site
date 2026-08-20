@@ -130,13 +130,13 @@ export interface V2Copy {
 
 const en: V2Copy = {
   hero: {
-    eyebrow: "Sales · Service · Admin & Finance",
+    eyebrow: "Sales / Service / Admin & Finance",
     headline: "Your customer already bought from whoever answered first.",
     sub: "We build the systems that answer every enquiry in seconds, chase quotes until they reply, and take invoicing and repetitive admin off your team. We find what is worth building first, for free, and you only pay once it is live and working.",
     primaryCta: "Get your free AI Map",
     primaryMicrocopy: "Up to 90 minutes, usually less. Yours to keep either way.",
     anim: {
-      sourceLabel: "Calls · WhatsApp · Forms · Email",
+      sourceLabel: "Calls / WhatsApp / Forms / Email",
       todayLabel: "By hand",
       todayResult: "lost",
       systemLabel: "With a system",
@@ -235,21 +235,21 @@ const en: V2Copy = {
         tier: "Sell",
         name: "Amira for HC MedSpa",
         desc: "Answers every enquiry on WhatsApp and the website in 9 seconds, day or night, and books the consultation.",
-        tag: "UK MedSpa · Lead response",
+        tag: "UK MedSpa / Lead response",
         href: "/automations/hcmedspa",
       },
       {
         tier: "Serve",
         name: "Elena Hotel & SPA",
         desc: "Handles booking requests and guest questions 24/7 across WhatsApp and the site, in the guest's own language.",
-        tag: "Hotel · Booking & Support",
+        tag: "Hotel / Booking & Support",
         href: "https://bukovel-elena.com.ua/en/",
       },
       {
         tier: "Operate",
         name: "Overtime OS",
         desc: "A whole front office in one system. Missed calls texted back, jobs booked on the calendar, follow-ups and review requests running on their own.",
-        tag: "Home Services · Front office",
+        tag: "Home Services / Front office",
         href: "https://overtimeos.com/",
       },
     ],
@@ -263,7 +263,7 @@ const en: V2Copy = {
         name: "IKEA",
         stats: [
           { value: "74%", label: "of queries handled" },
-          { value: "60% → 89%", label: "customer satisfaction" },
+          { value: "60% to 89%", label: "customer satisfaction" },
           { value: "8,500", label: "staff retrained, none cut" },
         ],
         line: "Their bot took the opening hours, order updates and returns. The call centre staff became interior design advisors, and that remote sales channel now turns over 1.25 billion euros.",
@@ -282,7 +282,7 @@ const en: V2Copy = {
       {
         name: "Vodafone",
         stats: [
-          { value: "15% → 60%", label: "solved on first contact" },
+          { value: "15% to 60%", label: "solved on first contact" },
           { value: "+14", label: "points of net promoter score" },
         ],
         line: "Replacing the old chatbot with a proper one meant four times as many people got an answer straight away instead of joining a queue.",
@@ -394,13 +394,13 @@ const en: V2Copy = {
 
 const es: V2Copy = {
   hero: {
-    eyebrow: "Ventas · Atención · Admin y Finanzas",
+    eyebrow: "Ventas / Atención / Admin y Finanzas",
     headline: "Tu cliente ya le compró al que respondió primero.",
     sub: "Construimos los sistemas que responden cada consulta en segundos, persiguen los presupuestos hasta que contestan, y le quitan a tu equipo la facturación y el admin repetitivo. Primero encontramos qué merece la pena construir, gratis, y solo pagas cuando ya está funcionando.",
     primaryCta: "Consigue tu AI Map gratis",
     primaryMicrocopy: "Hasta 90 minutos, normalmente menos. Es tuyo pase lo que pase.",
     anim: {
-      sourceLabel: "Llamadas · WhatsApp · Formularios · Email",
+      sourceLabel: "Llamadas / WhatsApp / Formularios / Email",
       todayLabel: "A mano",
       todayResult: "perdidos",
       systemLabel: "Con un sistema",
@@ -499,21 +499,21 @@ const es: V2Copy = {
         tier: "Vender",
         name: "Amira para HC MedSpa",
         desc: "Responde cada consulta en WhatsApp y la web en 9 segundos, de día o de noche, y reserva la consulta.",
-        tag: "MedSpa (Reino Unido) · Respuesta a leads",
+        tag: "MedSpa (Reino Unido) / Respuesta a leads",
         href: "/automations/hcmedspa",
       },
       {
         tier: "Atender",
         name: "Elena Hotel & SPA",
         desc: "Gestiona solicitudes de reserva y preguntas de huéspedes 24/7 en WhatsApp y la web, en el idioma del huésped.",
-        tag: "Hotel · Reservas y atención",
+        tag: "Hotel / Reservas y atención",
         href: "https://bukovel-elena.com.ua/en/",
       },
       {
         tier: "Operar",
         name: "Overtime OS",
         desc: "Toda la oficina de atención en un solo sistema. Llamadas perdidas respondidas por SMS, trabajos reservados en el calendario, seguimientos y reseñas funcionando solos.",
-        tag: "Servicios a domicilio · Front office",
+        tag: "Servicios a domicilio / Front office",
         href: "https://overtimeos.com/",
       },
     ],
@@ -527,7 +527,7 @@ const es: V2Copy = {
         name: "IKEA",
         stats: [
           { value: "74%", label: "de consultas resueltas" },
-          { value: "60% → 89%", label: "satisfacción del cliente" },
+          { value: "60% a 89%", label: "satisfacción del cliente" },
           { value: "8.500", label: "empleados reconvertidos, cero despidos" },
         ],
         line: "Su bot se quedó con los horarios, el estado de los pedidos y las devoluciones. El personal del call center pasó a asesorar en diseño de interiores, y ese canal de venta remota ya factura 1.250 millones de euros.",
@@ -546,7 +546,7 @@ const es: V2Copy = {
       {
         name: "Vodafone",
         stats: [
-          { value: "15% → 60%", label: "resuelto en el primer contacto" },
+          { value: "15% a 60%", label: "resuelto en el primer contacto" },
           { value: "+14", label: "puntos de net promoter score" },
         ],
         line: "Cambiar el chatbot viejo por uno de verdad hizo que cuatro veces más gente obtuviera respuesta al momento en lugar de entrar en una cola.",

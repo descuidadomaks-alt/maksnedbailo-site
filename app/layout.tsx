@@ -143,7 +143,7 @@ const jsonLd = {
       sameAs: [UPWORK_PROFILE_URL],
       telephone: "+34641935207",
       description:
-        "Operator, not consultant. Designing ROI-ranked AI diagnostics and custom systems for owner-led businesses — honest about where AI helps and where it doesn't.",
+        "Operator, not consultant. Designing ROI-ranked AI diagnostics and custom systems for owner-led businesses. Honest about where AI helps and where it does not.",
       knowsLanguage: ["en", "es", "ru"],
       knowsAbout: [
         "Generative Engine Optimization",
@@ -165,8 +165,12 @@ const jsonLd = {
       alternateName: ["Care Less", "Careless", "Care Less by Careless AI & Automation"],
       url: "https://maksnedbailo.site",
       telephone: "+34641935207",
+      // Kept in step with what the homepage and /ai-map actually offer. This
+      // block is what answer engines quote when asked what the business does,
+      // so a description still selling a retired offer ("The Bottleneck Map",
+      // priced, deadlined) is worse than no description at all.
       description:
-        "The Bottleneck Map: a 90-minute, ROI-ranked diagnosis of where an owner-led business is leaking time and money — and what's actually worth fixing first.",
+        "AI systems for owner-led businesses: answer every enquiry in seconds, follow up until customers reply, and take invoicing, bookkeeping and repetitive admin off the team. Starts with a free 90-minute AI Map that ranks where AI actually pays off, and where it does not.",
       priceRange: "€€€",
       currenciesAccepted: "EUR, GBP, USD",
       founder: { "@id": "https://maksnedbailo.site/#person" },

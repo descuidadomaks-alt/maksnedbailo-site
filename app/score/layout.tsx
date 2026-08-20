@@ -12,9 +12,9 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-const TITLE = "The Bottleneck Score — Free 2-Minute Diagnostic | Care Less AI Automation";
+const TITLE = "The Bottleneck Score: Free 2-Minute Diagnostic | Care Less AI Automation";
 const DESCRIPTION =
-  "8 questions, 2 minutes. Find out what being the bottleneck is costing your business every month — before you spend a cent fixing it.";
+  "8 questions, 2 minutes. Find out what being the bottleneck is costing your business every month, before you spend a cent fixing it.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     url: "https://maksnedbailo.site/score",
     siteName: "Care Less AI Automation",
     locale: "en_US",
-    images: [{ url: "/Bottleneck_Score_Thumbnail.jpg", width: 1200, height: 675, alt: "The Bottleneck Score — Care Less AI Automation" }],
+    images: [{ url: "/Bottleneck_Score_Thumbnail.jpg", width: 1200, height: 675, alt: "The Bottleneck Score, Care Less AI Automation" }],
   },
   twitter: {
     card: "summary_large_image",
