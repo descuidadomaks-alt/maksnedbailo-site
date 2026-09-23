@@ -237,20 +237,18 @@ export default function ElevatorField({
       });
     };
 
-    // Always pick up scroll immediately, including fast changes at the edge
-    // of the section. The observer below still stops ambient frames offscreen.
-    const onScroll = () => { dirty = true; scheduleRender(); };
+    // Avoid repainting thousands of dots while the visitor scrolls through
+    // unrelated sections. Check the bounds directly so a fast scroll into the
+    // field cannot outrun an asynchronously updated observer flag.
+    const onScroll = () => {
+      const rect = wrapper.getBoundingClientRect();
+      if (rect.bottom < -window.innerHeight || rect.top > window.innerHeight * 2) return;
+      dirty = true;
+      scheduleRender();
+    };
 
-    // Mobile browser chrome changes 100dvh without changing innerWidth.
-    // Observe the canvas itself so its bitmap always matches its CSS size;
-    // otherwise the old frame stretches and the field appears to freeze/jump.
-    const canvasResizeObserver = new ResizeObserver(() => {
-      if (!resizeCanvas()) return;
-      render();
-    });
-    canvasResizeObserver.observe(canvas);
-
-    // Width changes can also cross the mobile particle-density breakpoint.
+    // Ignore mobile browser-chrome height changes: resetting a canvas bitmap
+    // while the URL bar moves produces a visible blank frame.
     let lastWidth = window.innerWidth;
     const onResize = () => {
       if (window.innerWidth === lastWidth) return;
@@ -282,7 +280,6 @@ export default function ElevatorField({
 
     return () => {
       io.disconnect();
-      canvasResizeObserver.disconnect();
       ambientActive = false;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);

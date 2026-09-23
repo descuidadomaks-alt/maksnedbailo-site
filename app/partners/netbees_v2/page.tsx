@@ -91,7 +91,7 @@ export default function NetBeesV2Page() {
         </div>
       </section>
 
-      <ElevatorField clip cameraSpan={0.35} cameraOffset={0.32} className={styles.dotField}>
+      <ElevatorField clip cameraSpan={0.45} cameraOffset={0.32} className={styles.dotField}>
         <section className={styles.possibilities} aria-labelledby="possibilities-title">
           <div className={styles.middleInner}>
             <div className={styles.intro} data-reveal>
