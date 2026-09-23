@@ -48,7 +48,7 @@ export default function NetBeesV2Page() {
       <section className={base.hero} aria-labelledby="netbees-v2-title">
         <p className={base.eyebrow}>A NOTE AFTER OUR CONVERSATION</p>
         <h1 id="netbees-v2-title">Maura, I left yesterday’s conversation thinking two things…</h1>
-        <div className={base.heroVisual}>
+        <div className={`${base.heroVisual} ${styles.heroVisual}`}>
           <Image
             src="/partners/netbees/bees_hero3.jpg"
             alt="Maura and a curious bee looking toward Max as he waves"

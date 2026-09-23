@@ -1,6 +1,13 @@
+.heroVisual {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+
+.heroVisual::after { display: none; }
+
 .heroImage {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 20%, #000 86%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 20%, #000 86%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 75%, transparent 100%);
 }
 
 .note,
@@ -73,6 +80,7 @@
 }
 
 @media (max-width: 430px) {
+  .heroVisual { width: 100vw; margin-left: calc(50% - 50vw); }
   .note { padding-top: 28px; }
   .thoughts { gap: 36px; }
   .item { padding: 21px 0 23px; }
