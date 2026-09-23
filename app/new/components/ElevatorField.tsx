@@ -222,47 +222,32 @@ export default function ElevatorField({
     let rafId: number | null = null;
     let dirty = false;
     let ambientActive = false;
-    let nearViewport = false;
-    let lastRenderAt = 0;
 
     const scheduleRender = () => {
       if (rafId !== null) return;
-      rafId = requestAnimationFrame((now) => {
+      rafId = requestAnimationFrame(() => {
         rafId = null;
         if (ambientActive) {
-          // Slow ambient drift needs fewer frames than scroll interaction.
-          // Keep scroll and resize updates immediate, including on phones.
-          if (dirty || now - lastRenderAt >= 1000 / 30) {
-            dirty = false;
-            render();
-            lastRenderAt = now;
-          }
+          render();
           scheduleRender();
           return;
         }
         if (!dirty) return;
         dirty = false;
         render();
-        lastRenderAt = now;
       });
     };
 
-    // The scroll handler is on `window`, so without this gate every scroll
-    // anywhere on the page would re-render the ~4680-dot field even while
-    // it's far off-screen (e.g. scrolled down to Testimonials/WhyMe).
-    const onScroll = () => {
-      if (!nearViewport) return;
-      dirty = true;
-      scheduleRender();
-    };
+    // Always pick up scroll immediately, including fast changes at the edge
+    // of the section. The observer below still stops ambient frames offscreen.
+    const onScroll = () => { dirty = true; scheduleRender(); };
 
     // Mobile browser chrome changes 100dvh without changing innerWidth.
     // Observe the canvas itself so its bitmap always matches its CSS size;
     // otherwise the old frame stretches and the field appears to freeze/jump.
     const canvasResizeObserver = new ResizeObserver(() => {
       if (!resizeCanvas()) return;
-      dirty = true;
-      scheduleRender();
+      render();
     });
     canvasResizeObserver.observe(canvas);
 
@@ -276,8 +261,7 @@ export default function ElevatorField({
         dotsRef.current = generateDots(lastWidth < MOBILE_BREAKPOINT);
       }
       resizeCanvas();
-      dirty = true;
-      scheduleRender();
+      render();
     };
 
     render();
@@ -294,28 +278,11 @@ export default function ElevatorField({
     );
     io.observe(wrapper);
 
-    // Wider margin than `io` — wakes the scroll handler up one viewport
-    // before the field enters view and keeps it awake one viewport after,
-    // so scrolling far away (e.g. near Testimonials/WhyMe) doesn't keep
-    // re-rendering the ~4680-dot field on every scroll frame.
-    const proximityIo = new IntersectionObserver(
-      ([entry]) => {
-        nearViewport = entry?.isIntersecting ?? false;
-        if (nearViewport) {
-          dirty = true;
-          scheduleRender();
-        }
-      },
-      { rootMargin: "100% 0px 100% 0px" }
-    );
-    proximityIo.observe(wrapper);
-
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
       io.disconnect();
-      proximityIo.disconnect();
       canvasResizeObserver.disconnect();
       ambientActive = false;
       window.removeEventListener("scroll", onScroll);

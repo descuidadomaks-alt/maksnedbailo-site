@@ -56,7 +56,6 @@
 .thought .overlap { margin-top: 22px; color: var(--fg); font-family: var(--font-roboto-mono), monospace; font-size: 15px; }
 
 .dotField { isolation: isolate; }
-.dotField :global(canvas) { opacity: 0.35; }
 .possibilities {
   position: relative;
   padding: clamp(72px, 8vw, 112px) 24px clamp(76px, 8vw, 106px);
