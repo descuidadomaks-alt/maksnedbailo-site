@@ -56,6 +56,7 @@
 .thought .overlap { margin-top: 22px; color: var(--fg); font-family: var(--font-roboto-mono), monospace; font-size: 15px; }
 
 .dotField { isolation: isolate; }
+.dotField :global(canvas) { opacity: 0.35; }
 .possibilities {
   position: relative;
   padding: clamp(72px, 8vw, 112px) 24px clamp(76px, 8vw, 106px);
@@ -71,7 +72,7 @@
   padding: 24px 23px 25px;
   border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 16px;
-  background: rgba(6, 6, 8, 0.8);
+  background: rgba(6, 6, 8, 0.9);
 }
 .card h3 { min-height: 3.1em; margin-bottom: 17px; color: var(--accent); font-size: 12px; line-height: 1.5; letter-spacing: 0.035em; }
 .card p { font-size: 14px; line-height: 1.67; }
