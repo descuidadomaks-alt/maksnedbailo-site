@@ -9,8 +9,8 @@
 .heroVisual::after { display: none; }
 
 .heroImage {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 14%, #000 23%, #000 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, transparent 14%, #000 23%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 25%, #000 35%, #000 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 25%, #000 35%, #000 100%);
 }
 
 .note,
