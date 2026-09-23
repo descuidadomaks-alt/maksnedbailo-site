@@ -95,18 +95,17 @@ function generateDots(mobile: boolean): Dot[] {
 // reaches the viewport bottom. cameraSpan scales how much of the full
 // camera travel that progress maps to — short wrappers (e.g. the FAQ ->
 // footer field) use a small span so the dots drift instead of racing.
-function getCameraY(wrapperEl: HTMLElement, cameraSpan: number, cameraOffset: number): number {
+function getCameraY(wrapperEl: HTMLElement, cameraSpan: number, cameraOffset: number, clip: boolean): number {
   const rect = wrapperEl.getBoundingClientRect();
   const windowH = window.innerHeight;
   const scrollable = rect.height - windowH;
-  // Wrappers shorter than the viewport (e.g. a single `clip` section) never
-  // satisfy scrollable > 0, so the sticky-range formula above would stay
-  // pinned at progress = 0 the whole time the section is on screen — the
-  // camera (and dots) wouldn't move at all. Fall back to progress through
-  // the section's pass across the viewport instead.
-  const progress = scrollable > 0
-    ? Math.max(0, Math.min(1, -rect.top / scrollable))
-    : Math.max(0, Math.min(1, (windowH - rect.top) / (windowH + rect.height)));
+  // Sticky shafts travel through their sticky range. Clipped sections have
+  // an absolute canvas and must travel through the whole viewport pass even
+  // when their content happens to be slightly taller than the viewport.
+  // Otherwise the entire camera move happens in that tiny height difference.
+  const progress = clip || scrollable <= 0
+    ? Math.max(0, Math.min(1, (windowH - rect.top) / (windowH + rect.height)))
+    : Math.max(0, Math.min(1, -rect.top / scrollable));
   return CAMERA_Y_START + (cameraOffset + progress * cameraSpan) * (CAMERA_Y_END - CAMERA_Y_START);
 }
 
@@ -211,7 +210,7 @@ export default function ElevatorField({
     const startTime = performance.now();
 
     const computeCameraY = () => {
-      const cameraY = getCameraY(wrapper, cameraSpan, cameraOffset);
+      const cameraY = getCameraY(wrapper, cameraSpan, cameraOffset, clip);
       if (prefersReducedMotion) return cameraY;
       const t = performance.now() - startTime;
       return cameraY + Math.sin((t / AMBIENT_PERIOD) * Math.PI * 2) * AMBIENT_AMPLITUDE;
@@ -289,7 +288,7 @@ export default function ElevatorField({
       window.removeEventListener("resize", onResize);
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
-  }, [cameraSpan, cameraOffset]);
+  }, [cameraSpan, cameraOffset, clip]);
 
   // Matches the page background — the Belief and sample-map sections inside
   // paint solid var(--bg) over the canvas, so the dots only show through the
