@@ -29,10 +29,14 @@ export default function LenisProvider() {
     if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 1024) return;
 
     // Dynamically import Lenis so it's never bundled server-side
+    let dispose: (() => void) | undefined;
+    let cancelled = false;
     import("lenis").then(({ default: Lenis }) => {
+      if (cancelled) return;
       const lenis = new Lenis({
-        lerp: 0.07,          // silkiness; lower = slower but smoother (premium glide)
+        lerp: 0.06,
         smoothWheel: true,
+        wheelMultiplier: 0.75,
         touchMultiplier: 1.8,
         infinite: false,
       });
@@ -77,12 +81,13 @@ export default function LenisProvider() {
         });
       }
 
-      return () => {
+      dispose = () => {
         cancelAnimationFrame(rafId);
         lenis.destroy();
         document.removeEventListener("click", onAnchorClick);
       };
     });
+    return () => { cancelled = true; dispose?.(); };
   }, []);
 
   return null;
