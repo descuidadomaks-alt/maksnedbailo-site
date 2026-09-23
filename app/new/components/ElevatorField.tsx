@@ -191,8 +191,14 @@ export default function ElevatorField({
 
     const resizeCanvas = () => {
       const rect = canvas.getBoundingClientRect();
-      canvas.width  = rect.width;
-      canvas.height = rect.height;
+      const width = Math.round(rect.width);
+      const height = Math.round(rect.height);
+      // Assigning either property clears the bitmap. Only resize when the
+      // rendered size actually changed, including height-only viewport changes.
+      if (canvas.width === width && canvas.height === height) return false;
+      canvas.width = width;
+      canvas.height = height;
+      return true;
     };
     resizeCanvas();
     if (dotsRef.current.length === 0) {
@@ -217,19 +223,27 @@ export default function ElevatorField({
     let dirty = false;
     let ambientActive = false;
     let nearViewport = false;
+    let lastRenderAt = 0;
 
     const scheduleRender = () => {
       if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
+      rafId = requestAnimationFrame((now) => {
         rafId = null;
         if (ambientActive) {
-          render();
+          // Slow ambient drift needs fewer frames than scroll interaction.
+          // Keep scroll and resize updates immediate, including on phones.
+          if (dirty || now - lastRenderAt >= 1000 / 30) {
+            dirty = false;
+            render();
+            lastRenderAt = now;
+          }
           scheduleRender();
           return;
         }
         if (!dirty) return;
         dirty = false;
         render();
+        lastRenderAt = now;
       });
     };
 
@@ -242,13 +256,25 @@ export default function ElevatorField({
       scheduleRender();
     };
 
-    // Mobile browsers fire `resize` when the URL bar shows/hides (height
-    // only) — re-measuring then is wasted work and can cause a visible
-    // jump. Only react when the width actually changes.
+    // Mobile browser chrome changes 100dvh without changing innerWidth.
+    // Observe the canvas itself so its bitmap always matches its CSS size;
+    // otherwise the old frame stretches and the field appears to freeze/jump.
+    const canvasResizeObserver = new ResizeObserver(() => {
+      if (!resizeCanvas()) return;
+      dirty = true;
+      scheduleRender();
+    });
+    canvasResizeObserver.observe(canvas);
+
+    // Width changes can also cross the mobile particle-density breakpoint.
     let lastWidth = window.innerWidth;
     const onResize = () => {
       if (window.innerWidth === lastWidth) return;
+      const wasMobile = lastWidth < MOBILE_BREAKPOINT;
       lastWidth = window.innerWidth;
+      if (wasMobile !== (lastWidth < MOBILE_BREAKPOINT)) {
+        dotsRef.current = generateDots(lastWidth < MOBILE_BREAKPOINT);
+      }
       resizeCanvas();
       dirty = true;
       scheduleRender();
@@ -290,6 +316,7 @@ export default function ElevatorField({
     return () => {
       io.disconnect();
       proximityIo.disconnect();
+      canvasResizeObserver.disconnect();
       ambientActive = false;
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
