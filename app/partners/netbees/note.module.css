@@ -110,7 +110,16 @@
 }
 
 @media (max-width: 768px) {
-  .heroImage { height: auto; object-fit: contain; }
+  .heroVisual.heroVisual { height: auto; overflow: hidden; }
+  .heroImage.heroImage {
+    position: relative;
+    left: 50%;
+    width: 120%;
+    max-width: none;
+    height: auto;
+    transform: translateX(-50%);
+    object-fit: contain;
+  }
   .note { padding: 48px 20px; }
   .thoughts { grid-template-columns: 1fr; gap: 44px; }
   .thought h2 { margin-top: 12px; font-size: clamp(24px, 5vw, 30px); }
@@ -133,6 +142,5 @@
 }
 
 @media (max-width: 520px) {
-  .heroVisual.heroVisual { height: auto; overflow: visible; }
-  .heroImage.heroImage { height: auto; object-fit: contain; }
+  .heroVisual.heroVisual { height: auto; overflow: hidden; }
 }
