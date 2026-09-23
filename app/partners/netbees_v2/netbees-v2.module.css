@@ -1,3 +1,8 @@
+.heroImage {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 20%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, transparent 8%, #000 20%, #000 86%, transparent 100%);
+}
+
 .note,
 .possibilities {
   padding: clamp(34px, 4.5vw, 64px) 24px;

@@ -50,13 +50,13 @@ export default function NetBeesV2Page() {
         <h1 id="netbees-v2-title">Maura, I left yesterday’s conversation thinking two things…</h1>
         <div className={base.heroVisual}>
           <Image
-            src="/partners/netbees/bees_hero2.jpg"
+            src="/partners/netbees/bees_hero3.jpg"
             alt="Maura and a curious bee looking toward Max as he waves"
             width={1920}
-            height={640}
+            height={638}
             priority
             sizes="(max-width: 1280px) 100vw, 1280px"
-            className={base.heroImage}
+            className={`${base.heroImage} ${styles.heroImage}`}
           />
         </div>
       </section>
