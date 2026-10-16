@@ -4,7 +4,7 @@ import {emptyState,calculate,validateState} from './engine.js';
 import {assets,meetingHTML} from './assets.js';
 const BASE='/projects/notd_v2',COOKIE='eldar_review_v2';
 const prefix=()=>process.env.VERCEL_ENV==='preview'?'eldar-v2/preview/':'eldar-v2/production/';
-const headers={'Cache-Control':'private, no-store, max-age=0','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex, nofollow, noarchive','Referrer-Policy':'no-referrer','X-Frame-Options':'DENY'};
+const headers={'Cache-Control':'private, no-store, max-age=0','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex, nofollow, noarchive','Referrer-Policy':'same-origin','X-Frame-Options':'DENY'};
 const json=(body,status=200)=>Response.json(body,{status,headers});
 const hash=s=>createHash('sha256').update(s).digest('hex');
 const equal=(a,b)=>timingSafeEqual(Buffer.from(hash(a)),Buffer.from(hash(b)));
