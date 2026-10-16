@@ -1,5 +1,5 @@
 // Pure purchasing contract: no CRM, storage, UI, or LLM dependencies.
-export const ENGINE_VERSION='3.0.0';
+export const ENGINE_VERSION='3.1.0';
 export const DEFAULT_PARAMS=Object.freeze({review:7,lead:14,buffer:7,minimumOrder:5});
 export const RULE_TYPES=Object.freeze({demand:'Сезон / спрос ×',delivery:'Срок новой доставки, дней',extra:'Подтверждённый разовый спрос, шт.',floor:'Минимальный свободный запас, шт.',minimum:'Минимум положительного заказа, шт.',risk:'Опциональный резерв под опт, шт.',active:'Закупка разрешена: 1 / запрещена: 0'});
 const DAY=86400000;
@@ -41,7 +41,11 @@ export function calculate(data,state){
   }
   if(exclude<0||exclude>sales)conflict=true;
   const rawNeed=qty(Math.max(peak,floorPeak)),minimum=Math.ceil(minRule.value),minimumApplied=rawNeed>0?Math.max(rawNeed,minimum):0;
-  const blocked=activeRule.value===0,suggested=blocked?0:unknownStock||conflict?null:minimumApplied;
+  const replaced=(state.productLinks||[]).some(l=>l.from===row.id&&l.status==='confirmed'),blocked=activeRule.value===0||replaced;
+  const unknownInbound=unknown.reduce((s,a)=>s+a.qty,0),afterOpen=qty(Math.max(0,rawNeed-unknownInbound));
+  const quantityPlan=afterOpen>0?Math.max(afterOpen,minimum):0;
+  const beforeUndated=blocked?0:unknownStock||conflict?null:minimumApplied;
+  const suggested=blocked?0:unknownStock||conflict?null:quantityPlan;
   const inbound=arrivals.filter(a=>a.day<=horizon).reduce((s,a)=>s+a.qty,0),later=arrivals.filter(a=>a.day>horizon).reduce((s,a)=>s+a.qty,0),undated=unknown.reduce((s,a)=>s+a.qty,0);
   const rowBasis=fingerprint({engine:ENGINE_VERSION,date:asOf,row:{id:row.id,sales,exclude,free},lead,horizon,minimum,blocked,schedule,arrivals,unknown,risk});
   const hasOverride=edit.qty!==undefined&&edit.qty!==null&&edit.qty!=='';
@@ -49,7 +53,7 @@ export function calculate(data,state){
   const stale=hasOverride&&!previous&&!!edit.reviewedAt&&edit.reviewBasis!==rowBasis;
   const quantity=hasOverride?Number(edit.qty):suggested;
   const accepted=hasOverride&&!previous&&!stale&&!!edit.reviewedAt;
-  if(unknownStock)warnings.push('Нет свежего остатка: количество не рассчитываем.');
+  if(unknownStock&&!blocked)warnings.push('Нет свежего остатка: количество не рассчитываем.');
   if(!state.complete?.[row.brand])warnings.push('Полнота открытых закупок не подтверждена.');
   if(undated)warnings.push('Уже заказано '+undated+' шт. без актуальной даты: проверьте риск повторной закупки.');
   if(early>0&&!unknownStock)warnings.push('До новой доставки может не хватить '+qty(early)+' шт.');
@@ -57,8 +61,9 @@ export function calculate(data,state){
   if(previous)warnings.push('Сохранённое решение V2: можно подтвердить одним нажатием.');
   if(stale)warnings.push('Изменились данные именно этого товара: проверьте решение.');
   if(blocked)warnings.push('Закупка запрещена правилом: позиция снята или исключена.');
+  const knowledge=state.ownerKnowledge?.[row.id]||Object.entries(state.ownerKnowledge||{}).filter(([id])=>(state.productLinks||[]).some(l=>l.from===id&&l.to===row.id&&l.status==='confirmed')).map(([,v])=>v).at(-1);
   const issue=state.dataIssues?.[row.id],pendingLink=(state.productLinks||[]).some(l=>l.status==='pending'&&(l.from===row.id||l.to===row.id));if(issue&&!issue.resolved)warnings.push(issue.note);if(pendingLink)warnings.push('Есть старый / новый артикул этой позиции. Выберите одно итоговое количество в «Логика и группы».');
-  return {...row,sales,rate,free,unknownStock,suggested,rawNeed,quantity,hasOverride,previous,stale,accepted,reason:edit.reason||'',inbound,later,undated,lead,horizon,normalHorizon,regularDemand:regular,extraDemand:extraTotal,demand:cumulative,early:unknownStock?null:qty(early),conflict,blocked,minimum,optionalReserve:blocked?0:risk,optionalTotal:suggested===null?null:suggested+risk,rowBasis,usedRules:[...used],warnings,needsInboundCheck:undated>0,dataIssue:!!issue&&!issue.resolved,pendingLink,components:{baseline:unknownStock?null:qty(basePeak),adjusted:unknownStock?null:qty(peak),floor:unknownStock?null:qty(floorPeak),minimumAdded:suggested===null?null:Math.max(0,suggested-rawNeed),inboundReduction:unknownStock?null:qty(noInboundPeak)-qty(peak)},schedule,readyForSupplier:false};
+  return {...row,sales,rate,free,unknownStock,suggested,beforeUndated,replaced,knowledge,planningConditional:unknownInbound>0,rawNeed,quantity,hasOverride,previous,stale,accepted,reason:edit.reason||'',inbound,later,undated,lead,horizon,normalHorizon,regularDemand:regular,extraDemand:extraTotal,demand:cumulative,early:unknownStock?null:qty(early),conflict,blocked,minimum,optionalReserve:blocked?0:risk,optionalTotal:suggested===null?null:suggested+risk,rowBasis,usedRules:[...used],warnings,needsInboundCheck:undated>0,dataIssue:!!issue&&!issue.resolved,pendingLink,components:{baseline:unknownStock?null:qty(basePeak),adjusted:unknownStock?null:qty(peak),floor:unknownStock?null:qty(floorPeak),minimumAdded:suggested===null?null:Math.max(0,suggested-rawNeed),inboundReduction:unknownStock?null:qty(noInboundPeak)-qty(peak)},schedule,readyForSupplier:false};
  });
  return {asOf,engineVersion:ENGINE_VERSION,rulebook:fingerprint({params:p,rules}),params:p,rows,summary:{candidates:rows.filter(r=>r.suggested>0).length,units:rows.reduce((s,r)=>s+(r.suggested||0),0),ownerUnits:rows.reduce((s,r)=>s+(r.quantity||0),0),accepted:rows.filter(r=>r.accepted).length,previous:rows.filter(r=>r.previous).length,stale:rows.filter(r=>r.stale).length,unknownStock:rows.filter(r=>r.unknownStock).length,conflicts:rows.filter(r=>r.conflict).length,undated:rows.filter(r=>r.undated>0).length},readyForSupplier:false};
 }
@@ -67,12 +72,13 @@ export function validateState(s,data){
  const ids=new Set(data.rows.map(r=>r.id)),scopes=new Set(['all','notd','biblioteka',...ids,...data.rows.map(r=>'category:'+r.brand+':'+r.category)]);
  const ruleIds=new Set();for(const r of s.rules){if(!r.id||ruleIds.has(r.id)||!Object.hasOwn(RULE_TYPES,r.kind)||!scopes.has(r.scope)||!Number.isFinite(Number(r.value))||Number(r.value)<0||Number(r.value)>(r.kind==='demand'?10:r.kind==='delivery'?90:r.kind==='active'?1:100000)||!r.reason?.trim())throw Error('Проверьте тип, значение, область и причину правила.');ruleIds.add(r.id);if([r.from,r.to].some(x=>x&&(!Number.isFinite(dayNumber(x))||dateAfter(x,0)!==x))||r.from&&r.to&&r.to<r.from)throw Error('Проверьте даты правила.');if(!Number.isInteger(Number(r.priority||0))||Math.abs(Number(r.priority||0))>1000)throw Error('Проверьте приоритет.');if(r.kind==='extra'&&(!r.incremental||!r.from||!ids.has(r.scope)))throw Error('Разовый заказ требует SKU, даты и подтверждения отсутствия двойного резерва.');if(['floor','minimum','risk'].includes(r.kind)&&(!Number.isInteger(Number(r.value))||r.kind==='minimum'&&Number(r.value)<1))throw Error('Количество в правиле должно быть целым.');if(r.kind==='active'&&![0,1].includes(Number(r.value)))throw Error('Разрешение закупки: 0 или 1.');}
  const nums=new Set(),docs=new Set();for(const p of s.orders){const key=p.brand+':'+p.number;if(!p.number||nums.has(key)||!['notd','biblioteka'].includes(p.brand)||!Array.isArray(p.lines)||p.lines.length>3000)throw Error('Проверьте уникальный номер и строки закупки.');nums.add(key);if(p.documentId){if(docs.has(p.documentId))throw Error('Один оригинал не может учитываться в двух закупках.');docs.add(p.documentId);}if(p.eta&&(!Number.isFinite(dayNumber(p.eta))||dateAfter(p.eta,0)!==p.eta))throw Error('Проверьте дату приезда.');const seen=new Set();for(const l of p.lines){if(!ids.has(l.id)||!l.id.startsWith(p.brand+':')||seen.has(l.id)||![l.ordered,l.received,l.cancelled].every(x=>Number.isInteger(x)&&x>=0&&x<=100000)||l.received+l.cancelled>l.ordered)throw Error('Проверьте товар, заказано, получено и отменено.');seen.add(l.id);}}
+ for(const p of s.orders)for(const l of p.unmatchedLines||[]){if(!l.sourceName||![l.ordered,l.received,l.cancelled].every(x=>Number.isInteger(x)&&x>=0&&x<=100000)||l.received+l.cancelled>l.ordered)throw Error('Проверьте несопоставленные строки закупки.');}
  for(const [id,ed]of Object.entries(s.edits)){const row=data.rows.find(r=>r.id===id);if(!row)throw Error('Неизвестный SKU в решениях.');if(ed.qty!==undefined&&ed.qty!==null&&ed.qty!==''&&(!Number.isInteger(Number(ed.qty))||Number(ed.qty)<0||Number(ed.qty)>100000))throw Error('Количество должно быть целым и неотрицательным.');if(!Number.isFinite(Number(ed.excludeSales||0))||Number(ed.excludeSales||0)<0||Number(ed.excludeSales||0)>Number(row.sales28||0))throw Error('Исключение превышает исходные продажи.');if(String(ed.reason||'').length>5000)throw Error('Слишком длинный комментарий.');}
  if(JSON.stringify(s).length>2000000)throw Error('Встреча больше 2 МБ. Разделите документы.');calculate(data,s);return s;
 }
 export function acceptDecision(state,data,id,quantity,reason,allowUndated=false){
  const candidate=structuredClone(state),r=calculate(data,candidate).rows.find(x=>x.id===id);if(!r||r.conflict||r.unknownStock&&!r.blocked||r.dataIssue||r.pendingLink)throw Error('Сначала уточните остаток, конфликт правил, соответствие артикулов или расхождение продаж.');
- if(r.needsInboundCheck&&!allowUndated)throw Error('Есть уже заказанное без даты. Для новой закупки подтвердите риск повтора в карточке.');
+ if(r.needsInboundCheck&&!allowUndated&&!state.cycle?.acknowledgeUndated)throw Error('Есть уже заказанное без даты. Для новой закупки подтвердите риск повтора в карточке.');
  if(r.blocked&&Number(quantity)>0)throw Error('Сначала измените правило запрета закупки.');
  if(Number(quantity)!==r.suggested&&!reason?.trim())throw Error('Для другого количества укажите причину.');
  candidate.edits[id]={...candidate.edits[id],qty:Number(quantity),reason:reason?.trim()||'Согласен с расчётом',origin:'v3',reviewedAt:new Date().toISOString(),allowUndated,reviewBasis:r.rowBasis};validateState(candidate,data);return candidate;

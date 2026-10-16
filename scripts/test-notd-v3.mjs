@@ -6,7 +6,7 @@ let checks=0;const eq=(a,b)=>{assert.deepEqual(a,b);checks++;};
 const row={id:'notd:A',brand:'notd',sku:'A',name:'A',category:'Top',sales28:280,available:50,reserved:20,fresh:true},other={...row,id:'biblioteka:B',sku:'B',brand:'biblioteka'},data={meetingDate:'2026-10-16',rows:[row,other]};
 let s=emptyState();const calc=(state=s)=>calculate(data,state).rows[0];eq(calc().suggested,230);eq(calc().early,80);
 s.orders=[{number:'one',brand:'notd',confirmed:true,eta:'2026-10-23',lines:[{id:row.id,ordered:100,received:20,cancelled:10}]}];eq(calc().inbound,70);eq(calc().suggested,160);
-s.orders[0].eta='';eq(calc().undated,70);eq(calc().suggested,230);assert.throws(()=>acceptDecision(s,data,row.id,230,''));checks++;
+s.orders[0].eta='';eq(calc().undated,70);eq(calc().suggested,160);assert.throws(()=>acceptDecision(s,data,row.id,160,''));checks++;
 s=acceptDecision(s,data,row.id,230,'Подтверждаю дополнительную закупку',true);eq(calc().accepted,true);
 s=emptyState();s.orders=[{number:'late',brand:'notd',confirmed:true,eta:'2026-11-12',lines:[{id:row.id,ordered:70,received:0,cancelled:0}]}];eq(calc().suggested,210);
 s=emptyState();s=acceptDecision(s,data,row.id,230,'');eq(calc().accepted,true);s.complete.notd=true;s.notes.events='Только комментарий';eq(calc().accepted,true);
@@ -22,4 +22,4 @@ eq(calculate({...data,rows:[{...row,available:null,fresh:false}]},emptyState()).
 s=emptyState();s.orders=[{number:'x',brand:'notd',documentId:'same',lines:[{id:row.id,ordered:10,received:11,cancelled:0}]}];assert.throws(()=>validateState(s,data));checks++;
 s.orders[0].lines[0].received=0;s.orders.push({...s.orders[0],number:'y'});assert.throws(()=>validateState(s,data));checks++;
 
-console.log(JSON.stringify({checks,contract:"3.0.0"}));
+console.log(JSON.stringify({checks,contract:'3.1.0'}));

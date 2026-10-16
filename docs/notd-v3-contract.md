@@ -1,4 +1,14 @@
-# Purchasing V3 contract — 3.0.0
+## Next purchasing cycle
+
+A completed owner review is an archive, not a new order. Preparing the next cycle preserves owner comments as knowledge, saves old quantities in history, resolves explicit SKU corrections, carries forward confirmed policies and open supplier purchases, and clears the new order decisions. The homepage waits for a strictly newer CRM snapshot. A preparation does not create another forecast from the old data.
+
+Snapshot updates use immutable dataset files and a single conditional meeting-head pointer. Archiving, refresh and calculation are separate transitions. A refresh keeps open purchases and policy; the calculation is re-enabled only with a newer validated source date and explicit reconciliation of received versus outstanding purchase quantities against that date. This prevents already-received stock being counted again as inbound. Missing old catalogue records are retained as unverified history rather than silently replaced by zero. Automatic CRM fetching is not implemented by this endpoint.
+
+All physical quantities on a supplier invoice are retained, including rows not yet assigned to a CRM SKU. Only identified rows affect that SKU. In-transit status may be an explicit owner planning assumption; it does not imply verified shipment or a known ETA. Undated identified inbound reduces the primary **quantity planning** gap; a separate timed scenario without those arrivals and pre-delivery shortage remain visible. The reduced quantity is conditional on arrival, not a guarantee of timely stock. The owner has explicitly accepted using undated inbound for planning.
+
+The catalogue includes relevant products from the complete saved stock report, with current CRM names and legacy aliases. Replaced and excluded records are separated from active assortment. Coverage counts decompose into active, replaced, excluded and genuinely missing inputs; filtered recommendations never imply the rest of the catalogue is fine without a calculation.
+
+# Purchasing V3 contract — 3.1.0
 
 V3 is an owner-review tool, not an automatic supplier order. KeyCRM remains the record of sales, reservations and stock. The current web interface reads a saved CRM snapshot; scheduled CRM refresh and supplier submission are not implemented.
 

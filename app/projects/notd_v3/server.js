@@ -2,6 +2,7 @@ import {createHash,createHmac,timingSafeEqual,randomUUID} from 'node:crypto';
 import {get,put,list,head} from '@vercel/blob';
 import {calculate,validateState,ENGINE_VERSION} from './engine.js';
 import {migrateV2} from './patterns.js';
+import {validateDataset} from './cycles.js';
 import {assets,meetingHTML} from './assets.js';
 const BASE='/projects/notd_v3',COOKIE='eldar_review_v3';
 const env=()=>process.env.VERCEL_ENV==='preview'?'preview':'production',prefix=()=>`eldar-v3/${env()}/`,oldPrefix=()=>`eldar-v2/${env()}/`;
@@ -12,6 +13,7 @@ function auth(req){const v=req.headers.get('cookie')?.split(';').map(x=>x.trim()
 const cleanETag=e=>String(e||'').replace(/^W\//,'').replace(/^"|"$/g,'');
 async function read(path,old=false){const pathname=(old?oldPrefix():prefix())+path;for(let attempt=0;attempt<3;attempt++){const r=await get(pathname,{access:'private',useCache:false});if(r?.statusCode!==200)return null;const value=await new Response(r.stream).json();if(path!=='meeting.json')return {value,etag:cleanETag(r.blob.etag)};const metadata=await head(pathname);if(cleanETag(r.blob.etag)===cleanETag(metadata.etag))return {value,etag:metadata.etag};}throw Error('Данные изменились во время чтения. Обновите страницу; локальный черновик сохранён.');}
 const write=(path,value,etag)=>put(prefix()+path,JSON.stringify(value),{access:'private',contentType:'application/json',addRandomSuffix:false,allowOverwrite:!!etag,...(etag?{ifMatch:etag}:{}),cacheControlMaxAge:60});
+async function session(){const m=await read('meeting.json'),d=await read(m?.value.datasetPath||'dataset.json');return {m,d};}
 async function docMeta(id){return await read('document-metadata/'+id+'.json')||await read('document-metadata/'+id+'.json',true);}
 async function docs(){const out=new Map();for(const old of [true,false]){let cursor;do{const p=await list({prefix:(old?oldPrefix():prefix())+'document-metadata/',limit:500,cursor});for(const b of p.blobs){const r=await read(b.pathname.slice((old?oldPrefix():prefix()).length),old);if(r)out.set(r.value.id,{...r.value,archive:old?'v2':'v3'});}cursor=p.hasMore?p.cursor:undefined;if(out.size>2000)throw Error('Слишком много документов.');}while(cursor);}return [...out.values()].sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
 const loginHTML=(message='')=>`<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Закупки V3 · Вход</title><style>body{font:16px system-ui;background:#f5f6f2;color:#24372d;display:grid;min-height:95vh;place-items:center}main{width:min(390px,85vw);background:white;border:1px solid #d7dfd2;padding:32px;border-radius:16px}input,button{box-sizing:border-box;font:inherit;padding:13px;width:100%;margin:10px 0;border:1px solid #cbd3c7;border-radius:8px}button{background:#214f3b;color:white;cursor:pointer}p{color:#71806d;line-height:1.6}</style><main><p>NOTD + BIBLIOTEKA / V3</p><h1>Планируем закупку</h1><p>Тот же код доступа. Решения V2 остаются в архиве.</p><form action="${BASE}/login" method="post"><label>Код доступа<input name="password" type="password" autocomplete="current-password" required autofocus></label><button>Войти</button></form><p>${message}</p></main></html>`;
@@ -20,7 +22,7 @@ async function makeExcel(snapshot){
  const sheets={
   'Закупка':[['Бренд','Артикул','Товар','Продажи 28д','Свободно','Поставка в срок','Заказано без даты','Расчёт V3','Решение','Подтверждено','Причина','Предупреждения'],...snapshot.result.rows.map(r=>[r.brand,r.sku,r.name,r.sales,r.free,r.inbound,r.undated,r.suggested,r.quantity,r.accepted?'Да':'Нет',r.reason,r.warnings.join(' ')])],
   'Правила':[['Версия движка',snapshot.engineVersion],['Версия правил',snapshot.result.rulebook],['Срез CRM',snapshot.datasetDate],['Пересмотр',snapshot.input.params.review],['Доставка',snapshot.input.params.lead],['Запас дней',snapshot.input.params.buffer],['Минимум заказа',snapshot.input.params.minimumOrder],[],['Тип','Область','Значение','С','До','Включено','Причина'],...snapshot.input.rules.map(r=>[r.kind,r.scope,r.value,r.from,r.to,r.enabled!==false,r.reason])],
-  'Поставки':[['Номер','Бренд','Статус','Маршрут','Дата приезда','Артикул','Заказано','Получено в CRM','Отменено'],...snapshot.input.orders.flatMap(p=>p.lines.map(l=>[p.number,p.brand,p.status||'ordered',p.route||'',p.eta||'',l.id.split(':')[1],l.ordered,l.received,l.cancelled]))]
+  'Поставки':[['Номер','Бренд','Статус','Маршрут','Дата приезда','Артикул','Заказано','Получено в CRM','Отменено'],...snapshot.input.orders.flatMap(p=>[...p.lines,...p.unmatchedLines||[]].map(l=>[p.number,p.brand,p.status||'ordered',p.route||'',p.eta||'',l.id?l.id.split(':')[1]:'Сопоставить: '+l.sourceName,l.ordered,l.received,l.cancelled]))]
  };
  for(const [name,values]of Object.entries(sheets)){const ws=x.utils.aoa_to_sheet(values);ws['!cols']=values[0].map((_,i)=>({wch:i===2?55:i>9?65:20}));ws['!autofilter']={ref:ws['!ref']};for(const [key,cell]of Object.entries(ws)){if(!key.startsWith('!')&&cell.t==='s')delete cell.f;}x.utils.book_append_sheet(wb,ws,name);}return x.write(wb,{bookType:'xlsx',type:'buffer'});
 }
@@ -34,7 +36,7 @@ export async function handle(req){
   if(!auth(req))return path.startsWith('/api/')?json({error:'Войдите в закрытый экран.'},401):new Response(loginHTML(),{headers:{...HEAD,'Content-Type':'text/html;charset=utf-8'}});
   if(req.method==='GET'&&path==='/')return new Response(meetingHTML,{headers:{...HEAD,'Content-Type':'text/html;charset=utf-8','Content-Security-Policy':"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; img-src 'self' blob: data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"}});
   if(req.method==='GET'&&assets[path])return new Response(assets[path].body,{headers:{...HEAD,'Content-Type':assets[path].type}});
-  if(path==='/api/state'&&req.method==='GET'){const [d,m,documents]=await Promise.all([read('dataset.json'),read('meeting.json'),docs()]);return json({data:d?.value||null,state:m?.value.state||null,revision:m?.etag||null,updatedAt:m?.value.updatedAt||null,documents,canMigrate:!m});}
+  if(path==='/api/state'&&req.method==='GET'){const [{d,m},documents]=await Promise.all([session(),docs()]);return json({data:d?.value||null,state:m?.value.state||null,revision:m?.etag||null,updatedAt:m?.value.updatedAt||null,documents,canMigrate:!m});}
   if(path==='/api/migrate-v2'&&req.method==='POST'){
    if(await read('meeting.json'))return json({error:'V3 уже инициализирована; повторный перенос запрещён.'},409);
    const [d,m]=await Promise.all([read('dataset.json',true),read('meeting.json',true)]);if(!d||!m)return json({error:'Не найден исходный срез V2.'},400);
@@ -45,9 +47,10 @@ export async function handle(req){
   }
   if(['/api/state','/api/recalculate'].includes(path)&&req.method==='POST'){
    if(Number(req.headers.get('content-length'))>2300000)return json({error:'Слишком большой черновик.'},413);
-   const [d,m]=await Promise.all([read('dataset.json'),read('meeting.json')]);if(!d||!m)return json({error:'Сначала перенесите V2.'},400);const body=await req.json();if(body.expectedRevision!==m.etag)return json({error:'Другой экран уже сохранил изменения. Ваш черновик сохранён на этом устройстве. Скачайте его перед обновлением страницы.',conflict:true},409);
+   const {d,m}=await session();if(!d||!m)return json({error:'Сначала перенесите V2.'},400);const body=await req.json();if(body.expectedRevision!==m.etag)return json({error:'Другой экран уже сохранил изменения. Ваш черновик сохранён на этом устройстве. Скачайте его перед обновлением страницы.',conflict:true},409);
    const state=validateState(body.state,d.value);state.versions=m.value.state.versions||[];state.legacyVersions=m.value.state.legacyVersions||[];const updatedAt=new Date().toISOString();let version=null;
    if(path==='/api/recalculate'){
+    if(state.cycle&&state.cycle.status!=='ready')return json({error:'Новый расчёт ожидает свежую выгрузку CRM. Предыдущая проверка сохранена в истории.'},409);
     const result=calculate(d.value,state),id=randomUUID(),last=state.versions.at(-1),previous=last?await read('versions/'+last.id+'.json'):null;
     const old=new Map((previous?.value.result.rows||[]).map(r=>[r.id,r]));
     const comparison=result.rows.filter(r=>!old.has(r.id)||r.suggested!==old.get(r.id).suggested||r.quantity!==old.get(r.id).quantity).map(r=>({id:r.id,name:r.name,before:old.get(r.id)?.quantity??null,after:r.quantity,suggested:r.suggested,reason:r.reason}));
@@ -57,7 +60,16 @@ export async function handle(req){
    }
    // Immutable recovery copy for every successful save attempt, then compare-and-swap the head.
    const backupId=randomUUID();await write('backups/'+backupId+'.json',{state,updatedAt,previousRevision:m.etag});
-   const saved=await write('meeting.json',{state,updatedAt,backupId},m.etag);return json({revision:saved.etag,updatedAt,version,versions:state.versions});
+   const saved=await write('meeting.json',{...m.value,state,updatedAt,backupId},m.etag);return json({revision:saved.etag,updatedAt,version,versions:state.versions});
+  }
+  if(path==='/api/transition'&&req.method==='POST'){
+   const {m,d}=await session();if(!m||!d)return json({error:'Сначала подготовьте V3.'},400);const body=await req.json();if(body.expectedRevision!==m.etag)return json({error:'Другой экран сохранил изменения. Обновите исходное состояние перед переходом.',conflict:true},409);
+   if(!['prepare','refresh'].includes(body.action))return json({error:'Неизвестный переход цикла.'},400);
+   const nextData=validateDataset(body.data,d.value);const incomingIds=new Set(nextData.rows.map(r=>r.id));for(const old of d.value.rows)if(!incomingIds.has(old.id))nextData.rows.push({...old,fresh:false,available:null,sales28:null,absentFromSnapshot:true});let nextState;
+   if(body.action==='prepare'){nextState=validateState(body.state,nextData);if(nextState.cycle?.status!=='awaiting-data'||Object.keys(nextState.edits).length)throw Error('Подготовка нового цикла не должна копировать старые количества в новый заказ.');}
+   else{if(body.confirmedCompleteSnapshot!==true)throw Error('Подтвердите полноту среза CRM.');if(!m.value.state.cycle||nextData.meetingDate<=m.value.state.cycle.afterDate)throw Error('Для следующей закупки нужен более новый срез CRM.');nextState=structuredClone(m.value.state);const hasOpen=nextState.orders.some(p=>p.status!=='cancelled'&&[...p.lines,...p.unmatchedLines||[]].some(l=>l.ordered>l.received+l.cancelled));nextState.cycle={...nextState.cycle,status:hasOpen&&body.receiptsReviewedAsOf!==nextData.meetingDate?'awaiting-receipts':'ready',receiptsReviewedAsOf:body.receiptsReviewedAsOf||null,datasetDate:nextData.meetingDate,refreshedAt:new Date().toISOString()};validateState(nextState,nextData);}
+   const id=randomUUID(),updatedAt=new Date().toISOString(),datasetPath='datasets/'+id+'.json';await write('archives/cycle-transition-'+id+'.json',{data:d.value,meeting:m.value,revision:m.etag,action:body.action});await write(datasetPath,nextData);
+   const saved=await write('meeting.json',{...m.value,datasetPath,state:nextState,updatedAt,transition:body.action},m.etag);return json({ok:true,revision:saved.etag,updatedAt,datasetDate:nextData.meetingDate,cycle:nextState.cycle});
   }
   if(path==='/api/documents'&&req.method==='GET')return json(await docs());
   if(path==='/api/upload'&&req.method==='POST'){
