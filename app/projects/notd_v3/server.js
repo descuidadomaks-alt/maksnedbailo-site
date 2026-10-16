@@ -1,5 +1,5 @@
 import {createHash,createHmac,timingSafeEqual,randomUUID} from 'node:crypto';
-import {get,put,list} from '@vercel/blob';
+import {get,put,list,head} from '@vercel/blob';
 import {calculate,validateState,ENGINE_VERSION} from './engine.js';
 import {migrateV2} from './patterns.js';
 import {assets,meetingHTML} from './assets.js';
@@ -9,7 +9,8 @@ const HEAD={'Cache-Control':'private, no-store, max-age=0','X-Content-Type-Optio
 const json=(o,status=200)=>Response.json(o,{status,headers:HEAD}),hash=x=>createHash('sha256').update(x).digest('hex'),equal=(a,b)=>timingSafeEqual(Buffer.from(hash(a)),Buffer.from(hash(b)));
 const token=exp=>exp+'.'+createHmac('sha256',process.env.NOTD_REVIEW_PASSWORD).update('eldar-v3:'+exp).digest('hex');
 function auth(req){const v=req.headers.get('cookie')?.split(';').map(x=>x.trim()).find(x=>x.startsWith(COOKIE+'='))?.slice(COOKIE.length+1),exp=Number(v?.split('.')[0]);return Number.isFinite(exp)&&exp>Date.now()&&exp<Date.now()+8*86400000&&equal(v,token(exp));}
-async function read(path,old=false){const r=await get((old?oldPrefix():prefix())+path,{access:'private',useCache:false});return r?.statusCode===200?{value:await new Response(r.stream).json(),etag:r.blob.etag}:null;}
+const cleanETag=e=>String(e||'').replace(/^W\//,'').replace(/^"|"$/g,'');
+async function read(path,old=false){const pathname=(old?oldPrefix():prefix())+path;for(let attempt=0;attempt<3;attempt++){const r=await get(pathname,{access:'private',useCache:false});if(r?.statusCode!==200)return null;const value=await new Response(r.stream).json();if(path!=='meeting.json')return {value,etag:cleanETag(r.blob.etag)};const metadata=await head(pathname);if(cleanETag(r.blob.etag)===cleanETag(metadata.etag))return {value,etag:metadata.etag};}throw Error('Данные изменились во время чтения. Обновите страницу; локальный черновик сохранён.');}
 const write=(path,value,etag)=>put(prefix()+path,JSON.stringify(value),{access:'private',contentType:'application/json',addRandomSuffix:false,allowOverwrite:!!etag,...(etag?{ifMatch:etag}:{}),cacheControlMaxAge:60});
 async function docMeta(id){return await read('document-metadata/'+id+'.json')||await read('document-metadata/'+id+'.json',true);}
 async function docs(){const out=new Map();for(const old of [true,false]){let cursor;do{const p=await list({prefix:(old?oldPrefix():prefix())+'document-metadata/',limit:500,cursor});for(const b of p.blobs){const r=await read(b.pathname.slice((old?oldPrefix():prefix()).length),old);if(r)out.set(r.value.id,{...r.value,archive:old?'v2':'v3'});}cursor=p.hasMore?p.cursor:undefined;if(out.size>2000)throw Error('Слишком много документов.');}while(cursor);}return [...out.values()].sort((a,b)=>b.createdAt.localeCompare(a.createdAt));}
@@ -71,5 +72,5 @@ export async function handle(req){
    const v=await read('versions/'+id+'.json',legacy);return v?json(v.value):json({error:'Версия не найдена.'},404);
   }
   return json({error:'Не найдено.'},404);
- }catch(err){if(err.name==='BlobPreconditionFailedError'||/already exists/i.test(err.message))return json({error:'Сохранённая версия изменилась. Ваш локальный черновик сохранён; не перезаписываем другой экран.',conflict:true},409);console.error('NOTD V3',err.name);return json({error:err.name?.startsWith('Blob')?'Хранилище временно недоступно. Черновик остаётся на устройстве; повторите сохранение.':err.message||'Ошибка обработки.'},400);}
+ }catch(err){if(err.name==='BlobPreconditionFailedError'||/already exists|ETag mismatch|Precondition failed/i.test(err.message))return json({error:'Сохранённая версия изменилась. Ваш локальный черновик сохранён; не перезаписываем другой экран.',conflict:true},409);console.error('NOTD V3',err.name);return json({error:err.name?.startsWith('Blob')?'Хранилище временно недоступно. Черновик остаётся на устройстве; повторите сохранение.':err.message||'Ошибка обработки.'},400);}
 }
