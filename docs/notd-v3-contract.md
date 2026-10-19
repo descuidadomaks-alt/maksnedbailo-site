@@ -71,3 +71,7 @@ Daily anomaly monitoring is a separate future agent workflow. A provisional larg
 
 ## Review interface — 19 October 2026
 A fresh dataset can be previewed while receipt reconciliation is pending. This does not confirm receipt status or enable a final version; server-side cycle guards still apply. Review is paginated in groups of 20, and selecting visible rows selects only the current page. Changing brand, filter, search or page clears selections. Early shortage risks remain visible even when undated inbound reduces a new purchase to zero. Prior owner comments are dated and old quantities remain historical. Receipt evidence distinguishes a registered incoming document from an assumed in-transit purchase.
+
+
+## Owner navigation — 19 October 2026
+Overview, Supply and Order are distinct URL-addressable views (#overview, #supply, #order). Native browser history and visible overview links work in both directions. Routing does not modify business state; existing filters, page and table position survive view changes. Rules/history remain available as secondary links. The overview shows only the next actions, not migration diagnostics. Supply confirmation and invoice details precede optional uploads and evidence. Existing version guards remain active until receipt review is confirmed. Meaningful receipt/cancellation changes invalidate that review; merely opening a view or editing an unrelated delivery date does not. Calculation version and data remain unchanged.
