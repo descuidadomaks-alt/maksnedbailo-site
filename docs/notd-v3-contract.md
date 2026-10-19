@@ -68,3 +68,6 @@ Tests cover actual baseline, timely/late/undated/part-received inbound, rule con
 Changes follow: evidence/owner decision → draft rule with scope/dates/source → test representative and boundary cases → save immutable before/after version → owner review → release/version change. One outlier is not a universal rule. Backtesting uses only data known at the historical decision date.
 
 Daily anomaly monitoring is a separate future agent workflow. A provisional large-order threshold is an alert criterion, not a rule to remove all wholesale demand. Recent 7/14-day trends, customer repeat cadence and stockout-adjusted demand require order-level and availability history; the current 28-day aggregate cannot establish those patterns.
+
+## Review interface — 19 October 2026
+A fresh dataset can be previewed while receipt reconciliation is pending. This does not confirm receipt status or enable a final version; server-side cycle guards still apply. Review is paginated in groups of 20, and selecting visible rows selects only the current page. Changing brand, filter, search or page clears selections. Early shortage risks remain visible even when undated inbound reduces a new purchase to zero. Prior owner comments are dated and old quantities remain historical. Receipt evidence distinguishes a registered incoming document from an assumed in-transit purchase.
