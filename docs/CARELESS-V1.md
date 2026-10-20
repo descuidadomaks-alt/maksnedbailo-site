@@ -7,12 +7,12 @@
 - Original baseline: 653f2c321cd82e2ac2af27b6494cb975d0b44d2c. Original /new redirect was a route-local `permanentRedirect('/')` in app/new/page.tsx, not DNS or a Vercel redirect rule. A cached historical 308 in a visitor browser may need a refresh/new browser session.
 - Route implementation: app/new/page.tsx -> app/new/_cinematic/CareLess.tsx, CSS module and config.ts. No additional runtime dependencies.
 - All original homepage `_v2`, shared components/lib/sections, app/page.tsx, global CSS, next.config.js and original media remain intact. Root wrappers preserve existing analytics/schema/Lenis behavior on all paths except `/new`. `/new` uses native scroll, suppresses existing remote analytics, and supplies a simple WebPage schema without legacy pricing.
-- Native passive scroll listener -> one scheduled animation frame per scroll event -> opacity/transform layers and headquarters CSS variable. No perpetual new-route animation loop, body lock or wheel hijacking. Visible scene state changes only at boundaries (optional sequences have a 30-step progress limit). Reduced-motion/save-data use static posters and a shorter chapter gallery; chapter controls still work.
-- JS failure: all main content is server-rendered, skip remains a native anchor, noscript exposes all category content and direct human links. Missing runtime manifest retains server manifest. Missing image falls back to the local SVG storyboard. Missing videos are never requested.
+- Native passive scroll listener -> one scheduled animation frame per scroll event -> opacity/transform layers and headquarters CSS variable. No perpetual new-route animation loop, body lock or wheel hijacking. Visible caption state changes only at boundaries. The current MP4 controller coalesces seeks, holds while stopped and reverses with native scroll; only neighboring decoders mount. Reduced-motion/save-data use static posters and a shorter chapter gallery; chapter controls still work.
+- JS failure: all main content is server-rendered, skip remains a native anchor, noscript exposes all category content and direct human links. Missing runtime manifest retains server manifest. Missing image falls back to the local SVG storyboard. Loading/failed videos leave their posters visible. Reduced-motion and data-saving modes request no MP4s until explicitly enabled.
 
 ## Media
 
-public/careless/media.json is the centralized manifest, imported for SSR and fetched at runtime. public/careless/images has founder-approved WebP derivatives and emergency storyboard fallbacks. public/careless/video is the founder clip handoff folder. See CARELESS-MEDIA-HANDOFF.md for mapping, focal points and sequence conversion. Final videos have not been provided or tested. The supplied HQ image still has baked labels; a clean replacement remains a known item.
+public/careless/media.json is the centralized manifest, imported for SSR and fetched at runtime. public/careless/images has founder-approved WebP derivatives and emergency storyboard fallbacks. public/careless/video is the founder clip handoff folder. See CARELESS-MEDIA-HANDOFF.md for mapping, focal points and sequence conversion. All nine temporary V1 videos are integrated; see CARELESS-VIDEO-QA.md and CARELESS-VIDEO-INSPECTION.json for measured evidence and limits. The supplied HQ image still has baked labels; a clean replacement remains a known item.
 
 ## Scout and conversion state
 
@@ -34,10 +34,14 @@ Rollback: revert this feature's commits on main and let Vercel redeploy (returns
 
 ## Remaining decisions
 
-Public Scout privacy/controller/contact/retention rules and activation sign-off; approved widget installation test on staging; final video crops/sequence performance; genuinely text-free HQ source; physical iOS/Android/QR test; optional consented remote analytics/aggregate appreciation backend. Existing pinned Next 14.2.5 dependency was preserved, not upgraded as part of this isolated route; its installation reports a security advisory and needs a separately tested maintenance update.
+Public Scout privacy/controller/contact/retention rules and activation sign-off; approved widget installation test on staging; final higher-resolution footage and physical-device performance; genuinely text-free HQ source; physical iOS/Android/QR test; optional consented remote analytics/aggregate appreciation backend. Existing pinned Next 14.2.5 dependency was preserved, not upgraded as part of this isolated route; its installation reports a security advisory and needs a separately tested maintenance update.
 
 ## Restart
 
 Read existing Notion Website integration and Care Less initiative first. Reuse this repository and manifest, this PR/branch and the existing paused Scout. Read current release status in CARELESS-QA.md and Notion rather than assuming a draft/preview is live. Do not duplicate the roadmap or infer a QR target from the homepage. Continue with final media/Scout gates while preserving the rest of the site.
 
 Final external link audit: zcal and WhatsApp returned HTTP 200; WhatsApp resolved to the correct +34641935207 destination, with no message sent. The historically recorded roman.maksnedbailo.com no longer resolves. The third portfolio card now links to the preserved /projects/roman route and explicitly says Archived website prototype. No unrelated domain/DNS changes.
+
+## Temporary video update
+
+The 20 October video release builds from main 6eb639120e7fd3721288fc080d8b004a2313599d on care-less-video-v1. New components are cinema.ts (manifest validation/timeline), VideoMedia.tsx (ambient and queued seeking), CinematicJourney.tsx (native scroll orchestration). Existing content and Scout gates are preserved. Public files, source inspection and replacement instructions are in CARELESS-MEDIA-HANDOFF.md. See CARELESS-VIDEO-QA.md for this release status. Revert only the video PR to restore the previous still-based /new; do not revert the original website PR or unrelated NOTD changes.
