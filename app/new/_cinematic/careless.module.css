@@ -20,3 +20,5 @@
 @media(max-width:700px){.heroCopy{font-size:13px}.sectionHeading>p,.yourself>div>p:not(.eyebrow),.approach>div>p:not(.eyebrow){font-size:13px}.categoryBody p,.categoryBody li,.workCard>p,.approach li p{font-size:12px}.scoutCard>p{font-size:12px!important}.dialog p:not(.eyebrow){font-size:13px}.sceneRail{display:grid;grid-template-columns:repeat(4,1fr);gap:6px 15px;bottom:50px}.sceneRail button{min-height:44px;gap:8px}.sceneCopy{bottom:30%}.categoryNote{font-size:10px}.final footer button{min-height:44px}.journeyTools>div{gap:10px}}
 .noScript{position:relative;z-index:20;background:#1b2019;padding:15px 6%;font-size:13px}.noScript a{text-decoration:underline}.journeyTools button:disabled{cursor:default;color:#b8b4a6}
 @media(max-width:700px){.page picture img{object-position:var(--mobile-position,center)!important}}
+/* Scene copy changes height as Scout appears; never let scroll anchoring move the camera. */
+.page{overflow-anchor:none}
