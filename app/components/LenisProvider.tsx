@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Lenis smooth-scroll provider — site-wide.
@@ -16,7 +17,10 @@ import { useEffect } from "react";
  * Render once in the root layout body — no children wrapper needed.
  */
 export default function LenisProvider() {
+  const pathname = usePathname();
   useEffect(() => {
+    // The cinematic route uses native scroll, including native anchor navigation.
+    if (pathname === "/new") return;
     if (typeof window === "undefined") return;
 
     // Respect prefers-reduced-motion
@@ -88,7 +92,7 @@ export default function LenisProvider() {
       };
     });
     return () => { cancelled = true; dispose?.(); };
-  }, []);
+  }, [pathname]);
 
   return null;
 }

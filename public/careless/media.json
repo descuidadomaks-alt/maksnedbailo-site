@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "status": "storyboard-placeholders",
+  "scenes": [
+    {
+      "id": "pool",
+      "image": "/careless/images/pool-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "coast",
+      "image": "/careless/images/coast-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "discovery",
+      "image": "/careless/images/entrance-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "entrance",
+      "image": "/careless/images/entrance-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "tunnel",
+      "image": "/careless/images/colony-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "colony",
+      "image": "/careless/images/colony-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "scout",
+      "image": "/careless/images/colony-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    },
+    {
+      "id": "hq",
+      "image": "/careless/images/hq-placeholder.svg",
+      "mode": "image",
+      "position": "center",
+      "video": null
+    }
+  ]
+}
