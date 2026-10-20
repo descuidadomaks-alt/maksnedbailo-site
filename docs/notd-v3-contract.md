@@ -75,3 +75,13 @@ A fresh dataset can be previewed while receipt reconciliation is pending. This d
 
 ## Owner navigation — 19 October 2026
 Overview, Supply and Order are distinct URL-addressable views (#overview, #supply, #order). Native browser history and visible overview links work in both directions. Routing does not modify business state; existing filters, page and table position survive view changes. Rules/history remain available as secondary links. The overview shows only the next actions, not migration diagnostics. Supply confirmation and invoice details precede optional uploads and evidence. Existing version guards remain active until receipt review is confirmed. Meaningful receipt/cancellation changes invalidate that review; merely opening a view or editing an unrelated delivery date does not. Calculation version and data remain unchanged.
+
+## V3.1 · 2026-10-20: receipt and persistence contract
+- The existing V3 address remains stable; the interface and new saved versions display V3.1.
+- A visible “Received all” action fills every source line, including unmatched lines. Partial receipts remain editable.
+- Receipt quantities are whole, nonnegative, and cannot exceed ordered minus cancelled. A fully received status cannot contain outstanding quantities.
+- Increasing received quantities requires explicit confirmation that they are included in the current CRM stock snapshot. A later arrival requires refreshed stock first; CRM itself is never changed.
+- Modal save actions close only after a successful server acknowledgement. Validation/network/conflict errors remain visible in the dialog; pending data keeps a local recovery copy.
+- Refresh may atomically apply explicit receipt updates with a new immutable dataset and a compare-and-swap meeting head. Source receipt identifiers and receipt history are retained.
+- Repeating full receipt is idempotent. Old owner comments, product links, rules, decisions and historical versions are preserved.
+- “Save plan + Excel” persists an immutable version and starts the Excel download. History retains the same export.

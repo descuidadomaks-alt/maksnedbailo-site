@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {emptyState,calculate} from '../app/projects/notd_v3/engine.js';
+import {updateReceipt,receiptLines} from '../app/projects/notd_v3/receipts.js';
+const data={meetingDate:'2026-10-20',rows:[{id:'notd:TEST',sku:'TEST',brand:'notd',category:'Test',name:'Test product',sales28:28,available:10,fresh:true}]};
+const state=emptyState();state.cycle={status:'awaiting-receipts'};state.orders=[{number:'TEST-INVOICE',brand:'notd',status:'in_transit',confirmed:true,lines:[{id:'notd:TEST',ordered:10,received:0,cancelled:0}],unmatchedLines:[{sourceName:'Unmatched test line',ordered:5,received:0,cancelled:0}]}];
+assert.throws(()=>updateReceipt(state,data,0,{mode:'all'}));const full=updateReceipt(state,data,0,{mode:'all',stockConfirmed:true});assert.equal(receiptLines(full.orders[0]).reduce((s,l)=>s+l.received,0),15);assert.equal(full.orders[0].status,'received');assert.equal(full.cycle.status,'ready');assert.equal(calculate(data,full).rows[0].undated,0);assert.deepEqual(updateReceipt(full,data,0,{mode:'all',stockConfirmed:true}),full);assert.equal(state.orders[0].lines[0].received,0);
+const partial=updateReceipt(state,data,0,{stockConfirmed:true,status:'partial',lines:[{received:2,cancelled:0},{received:0,cancelled:0}]});assert.equal(partial.orders[0].status,'partial');assert.throws(()=>updateReceipt(state,data,0,{stockConfirmed:true,status:'received'}));assert.throws(()=>updateReceipt(state,data,0,{stockConfirmed:true,lines:[{received:11,cancelled:0},{received:0,cancelled:0}]}));
+console.log('V3.1 receipt contract passed: full, partial, unmatched, bounds, idempotence, source stock confirmation.');

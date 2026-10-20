@@ -3,6 +3,7 @@ import {get,put,list,head} from '@vercel/blob';
 import {calculate,validateState,ENGINE_VERSION} from './engine.js';
 import {migrateV2} from './patterns.js';
 import {validateDataset} from './cycles.js';
+import {updateReceipt} from './receipts.js';
 import {assets,meetingHTML} from './assets.js';
 const BASE='/projects/notd_v3',COOKIE='eldar_review_v3';
 const env=()=>process.env.VERCEL_ENV==='preview'?'preview':'production',prefix=()=>`eldar-v3/${env()}/`,oldPrefix=()=>`eldar-v2/${env()}/`;
@@ -54,7 +55,7 @@ export async function handle(req){
     const result=calculate(d.value,state),id=randomUUID(),last=state.versions.at(-1),previous=last?await read('versions/'+last.id+'.json'):null;
     const old=new Map((previous?.value.result.rows||[]).map(r=>[r.id,r]));
     const comparison=result.rows.filter(r=>!old.has(r.id)||r.suggested!==old.get(r.id).suggested||r.quantity!==old.get(r.id).quantity).map(r=>({id:r.id,name:r.name,before:old.get(r.id)?.quantity??null,after:r.quantity,suggested:r.suggested,reason:r.reason}));
-    version={id,label:'V3 · версия '+(state.versions.length+1),createdAt:updatedAt,count:result.summary.candidates,units:result.summary.units,ownerUnits:result.summary.ownerUnits,accepted:result.summary.accepted,changed:comparison.length,engineVersion:ENGINE_VERSION,rulebook:result.rulebook};
+    version={id,label:'V3.1 · версия '+(state.versions.length+1),createdAt:updatedAt,count:result.summary.candidates,units:result.summary.units,ownerUnits:result.summary.ownerUnits,accepted:result.summary.accepted,changed:comparison.length,engineVersion:ENGINE_VERSION,rulebook:result.rulebook};
     const snapshot={...version,datasetDate:d.value.meetingDate,data:d.value,input:structuredClone({...state,versions:[],legacyVersions:[]}),result,comparison};
     await write('versions/'+id+'.json',snapshot);const excel=await makeExcel(snapshot);await put(prefix()+'versions/'+id+'.xlsx',excel,{access:'private',contentType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',addRandomSuffix:false,allowOverwrite:false});state.versions=[...state.versions,version];
    }
@@ -68,6 +69,8 @@ export async function handle(req){
    const nextData=validateDataset(body.data,d.value);const incomingIds=new Set(nextData.rows.map(r=>r.id));for(const old of d.value.rows)if(!incomingIds.has(old.id))nextData.rows.push({...old,fresh:false,available:null,sales28:null,absentFromSnapshot:true});let nextState;
    if(body.action==='prepare'){nextState=validateState(body.state,nextData);if(nextState.cycle?.status!=='awaiting-data'||Object.keys(nextState.edits).length)throw Error('Подготовка нового цикла не должна копировать старые количества в новый заказ.');}
    else{if(body.confirmedCompleteSnapshot!==true)throw Error('Подтвердите полноту среза CRM.');if(!m.value.state.cycle||nextData.meetingDate<=m.value.state.cycle.afterDate)throw Error('Для следующей закупки нужен более новый срез CRM.');nextState=structuredClone(m.value.state);const hasOpen=nextState.orders.some(p=>p.status!=='cancelled'&&[...p.lines,...p.unmatchedLines||[]].some(l=>l.ordered>l.received+l.cancelled));nextState.cycle={...nextState.cycle,status:hasOpen&&body.receiptsReviewedAsOf!==nextData.meetingDate?'awaiting-receipts':'ready',receiptsReviewedAsOf:body.receiptsReviewedAsOf||null,datasetDate:nextData.meetingDate,refreshedAt:new Date().toISOString()};validateState(nextState,nextData);}
+   if(body.receiptUpdates){if(body.action!=='refresh'||!Array.isArray(body.receiptUpdates)||body.receiptUpdates.length>500)throw Error('Проверьте список обновлений поставок.');for(const receipt of body.receiptUpdates){const index=nextState.orders.findIndex(p=>p.number===receipt.number&&p.brand===receipt.brand);if(index<0)throw Error('Не найден счёт для сверки получения.');nextState=updateReceipt(nextState,nextData,index,receipt,{source:receipt.source||'Обновление остатков и получения'});const p=nextState.orders[index];p.crmReceiptIds=(nextData.receiptEvidence?.registeredReceiptsSince||[]).filter(r=>r.belongsToLatestInvoice&&r.invoiceReference===p.number).map(r=>r.id);}}
+   nextState.release={version:'3.1',date:nextData.meetingDate};validateState(nextState,nextData);
    const id=randomUUID(),updatedAt=new Date().toISOString(),datasetPath='datasets/'+id+'.json';await write('archives/cycle-transition-'+id+'.json',{data:d.value,meeting:m.value,revision:m.etag,action:body.action});await write(datasetPath,nextData);
    const saved=await write('meeting.json',{...m.value,datasetPath,state:nextState,updatedAt,transition:body.action},m.etag);return json({ok:true,revision:saved.etag,updatedAt,datasetDate:nextData.meetingDate,cycle:nextState.cycle});
   }
