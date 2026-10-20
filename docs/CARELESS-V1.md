@@ -39,3 +39,5 @@ Public Scout privacy/controller/contact/retention rules and activation sign-off;
 ## Restart
 
 Read existing Notion Website integration and Care Less initiative first. Reuse this repository and manifest, this PR/branch and the existing paused Scout. Read current release status in CARELESS-QA.md and Notion rather than assuming a draft/preview is live. Do not duplicate the roadmap or infer a QR target from the homepage. Continue with final media/Scout gates while preserving the rest of the site.
+
+Final external link audit: zcal and WhatsApp returned HTTP 200; WhatsApp resolved to the correct +34641935207 destination, with no message sent. The historically recorded roman.maksnedbailo.com no longer resolves. The third portfolio card now links to the preserved /projects/roman route and explicitly says Archived website prototype. No unrelated domain/DNS changes.
