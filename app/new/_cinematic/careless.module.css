@@ -22,3 +22,19 @@
 @media(max-width:700px){.page picture img{object-position:var(--mobile-position,center)!important}}
 /* Scene copy changes height as Scout appears; never let scroll anchoring move the camera. */
 .page{overflow-anchor:none}
+/* Video integration is scoped to the existing cinematic introduction. */
+.filmIntro{position:relative;isolation:isolate;--intro-reveal:0}
+.filmIntro .hero{position:sticky;top:0}
+.filmIntro .heroContent,.filmIntro .heroBottom{opacity:calc(1 - var(--intro-reveal))}
+.filmIntro[data-covered=true] .heroContent,.filmIntro[data-covered=true] .heroBottom{visibility:hidden}
+.videoJourney{position:relative;margin-top:-100svh;z-index:2;background:transparent;pointer-events:none}
+.journeyAnchor{position:absolute;left:0;width:1px;height:1px;pointer-events:none;scroll-margin-top:0}
+.videoJourney .stage{min-height:0}
+.ambient{position:relative;width:100%;height:100%;overflow:hidden;background:#203332}
+.ambient>img,.ambient>video,.videoPoster,.scrubVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.ambient>video,.scrubVideo{pointer-events:none;transition:opacity .12s linear}
+.mediaNotice{font-size:11px!important;margin-top:16px!important;color:#e1ccb0!important}
+.simple .filmIntro .hero{position:relative}
+.simple .videoJourney{margin-top:0}
+.simple .filmIntro .heroContent,.simple .filmIntro .heroBottom{opacity:1;visibility:visible}
+@media(max-width:700px){.ambient>img,.ambient>video,.videoPoster,.scrubVideo{object-position:var(--mobile-position,center)!important}}
