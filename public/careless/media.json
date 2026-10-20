@@ -1,62 +1,87 @@
 {
   "version": 1,
-  "status": "storyboard-placeholders",
+  "status": "approved-stills",
   "scenes": [
     {
       "id": "pool",
-      "image": "/careless/images/pool-placeholder.svg",
+      "image": "/careless/images/01-pool.webp",
       "mode": "image",
-      "position": "center",
-      "video": null
+      "position": "center 45%",
+      "video": null,
+      "mobileImage": "/careless/images/01-pool-mobile.webp",
+      "mobilePosition": "30% center",
+      "sourceFile": "01_hero.png"
     },
     {
       "id": "coast",
-      "image": "/careless/images/coast-placeholder.svg",
+      "image": "/careless/images/02-coast.webp",
       "mode": "image",
       "position": "center",
-      "video": null
+      "video": null,
+      "mobileImage": "/careless/images/02-coast-mobile.webp",
+      "mobilePosition": "45% center",
+      "sourceFile": "02_pool_turn.png"
     },
     {
       "id": "discovery",
-      "image": "/careless/images/entrance-placeholder.svg",
+      "image": "/careless/images/02a-discovery.webp",
       "mode": "image",
-      "position": "center",
-      "video": null
+      "position": "center 62%",
+      "video": null,
+      "mobileImage": "/careless/images/02a-discovery-mobile.webp",
+      "mobilePosition": "57% center",
+      "sourceFile": "02A_anthill_discovery.png"
     },
     {
       "id": "entrance",
-      "image": "/careless/images/entrance-placeholder.svg",
+      "image": "/careless/images/02b-entrance.webp",
       "mode": "image",
-      "position": "center",
-      "video": null
+      "position": "center 55%",
+      "video": null,
+      "mobileImage": "/careless/images/02b-entrance-mobile.webp",
+      "mobilePosition": "center",
+      "sourceFile": "02B_anthill_entrance.png"
     },
     {
       "id": "tunnel",
-      "image": "/careless/images/colony-placeholder.svg",
+      "image": "/careless/images/03-tunnel.webp",
       "mode": "image",
       "position": "center",
-      "video": null
+      "video": null,
+      "mobileImage": "/careless/images/03-tunnel-mobile.webp",
+      "mobilePosition": "center",
+      "sourceFile": "03_tunnel.png"
     },
     {
       "id": "colony",
-      "image": "/careless/images/colony-placeholder.svg",
+      "image": "/careless/images/04-colony.webp",
       "mode": "image",
       "position": "center",
-      "video": null
+      "video": null,
+      "mobileImage": "/careless/images/04-colony-mobile.webp",
+      "mobilePosition": "center",
+      "sourceFile": "04B_colony_reveal.png.png"
     },
     {
       "id": "scout",
-      "image": "/careless/images/colony-placeholder.svg",
+      "image": "/careless/images/05-scout.webp",
       "mode": "image",
-      "position": "center",
-      "video": null
+      "position": "center 48%",
+      "video": null,
+      "mobileImage": "/careless/images/05-scout-mobile.webp",
+      "mobilePosition": "center",
+      "sourceFile": "05_scout.png"
     },
     {
       "id": "hq",
-      "image": "/careless/images/hq-placeholder.svg",
+      "image": "/careless/images/06-hq.webp",
       "mode": "image",
-      "position": "center",
-      "video": null
+      "position": "center 55%",
+      "video": null,
+      "mobileImage": "/careless/images/06-hq-mobile.webp",
+      "mobilePosition": "center",
+      "sourceFile": "06_headquarters_clean.png"
     }
-  ]
+  ],
+  "hqNote": "Supplied clean file still contains baked labels; a genuinely text-free replacement remains pending."
 }

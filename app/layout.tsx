@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Sora, Cormorant_Garamond, IBM_Plex_Sans, Roboto_Mono } from "next/font/google";
 import ExistingSiteAnalytics from "./components/ExistingSiteAnalytics";
+import ExistingSiteSchema from "./components/ExistingSiteSchema";
 import "./globals.css";
 import LenisProvider from "./components/LenisProvider";
 import { UPWORK_PROFILE_URL } from "./new/lib/config";
@@ -222,10 +223,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${sora.variable} ${cormorant.variable} ${ibmPlex.variable} ${robotoMono.variable}`}>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <ExistingSiteSchema schema={jsonLd} />
       </head>
       <body className="bg-bg text-fg font-sora">
         <LenisProvider />

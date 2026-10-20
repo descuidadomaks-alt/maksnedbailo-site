@@ -106,3 +106,7 @@ Don't build on any of `oh2`–`oh6` going forward; if a change belongs to the li
 - **`public/kitchen-uploads/`** — large raw dump of kitchen product photography (sofas, cabinetry, beds — actually mixed with `furniture-uploads/`, worth double-checking which folder is which). No app route consumes it. Probably feeds Modulia/CocinaRapida (above) but not confirmed.
 - **`public/furniture-uploads/`** — same situation, different product line (Ukrainian furniture: "Диван Scandik", "Ліжко April", "Корпусні меблі"). No app route consumes it, no known destination project.
 - **Eldar / Nailsoftheday, beyond the reorder tool** — the user has referenced this relationship as an example of a "separate entity" project; only the reorder tool (above) is visible in this repo. If there's more (a storefront, a brand site, other tooling), it needs to be added here — ask the user or point an agent at the right repo.
+
+## Care Less cinematic V1
+
+Last touched 2026-10-20. New experience at `/new`, isolated in `app/new/_cinematic`, with `public/careless/media.json` and founder-approved optimized stills. Existing homepage / and shared _v2 remain intact. Vercel branch care-less-v1 / PR #1. Scout stays paused; direct human fallbacks use existing links. See [implementation/restart](CARELESS-V1.md), [media handoff](CARELESS-MEDIA-HANDOFF.md), and [QA/release status](CARELESS-QA.md). No duplicate roadmap or assistant.
