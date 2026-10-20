@@ -1,23 +1,11 @@
-/**
- * /new - 308 redirect to "/".
- *
- * This page WAS the V3 homepage. It was promoted to "/" (see app/page.tsx),
- * which imports app/new/_v2/V2HomeClient directly, so nothing here renders
- * any more. The redirect is permanent to fold any accumulated links and
- * crawl signal into the homepage instead of stranding them, and to make it
- * impossible for /new to be indexed as a duplicate of "/".
- *
- * app/new/layout.tsx was deleted with this change: it existed to give /new
- * its own locale provider, header and noindex metadata, all of which now
- * belong to app/page.tsx. Everything else under app/new/ is still live
- * source, imported by "/" and by /old2, and must not be removed:
- *   _v2/        the current homepage
- *   sections/   the archived Bottleneck Map homepage, served at /old2
- *   components/ shared header, ticker and dot field used by both
- *   lib/        shared locale context and i18n
- */
-import { permanentRedirect } from "next/navigation";
-
-export default function NewPage() {
-  permanentRedirect("/");
-}
+import type { Metadata } from "next";
+import CareLess from "./_cinematic/CareLess";
+export const metadata: Metadata = {
+ title: "Care Less | Better experiences. Less work behind them.",
+ description: "We design better customer experiences and build the AI, software, websites and business systems that make them work.",
+ alternates: { canonical: "https://maksnedbailo.site/new" },
+ robots: { index: false, follow: true },
+ openGraph: { title: "Care Less | Better experiences. Less work behind them.", description: "Thoughtful experiences. Working systems.", url: "https://maksnedbailo.site/new", images: [{ url: "/careless/images/01-pool.webp", alt: "Care Less sunset infinity pool" }] },
+ twitter: { card: "summary", title: "Care Less | Better experiences", description: "Thoughtful experiences. Working systems.", images: ["/careless/images/01-pool.webp"] },
+};
+export default function NewPage() { return <CareLess />; }
