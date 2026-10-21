@@ -54,6 +54,8 @@ export default function CinematicJourney({ cinema, scenes, reduced, onReduced, o
       if (!layer) return;
       const cue = cinema.cues[index];
       const at = cueAt(time, cue);
+      // A dialog's returned focus must not keep an expired caption over a new scene.
+      if (at.opacity <= .015 && layer.contains(document.activeElement)) root.focus({ preventScroll: true });
       const focused = introProgress.current > .98 && layer.contains(document.activeElement);
       const visible = introProgress.current > .98 && (at.opacity > .015 || focused);
       layer.style.opacity = String(focused ? 1 : at.opacity);
