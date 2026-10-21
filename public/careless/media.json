@@ -85,7 +85,7 @@
   ],
   "hqNote": "Supplied clean file still contains baked labels; a genuinely text-free replacement remains pending.",
   "cinema": {
-    "version": 3,
+    "version": 4,
     "introScroll": 85,
     "hero": {
       "id": "hero",
@@ -263,11 +263,14 @@
     "master": {
       "id": "film",
       "mode": "scroll",
-      "src": "/careless/video/film-v2/journey.mp4",
-      "poster": "/careless/video/film-v2/film-first.webp",
-      "endPoster": "/careless/video/film-v2/film-last.webp",
-      "duration": 45.5,
-      "fps": 24,
+      "delivery": "video",
+      "sourceFile": "full.mp4",
+      "src": "/careless/video/film-v4/film-720.mp4",
+      "mobileSrc": "/careless/video/film-v4/film-540.mp4",
+      "poster": "/careless/video/film-v4/chapter-0.webp",
+      "endPoster": "/careless/video/film-v4/film-last.webp",
+      "duration": 45.866667,
+      "fps": 30,
       "position": "center 45%",
       "mobilePosition": "30% center",
       "settle": false,
@@ -277,149 +280,133 @@
           "copySceneId": "pool",
           "sourceFile": "2.mp4",
           "start": 0,
-          "end": 5.083333,
+          "end": 5.1,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/2-first.webp"
+          "poster": "/careless/video/film-v4/chapter-0.webp"
         },
         {
           "id": "clip-2a",
           "copySceneId": "coast",
           "sourceFile": "2a.mp4",
-          "start": 5.083333,
-          "end": 10.166666,
+          "start": 5.1,
+          "end": 10.166667,
           "scrollLength": 220,
-          "poster": "/careless/video/film-v2/2a-first.webp"
+          "poster": "/careless/video/film-v4/chapter-1.webp"
         },
         {
           "id": "clip-3",
           "copySceneId": "coast",
           "sourceFile": "3.mp4",
-          "start": 10.166666,
-          "end": 15.249998999999999,
+          "start": 10.166667,
+          "end": 15.266667,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/3-first.webp"
+          "poster": "/careless/video/film-v4/chapter-2.webp"
         },
         {
           "id": "clip-4",
           "copySceneId": "discovery",
           "sourceFile": "4.mp4",
-          "start": 15.249998999999999,
-          "end": 20.458332,
+          "start": 15.266667,
+          "end": 20.466667,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/4-first.webp"
+          "poster": "/careless/video/film-v4/chapter-3.webp"
         },
         {
           "id": "clip-5",
           "copySceneId": "entrance",
           "sourceFile": "5.mp4",
-          "start": 20.458332,
-          "end": 25.166665,
+          "start": 20.466667,
+          "end": 25.566667,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/5-first.webp"
+          "poster": "/careless/video/film-v4/chapter-4.webp"
         },
         {
           "id": "clip-6",
           "copySceneId": "tunnel",
           "sourceFile": "6.mp4",
-          "start": 25.166665,
-          "end": 30.249997999999998,
+          "start": 25.566667,
+          "end": 30.633333,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/6-first.webp"
+          "poster": "/careless/video/film-v4/chapter-5.webp"
         },
         {
           "id": "clip-7",
           "copySceneId": "colony",
           "sourceFile": "7.mp4",
-          "start": 30.249997999999998,
-          "end": 35.333331,
+          "start": 30.633333,
+          "end": 35.733333,
           "scrollLength": 250,
-          "poster": "/careless/video/v1/posters/7-first.webp"
+          "poster": "/careless/video/film-v4/chapter-6.webp"
         },
         {
           "id": "clip-8",
           "copySceneId": "scout",
           "sourceFile": "8.mp4",
-          "start": 35.333331,
-          "end": 40.416664,
+          "start": 35.733333,
+          "end": 40.8,
           "scrollLength": 400,
-          "poster": "/careless/video/v1/posters/8-first.webp"
+          "poster": "/careless/video/film-v4/chapter-7.webp"
         },
         {
           "id": "clip-9",
           "copySceneId": "hq",
           "sourceFile": "9.mp4",
-          "start": 40.416664,
-          "end": 45.49999699999999,
+          "start": 40.8,
+          "end": 45.866667,
           "scrollLength": 440,
-          "poster": "/careless/video/v1/posters/9-first.webp"
+          "poster": "/careless/video/film-v4/chapter-8.webp"
         }
-      ],
-      "sequence": {
-        "fps": 24,
-        "count": 1092,
-        "variants": [
-          {
-            "id": "w624-avif",
-            "width": 624,
-            "height": 624,
-            "pattern": "/careless/frames/frames-v3/w624-avif/frame-{frame}.avif",
-            "bytes": 36437580,
-            "firstSecondBytes": 677973,
-            "format": "avif",
-            "fallbackPattern": "/careless/frames/frames-v3/w624/frame-{frame}.webp"
-          }
-        ]
-      }
+      ]
     },
     "cues": [
       {
         "id": "surface",
         "scene": "pool",
         "start": 0.65,
-        "end": 4.833333,
+        "end": 4.85,
         "fade": 0.65
       },
       {
         "id": "coast",
         "scene": "coast",
-        "start": 5.783333,
-        "end": 9.916666,
+        "start": 5.8,
+        "end": 9.916667,
         "fade": 0.65
       },
       {
         "id": "discovery",
         "scene": "discovery",
-        "start": 11.366665999999999,
-        "end": 16.249999,
+        "start": 11.366667,
+        "end": 16.266666999999998,
         "fade": 0.65
       },
       {
         "id": "system",
         "scene": "tunnel",
-        "start": 21.658331999999998,
-        "end": 29.649997999999997,
+        "start": 21.666667,
+        "end": 30.033333,
         "fade": 0.65
       },
       {
         "id": "colony",
         "scene": "colony",
-        "start": 30.799998,
-        "end": 34.983331,
+        "start": 31.183333,
+        "end": 35.383333,
         "fade": 0.65
       },
       {
         "id": "scout",
         "scene": "scout",
-        "start": 36.333331,
-        "end": 40.966663999999994,
+        "start": 36.733333,
+        "end": 41.349999999999994,
         "actions": true,
         "fade": 0.65
       },
       {
         "id": "headquarters",
         "scene": "hq",
-        "start": 42.416664,
-        "end": 46,
+        "start": 42.8,
+        "end": 46.366667,
         "actions": true,
         "fade": 0.65
       }

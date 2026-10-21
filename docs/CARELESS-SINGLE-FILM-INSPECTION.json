@@ -1,0 +1,34 @@
+{
+  "release": "film-v4",
+  "sourceFile": "full.mp4",
+  "sourceSha256": "d13b2fe146cb2dc13518be49a17a2ef2aa8f7157b518d33003aac3832c2be74b",
+  "sourceBytes": 21025051,
+  "sourceWidth": 720,
+  "sourceHeight": 720,
+  "duration": 45.866667,
+  "fps": 30,
+  "variants": [
+    {
+      "file": "film-720.mp4",
+      "width": 720,
+      "gop": 30,
+      "prepared": "720-g30-crf25.mp4",
+      "bytes": 18301867,
+      "duration": 45.866667
+    },
+    {
+      "file": "film-540.mp4",
+      "width": 540,
+      "gop": 15,
+      "prepared": "540-g15-crf25.mp4",
+      "bytes": 12747773,
+      "duration": 45.866667
+    }
+  ],
+  "sourceFilesUntouched": true,
+  "notes": [
+    "Original source contains a brief dark patch around20.47–20.77s; preserved.",
+    "720px square source is not Full HD.",
+    "Only one rendition is requested per mount; no frame sequences are loaded."
+  ]
+}

@@ -4,7 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { clampProgress, cueAt, filmAt, type Cinema } from "./cinema";
-import { FrameCanvas, type FrameHandle } from "./FrameCanvas";
+import { SingleFilm, type FilmHandle } from "./SingleFilm";
 import { track, type Scene } from "./config";
 import styles from "./careless.module.css";
 
@@ -16,13 +16,12 @@ export default function CinematicJourney({ cinema, scenes, reduced, onReduced, o
   const mediaLayer = useRef<HTMLDivElement>(null);
   const posterLayer = useRef<HTMLImageElement>(null);
   const progressBar = useRef<HTMLDivElement>(null);
-  const player = useRef<FrameHandle | null>(null);
+  const player = useRef<FilmHandle | null>(null);
   const targetTime = useRef(0);
   const introProgress = useRef(0);
   const shownTime = useRef(0);
   const failed = useRef(false);
   const [armed, setArmed] = useState(false);
-  const [near, setNear] = useState(true);
   const [introActive, setIntroActive] = useState(reduced);
   const [mediaReady, setMediaReady] = useState(false);
   const [mediaFailed, setMediaFailed] = useState(false);
@@ -72,13 +71,6 @@ export default function CinematicJourney({ cinema, scenes, reduced, onReduced, o
       }
     });
   }, [film, cinema.cues]);
-
-  useEffect(() => {
-    if (reduced || !stage.current) return;
-    const observer = new IntersectionObserver(([entry]) => setNear(entry.isIntersecting), { rootMargin: "300px" });
-    observer.observe(stage.current);
-    return () => observer.disconnect();
-  }, [reduced]);
 
   useEffect(() => {
     const element = section.current;
@@ -142,7 +134,7 @@ export default function CinematicJourney({ cinema, scenes, reduced, onReduced, o
     <div ref={stage} className={styles.stage} style={{ opacity: 0, pointerEvents: "none" }}>
       <div ref={mediaLayer} className={styles.filmMedia} aria-hidden="true">
         <img ref={posterLayer} className={styles.videoPoster} src={film.poster} alt="" width="624" height="624" onError={event => { if (!event.currentTarget.dataset.fallback) { event.currentTarget.dataset.fallback = "true"; event.currentTarget.src = scenes[5].image; } }} />
-        {near && armed && film.sequence && <FrameCanvas ref={handle => { player.current = handle; handle?.seek(targetTime.current / film.duration); }} film={film} onPresented={time => { failed.current=false; setMediaReady(true); setMediaFailed(false); presentFrame(introProgress.current < .98 ? 0 : time); }} onWaiting={time => { setMediaReady(false); presentFrame(introProgress.current < .98 ? 0 : time); }} onFailure={() => { failed.current = true; setMediaFailed(true); presentFrame(targetTime.current); }} />}
+        <SingleFilm ref={handle => { player.current = handle; handle?.seek(targetTime.current / film.duration); }} film={film} onPresented={time => { failed.current=false; setMediaReady(true); setMediaFailed(false); presentFrame(introProgress.current < .98 ? 0 : time); }} onWaiting={() => { setMediaReady(false); if (introProgress.current < .98) presentFrame(0); }} onFailure={() => { failed.current = true; setMediaFailed(true); setMediaReady(false); presentFrame(targetTime.current); }} />
       </div>
       <div className={styles.stageShade} />
       <div className={`${styles.journeyTools} ${styles.filmTools}`} style={{ visibility: introActive ? "visible" : "hidden" }}><span>THE WORLD BENEATH</span><div><button onClick={onReduced}>Continue without motion</button><a href="#experience" onClick={() => track("journey_skip")}>Skip intro <ArrowRight size={14} /></a></div></div>
@@ -152,7 +144,7 @@ export default function CinematicJourney({ cinema, scenes, reduced, onReduced, o
       })}
       <div ref={progressBar} className={styles.filmProgress} role="progressbar" aria-label="Cinematic journey progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} style={{ visibility: introActive ? "visible" : "hidden" }}><span /><div><span>SCROLL TO EXPLORE</span><span>SCROLL BACK TO RETURN</span></div></div>
       {armed && !mediaReady && !mediaFailed && <p className={styles.filmNotice} role="status">Loading this moment. You can skip ahead at any time.</p>}
-      {mediaFailed && <p className={styles.filmNotice} role="status">Connection interrupted. You can keep exploring or skip to the website.</p>}
+      {mediaFailed && <div className={styles.filmNotice} role="status">The film is unavailable. <button onClick={() => { setMediaFailed(false); failed.current=false; player.current?.retry(); }}>Try again</button> or <a href="#experience">continue to the website</a>.</div>}
     </div>
   </section>;
 }
