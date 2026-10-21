@@ -18,6 +18,7 @@ export function controlFilm(video: HTMLVideoElement, duration: number, fps: numb
     if (disposed || broken || video.readyState < 2 || video.seeking) return;
     // A completed old seek must never reveal headquarters after a reset to zero.
     if (desired === 0 && video.currentTime > 1 / fps) return;
+    if (shown < 0 && Math.abs(video.currentTime - desired) > 1 / fps) return;
     video.dataset.mediaState = "ready";
     if (!video.dataset.firstFrameMs) video.dataset.firstFrameMs = (performance.now() - mounted).toFixed(2);
     video.dataset.presentedTime = video.currentTime.toFixed(4);
@@ -72,6 +73,11 @@ export function controlFilm(video: HTMLVideoElement, duration: number, fps: numb
   document.addEventListener("visibilitychange", visibility);
   video.dataset.mediaState = "loading";
   timer = setTimeout(fail, 8000); observeFrame(); warm();
+  const retry = () => {
+    if (disposed) return;
+    broken = false; busy = false; shown = -1; clear(); events.waiting();
+    video.load(); timer = setTimeout(fail, 8000); warm();
+  };
   return {
     seek(progress: number) {
       const previous = desired;
@@ -80,11 +86,9 @@ export function controlFilm(video: HTMLVideoElement, duration: number, fps: numb
       if (desired === 0 && previous > 1 / fps) { shown = -1; events.waiting(); }
       queue();
     },
-    retry() {
-      if (disposed) return;
-      broken = false; busy = false; shown = -1; clear(); events.waiting();
-      video.load(); timer = setTimeout(fail, 8000); warm();
-    },
+    // Called synchronously in the visitor's Explore click for Safari gesture rules.
+    prime() { if (broken) retry(); else warm(); },
+    retry,
     dispose() {
       disposed = true; clear(); cancelAnimationFrame(frame);
       if (observe && video.cancelVideoFrameCallback) video.cancelVideoFrameCallback(observe);

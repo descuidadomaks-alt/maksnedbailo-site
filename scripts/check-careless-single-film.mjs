@@ -37,6 +37,15 @@ const create=()=>{const video=new Video(),shown=[],states=[];const controller=mo
  const {states,controller}=create();advance(8001);assert.deepEqual(states,['failed'],'startup must have a deadline even without metadata');controller.retry();advance(8001);assert.equal(states.at(-1),'failed');controller.dispose();
 }
 {
+ const {video,controller,shown}=create();advance(8001);
+ const plays=video.plays;controller.prime();assert.ok(video.plays>plays,'Explore gesture must retry priming after automatic startup failure');
+ video.readyState=2;video.emit('loadeddata');advance(20);assert.equal(shown.at(-1),0);controller.dispose();
+}
+{
+ const {video,controller,shown}=create();controller.seek(.8);video.readyState=2;video.emit('loadeddata');advance(16);
+ assert.deepEqual(shown,[],'first pool frame must stay hidden when restoring deep into the film');video.decoded();advance(16);assert.ok(shown.at(-1)>30);controller.dispose();
+}
+{
  const {video,controller,states}=create();video.readyState=2;video.emit('loadeddata');controller.seek(.9);advance(16);advance(8001);assert.equal(states.at(-1),'failed','a seek that never completes must not hang');controller.dispose();
 }
 const media=JSON.parse(fs.readFileSync('public/careless/media.json','utf8'));
