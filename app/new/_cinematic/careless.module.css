@@ -55,7 +55,7 @@
 .staticJourney .sceneCopy>p:not(.eyebrow){max-width:490px}
 @media(max-width:700px){.filmMedia :is(img,video){object-position:var(--film-mobile-crop)!important}.filmCaption{bottom:22%;right:6%}.filmCaption h2{font-size:clamp(34px,9vw,42px)}.filmTools>span{display:none}.filmTools{justify-content:flex-end}.filmProgress{left:6%;right:6%;bottom:27px}.filmProgress>div{font-size:6px}.filmNotice{left:6%;bottom:80px;right:6%;font-size:10px!important}.motionHint{font-size:10px;max-width:330px}.staticJourney .sceneCopy{bottom:20%}.staticJourney .stage{min-height:680px}}
 
-/* Frame renderer: decoded cache is bounded; no video seek is used for the journey. */
+/* Previous frame renderer retained for rollback; active delivery uses one video. */
 .frameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:var(--film-crop);pointer-events:none;transition:none!important}
 .filmJourney .stage{height:100dvh;min-height:0}
 @media(max-width:700px){
@@ -77,3 +77,5 @@
 @media(max-width:700px) and (max-height:650px){.filmCaption{top:85px}.filmCaption h2{font-size:28px}.filmCaption .scoutEncounter{margin-top:8px}}
 
 @media(max-width:700px){.filmJourney .stageShade{background:linear-gradient(180deg,#09110db3,#09110d70 38%,transparent 66%),linear-gradient(0deg,#09110d55,transparent 40%)}}
+
+.filmNotice :is(button,a){pointer-events:auto;text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}

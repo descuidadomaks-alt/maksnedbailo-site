@@ -1,4 +1,4 @@
-> Current mobile recovery: see CARELESS-MOBILE-RECOVERY.md. The earlier video-scrub release failed founder iPhone review. The scroll renderer now uses progressive AVIF frames with WebP fallback; physical-device acceptance and final-HD budgets remain pending.
+> Current single-film replacement: see CARELESS-SINGLE-FILM.md and CARELESS-SINGLE-FILM-INSPECTION.json. The founder rejected version3 frame loading/flow. Version4 uses the supplied full.mp4 with one preloaded video decoder and responsive delivery. Physical-device acceptance and final-HD performance remain pending. Sections below document earlier versions; use the new single-film preparation script for current replacements.
 
 # Care Less V1 implementation and restart
 
