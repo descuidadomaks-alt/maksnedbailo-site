@@ -6,6 +6,7 @@ const [id, input] = process.argv.slice(2);
 if (!id || !input) throw Error('Usage: node scripts/prepare-careless-video.mjs hero|clip-2..clip-9 source.mp4');
 const manifestPath = path.resolve('public/careless/media.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+if (id !== 'hero' && manifest.cinema.master) throw Error('The journey now uses one master film. Replace the original source in your media folder, then run scripts/prepare-careless-film.mjs source-folder unique-release. The manifest retains shot order, crops, timing and cues.');
 const clip = id === 'hero' ? manifest.cinema.hero : manifest.cinema.journey.find(item => item.id === id);
 if (!clip || !fs.statSync(input).isFile()) throw Error('Unknown clip or missing source');
 const run = (tool, args) => { const result = spawnSync(tool, args, { encoding: 'utf8', windowsHide: true }); if (result.status !== 0) throw Error(result.stderr || `${tool} unavailable`); return result.stdout; };

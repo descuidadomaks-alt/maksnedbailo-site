@@ -1,5 +1,7 @@
 # Care Less V1 implementation and restart
 
+Current correction: see **CARELESS-CONTINUOUS-FILM.md**. The continuous-film branch adds 2a between 2 and 3 and replaces chapter-driven per-clip playback with one 45.5-second master, Lenis wheel smoothing, GSAP orchestration and film-time HTML cues. Homepage, unrelated routes and Scout OFF gates remain preserved. Check Notion for verified deployment status.
+
 ## Scope and architecture
 
 - Production: https://maksnedbailo.site/new. Homepage `/` and unrelated paths stay as they are.
@@ -7,12 +9,12 @@
 - Original baseline: 653f2c321cd82e2ac2af27b6494cb975d0b44d2c. Original /new redirect was a route-local `permanentRedirect('/')` in app/new/page.tsx, not DNS or a Vercel redirect rule. A cached historical 308 in a visitor browser may need a refresh/new browser session.
 - Route implementation: app/new/page.tsx -> app/new/_cinematic/CareLess.tsx, CSS module and config.ts. No additional runtime dependencies.
 - All original homepage `_v2`, shared components/lib/sections, app/page.tsx, global CSS, next.config.js and original media remain intact. Root wrappers preserve existing analytics/schema/Lenis behavior on all paths except `/new`. `/new` uses native scroll, suppresses existing remote analytics, and supplies a simple WebPage schema without legacy pricing.
-- Native passive scroll listener -> one scheduled animation frame per scroll event -> opacity/transform layers and headquarters CSS variable. No perpetual new-route animation loop, body lock or wheel hijacking. Visible caption state changes only at boundaries. The current MP4 controller coalesces seeks, holds while stopped and reverses with native scroll; only neighboring decoders mount. Reduced-motion/save-data use static posters and a shorter chapter gallery; chapter controls still work.
+- Current motion mode uses a route-local Lenis/GSAP ticker, native touch scrolling and one continuous master playhead. Caption entrances/holds/exits follow presented frame time. The earlier event-only, per-chapter controller is historical. Normal scrollbar/keyboard/skip access remains; the master decoder is released offscreen. Reduced-motion/save-data use static posters and a shorter chapter gallery; chapter controls still work.
 - JS failure: all main content is server-rendered, skip remains a native anchor, noscript exposes all category content and direct human links. Missing runtime manifest retains server manifest. Missing image falls back to the local SVG storyboard. Loading/failed videos leave their posters visible. Reduced-motion and data-saving modes request no MP4s until explicitly enabled.
 
 ## Media
 
-public/careless/media.json is the centralized manifest, imported for SSR and fetched at runtime. public/careless/images has founder-approved WebP derivatives and emergency storyboard fallbacks. public/careless/video is the founder clip handoff folder. See CARELESS-MEDIA-HANDOFF.md for mapping, focal points and sequence conversion. All nine temporary V1 videos are integrated; see CARELESS-VIDEO-QA.md and CARELESS-VIDEO-INSPECTION.json for measured evidence and limits. The supplied HQ image still has baked labels; a clean replacement remains a known item.
+public/careless/media.json is the centralized manifest, imported for SSR and fetched at runtime. public/careless/images has founder-approved WebP derivatives and emergency storyboard fallbacks. public/careless/video is the founder clip handoff folder. See CARELESS-MEDIA-HANDOFF.md for mapping, focal points and sequence conversion. All ten temporary V1 videos including 2a are accounted for; see CARELESS-VIDEO-QA.md and CARELESS-VIDEO-INSPECTION.json for measured evidence and limits. The supplied HQ image still has baked labels; a clean replacement remains a known item.
 
 ## Scout and conversion state
 

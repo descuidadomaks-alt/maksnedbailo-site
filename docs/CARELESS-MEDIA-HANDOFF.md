@@ -2,6 +2,28 @@
 
 The experience lives only at `/new`. Do not edit the homepage's `_v2`, `components`, `lib` or `sections` folders to replace its media.
 
+## Current: continuous master film (21 October)
+
+The journey now uses one joined movie and one decoder. Source order is **2 -> 2a -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9**. `1_loop.mp4` remains the separate ambient hero/final sunset. All ten originals remain untouched in the founder's source folder.
+
+Delivery: `public/careless/video/film-v2/journey.mp4`, 45.5 seconds, 31.03 MB, 624 square, H.264/yuv420p, 24 fps, every frame a keyframe, no B-frames/audio, fast-start. `film-first.webp` and `film-last.webp` support loading and the HQ transition. The optimized `2a.mp4` and its posters are also preserved here; previous v1 assets remain for rollback.
+
+The centralized manifest now has `cinema.master` (src/posters/duration/fps/shots), `cinema.cues` (HTML cue windows), `cinema.journey` (editable source order/trims/scroll weights), and `cinema.hero`. Shot boundaries and cue start/end/fade values use master movie seconds. `master.settle` is false by default; optional near-stop settling is limited to Scout/HQ. No chapter/slider rail is rendered.
+
+### Replace a journey clip
+
+1. Keep all original source files in one folder, including 2a.mp4. Replace the desired source there, or change its basename in the corresponding journey manifest entry. Our tools read originals and never overwrite them.
+2. Adjust that entry's duration and inPoint/outPoint to the new source. Keep its id/order; scrollLength sets reading/travel space. Current total is 2560 svh, with extra room at Scout and HQ.
+3. Run `node scripts/prepare-careless-film.mjs "D:/AI Automation/Service/Website/CARELESS-V1/video" film-v3` from the repository. Use a new release name. FFmpeg/ffprobe must be installed. The helper encodes temporary normalized segments, joins a seekable master, creates posters and inspection metadata, and updates master/shot/cue timing. Previous releases and originals survive. Current temporary output is square; review delivery dimensions/crops before using different-aspect final footage.
+4. Review custom cue edits: the helper recomputes default narrative windows relative to the source shots. Edit cinema.cues for precise entrance/hold/exit timing. Scene copy remains real HTML. No component rewrite is required.
+5. Run both check scripts, type check, build and rendered forward/reverse/mobile/skip/failure QA. Deploy the manifest and new media together through existing GitHub/Vercel.
+
+For the ambient hero only, `node scripts/prepare-careless-video.mjs hero source.mp4` remains supported. The older helper deliberately refuses individual journey replacements now, preventing silent master/clip mismatches.
+
+For a media rollback, restore the previous complete cinema manifest and keep its referenced master/posters. Revert only the continuous-film PR for a full interaction rollback; preserve the homepage/unrelated work. See CARELESS-FILM-INSPECTION.json and CARELESS-CONTINUOUS-FILM.md.
+
+## Previous per-clip release - historical reference
+
 Runtime manifest: `public/careless/media.json`. URLs start `/careless/`. This JSON is fetched in the browser; upload/deploy it with its referenced files. No component changes are needed for poster or sequence replacements. Existing repository deployment still publishes files through Vercel.
 
 | Scene ID | Founder asset | Suggested poster | Current fallback |
@@ -25,7 +47,7 @@ Poster-only entry:
 
 `mobileImage` is optional. The desktop image stays available if it fails. Fixed media geometry prevents layout shifts; native lazy loading applies below the hero. Missing files fall back to the local storyboard. Any missing scene entry falls back independently. External/path-traversal media URLs are rejected. Scene identity and content remain in the source, not in untrusted manifest fields.
 
-## Temporary V1 video delivery — 20 October 2026
+## Archived per-clip video delivery — 20 October 2026
 
 All nine supplied clips from CARELESS_V1_VIDEOS.zip are installed. Originals remain untouched outside public delivery. Technical inspection, hashes, five sampled timestamps, camera notes and first/last poster URLs are recorded in CARELESS-VIDEO-INSPECTION.json.
 
