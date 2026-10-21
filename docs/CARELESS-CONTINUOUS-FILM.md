@@ -1,3 +1,5 @@
+> Current mobile recovery: see CARELESS-MOBILE-RECOVERY.md. The earlier video-scrub release failed founder iPhone review. The scroll renderer now uses progressive AVIF frames with WebP fallback; physical-device acceptance and final-HD budgets remain pending.
+
 # Care Less continuous film correction
 
 21 October 2026. Release branch: care-less-continuous-film. Scope: /new only. Existing GitHub -> Vercel deployment; homepage, shared layout/styles, redirects and unrelated routes are unchanged. Scout public activation remains OFF.

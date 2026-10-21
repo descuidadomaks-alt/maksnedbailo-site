@@ -43,3 +43,7 @@ for (const cue of cinema.cues) {
 const broken = structuredClone(cinema); broken.master.shots[1].start += 1;
 assert.equal(readCinema(broken), null);
 console.log('PASS ten source mappings, continuous master, 2a placement, cue fade windows, monotonic reversible film clock, safe manifest and assets');
+
+for (const p of [1,0,.5,.99,0,1,.01,0]) { const a=filmAt(p,cinema.master.shots).time; const b=filmAt(p,cinema.master.shots).time;assert.equal(a,b);if(p===0)assert.equal(a,0); }
+for(let i=2000;i>=0;i--){const t=filmAt(i/2000,cinema.master.shots).time;assert.ok(t<=previousTime+.0001);previousTime=t;}
+console.log('PASS deterministic hero restart and monotonic reverse progress without mutable tween state');

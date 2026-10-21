@@ -85,7 +85,7 @@
   ],
   "hqNote": "Supplied clean file still contains baked labels; a genuinely text-free replacement remains pending.",
   "cinema": {
-    "version": 2,
+    "version": 3,
     "introScroll": 85,
     "hero": {
       "id": "hero",
@@ -353,7 +353,23 @@
           "scrollLength": 440,
           "poster": "/careless/video/v1/posters/9-first.webp"
         }
-      ]
+      ],
+      "sequence": {
+        "fps": 24,
+        "count": 1092,
+        "variants": [
+          {
+            "id": "w624-avif",
+            "width": 624,
+            "height": 624,
+            "pattern": "/careless/frames/frames-v3/w624-avif/frame-{frame}.avif",
+            "bytes": 36437580,
+            "firstSecondBytes": 677973,
+            "format": "avif",
+            "fallbackPattern": "/careless/frames/frames-v3/w624/frame-{frame}.webp"
+          }
+        ]
+      }
     },
     "cues": [
       {

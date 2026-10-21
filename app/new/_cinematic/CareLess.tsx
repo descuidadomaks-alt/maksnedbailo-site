@@ -93,7 +93,7 @@ export default function CareLess() {
  }, [simple]);
  useEffect(() => {
   if (dialog && modal.current) { focusReturn.current = document.activeElement as HTMLElement; modal.current.showModal(); }
-  else if (modal.current?.open) { modal.current.close(); focusReturn.current?.focus(); }
+  else if (modal.current?.open) { modal.current.close(); focusReturn.current?.focus({preventScroll:true}); }
  }, [dialog]);
  function openScout() { track("scout_open", { state: "paused" }); setDialog("scout"); }
  function jumpTo(target: "top" | "journey" | "experience") {

@@ -1,3 +1,5 @@
+> Current mobile recovery: see CARELESS-MOBILE-RECOVERY.md. The earlier video-scrub release failed founder iPhone review. The scroll renderer now uses progressive AVIF frames with WebP fallback; physical-device acceptance and final-HD budgets remain pending.
+
 # Care Less V1 media handoff
 
 The experience lives only at `/new`. Do not edit the homepage's `_v2`, `components`, `lib` or `sections` folders to replace its media.

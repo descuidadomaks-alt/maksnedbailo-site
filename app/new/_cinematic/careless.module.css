@@ -54,3 +54,26 @@
 .staticJourney .stage{height:100svh;min-height:680px}
 .staticJourney .sceneCopy>p:not(.eyebrow){max-width:490px}
 @media(max-width:700px){.filmMedia :is(img,video){object-position:var(--film-mobile-crop)!important}.filmCaption{bottom:22%;right:6%}.filmCaption h2{font-size:clamp(34px,9vw,42px)}.filmTools>span{display:none}.filmTools{justify-content:flex-end}.filmProgress{left:6%;right:6%;bottom:27px}.filmProgress>div{font-size:6px}.filmNotice{left:6%;bottom:80px;right:6%;font-size:10px!important}.motionHint{font-size:10px;max-width:330px}.staticJourney .sceneCopy{bottom:20%}.staticJourney .stage{min-height:680px}}
+
+/* Frame renderer: decoded cache is bounded; no video seek is used for the journey. */
+.frameCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:var(--film-crop);pointer-events:none;transition:none!important}
+.filmJourney .stage{height:100dvh;min-height:0}
+@media(max-width:700px){
+ .frameCanvas{object-position:var(--film-mobile-crop)}
+ .filmCaption{top:clamp(90px,16svh,145px);bottom:auto;left:7%;right:7%;max-width:none;text-align:center;pointer-events:none!important}
+ .filmCaption>.eyebrow{justify-content:center;font-size:9px}
+ .filmCaption h2{font-size:clamp(28px,8vw,38px);line-height:1.08;max-width:20ch;margin:12px auto!important;text-wrap:balance}
+ .filmCaption>p:last-of-type{font-size:13px;line-height:1.6;max-width:30ch;margin:0 auto}
+ .filmCaption .scoutEncounter{justify-content:center;gap:8px 18px;margin-top:15px}
+ .filmCaption .scoutEncounter>p{display:none}
+ .filmCaption .scoutEncounter :is(a,button){pointer-events:auto;min-height:48px;font-size:12px!important}
+ .filmTools{left:5%;right:5%;top:calc(10px + env(safe-area-inset-top,0px))}
+ .filmTools :is(button,a){font-size:9px;min-height:44px}
+ .filmProgress{bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+ .filmProgress>div{display:none}
+ .filmNotice{top:calc(62px + env(safe-area-inset-top,0px));bottom:auto;text-align:center;max-width:none;font-size:11px!important;pointer-events:none}
+ .filmIntro .hero{min-height:100svh}
+}
+@media(max-width:700px) and (max-height:650px){.filmCaption{top:85px}.filmCaption h2{font-size:28px}.filmCaption .scoutEncounter{margin-top:8px}}
+
+@media(max-width:700px){.filmJourney .stageShade{background:linear-gradient(180deg,#09110db3,#09110d70 38%,transparent 66%),linear-gradient(0deg,#09110d55,transparent 40%)}}
