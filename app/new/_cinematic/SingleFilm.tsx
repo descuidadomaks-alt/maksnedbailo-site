@@ -28,7 +28,11 @@ export const SingleFilm = forwardRef<FilmHandle, { film: Film; onPresented(time:
       failed() { setVisible(false); callbacks.current.onFailure(); }
     });
     controller.current = control; control.seek(target.current); video.load();
-    return () => { control.dispose(); controller.current = undefined; video.removeAttribute("src"); video.load(); };
+    const activate = (event: MouseEvent) => {
+      if ((event.target as Element | null)?.closest('a[href="#journey"]')) control.prime();
+    };
+    document.addEventListener("click", activate, true);
+    return () => { document.removeEventListener("click", activate, true); control.dispose(); controller.current = undefined; video.removeAttribute("src"); video.load(); };
   }, [film.src, film.mobileSrc, film.duration, film.fps]);
   return <video ref={element} className={styles.scrubVideo} data-single-film="true" muted playsInline preload="auto" disablePictureInPicture aria-hidden="true" style={{ opacity: visible ? 1 : 0, transition: "none" }} />;
 });
