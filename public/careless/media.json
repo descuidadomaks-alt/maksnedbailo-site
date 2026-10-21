@@ -85,8 +85,8 @@
   ],
   "hqNote": "Supplied clean file still contains baked labels; a genuinely text-free replacement remains pending.",
   "cinema": {
-    "version": 1,
-    "introScroll": 70,
+    "version": 2,
+    "introScroll": 85,
     "hero": {
       "id": "hero",
       "mode": "loop",
@@ -105,13 +105,31 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/2-first.webp",
         "endPoster": "/careless/video/v1/posters/2-last.webp",
         "position": "center 45%",
         "mobilePosition": "30% center",
         "transition": "dissolve",
+        "transitionDuration": 0.18,
+        "fps": 24
+      },
+      {
+        "id": "clip-2a",
+        "copySceneId": "coast",
+        "sourceFile": "2a.mp4",
+        "src": "/careless/video/film-v2/2a.mp4",
+        "mode": "scroll",
+        "duration": 5.083333,
+        "inPoint": 0,
+        "outPoint": 5.073333,
+        "scrollLength": 220,
+        "poster": "/careless/video/film-v2/2a-first.webp",
+        "endPoster": "/careless/video/film-v2/2a-last.webp",
+        "position": "center 45%",
+        "mobilePosition": "30% center",
+        "transition": "cut",
         "transitionDuration": 0.18,
         "fps": 24
       },
@@ -123,8 +141,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/3-first.webp",
         "endPoster": "/careless/video/v1/posters/3-last.webp",
         "position": "center",
@@ -141,8 +159,8 @@
         "mode": "scroll",
         "duration": 5.208333,
         "inPoint": 0,
-        "outPoint": 5.158333,
-        "scrollLength": 58,
+        "outPoint": 5.198333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/4-first.webp",
         "endPoster": "/careless/video/v1/posters/4-last.webp",
         "position": "center",
@@ -159,8 +177,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0.34,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/5-first.webp",
         "endPoster": "/careless/video/v1/posters/5-last.webp",
         "position": "center",
@@ -177,8 +195,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/6-first.webp",
         "endPoster": "/careless/video/v1/posters/6-last.webp",
         "position": "center",
@@ -195,8 +213,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 250,
         "poster": "/careless/video/v1/posters/7-first.webp",
         "endPoster": "/careless/video/v1/posters/7-last.webp",
         "position": "center",
@@ -213,8 +231,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 80,
+        "outPoint": 5.073333,
+        "scrollLength": 400,
         "poster": "/careless/video/v1/posters/8-first.webp",
         "endPoster": "/careless/video/v1/posters/8-last.webp",
         "position": "center",
@@ -231,8 +249,8 @@
         "mode": "scroll",
         "duration": 5.083333,
         "inPoint": 0,
-        "outPoint": 5.033333,
-        "scrollLength": 58,
+        "outPoint": 5.073333,
+        "scrollLength": 440,
         "poster": "/careless/video/v1/posters/9-first.webp",
         "endPoster": "/careless/video/v1/posters/9-last.webp",
         "position": "center",
@@ -240,6 +258,154 @@
         "transition": "dissolve",
         "transitionDuration": 0.18,
         "fps": 24
+      }
+    ],
+    "master": {
+      "id": "film",
+      "mode": "scroll",
+      "src": "/careless/video/film-v2/journey.mp4",
+      "poster": "/careless/video/film-v2/film-first.webp",
+      "endPoster": "/careless/video/film-v2/film-last.webp",
+      "duration": 45.5,
+      "fps": 24,
+      "position": "center 45%",
+      "mobilePosition": "30% center",
+      "settle": false,
+      "shots": [
+        {
+          "id": "clip-2",
+          "copySceneId": "pool",
+          "sourceFile": "2.mp4",
+          "start": 0,
+          "end": 5.083333,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/2-first.webp"
+        },
+        {
+          "id": "clip-2a",
+          "copySceneId": "coast",
+          "sourceFile": "2a.mp4",
+          "start": 5.083333,
+          "end": 10.166666,
+          "scrollLength": 220,
+          "poster": "/careless/video/film-v2/2a-first.webp"
+        },
+        {
+          "id": "clip-3",
+          "copySceneId": "coast",
+          "sourceFile": "3.mp4",
+          "start": 10.166666,
+          "end": 15.249998999999999,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/3-first.webp"
+        },
+        {
+          "id": "clip-4",
+          "copySceneId": "discovery",
+          "sourceFile": "4.mp4",
+          "start": 15.249998999999999,
+          "end": 20.458332,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/4-first.webp"
+        },
+        {
+          "id": "clip-5",
+          "copySceneId": "entrance",
+          "sourceFile": "5.mp4",
+          "start": 20.458332,
+          "end": 25.166665,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/5-first.webp"
+        },
+        {
+          "id": "clip-6",
+          "copySceneId": "tunnel",
+          "sourceFile": "6.mp4",
+          "start": 25.166665,
+          "end": 30.249997999999998,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/6-first.webp"
+        },
+        {
+          "id": "clip-7",
+          "copySceneId": "colony",
+          "sourceFile": "7.mp4",
+          "start": 30.249997999999998,
+          "end": 35.333331,
+          "scrollLength": 250,
+          "poster": "/careless/video/v1/posters/7-first.webp"
+        },
+        {
+          "id": "clip-8",
+          "copySceneId": "scout",
+          "sourceFile": "8.mp4",
+          "start": 35.333331,
+          "end": 40.416664,
+          "scrollLength": 400,
+          "poster": "/careless/video/v1/posters/8-first.webp"
+        },
+        {
+          "id": "clip-9",
+          "copySceneId": "hq",
+          "sourceFile": "9.mp4",
+          "start": 40.416664,
+          "end": 45.49999699999999,
+          "scrollLength": 440,
+          "poster": "/careless/video/v1/posters/9-first.webp"
+        }
+      ]
+    },
+    "cues": [
+      {
+        "id": "surface",
+        "scene": "pool",
+        "start": 0.65,
+        "end": 4.833333,
+        "fade": 0.65
+      },
+      {
+        "id": "coast",
+        "scene": "coast",
+        "start": 5.783333,
+        "end": 9.916666,
+        "fade": 0.65
+      },
+      {
+        "id": "discovery",
+        "scene": "discovery",
+        "start": 11.366665999999999,
+        "end": 16.249999,
+        "fade": 0.65
+      },
+      {
+        "id": "system",
+        "scene": "tunnel",
+        "start": 21.658331999999998,
+        "end": 29.649997999999997,
+        "fade": 0.65
+      },
+      {
+        "id": "colony",
+        "scene": "colony",
+        "start": 30.799998,
+        "end": 34.983331,
+        "fade": 0.65
+      },
+      {
+        "id": "scout",
+        "scene": "scout",
+        "start": 36.333331,
+        "end": 40.966663999999994,
+        "actions": true,
+        "fade": 0.65
+      },
+      {
+        "id": "headquarters",
+        "scene": "hq",
+        "start": 42.416664,
+        "end": 46,
+        "actions": true,
+        "fade": 0.65
       }
     ]
   }

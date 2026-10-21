@@ -1,0 +1,121 @@
+{
+  "release": "film-v2",
+  "duration": 45.5,
+  "bytes": 31028115,
+  "width": 624,
+  "height": 624,
+  "fps": 24,
+  "keyframeInterval": 1,
+  "sourceFilesUntouched": true,
+  "order": [
+    {
+      "sourceFile": "2.mp4",
+      "sha256": "d195be70919df3853f92a4fb792cad1bdec1d5506eba3c6b41cdf07313979a5b",
+      "bytes": 7402661,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 0,
+      "masterEnd": 5.083333
+    },
+    {
+      "sourceFile": "2a.mp4",
+      "sha256": "646d66db427420aba56e45df4f41c3bcf294a536566883a0e59a1368d65fc3cb",
+      "bytes": 8319003,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 5.083333,
+      "masterEnd": 10.166666
+    },
+    {
+      "sourceFile": "3.mp4",
+      "sha256": "ff6cb67bd8caa9e42568e041116d0c7dd2025706dc543905f36006a018876f68",
+      "bytes": 12232695,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 10.166666,
+      "masterEnd": 15.249998999999999
+    },
+    {
+      "sourceFile": "4.mp4",
+      "sha256": "39f2a3f04d1a7565b88cbd3e35fbf65e0ae2e57c5df030105b0e9153eda7d7ad",
+      "bytes": 9527852,
+      "sourceDuration": 5.208333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 15.249998999999999,
+      "masterEnd": 20.458332
+    },
+    {
+      "sourceFile": "5.mp4",
+      "sha256": "7bad8f6cdeb344c6fe94ac2c5702d6643230f572468718bdf66442c9799457a7",
+      "bytes": 5622564,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 20.458332,
+      "masterEnd": 25.166665
+    },
+    {
+      "sourceFile": "6.mp4",
+      "sha256": "b7b471d4c95f6af9627f57ad24c00f8b30b21145a6912f9516abb8ec91282f7f",
+      "bytes": 5952947,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 25.166665,
+      "masterEnd": 30.249997999999998
+    },
+    {
+      "sourceFile": "7.mp4",
+      "sha256": "7b3ddd2d8aa13e9501f678be768840ae4d9d0d184498beceeeb89a0c83a22f2a",
+      "bytes": 7310529,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 30.249997999999998,
+      "masterEnd": 35.333331
+    },
+    {
+      "sourceFile": "8.mp4",
+      "sha256": "c6fa548998e81a219e017f79933463e9c5b971d3af209ad12ac505f9342e5a9a",
+      "bytes": 6943757,
+      "sourceDuration": 5.083333,
+      "width": 624,
+      "height": 624,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 35.333331,
+      "masterEnd": 40.416664
+    },
+    {
+      "sourceFile": "9.mp4",
+      "sha256": "8c244636cc7bcef5100f4605a0e2af7bde02c24cd4ae690ddf2782b31126468a",
+      "bytes": 7612959,
+      "sourceDuration": 5.083333,
+      "width": 1080,
+      "height": 1080,
+      "fps": "24/1",
+      "audio": false,
+      "masterStart": 40.416664,
+      "masterEnd": 45.49999699999999
+    }
+  ],
+  "addedTransition": "2a.mp4: camera moves from pool edge along rocky coast toward the ground; inspected at 0, 1.25, 2.54, 3.79 and 5.04 seconds."
+}

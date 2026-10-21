@@ -34,58 +34,87 @@ export function AmbientVideo({ clip, reduced, active = true }: { clip: AmbientCl
 }
 
 export type ScrubHandle = { seek(progress: number): void };
+type SeekMedia = Pick<ScrollClip, "id" | "src" | "poster" | "inPoint" | "outPoint" | "fps" | "position" | "mobilePosition">;
 
-export const ScrubVideo = forwardRef<ScrubHandle, { clip: ScrollClip; onFailure(): void }>(function ScrubVideo({ clip, onFailure }, ref) {
+export const ScrubVideo = forwardRef<ScrubHandle, { clip: SeekMedia; onFailure(): void; onPresented?(time: number): void }>(function ScrubVideo({ clip, onFailure, onPresented }, ref) {
   const video = useRef<HTMLVideoElement>(null);
   const desired = useRef(clip.inPoint);
   const pump = useRef<() => void>(() => {});
+  const callbacks = useRef({ onFailure, onPresented });
+  callbacks.current = { onFailure, onPresented };
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
   useImperativeHandle(ref, () => ({ seek(progress) { desired.current = clip.inPoint + clampProgress(progress) * (clip.outPoint - clip.inPoint); pump.current(); } }), [clip.inPoint, clip.outPoint]);
   useEffect(() => {
     const element = video.current;
     if (!element) return;
-    let busy = false;
-    let broken = false;
-    let disposed = false;
+    let busy = false, disposed = false, broken = false;
     let timeout: ReturnType<typeof setTimeout> | undefined;
-    let slow = 0;
-    let started = 0;
-    let seeks = 0;
-    let sumMs = 0;
-    let maxMs = 0;
+    let fallback: ReturnType<typeof setTimeout> | undefined;
+    let frameRequest = 0, activeTarget = 0, started = 0, seeks = 0, sumMs = 0, maxMs = 0, slow = 0;
+    let lastPresented = -1;
+    let lastComposited = -1, compositedFrames = 0;
+    const frameSamples: number[] = [];
     setReady(false); setFailed(false);
-    // Strict Mode and manifest replacements can reuse this DOM node after cleanup.
-    // Restore the source before waiting for loadeddata on the new controller.
-    if (element.getAttribute("src") !== clip.src) { element.src = clip.src; element.load(); }
-    const fail = () => { if (disposed) return; broken = true; setFailed(true); setReady(false); onFailure(); element.pause(); };
-    const present = () => { if (!disposed && element.readyState >= 2) setReady(true); };
-    pump.current = () => {
-      if (disposed || busy || element.readyState < 2 || broken) return;
-      const target = Math.min(desired.current, Math.max(0, element.duration - .025));
-      if (!Number.isFinite(target) || Math.abs(element.currentTime - target) < 1 / clip.fps / 2) { present(); return; }
-      busy = true; started = performance.now();
-      try { element.currentTime = target; } catch { busy = false; fail(); return; }
-      timeout = setTimeout(() => { busy = false; if (++slow >= 3) fail(); else pump.current(); }, 1200);
+    const supportsFrames = typeof element.requestVideoFrameCallback === "function";
+    const cancelFrame = () => { if (frameRequest && element.cancelVideoFrameCallback) element.cancelVideoFrameCallback(frameRequest); frameRequest = 0; };
+    const present = (time: number) => {
+      if (disposed || broken || element.readyState < 2) return;
+      setReady(true);
+      element.dataset.presentedTime = time.toFixed(4);
+      if (Math.abs(time - lastPresented) > .001) { lastPresented = time; callbacks.current.onPresented?.(time); }
     };
-    const complete = () => {
-      if (disposed) return;
-      clearTimeout(timeout);
+    const fail = () => { if (disposed) return; broken = true; busy = false; cancelFrame(); clearTimeout(timeout); clearTimeout(fallback); setFailed(true); setReady(false); callbacks.current.onFailure(); element.pause(); };
+    const complete = (time: number) => {
+      if (disposed || broken || !busy) return;
+      clearTimeout(timeout); clearTimeout(fallback); cancelFrame();
       const elapsed = performance.now() - started;
-      if (busy) { seeks++; sumMs += elapsed; maxMs = Math.max(maxMs, elapsed); }
+      seeks++; sumMs += elapsed; maxMs = Math.max(maxMs, elapsed);
       element.dataset.seekCount = String(seeks);
-      element.dataset.seekMeanMs = String(seeks ? sumMs / seeks : 0);
-      element.dataset.seekMaxMs = String(maxMs);
-      busy = false; present(); pump.current();
+      element.dataset.seekMeanMs = (sumMs / seeks).toFixed(2);
+      element.dataset.seekMaxMs = maxMs.toFixed(2);
+      busy = false; present(time); pump.current();
     };
-    const loaded = () => { if (clip.inPoint === 0) present(); pump.current(); };
-    element.addEventListener("loadeddata", loaded);
-    element.addEventListener("seeked", complete);
-    element.addEventListener("error", fail);
+    const waitForFrame = () => {
+      frameRequest = element.requestVideoFrameCallback((_, metadata) => {
+        frameRequest = 0;
+        if (disposed || !busy) return;
+        if (Math.abs(metadata.mediaTime - lastComposited) > .001) {
+          lastComposited = metadata.mediaTime; compositedFrames++;
+          frameSamples.push(Number(metadata.mediaTime.toFixed(4)));
+          if (frameSamples.length > 40) frameSamples.shift();
+          element.dataset.compositedFrames = String(compositedFrames);
+          element.dataset.frameSamples = JSON.stringify(frameSamples);
+        }
+        if (Math.abs(metadata.mediaTime - activeTarget) <= 1 / clip.fps + .006) complete(metadata.mediaTime);
+        else waitForFrame();
+      });
+    };
+    pump.current = () => {
+      if (disposed || busy || broken || element.readyState < 2) return;
+      const rawTarget = Math.min(desired.current, Math.max(0, element.duration - .025));
+      const target = Math.round(rawTarget * clip.fps) / clip.fps;
+      if (!Number.isFinite(target)) return;
+      if (Math.abs(element.currentTime - target) < .001) { if (!supportsFrames) present(element.currentTime); return; }
+      busy = true; started = performance.now(); activeTarget = target;
+      if (supportsFrames) waitForFrame();
+      try { element.currentTime = target; } catch { fail(); return; }
+      timeout = setTimeout(() => { if (++slow >= 3) fail(); else complete(element.currentTime); }, 1200);
+    };
+    const seeked = () => {
+      if (!busy) return;
+      // Paused-frame callbacks vary across browsers. Keep a bounded seeked fallback.
+      if (supportsFrames) fallback = setTimeout(() => complete(element.currentTime), 100);
+      else complete(element.currentTime);
+    };
+    const loaded = () => { if (Math.abs(desired.current - element.currentTime) < 1 / clip.fps) present(element.currentTime); pump.current(); };
+    element.addEventListener("loadeddata", loaded); element.addEventListener("seeked", seeked); element.addEventListener("error", fail);
+    // React Strict Mode may reuse a node whose previous controller released its src.
+    if (element.getAttribute("src") !== clip.src) { element.src = clip.src; element.load(); }
     if (element.readyState >= 2) loaded();
     return () => {
-      disposed = true; clearTimeout(timeout); pump.current = () => {};
-      element.removeEventListener("loadeddata", loaded); element.removeEventListener("seeked", complete); element.removeEventListener("error", fail);
+      disposed = true; clearTimeout(timeout); clearTimeout(fallback); cancelFrame(); pump.current = () => {};
+      element.removeEventListener("loadeddata", loaded); element.removeEventListener("seeked", seeked); element.removeEventListener("error", fail);
       element.pause(); element.removeAttribute("src"); element.load();
     };
   }, [clip.src, clip.inPoint, clip.fps]);
