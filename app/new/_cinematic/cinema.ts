@@ -4,7 +4,9 @@ export type AmbientClip = { id: string; mode: "loop"; src: string; poster: strin
 export type ScrollClip = { id: string; copySceneId: string; sourceFile: string; mode: "scroll"; src: string; poster: string; endPoster: string; duration: number; inPoint: number; outPoint: number; scrollLength: number; position: string; mobilePosition: string; transition: "cut" | "dissolve"; transitionDuration: number; fps: number };
 export type FilmShot = { id: string; copySceneId: string; sourceFile: string; start: number; end: number; scrollLength: number; poster: string };
 export type FilmCue = { id: string; scene: string; start: number; end: number; fade: number; actions?: boolean };
-export type Film = { id: string; mode: "scroll"; src: string; poster: string; endPoster: string; duration: number; fps: number; position: string; mobilePosition: string; settle: boolean; shots: FilmShot[] };
+export type FrameVariant = { id: string; width: number; height: number; pattern: string; bytes: number; firstSecondBytes: number; format?: "avif" | "webp"; fallbackPattern?: string };
+export type FrameSequence = { fps: number; count: number; variants: FrameVariant[] };
+export type Film = { id: string; mode: "scroll"; src: string; poster: string; endPoster: string; duration: number; fps: number; position: string; mobilePosition: string; settle: boolean; shots: FilmShot[]; sequence?: FrameSequence };
 export type Cinema = { version: number; introScroll: number; hero: AmbientClip; journey: ScrollClip[]; master: Film; cues: FilmCue[] };
 
 const local = (value: unknown): value is string => typeof value === "string" && value.startsWith("/careless/") && !value.includes("..");
@@ -32,7 +34,10 @@ export function readCinema(value: unknown): Cinema | null {
   }
   if (Math.abs(previous - duration) > .05 || !Array.isArray(input.cues)) return null;
   const cues = input.cues.filter(cue => cue && typeof cue.id === "string" && typeof cue.scene === "string" && Number.isFinite(cue.start) && Number.isFinite(cue.end) && cue.end > cue.start && cue.start >= 0 && cue.start < duration).slice(0, 16).map(cue => ({ ...cue, fade: number(cue.fade, .65, .1, 2) }));
-  return { version: 2, introScroll: number(input.introScroll, 85, 20, 100), hero: { ...input.hero, mode: "loop" }, journey, master: { ...film, duration, fps: number(film.fps, 24, 1, 60), settle: film.settle === true, shots }, cues };
+  const sequence = film.sequence;
+  if (!sequence) return null;
+  if (sequence && (!Number.isInteger(sequence.count) || sequence.count < 2 || sequence.count > 18000 || !Number.isFinite(sequence.fps) || sequence.fps < 1 || sequence.fps > 60 || Math.abs(sequence.count / sequence.fps - duration) > .1 || !Array.isArray(sequence.variants) || !sequence.variants.length || sequence.variants.some(v => !local(v.pattern) || !v.pattern.includes("{frame}") || (!!v.fallbackPattern && !local(v.fallbackPattern)) || !Number.isFinite(v.width) || !Number.isFinite(v.height) || v.width < 100 || v.height < 100 || v.width > 3840 || v.height > 3840))) return null;
+  return { version: sequence ? 3 : 2, introScroll: number(input.introScroll, 85, 20, 100), hero: { ...input.hero, mode: "loop" }, journey, master: { ...film, duration, fps: number(film.fps, 24, 1, 60), settle: film.settle === true, shots }, cues };
 }
 
 export const initialCinema = readCinema(manifest.cinema)!;

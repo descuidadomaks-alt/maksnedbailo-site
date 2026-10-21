@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import ts from 'typescript';
+const module={exports:{}};
+vm.runInNewContext(ts.transpileModule(fs.readFileSync('app/new/_cinematic/frame-store.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText,{exports:module.exports,module,AbortController,Date,Math});
+const {FrameStore,frameIndex,frameURL}=module.exports;
+const loads=[],shown=[],closed=[];const tick=()=>new Promise(r=>setImmediate(r));
+const store=new FrameStore({count:1092,maxFrames:4,concurrency:2,ahead:2,behind:1,load:(index,signal)=>new Promise((resolve,reject)=>loads.push({index,signal,resolve,reject})),present:(index)=>shown.push(index),failure:()=>{}});
+store.select(1091);const late=loads.find(x=>x.index===1091);store.select(0);
+assert.ok(late.signal.aborted,'old HQ request aborted on return to hero');
+late.resolve({image:{},width:1920,height:1080,close:()=>closed.push(1091)});await tick();
+assert.equal(shown.includes(1091),false,'late HQ cannot paint after hero reset');assert.ok(closed.includes(1091));
+const first=loads.find(x=>x.index===0);first.resolve({image:{},width:1920,height:1080,close:()=>closed.push(0)});await tick();assert.equal(shown.at(-1),0);
+store.select(100);const stale=loads.find(x=>x.index===100);store.select(90);stale.resolve({image:{},width:1920,height:1080,close:()=>closed.push(100)});await tick();assert.equal(shown.includes(100),false);
+store.dispose();assert.equal(store.cache.size,0);assert.equal(store.pending.size,0);
+assert.equal(frameIndex(0,24,1092),0);assert.equal(frameIndex(45.5,24,1092),1091);assert.equal(frameURL('/frame-{frame}.avif',3),'/frame-00003.avif');
+const real=JSON.parse(fs.readFileSync('public/careless/media.json','utf8')).cinema.master.sequence;
+for(const variant of real.variants){for(let i=0;i<real.count;i++){assert.ok(fs.statSync('public'+frameURL(variant.pattern,i)).size>100);if(variant.fallbackPattern)assert.ok(fs.statSync('public'+frameURL(variant.fallbackPattern,i)).size>100);}}
+console.log('PASS stale/out-of-order HQ responses, backwards target, abort/dispose, all sequence files and frame boundaries');

@@ -56,6 +56,7 @@ media.cinema.cues = [
   { id: 'headquarters', scene: 'hq', start: shot('clip-9').start + 2, end: duration + .5, actions: true }
 ].map(cue => ({ ...cue, fade: .65 }));
 media.cinema.version = 2;
+console.warn("Master changed: regenerate responsive frame sequences before publishing the current frame renderer.");
 fs.writeFileSync(file, JSON.stringify(media, null, 2) + '\n');
 fs.writeFileSync('docs/CARELESS-FILM-INSPECTION.json', JSON.stringify({ release, duration, bytes: fs.statSync(output).size, width: 624, height: 624, fps: 24, keyframeInterval: 1, sourceFilesUntouched: true, order: inspected, addedTransition: '2a.mp4: camera moves from pool edge along rocky coast toward the ground; inspected at 0, 1.25, 2.54, 3.79 and 5.04 seconds.' }, null, 2) + '\n');
 console.log(`Master ready: ${duration.toFixed(3)} s / ${(fs.statSync(output).size / 1e6).toFixed(2)} MB. Previous release and original sources retained.`);

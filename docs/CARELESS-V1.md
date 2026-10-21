@@ -1,3 +1,5 @@
+> Current mobile recovery: see CARELESS-MOBILE-RECOVERY.md. The earlier video-scrub release failed founder iPhone review. The scroll renderer now uses progressive AVIF frames with WebP fallback; physical-device acceptance and final-HD budgets remain pending.
+
 # Care Less V1 implementation and restart
 
 Current correction: see **CARELESS-CONTINUOUS-FILM.md**. The continuous-film branch adds 2a between 2 and 3 and replaces chapter-driven per-clip playback with one 45.5-second master, Lenis wheel smoothing, GSAP orchestration and film-time HTML cues. Homepage, unrelated routes and Scout OFF gates remain preserved. Check Notion for verified deployment status.
