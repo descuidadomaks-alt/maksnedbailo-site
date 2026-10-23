@@ -6,6 +6,10 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: "/projects/aelia",
+        destination: "/aelia-presentation/index.html",
+      },
+      {
         source: "/api/connecto/:path*",
         destination: "https://api.theconnecto.ai/api/v1/:path*",
       },
