@@ -9,6 +9,7 @@ export function updateReceipt(state,data,index,input,{at=new Date().toISOString(
  for(const l of lines)if(![l.ordered,l.received,l.cancelled].every(x=>Number.isInteger(x)&&x>=0&&x<=100000)||l.received+l.cancelled>l.ordered)throw Error('Получено и отменено не могут превышать заказанное. Укажите целые неотрицательные количества.');
  const increased=lines.some((l,i)=>l.received>receiptLines(state.orders[index])[i].received);
  if(increased&&input.stockConfirmed!==true)throw Error('Подтвердите, что полученное уже внесено в остатки CRM на дату среза.');
+ if(input.countAsInbound!==undefined)p.countAsInbound=input.countAsInbound;
  p.eta=input.eta??p.eta??'';p.route=input.route??p.route??'';
  const received=lines.reduce((s,l)=>s+l.received,0),remaining=lines.reduce((s,l)=>s+l.ordered-l.received-l.cancelled,0);
  const requested=input.mode==='all'?'received':input.status||p.status;

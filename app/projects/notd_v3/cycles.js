@@ -3,8 +3,9 @@ export function canonicalId(id,state){const seen=new Set();while(!seen.has(id)){
 export function coverage(data,state,result=null){
  const rows=result?.rows||data.rows,sets={active:[],replaced:[],excluded:[],missing:[]};
  for(const row of rows){const replaced=canonicalId(row.id,state)!==row.id,excluded=state.rules.some(r=>r.kind==='active'&&r.scope===row.id&&r.enabled!==false&&Number(r.value)===0&&(!r.from||r.from<=data.meetingDate)&&(!r.to||r.to>=data.meetingDate));if(replaced)sets.replaced.push(row);else if(excluded)sets.excluded.push(row);else{sets.active.push(row);if(!row.fresh||!Number.isFinite(row.available))sets.missing.push(row);}}
- const outstanding=(state.orders||[]).filter(p=>p.status!=='cancelled').reduce((s,p)=>s+p.lines.reduce((n,l)=>n+Math.max(0,l.ordered-l.received-l.cancelled),0)+(p.unmatchedLines||[]).reduce((n,l)=>n+Math.max(0,l.ordered-l.received-l.cancelled),0),0);
- return {known:rows.length,active:sets.active.length,replaced:sets.replaced.length,excluded:sets.excluded.length,missing:sets.missing.length,fresh:sets.active.length-sets.missing.length,outstanding,unmatchedInbound:(state.orders||[]).filter(p=>p.status!=='cancelled').flatMap(p=>p.unmatchedLines||[]),sets};
+ const outstanding=(state.orders||[]).filter(p=>p.status!=='cancelled'&&p.countAsInbound!==false).reduce((s,p)=>s+p.lines.reduce((n,l)=>n+Math.max(0,l.ordered-l.received-l.cancelled),0)+(p.unmatchedLines||[]).reduce((n,l)=>n+Math.max(0,l.ordered-l.received-l.cancelled),0),0);
+ const requested=(state.orders||[]).filter(p=>p.status!=='cancelled'&&p.countAsInbound===false).reduce((s,p)=>s+[...p.lines,...p.unmatchedLines||[]].reduce((n,l)=>n+l.ordered-l.received-l.cancelled,0),0);
+ return {requested,known:rows.length,active:sets.active.length,replaced:sets.replaced.length,excluded:sets.excluded.length,missing:sets.missing.length,fresh:sets.active.length-sets.missing.length,outstanding,unmatchedInbound:(state.orders||[]).filter(p=>p.status!=='cancelled').flatMap(p=>p.unmatchedLines||[]),sets};
 }
 export function prepareNextCycle(data,original,{targetDate,at=new Date().toISOString()}={}){
  const state=structuredClone(original);state.engineVersion=ENGINE_VERSION;state.ownerKnowledge=state.ownerKnowledge||{};state.cycleHistory=state.cycleHistory||[];
