@@ -20,7 +20,7 @@ export default function LenisProvider() {
   const pathname = usePathname();
   useEffect(() => {
     // The cinematic route uses native scroll, including native anchor navigation.
-    if (pathname === "/new") return;
+    if (pathname === "/new" || pathname === "/new2") return;
     if (typeof window === "undefined") return;
 
     // Respect prefers-reduced-motion
