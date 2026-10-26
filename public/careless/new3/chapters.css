@@ -1,0 +1,36 @@
+.chapter-experience{position:relative;margin:72px auto 0}
+.shared-plate-stick{position:sticky;top:20px;z-index:8;background:var(--ink);padding:0 0 10px}
+.shared-plate-stick .plate-scene{margin:0 auto}
+.chapter-experience.is-reading .plate-tilt{border-color:transparent;background:var(--ink);box-shadow:none}
+.chapter-experience.is-reading .shared-plate-stick::before{content:'';position:absolute;inset:-24px -6vw -18px;background:var(--ink);z-index:-1}
+.chapters{position:relative;height:460svh;margin-top:96px;view-timeline-name:--chapter-scroll;view-timeline-axis:block}
+.chapter-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:clip}
+.chapter-track{display:flex;width:400%;height:100%;will-change:transform}
+.chapter{width:25%;flex:none;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:340px 3.5vw 86px}
+.chapter h2{margin:0;max-width:20ch;font:300 clamp(50px,5.2vw,78px)/1.1 var(--font-sora);letter-spacing:-.055em;text-wrap:balance}
+.chapter h2 span{display:block}
+.chapter-line{max-width:750px;margin-top:25px;font-size:17px;line-height:1.85;color:var(--muted);text-wrap:pretty}
+.chapter-tags{display:flex;flex-wrap:wrap;gap:10px 24px;margin:26px 0 0;padding:0;list-style:none;font:12px/1.6 var(--font-roboto-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.chapter-offer{display:inline-flex;align-items:center;gap:38px;max-width:100%;min-height:48px;margin-top:37px;padding:10px 0;color:var(--paper);text-decoration:none;border-bottom:1px solid #e0b17499;font-size:15px;line-height:1.6;transition:color .4s var(--ease),border-color .4s var(--ease);scroll-margin-top:340px}
+.chapter-offer span{color:var(--amber);font-size:20px;line-height:1}.chapter-offer:hover{color:var(--amber);border-color:var(--amber)}.chapter-offer:focus-visible{outline:2px solid var(--amber);outline-offset:6px}
+.chapter-progress{position:absolute;bottom:-13px;left:50%;transform:translateX(-50%);display:flex;gap:9px;opacity:0;visibility:hidden;transition:opacity .6s var(--ease)}
+.chapter-progress i{display:block;width:25px;height:2px;background:#f2eee52e;transition:background-color .6s var(--ease)}
+.chapter-progress i.active{background:var(--amber)}.chapter-experience.is-reading .chapter-progress{opacity:1;visibility:visible}
+@keyframes chapter-pan{from{transform:translateX(0)}to{transform:translateX(-75%)}}
+@supports(animation-timeline:view()){@media(min-width:768px) and (prefers-reduced-motion:no-preference){.chapter-track{animation:chapter-pan 1s linear both;animation-timeline:--chapter-scroll;animation-range:contain 0% contain 100%}}}
+.chapters[data-pan=js] .chapter-track{animation:none;transform:translateX(calc(var(--chapter-progress,0)*-75%))}
+@media(max-width:767px){
+ .chapter-experience{margin-top:54px}.shared-plate-stick{top:12px;padding-bottom:12px}
+ .chapter-experience.is-reading .plate-scene{width:calc(100% + 32px);max-width:none;margin-left:-16px}
+ .chapter-experience.is-reading .plate-window{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#e0b17455 transparent}
+ .chapter-experience.is-reading .seven-plate{width:960px;max-width:none}
+ .chapters{height:auto;margin-top:78px;scroll-margin-top:310px}.chapter-stage{height:auto;position:static;overflow:visible}
+ .chapter-track{display:block;width:100%;height:auto;transform:none!important;animation:none!important;will-change:auto}
+ .chapter{width:100%;min-height:calc(100svh - 270px);padding:36px 0 66px;justify-content:flex-start}
+ .chapter h2{font-size:clamp(35px,10.2vw,45px);line-height:1.12;max-width:16ch;letter-spacing:-.05em}
+ .chapter-line{font-size:14px;line-height:1.85;margin-top:23px;max-width:320px}
+ .chapter-tags{gap:8px 19px;margin-top:23px;font-size:11px;letter-spacing:.02em}
+ .chapter-offer{font-size:14px;gap:24px;margin-top:30px;min-height:48px}
+ .chapter-progress{bottom:-11px}.chapter-progress i{width:21px}
+}
+@media(prefers-reduced-motion:reduce){.chapters{height:auto;scroll-margin-top:340px}.chapter-stage{height:auto;position:static;overflow:visible}.chapter-track{display:block;width:100%;height:auto;transform:none!important;animation:none!important;will-change:auto}.chapter{width:100%;min-height:70svh;padding:80px 3.5vw}.chapter-progress,.chapter-progress i,.chapter-offer{transition:none}}
