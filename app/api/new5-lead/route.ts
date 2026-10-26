@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
   if (!request.headers.get('content-type')?.includes('application/json') || Number(request.headers.get('content-length') || 0) > 12000) return reply({ accepted: false }, 400);
   let data;
   try { data = await request.json(); } catch { return reply({ accepted: false }, 400); }
-  const { offerId, contact, note = '', key, startedAt, company_fax } = data || {};
+  const { offerId, contact, note = '', key, startedAt, company_fax, page: rawPage } = data || {};
+  const page = rawPage === 'new6' ? 'new6' : 'new5'; // /new6 shares this intake
   if (typeof offerId !== 'string' || !Object.hasOwn(offers, offerId) || typeof contact !== 'string' || contact.length > 320 || typeof note !== 'string' || note.length > 2000 || typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key) || typeof startedAt !== 'number' || Date.now() - startedAt < 700 || Date.now() - startedAt > 86400000 || company_fax) return reply({ accepted: false }, 400);
   const value = contact.trim();
   const kind = kindOf(value);
@@ -48,12 +49,12 @@ export async function POST(request: NextRequest) {
   const bucket = attempts.get(ip) || { count: 0, until: now + 600000 };
   if (++bucket.count > 8) return reply({ accepted: false }, 429);
   attempts.set(ip, bucket);
-  const message = `Care Less /new5 lead: ${offers[offerId]}\nContact (${kind}): ${value}\nNote:\n${note.trim() || '—'}\nPlease route to Maks. Do not start a voice call.`;
+  const message = `Care Less /${page} lead: ${offers[offerId]}\nContact (${kind}): ${value}\nNote:\n${note.trim() || '—'}\nPlease route to Maks. Do not start a voice call.`;
   try {
     const response = await fetch(`https://api.mychatbot.app/webhook/sw-widget/${account}/${widget}/${session}`, {
       method: 'POST', cache: 'no-store', signal: AbortSignal.timeout(12000),
       headers: { 'Content-Type': 'application/json', Authorization: account + widget },
-      body: JSON.stringify({ action: 'my_chat_send', widget_id: widget, session, payload: { message, wp_context: request.nextUrl.origin + '/new5', offer_id: offerId }, ...(kind === 'email' ? { user_data: { email: value } } : kind === 'phone' ? { user_data: { phone: value } } : {}) }),
+      body: JSON.stringify({ action: 'my_chat_send', widget_id: widget, session, payload: { message, wp_context: request.nextUrl.origin + '/' + page, offer_id: offerId }, ...(kind === 'email' ? { user_data: { email: value } } : kind === 'phone' ? { user_data: { phone: value } } : {}) }),
     });
     if (!response.ok) return reply({ accepted: false }, 502);
     const result = await response.json();

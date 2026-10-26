@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>care_less®</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0f0e0c">
+  <meta name="description" content="Big plans. One team to make them happen. Brand, website, sales follow-up, automation, content and numbers, handled, so your business needs you less.">
+  <meta property="og:title" content="care_less® — Big plans. One team to make them happen.">
+  <meta property="og:description" content="Brand, website, sales follow-up, automation, content and numbers, handled by one team.">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://maksnedbailo.site/new6">
+  <meta property="og:image" content="https://maksnedbailo.site/careless/images/01-pool.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="/careless/new4/favicon.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="/careless/video/v1/posters/1_loop-first.webp" fetchpriority="high">
+  <link rel="preload" as="font" type="font/woff2" href="/careless/new5/fonts/sora-latin.woff2" crossorigin>
+  <link rel="stylesheet" href="/careless/new6/new6.css">
+  <script src="/careless/new6/new6.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#human">Skip the film</a>
+  <header class="topbar">
+    <span class="wordmark" aria-label="care less">care_less<sup>®</sup></span>
+    <div class="top-right">
+      <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound"><i></i><i></i><i></i><i></i><span>Sound</span></button>
+      <a class="top-book" href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer">Book a call</a>
+    </div>
+    <i class="progress" id="progress" aria-hidden="true"></i>
+  </header>
+
+  <!-- Journey rail: where you are, and a way to jump. Positions are set in new6.js (RAIL). -->
+  <nav class="rail" id="rail" aria-label="Chapters" hidden>
+    <button type="button" data-go="view"><span>The view</span></button>
+    <button type="button" data-go="takes"><span>What it takes</span></button>
+    <button type="button" data-go="colony"><span>The colony</span></button>
+    <button type="button" data-go="scout"><span>Scout</span></button>
+    <button type="button" data-go="hq"><span>HQ</span></button>
+    <button type="button" data-go="board"><span>Seven things</span></button>
+    <button type="button" data-go="human"><span>Say it once</span></button>
+    <button type="button" data-go="final"><span>Your turn</span></button>
+  </nav>
+
+  <!-- 1 · Arrival gate -->
+  <section class="gate" id="gate" aria-label="Loading">
+    <div class="gate-inner">
+      <p class="gate-status" aria-live="polite">Clearing your schedule…</p>
+      <h1 class="gate-title">Ready to care <em>less?</em></h1>
+      <button class="gate-btn" id="gate-btn" type="button" disabled>
+        <svg class="gate-ring" viewBox="0 0 200 64" aria-hidden="true" preserveAspectRatio="none"><rect x="1" y="1" width="198" height="62" rx="31" pathLength="100"/></svg>
+        <span class="gate-label">I'm ready</span>
+      </button>
+      <p class="gate-hint">About two minutes. Best with sound. <button class="gate-quiet" id="gate-quiet" type="button" disabled>Enter in silence</button></p>
+    </div>
+  </section>
+  <noscript><style>.gate{display:none}</style></noscript>
+
+  <main id="main">
+    <!-- 2 · The pinned stage: film → plate → seven pillars → chapters -->
+    <section class="journey" id="journey">
+      <div class="stage" id="stage">
+        <div class="film" aria-hidden="true">
+          <img class="film-poster" id="poster" src="/careless/video/v1/posters/1_loop-first.webp" alt="" width="720" height="720" fetchpriority="high" decoding="async">
+          <video class="film-loop" id="loop" muted loop playsinline preload="none" disablepictureinpicture></video>
+          <video class="film-movie" id="movie" muted playsinline preload="none" disablepictureinpicture></video>
+          <div class="film-shade" id="shade"></div>
+        </div>
+
+        <div class="hero" id="hero">
+          <h2 class="hero-title">Big plans.</h2>
+          <p class="hero-line"><span class="typed" id="hero-typed">One team to make them happen.</span><span class="caret" aria-hidden="true"></span></p>
+        </div>
+
+        <!-- Captions: timings per film live in new6.js (FILMS). -->
+        <div class="captions" aria-live="off">
+          <div class="cap" data-cap="view"><p class="cap-big">That's the view you're working&nbsp;for.</p></div>
+          <div class="cap" data-cap="takes"><p class="cap-big">Now look at what it&nbsp;takes.</p></div>
+          <div class="cap" data-cap="jobs"><p class="cap-list"><span>Enquiries.</span> <span>Quotes.</span> <span>Follow-ups.</span> <span>Invoices.</span> <span>Reviews.</span> <span>Content.</span></p><p class="cap-small">A hundred small jobs. Most of them still go through&nbsp;you.</p></div>
+          <div class="cap" data-cap="colony"><p class="cap-big">Look closer.</p><p class="cap-small">The best businesses run like this. Every job has someone on it. Nobody waits for the&nbsp;queen.</p></div>
+          <div class="cap cap-scout" data-cap="scout"><p class="cap-big">Meet <em>Scout.</em></p><p class="cap-small">Our guide. Knows what's possible now, and asks better questions than most&nbsp;consultants.</p></div>
+          <div class="cap" data-cap="follow"><p class="cap-big">Follow him. This is where it gets&nbsp;handled.</p></div>
+          <div class="cap cap-hq" data-cap="hq"><p class="cap-big">Five teams. <em>One</em> conversation.</p><ul class="hq-list"><li>Sales &amp; growth</li><li>Automation</li><li>Web &amp; brand</li><li>Content</li><li>Analytics</li></ul></div>
+        </div>
+
+        <!-- Tilt plate -->
+        <div class="plate" id="plate">
+          <div class="plate-card" id="plate-card">
+            <span class="plate-glare" aria-hidden="true"></span>
+            <div class="plate-copy">
+              <h2>What feels effortless has something <em>thoughtful</em> behind&nbsp;it.</h2>
+              <p>Every business that looks easy has a system someone built on purpose. We build yours, so the business stops needing you for&nbsp;everything.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seven pillars + four chapters -->
+        <div class="board" id="board" aria-labelledby="board-title">
+          <div class="board-graphic">
+            <p class="kpi"><span>The number we watch</span> Hours a week your business still needs&nbsp;you.</p>
+            <h2 class="board-title" id="board-title">Every business runs on seven things. In most, all seven run through <em>you.</em></h2>
+            <div class="org" id="org">
+              <div class="org-owner" data-col="you"><span>You</span><small>founder</small></div>
+              <svg class="org-wires" viewBox="0 0 700 60" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M350 0V24M50 24H650M50 24V60M150 24V60M250 24V60M350 24V60M450 24V60M550 24V60M650 24V60"/>
+              </svg>
+              <ol class="org-cols">
+                <li data-col="people"><b>1</b><span>People</span></li>
+                <li data-col="noticed"><b>2</b><span>Getting seen</span></li>
+                <li data-col="sales"><b>3</b><span>Sales</span></li>
+                <li data-col="money"><b>4</b><span>Money</span></li>
+                <li data-col="work"><b>5</b><span>The work</span></li>
+                <li data-col="customers"><b>6</b><span>Customers</span></li>
+                <li data-col="growth"><b>7</b><span>Growth</span></li>
+              </ol>
+              <div class="org-teams" aria-label="Who handles it">
+                <span data-team="sales">Sales &amp; growth</span><span data-team="automation">Automation</span><span data-team="web">Web &amp; brand</span><span data-team="content">Content</span><span data-team="analytics">Analytics</span>
+              </div>
+            </div>
+          </div>
+          <div class="chapters" id="chapters">
+            <div class="chapter-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <div class="chapter-track" id="chapter-track">
+              <article class="chapter" data-cols="noticed sales" data-teams="web content">
+                <p class="chapter-eyebrow">How you look</p>
+                <h3>Look as good as you actually&nbsp;are.</h3>
+                <p>Most good businesses look average online. We fix the brand, the website and the words, so a stranger gets it in five seconds.</p>
+                <ul class="chapter-jobs"><li>Brand &amp; logo</li><li>Website</li><li>What you say and how</li></ul>
+                <button class="chapter-offer" type="button" data-offer="look">Free: the 5-second test <span aria-hidden="true">→</span></button>
+                <p class="offer-note">Send your site. We tell you what a stranger sees.</p>
+              </article>
+              <article class="chapter" data-cols="sales money" data-teams="sales automation">
+                <p class="chapter-eyebrow">Getting customers</p>
+                <h3>Nobody waits until&nbsp;Monday.</h3>
+                <p>Every enquiry answered in minutes, sorted, and handed to you warm. Evenings and weekends&nbsp;included.</p>
+                <ul class="chapter-jobs"><li>Instant replies</li><li>Quotes that go out the same day</li><li>Follow-ups you don't have to remember</li></ul>
+                <button class="chapter-offer" type="button" data-offer="leak">Free: the missed-enquiry check <span aria-hidden="true">→</span></button>
+                <p class="offer-note">Show us last month's enquiries. We show you who waited, who left, and what they were worth.</p>
+              </article>
+              <article class="chapter" data-cols="work customers" data-teams="automation content">
+                <p class="chapter-eyebrow">Keeping customers</p>
+                <h3>Once is a sale. Twice is a&nbsp;business.</h3>
+                <p>Welcome messages, check-ins, reviews and reorders that happen on time, without you remembering to do&nbsp;them.</p>
+                <ul class="chapter-jobs"><li>Onboarding</li><li>Check-ins &amp; reviews</li><li>Reorders &amp; referrals</li></ul>
+                <button class="chapter-offer" type="button" data-offer="shopper">Free: the mystery-shopper run <span aria-hidden="true">→</span></button>
+                <p class="offer-note">We pose as a new customer and show you exactly where we'd have walked away.</p>
+              </article>
+              <article class="chapter" data-cols="you people money growth" data-teams="analytics automation sales">
+                <p class="chapter-eyebrow">Growing, or exiting</p>
+                <h3>Built to grow. Or to&nbsp;exit.</h3>
+                <p>A business that runs without you is worth more. To you, and to anyone who might one day buy&nbsp;it.</p>
+                <ul class="chapter-jobs"><li>Clean numbers</li><li>Handovers that stick</li><li>New markets &amp; products</li></ul>
+                <button class="chapter-offer" type="button" data-offer="needs_me">Free: the "does it need me?" check <span aria-hidden="true">→</span></button>
+                <p class="offer-note">A few questions. One page back: what still can't happen without you, in hours.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="cue" id="cue" aria-hidden="true"><i></i></div>
+      </div>
+    </section>
+
+    <!-- 3 · Human -->
+    <section class="human" id="human" aria-labelledby="human-title">
+      <!-- Remove "no-video" and the video's hidden attribute once Maks's hello video is in. -->
+      <div class="human-inner no-video">
+        <div class="human-head">
+          <h2 id="human-title">Say it <em>once.</em></h2>
+          <p class="human-q">How many times did you explain the same thing this month?</p>
+        </div>
+        <div class="human-video" data-video-wide="" data-video-vertical="" aria-hidden="true" hidden>
+          <i class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></i>
+          <span>Reserved: Maks, 30-second hello</span>
+        </div>
+        <div class="human-copy">
+          <div class="human-sig">
+            <img src="/careless/new6/media/maks-avatar.webp" alt="Maks Nedbailo" width="88" height="88" loading="lazy">
+            <p><b>Maks Nedbailo</b><span>Founder. A real person, not a bot.</span></p>
+          </div>
+          <p>Tell me what's stuck, and I'll tell you what I'd do first. You talk to me, then one team does the work: 16+ years of design, development and marketing, now with the new tools.</p>
+          <p class="human-promise">No pitch deck. Promise.</p>
+          <div class="human-actions">
+            <a class="btn btn-paper" href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer">Book a call with me <span aria-hidden="true">→</span></a>
+            <a class="btn btn-wa" href="https://wa.me/34641935207?text=Hi%20Maks%2C%20I%20saw%20your%20site." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm5.8 14.03c-.25.69-1.44 1.32-1.98 1.37-.51.05-.99.23-3.32-.69-2.8-1.1-4.58-3.97-4.72-4.15-.14-.18-1.12-1.49-1.12-2.85 0-1.35.71-2.02.96-2.29.25-.28.55-.35.73-.35l.53.01c.17 0 .4-.06.62.48.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.18.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.76 1.87.9.28.14.46.2.53.32.07.12.07.67-.18 1.36Z"/></svg>Prefer WhatsApp? Message me</a>
+          </div>
+          <button class="proof" id="proof-open" type="button" aria-haspopup="dialog">
+            <span class="proof-faces" aria-hidden="true"><img src="https://i.ytimg.com/vi/3Gzbg1rI5Tg/hqdefault.jpg" alt="" loading="lazy"><img src="https://i.ytimg.com/vi/pVgC-3GciSw/hqdefault.jpg" alt="" loading="lazy"><i>C</i><i>S</i></span>
+            <span class="proof-text"><b><span class="stars" aria-hidden="true">★★★★★</span> Hear it from clients</b><small>2 videos · 13 reviews, all from Upwork</small></span>
+            <span class="proof-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · Final -->
+    <section class="final" id="final" aria-labelledby="final-title">
+      <div class="final-bg" aria-hidden="true"><video id="final-loop" muted loop playsinline preload="none" disablepictureinpicture poster="/careless/new6/media/final-loop-first.webp"></video></div>
+      <div class="final-inner">
+        <h2 id="final-title">What would you like to <em>care less</em> about?</h2>
+        <form class="final-form" id="final-form" data-clarity-mask="true">
+          <label class="sr-only" for="final-input">What would you like to care less about?</label>
+          <textarea id="final-input" name="topic" rows="1" maxlength="1800" placeholder="repeating myself…"></textarea>
+          <button type="submit" class="final-send" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <button class="final-talk" id="final-talk" type="button" hidden><img src="/careless/new5/media/scout-avatar.webp" alt="" width="28" height="28">Rather talk? Call Scout <span aria-hidden="true">→</span></button>
+        <p class="final-or"><a href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer">or book a call with a human</a></p>
+        <p class="signoff">You care less. We carry the rest.</p>
+      </div>
+      <footer class="foot"><span class="wordmark">care_less<sup>®</sup></span><span>Made in Santander. Working wherever you are.</span></footer>
+    </section>
+  </main>
+
+  <!-- Scout: encounter card, dock, chat, call, comic -->
+  <section class="encounter" id="encounter" role="dialog" aria-modal="false" aria-labelledby="enc-title" hidden>
+    <div class="enc-head">
+      <img class="enc-avatar" id="enc-avatar" src="/careless/new5/media/scout-avatar.webp" alt="" width="64" height="64">
+      <div><p class="enc-name" id="enc-title">Scout</p><p class="enc-role"><i></i>AI guide · here now</p></div>
+    </div>
+    <div class="enc-copy">
+      <p class="enc-line" data-type="Psst. Quiet down here, isn't it?"></p>
+      <p class="enc-line" data-type="Tell me what your business does. I'll show you what's quietly possible now. Two minutes, no pitch."></p>
+    </div>
+    <div class="enc-actions">
+      <button class="btn btn-scout" type="button" data-scout="call"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4-1.9 1.3a11 11 0 0 0 6.5 6.5l1.3-1.9 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2.1-2.2Z"/></svg>Call Scout</button>
+      <button class="btn btn-ghost" type="button" data-scout="chat">Type instead</button>
+    </div>
+    <button class="enc-skip" type="button" data-scout="skip">Just show me around <span aria-hidden="true">↓</span></button>
+    <p class="enc-note">Voice, right here in your browser. Hang up anytime. He won't take it personally.</p>
+  </section>
+
+  <div class="dock" id="dock" hidden>
+    <div class="dock-menu" id="dock-menu" hidden>
+      <button type="button" data-scout="call">Call Scout</button>
+      <button type="button" data-scout="chat">Message Scout</button>
+    </div>
+    <button class="dock-btn" id="dock-btn" type="button" aria-expanded="false" aria-controls="dock-menu" aria-label="Talk to Scout">
+      <img src="/careless/new5/media/scout-avatar.webp" alt="" width="64" height="64">
+    </button>
+  </div>
+
+  <aside class="comic" id="comic" aria-label="Meanwhile, at HQ" hidden>
+    <button class="comic-close" type="button" aria-label="Close">×</button>
+    <figure class="comic-panel"><img src="/careless/new6/media/comic-1.webp" alt="" width="520" height="443"><figcaption><span class="bubble">Who was that?</span><span class="bubble bubble-scout">Regular visitor. I offered a guided tour.</span></figcaption></figure>
+    <figure class="comic-panel"><img src="/careless/new6/media/comic-2.webp" alt="" width="520" height="443"><figcaption><span class="bubble">And?</span><span class="bubble bubble-scout">Wanted to look around first. They'll be back by Monday.</span></figcaption></figure>
+  </aside>
+
+  <section class="chat" id="chat" role="dialog" aria-modal="false" aria-labelledby="chat-title" hidden data-clarity-mask="true">
+    <header class="chat-head">
+      <img src="/careless/new5/media/scout-avatar.webp" alt="" width="40" height="40">
+      <div><p id="chat-title">Scout</p><p class="chat-sub">AI guide · real team behind him</p></div>
+      <span class="chat-mode" id="chat-mode" hidden>Preview</span>
+      <button class="icon-btn" type="button" data-scout="call" aria-label="Switch to a voice call"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.6l1.4 4-1.9 1.3a11 11 0 0 0 6.5 6.5l1.3-1.9 4 1.4v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7a2 2 0 0 1 2.1-2.2Z"/></svg></button>
+      <button class="icon-btn" type="button" data-close="chat" aria-label="Close chat">×</button>
+    </header>
+    <div class="chat-log" id="chat-log" role="log" aria-live="polite" tabindex="0"></div>
+    <div class="chat-quick" id="chat-quick"></div>
+    <form class="chat-form" id="chat-form">
+      <label class="sr-only" for="chat-input">Message Scout</label>
+      <input id="chat-input" type="text" autocomplete="off" maxlength="1500" placeholder="Type to Scout…">
+      <button type="submit" aria-label="Send"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button>
+    </form>
+  </section>
+
+  <section class="call" id="call" role="dialog" aria-modal="true" aria-labelledby="call-title" hidden>
+    <div class="call-inner">
+      <p class="call-state" id="call-state">Connecting…</p>
+      <div class="call-orb" id="call-orb"><img src="/careless/new5/media/scout-avatar.webp" alt="" width="200" height="200"><i></i><i></i><i></i></div>
+      <h2 class="call-title" id="call-title">Scout</h2>
+      <p class="call-time" id="call-time">00:00</p>
+      <div class="call-caption" id="call-caption" aria-live="polite"></div>
+      <div class="call-actions">
+        <button class="call-btn" id="call-mute" type="button" aria-pressed="false" aria-label="Mute microphone"><svg class="ic-mic" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg><svg class="ic-mic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 9.4V6a3 3 0 0 0-5.7-1.3M9 9v2a3 3 0 0 0 4.6 2.5M5.5 11a6.5 6.5 0 0 0 10.3 5.3M18.5 11c0 .8-.1 1.5-.4 2.2M12 17.5V21M4 4l16 16"/></svg></button>
+        <button class="call-btn call-end" id="call-end" type="button" aria-label="End call"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14.5c5-4.7 13-4.7 18 0l-2.3 2.4-3.4-1.5v-2.3a12 12 0 0 0-6.6 0v2.3l-3.4 1.5Z"/></svg></button>
+        <button class="call-btn" type="button" data-scout="chat" aria-label="Switch to chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z"/></svg></button>
+      </div>
+      <p class="call-foot" id="call-foot"></p>
+    </div>
+  </section>
+
+  <!-- Client stories: videos first, then reviews. Content lives in new6.js (STORIES). -->
+  <section class="stories" id="stories" role="dialog" aria-modal="true" aria-label="Client stories" hidden>
+    <div class="stories-bg" aria-hidden="true"></div>
+    <div class="story-frame" id="story-frame">
+      <div class="story-bars" id="story-bars" aria-hidden="true"></div>
+      <header class="story-head">
+        <p class="story-who" id="story-who"></p>
+        <button class="icon-btn story-close" type="button" data-close="stories" aria-label="Close">×</button>
+      </header>
+      <div class="story-stage" id="story-stage" aria-live="polite"></div>
+      <button class="story-nav story-prev" type="button" id="story-prev" aria-label="Previous"></button>
+      <button class="story-nav story-next" type="button" id="story-next" aria-label="Next"></button>
+    </div>
+    <button class="story-arrow story-arrow-prev" type="button" data-story="-1" aria-label="Previous"><span aria-hidden="true">←</span></button>
+    <button class="story-arrow story-arrow-next" type="button" data-story="1" aria-label="Next"><span aria-hidden="true">→</span></button>
+  </section>
+
+  <section class="offer" id="offer" role="dialog" aria-modal="true" aria-labelledby="offer-title" hidden data-clarity-mask="true">
+    <div class="offer-card">
+      <button class="icon-btn offer-close" type="button" data-close="offer" aria-label="Close">×</button>
+      <p class="offer-eyebrow">Free, no strings</p>
+      <h2 id="offer-title"></h2>
+      <p class="offer-desc" id="offer-desc"></p>
+      <form class="offer-form" id="offer-form">
+        <label for="offer-contact">Website, email or phone</label>
+        <input id="offer-contact" name="contact" type="text" autocomplete="email" required maxlength="320">
+        <label for="offer-note">Anything we should know? <span>(optional)</span></label>
+        <textarea id="offer-note" name="note" rows="2" maxlength="2000"></textarea>
+        <input class="honey" name="company_fax" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn btn-paper" type="submit">Send it over <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="offer-status" id="offer-status" role="status"></p>
+      <p class="offer-alt">Or <a href="https://wa.me/34641935207" target="_blank" rel="noopener noreferrer" id="offer-wa">send it on WhatsApp</a>.</p>
+    </div>
+  </section>
+</body>
+</html>
