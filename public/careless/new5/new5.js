@@ -31,7 +31,8 @@ const FILMS = {
     hold: 39.65, scoutSide: 'left',
   },
 };
-const filmKey = (/[?&]film=v4\b/.test(location.search) || location.hash === '#v4') && window.CARELESS_V4 !== false ? 'v4' : 'cam';
+// Default is the rendered film; the Blender camera blockout stays reachable at ?film=cam until its final render lands.
+const filmKey = /[?&]film=cam\b/.test(location.search) || location.hash === '#cam' ? 'cam' : 'v4';
 const FILM = FILMS[filmKey];
 const FILM_U = FILM.map[FILM.map.length - 1][0];
 // Phases after the film, in viewport heights.
@@ -93,6 +94,86 @@ const caps = $$('.cap').map(el => ({ el, key: el.dataset.cap, win: FILM.captions
 const plate = $('#plate'), plateCard = $('#plate-card');
 const board = $('#board'), org = $('#org'), track_ = $('#chapter-track'), chapters = $$('.chapter'), dots = $$('.chapter-dots i');
 const cue = $('#cue');
+const finalSec = $('#final'), humanSec = $('#human');
+
+/* ───────────────────────── Sound: generated live, no audio files ─────────────────────────
+   Sea on the surface, a low hum underground, a warm chord in the colony. Scroll speed adds air;
+   Scout arrives with a chime; the sea comes back at the final pool shot. */
+const sound = (() => {
+  let ctx = null, out = null, on = false, duckTo = 1, lastY = 0, lastT = 0, offTimer = 0;
+  const n = {}, btn = $('#sound');
+  const pref = { get() { try { return localStorage.getItem('cl5-sound'); } catch { return null; } }, set(v) { try { localStorage.setItem('cl5-sound', v); } catch {} } };
+  const gain = (v, to) => { const g = ctx.createGain(); g.gain.value = v; if (to) g.connect(to); return g; };
+  const filter = (type, f, q, to) => { const x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; if (q) x.Q.value = q; if (to) x.connect(to); return x; };
+  const osc = (f, to, type = 'sine') => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; o.connect(to); o.start(); return o; };
+  const lfo = (rate, depth, param) => osc(rate, gain(depth, param));
+  function noise(brown) {
+    const len = ctx.sampleRate * 6, b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) { const w = Math.random() * 2 - 1; if (brown) { last = (last + .02 * w) / 1.02; d[i] = last * 3.5; } else d[i] = w; }
+    const s = ctx.createBufferSource(); s.buffer = b; s.loop = true; s.start(); return s;
+  }
+  function build() {
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -20; comp.ratio.value = 4; comp.connect(ctx.destination);
+    out = gain(0, comp);
+    // A little room: one dark feedback delay shared by the chord and the chimes.
+    n.space = ctx.createDelay(1); n.space.delayTime.value = .41;
+    const fb = gain(.34), dark = filter('lowpass', 2200);
+    n.space.connect(dark); dark.connect(fb); fb.connect(n.space); dark.connect(gain(.6, out));
+    // Sea: brown noise through a low-pass, swelling on two slow, out-of-step waves.
+    n.sea = gain(0, out); n.seaF = filter('lowpass', 900, .4, n.sea);
+    const swell = gain(.5, n.seaF); noise(true).connect(swell);
+    lfo(.085, .32, swell.gain); lfo(.031, .16, swell.gain);
+    // Underground hum: low fifths with a slow beat.
+    n.drone = gain(0, out); const droneF = filter('lowpass', 340, .5, n.drone);
+    osc(55, gain(.55, droneF)); osc(82.41, gain(.32, droneF)); osc(82.9, gain(.18, droneF)); osc(110, gain(.08, droneF), 'triangle');
+    // Colony chord (A major 9), each voice breathing on its own.
+    n.pad = gain(0, out); const padF = filter('lowpass', 1700, .3, n.pad); padF.connect(gain(.35, n.space));
+    [220, 277.18, 329.63, 415.3, 493.88].forEach((f, i) => { const g = gain(.09, padF); osc(f, g); lfo(.07 + i * .037, .06, g.gain); });
+    // Air: white noise, band-passed, driven by scroll speed.
+    n.air = gain(0, out); n.airF = filter('bandpass', 700, .8, n.air); noise(false).connect(n.airF);
+  }
+  function chime(freqs, level = .16) {
+    if (!on || !ctx) return;
+    freqs.forEach((f, i) => {
+      const t = ctx.currentTime + i * .13, g = gain(0, out); g.connect(n.space);
+      [[f, 1], [f * 2.76, .22], [f * 5.4, .06]].forEach(([fr, a]) => { const o = osc(fr, gain(a, g)); o.stop(t + 3.2); });
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(level, t + .008); g.gain.exponentialRampToValueAtTime(.0001, t + 3);
+    });
+  }
+  function tick() { chime([1318.5], .035); }
+  function update(u, y, now) {
+    if (!on || !ctx) return;
+    const dt = Math.max(16, now - lastT), v = lastT ? Math.abs(y - lastY) / dt * 1000 : 0; lastY = y; lastT = now;
+    const t = ctx.currentTime, set = (p, val, tau) => p.setTargetAtTime(val, t, tau);
+    const down = smooth((u - 1.6) / 2.4), colony = smooth((u - 6.2) / 2.2), after = smooth((u - FILM_U) / 2);
+    const fin = clamp(1 - finalSec.getBoundingClientRect().top / innerHeight);
+    set(n.sea.gain, .5 * (1 - down) + .38 * fin, .5);
+    set(n.seaF.frequency, 360 + 900 * (1 - down) + 300 * fin, .6);
+    set(n.drone.gain, .16 * down * (1 - .6 * after) * (1 - fin), .6);
+    set(n.pad.gain, .34 * colony * (1 - .3 * after) * (1 - .5 * fin), .7);
+    set(n.air.gain, Math.min(.2, v / 10000), .09);
+    set(n.airF.frequency, 500 + Math.min(1600, v / 5), .12);
+  }
+  function setOn(v, save = true) {
+    on = v; clearTimeout(offTimer);
+    btn.setAttribute('aria-pressed', String(v)); root.classList.toggle('sound-on', v);
+    if (save) pref.set(v ? 'on' : 'off');
+    if (v) {
+      try { if (!ctx) build(); } catch { on = false; root.classList.remove('sound-on'); btn.hidden = true; return; }
+      ctx.resume(); lastT = 0; out.gain.setTargetAtTime(.8 * duckTo, ctx.currentTime, .6); wake();
+    } else if (ctx) { out.gain.setTargetAtTime(0, ctx.currentTime, .15); offTimer = setTimeout(() => ctx.suspend(), 700); }
+  }
+  btn.addEventListener('click', () => { setOn(!on); track('sound', { on }); });
+  document.addEventListener('visibilitychange', () => { if (!ctx || !on) return; document.hidden ? ctx.suspend() : ctx.resume(); });
+  if (!(window.AudioContext || window.webkitAudioContext)) btn.hidden = true;
+  return {
+    start(want) { setOn(want && pref.get() !== 'off', false); },
+    duck(level) { duckTo = level; if (on && ctx) out.gain.setTargetAtTime(.8 * level, ctx.currentTime, .3); },
+    update, chime, tick,
+  };
+})();
 
 /* ───────────────────────── Layout ───────────────────────── */
 let H = innerHeight, journeyTop = 0, maxScroll = 0, rests = [];
@@ -107,9 +188,13 @@ function layout() {
   rests.push(px(uAt(FILM.captions.hq[0] + .6) + .35));
   rests.push(px(P_START + PH.plateIn + PH.plateHold * .5));
   for (let i = 0; i < PH.chapters; i++) rests.push(px(P_CH + i * PH.chapter + PH.chapter * .3));
-  rests.push($('#human').getBoundingClientRect().top + scrollY);
-  rests.push(Math.min(maxScroll, $('#final').getBoundingClientRect().top + scrollY));
+  rests.push(humanSec.getBoundingClientRect().top + scrollY);
+  rests.push(Math.min(maxScroll, finalSec.getBoundingClientRect().top + scrollY));
+  const mid = k => px(uAt((FILM.captions[k][0] + FILM.captions[k][1]) / 2));
+  RAIL = [['view', mid('view')], ['takes', mid('takes')], ['colony', mid('colony')], ['scout', px(uAt(FILM.hold))], ['hq', rests[rests.length - 8]],
+    ['board', px(P_CH + PH.chapter * .3)], ['human', rests[rests.length - 2]], ['final', rests[rests.length - 1]]];
 }
+let RAIL = [];
 
 /* ───────────────────────── Smooth wheel + settle ───────────────────────── */
 let sTarget = scrollY, sCur = scrollY, sRaf = 0, sLast = 0, sTau = 120, selfScroll = false, lastInput = 0, touching = false, settleTimer = 0;
@@ -180,7 +265,16 @@ function settle() {
 }
 
 /* ───────────────────────── Stage: film, captions, plate, board ───────────────────────── */
-let movieReady = false, loopReady = false, primed = false, vTime = 0, frame = 0, tLast = 0, lastU = -1, comicShown = false, chapterIdx = -1;
+let movieReady = false, loopReady = false, primed = false, vTime = 0, frame = 0, tLast = 0, lastU = -1, comicShown = false, chapterIdx = -1, railIdx = -2, duckLevel = 1;
+const rail = $('#rail'), railBtns = $$('button', rail), progress = $('#progress');
+rail.addEventListener('click', e => {
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  const at = RAIL.find(r => r[0] === b.dataset.go)[1];
+  // Jumping past Scout counts as walking past him: he waits in the corner instead of stopping the glide.
+  if (scoutState === 'pending' && at > journeyTop + uAt(FILM.hold) * H + 4) { scoutState = 'passed'; showDock(); }
+  if (held) unhold();
+  glideTo(at, 420); track('rail_jump', { to: b.dataset.go });
+});
 const filmSrc = () => (light || small) ? FILM.src540 : FILM.src720;
 function primeMovie() {
   if (primed) return; primed = true;
@@ -259,10 +353,21 @@ function tick(now) {
 
   cue.style.setProperty('--cue', (held || modal || u > STAGE_U - .5 || (small && u > P_SWAP) || performance.now() - lastInput < 900) ? '0' : '1');
 
+  // Rail + progress line
+  const y = scrollY;
+  let ri = -1; RAIL.forEach(([, at], i) => { if (y >= at - H * .35) ri = i; });
+  if (ri !== railIdx) { railIdx = ri; railBtns.forEach((b, i) => { b.classList.toggle('on', i === ri); b.classList.toggle('past', i < ri); if (i === ri) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); }); }
+  rail.classList.toggle('away', held || modal > 0);
+  progress.style.transform = `scaleX(${clamp(y / (maxScroll || 1)).toFixed(4)})`;
+  sound.update(u, y, now);
+  const level = !call.hidden ? .2 : !offerEl.hidden ? .5 : !chat.hidden ? .55 : 1;
+  if (level !== duckLevel) { duckLevel = level; sound.duck(level); }
+
   if (u !== lastU || Math.abs(target - vTime) > .002 || (movieReady && Math.abs(movie.currentTime - vTime) > 1 / 50)) wake();
   lastU = u;
 }
 function highlight(i) {
+  if (i >= 0) sound.tick();
   const cols = $$('[data-col]', org), teams = $$('[data-team]', org);
   cols.forEach(n => n.classList.remove('on')); teams.forEach(n => n.classList.remove('on'));
   org.classList.toggle('has-focus', i >= -1);
@@ -298,16 +403,34 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) loop.
 })();
 
 /* ───────────────────────── Gate ───────────────────────── */
-const gate = $('#gate'), gateBtn = $('#gate-btn'), gateStatus = $('.gate-status');
-function begin() {
+const gate = $('#gate'), gateBtn = $('#gate-btn'), gateStatus = $('.gate-status'), gateQuiet = $('#gate-quiet');
+function begin(withSound = true) {
   if (root.classList.contains('begun')) return;
   root.classList.add('begun'); root.classList.remove('locked');
   gate.classList.add('out'); setTimeout(() => gate.hidden = true, 1200);
+  sound.start(withSound); rail.hidden = false;
   startLoop(); layout(); wake(); heroType(); startAnalytics();
-  track('begin', { film: filmKey });
+  track('begin', { film: filmKey, sound: withSound });
 }
+// The first line notices who's here and when: late nights, early starts, weekends, second visits.
+function greeting() {
+  const d = new Date(), h = d.getHours();
+  let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
+  if (seen) return 'Welcome back. Clearing your schedule…';
+  if (h >= 21 || h < 5) return `It's ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}. Still working? Clearing your schedule…`;
+  if (h < 8) return 'Early start. Clearing your schedule…';
+  if (d.getDay() === 0 || d.getDay() === 6) return `It's ${d.toLocaleDateString('en-GB', { weekday: 'long' })}. Clearing your schedule…`;
+  return 'Clearing your schedule…';
+}
+const pageTitle = document.title;
+document.addEventListener('visibilitychange', () => {
+  if (!root.classList.contains('begun')) return;
+  document.title = !document.hidden ? pageTitle : scoutState === 'pending' ? 'Scout is waiting for you…' : "The colony's still working…";
+});
 function runGate() {
   root.classList.add('locked');
+  gateStatus.textContent = greeting();
+  gateQuiet.addEventListener('click', () => begin(false));
   const t0 = performance.now();
   primeMovie();
   const poll = () => {
@@ -319,15 +442,17 @@ function runGate() {
     const elapsed = (performance.now() - t0) / 8000;
     const load = clamp(Math.max(p, elapsed * .9, movie.readyState >= 3 ? .35 : 0));
     gateBtn.style.setProperty('--load', load.toFixed(3));
-    if (load >= .999 || (movie.readyState >= 3 && p >= 1) || motion.matches) {
-      gateBtn.disabled = false; gateStatus.textContent = 'Schedule cleared.'; gateStatus.classList.add('done');
+    const readable = performance.now() - t0 > 2400; // let the greeting be read, even when the film is cached
+    gateBtn.style.setProperty('--load', (readable ? load : Math.min(load, (performance.now() - t0) / 2400)).toFixed(3));
+    if ((readable && (load >= .999 || (movie.readyState >= 3 && p >= 1))) || motion.matches) {
+      gateBtn.disabled = false; gateQuiet.disabled = false; gateStatus.textContent = 'Schedule cleared.'; gateStatus.classList.add('done');
       gateBtn.focus({ preventScroll: true });
       return;
     }
     setTimeout(poll, 160);
   };
   poll();
-  gateBtn.addEventListener('click', begin);
+  gateBtn.addEventListener('click', () => begin(true));
 }
 scrollTo(0, 0);
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -359,6 +484,8 @@ function hold() {
   const y = journeyTop + uAt(FILM.hold) * H; selfScroll = true; scrollTo(0, y); sTarget = sCur = y;
   enc.dataset.side = small ? 'bottom' : (FILM.scoutSide === 'right' ? 'left' : 'right');
   enc.hidden = false; enc.classList.remove('leaving');
+  sound.chime([659.25, 987.77]);
+  if (navigator.vibrate && !finePointer.matches) try { navigator.vibrate(12); } catch {}
   if (!encTyped) {
     encTyped = true;
     const lines = $$('.enc-line', enc);
