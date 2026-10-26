@@ -1,13 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
-    return [{ source: "/new3", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] }];
+    return [
+      { source: "/new3", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/new4", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/careless/new4/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+    ];
   },
   // Proxy Connecto API through our own domain so the browser makes
   // same-origin requests — no CORS preflight, no 403.
   // Vercel forwards the request (HTTP + WebSocket) to api.theconnecto.ai.
   async rewrites() {
     return [
+      {
+        source: "/new4",
+        destination: "/careless/new4/index.html",
+      },
       {
         source: "/new3",
         destination: "/careless/new3/index.html",

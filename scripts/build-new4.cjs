@@ -1,0 +1,4 @@
+/* Run from the repository root: node scripts/build-new4.cjs */
+const fs=require('node:fs'),path=require('node:path'),{minify}=require('next/dist/compiled/terser');
+const source=path.join(__dirname,'new4'),output=path.resolve(__dirname,'../public/careless/new4');
+(async()=>{let bytes=0;for(const file of fs.readdirSync(source).filter(f=>f.endsWith('.js'))){const result=await minify(fs.readFileSync(path.join(source,file),'utf8'),{compress:true,mangle:true,format:{comments:false}});if(!result.code)throw Error(file);fs.writeFileSync(path.join(output,file),result.code+'\n');bytes+=Buffer.byteLength(result.code)+1;}if(bytes>40000)throw Error('new4 browser JavaScript exceeds 40 KB');console.log('new4 browser JavaScript: '+bytes+' bytes');})().catch(error=>{console.error(error);process.exitCode=1;});

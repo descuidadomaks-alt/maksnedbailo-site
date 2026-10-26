@@ -1,0 +1,23 @@
+/* Exact font bytes and colour tokens used by /new. No shared styles are changed. */
+@font-face{font-family:Sora;src:url('./fonts/sora-latin.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('./fonts/playfair-italic-latin.woff2') format('woff2');font-weight:400 900;font-style:italic;font-display:swap}
+@font-face{font-family:'Roboto Mono';src:url('./fonts/roboto-mono-latin.woff2') format('woff2');font-weight:100 700;font-style:normal;font-display:swap}
+:root{--ink:#11110f;--paper:#f2eee5;--muted:#b5b1a6;--amber:#e0b174;--ease:cubic-bezier(.22,.61,.36,1);--font-sora:Sora,Arial,sans-serif;--font-playfair:'Playfair Display',Georgia,serif;--font-roboto-mono:'Roboto Mono',monospace;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--ink);color:var(--paper)}body{font:400 15px/1.7 var(--font-sora);-webkit-font-smoothing:antialiased;overflow-anchor:none}h1,p{margin:0}button{font:inherit}main{overflow:clip}
+.film-section{position:relative;height:600vh;height:600svh}
+.film-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate;background:var(--ink)}
+.film-poster,.film-layer,.film-shade{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.film-poster{z-index:0}.film-layer{opacity:0;z-index:1;pointer-events:none;transition:opacity .45s var(--ease)}.film-layer[data-ready=true]{opacity:1}.movie{z-index:2;transition:opacity .45s var(--ease)}
+.film-shade{z-index:3;pointer-events:none;background:linear-gradient(90deg,#11110f30,transparent 65%),linear-gradient(0deg,#11110fa6,transparent 72%);opacity:.72}
+.opening{position:absolute;z-index:4;left:7%;bottom:23%;max-width:800px;will-change:opacity}
+.opening h1{font:300 clamp(76px,8.2vw,132px)/1.04 var(--font-sora);letter-spacing:-.065em;text-shadow:0 2px 26px #11110f3d}
+.opening p{font-size:14px;line-height:1.8;max-width:340px;margin-top:26px;color:var(--paper);text-shadow:0 1px 12px #11110fbb;text-wrap:balance}
+.scroll-cue{position:absolute;z-index:4;bottom:7%;left:7%;display:flex;align-items:center;gap:18px;font:11px/1.5 var(--font-roboto-mono);letter-spacing:.05em;color:var(--paper);opacity:.85}
+.scroll-line{width:48px;height:1px;background:var(--amber)}
+.film-caption{position:absolute;z-index:4;left:7%;bottom:12%;width:min(550px,60%);opacity:0;visibility:hidden;pointer-events:none;will-change:opacity;text-shadow:0 2px 18px #11110fcc,0 1px 4px #11110f80}
+.film-caption p{font-size:clamp(20px,2.05vw,31px);font-weight:300;line-height:1.45;letter-spacing:-.035em;text-wrap:balance}
+.centered{left:50%;top:67%;bottom:auto;transform:translateX(-50%);text-align:center;width:70%}
+.scout-caption{bottom:13%;max-width:420px}.final-caption{max-width:500px}
+.scout-button{position:fixed;z-index:20;right:max(28px,env(safe-area-inset-right));bottom:max(28px,env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;border:1px solid var(--amber);padding:0;background:var(--ink);box-shadow:0 4px 18px #11110f45;opacity:0;pointer-events:none;transition:opacity .45s var(--ease);overflow:hidden}.scout-button img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}.scout-button[data-visible=true]{opacity:1;pointer-events:auto}.scout-button:focus-visible{outline:2px solid var(--paper);outline-offset:5px}
+@media(max-width:700px){.film-poster,.sunset{object-position:52% center}.movie{object-position:50% center}.opening{left:7%;right:7%;bottom:25%;max-width:none}.opening h1{font-size:clamp(64px,16.8vw,108px);letter-spacing:-.065em}.opening p{font-size:13px;max-width:280px;margin-top:22px;line-height:1.8}.scroll-cue{left:7%;bottom:7%;font-size:10px}.film-caption{left:7%;bottom:13%;width:86%;max-width:350px}.film-caption p{font-size:22px;line-height:1.5}.centered{left:50%;top:68%;bottom:auto;width:86%}.scout-caption{top:auto;bottom:13%;text-align:left}.final-caption{bottom:12%;max-width:320px}.scout-button{right:20px;bottom:max(20px,env(safe-area-inset-bottom))}}
+@media(prefers-reduced-motion:reduce){.film-section{height:100vh;height:100svh}.film-stage{position:relative}.film-layer,.film-caption{display:none!important}.opening,.scroll-cue{opacity:1!important;transform:none!important}.scout-button{transition:none}*{scroll-behavior:auto!important}}
