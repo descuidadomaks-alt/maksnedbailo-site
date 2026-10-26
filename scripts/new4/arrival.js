@@ -44,7 +44,7 @@
     idle=setTimeout(()=>{clearTimeout(typing);a.textContent=first;b.textContent='No rush. Ants are patient.';encounter.querySelector('.scout-introduction .sr-only').textContent=b.textContent;},8000);
   }
   function enter(){
-    if(moment||choice||CL.motion.matches)return;warm();moment=true;film.hold(37.8);lock();root.setAttribute('data-scout-moment','');
+    if(moment||choice||CL.motion.matches)return;warm();moment=true;root.dataset.snap='off';film.hold(37.8);lock();root.setAttribute('data-scout-moment','');
     encounter.hidden=false;encounter.inert=false;encounter.setAttribute('aria-hidden','false');encounter.setAttribute('role','dialog');encounter.setAttribute('aria-modal','true');encounter.classList.add('is-open');
     talk.textContent=SCOUT_ENABLED?'Yes, ask away':'Say hi on WhatsApp';talk.href=SCOUT_ENABLED?'#scout-panel':CL.whatsapp("Hi Maks, want to ask me a few questions and tell me what you'd fix first?");
     talk.focus({preventScroll:true});type();
@@ -64,7 +64,7 @@
   }
   decline.addEventListener('click',()=>leave(true));talk.addEventListener('click',event=>{leave(false);if(SCOUT_ENABLED){event.preventDefault();window.careLessScout?.open();}});
   function updateLauncher(){
-    const range=film.range(),threshold=range.start+(range.distance?range.distance*36.1/45.866667:document.querySelector('.film-stage').offsetHeight);
+    const range=film.range(),threshold=range.start+(range.distance?range.distance*37.8/45.866667:document.querySelector('.film-stage').offsetHeight);
     const visible=begun&&scrollY>=threshold&&!moment&&scrollY<=document.documentElement.scrollHeight-innerHeight+2;
     launcher.hidden=!visible;launcher.dataset.visible=String(visible);launcher.setAttribute('aria-label',declined?'Changed your mind?':'Ask Scout');launcher.querySelector('.scout-tooltip').textContent=declined?'Changed your mind?':'Ask Scout';
     if(visible){const img=launcher.querySelector('img');if(!img.getAttribute('src'))img.src=img.dataset.src;}else window.careLessScout?.close();
@@ -73,7 +73,8 @@
   function update(){
     raf=0;const range=film.range(),t=range.distance?(scrollY-range.start)/range.distance*45.866667:0;
     if(t>33&&t<42)warm();
-    if(begun&&!choice&&t>=37.55&&t<=40.4)enter();
+    // Let the Meet Scout snap settle; the next scroll opens his encounter.
+    if(begun&&!choice&&t>=39&&scrollY<range.end)enter();
     if(!moment){encounter.hidden=true;encounter.style.display='none';}else encounter.style.removeProperty('display');
     if(t<35||t>41){ghost?.remove();ghost=null;}
     updateLauncher();
