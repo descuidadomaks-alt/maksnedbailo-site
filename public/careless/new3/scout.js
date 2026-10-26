@@ -11,7 +11,7 @@
   const launcher=document.createElement('button');
   launcher.className='scout-launcher';launcher.type='button';
   launcher.setAttribute('aria-label','Ask Scout');launcher.setAttribute('aria-expanded','false');launcher.setAttribute('aria-controls','scout-panel');
-  launcher.innerHTML='<img data-src="/careless/images/05-scout.webp" width="56" height="56" alt="" loading="lazy"><span class="scout-tooltip" aria-hidden="true">Ask Scout</span>';
+  launcher.innerHTML='<span class="scout-face"><img data-src="/careless/images/05-scout.webp" width="56" height="56" alt="" loading="lazy"></span><span class="scout-tooltip" aria-hidden="true">Ask Scout</span>';
   const panel=document.createElement('section');panel.className='scout-panel';panel.id='scout-panel';
   panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','false');panel.setAttribute('aria-labelledby','scout-title');panel.setAttribute('aria-hidden','true');panel.inert=true;
   panel.innerHTML='<h2 id="scout-title">Meet Scout. Tell him once.</h2><button class="scout-close" type="button" aria-label="Close Scout">×</button><div class="scout-log" role="log" aria-label="Ask Scout" aria-live="polite" aria-relevant="additions" tabindex="0"></div><form class="scout-form"><input class="scout-input" type="text" aria-label="Ask Scout" placeholder="Ask Scout" autocomplete="off" maxlength="3000" required><div class="scout-error" role="status" hidden><a href="'+booking+'">Book the call</a></div></form>';
@@ -54,7 +54,9 @@
     context=next;opener=document.activeElement;open=true;panel.inert=false;panel.setAttribute('aria-hidden','false');panel.classList.add('is-open');launcher.setAttribute('aria-expanded','true');error.hidden=true;
     if(next.topic)input.value=next.topic;
     else if(next.offerId){const offer=document.querySelector('.chapter-offer[data-offer="'+CSS.escape(next.offerId)+'"]');input.value=offer?offer.textContent.replace('↗','').trim():'';}
-    input.focus({preventScroll:true});schedule();
+    // Resolve the visibility change before focusing, including when opened from the encounter.
+    panel.getBoundingClientRect();input.focus({preventScroll:true});
+    requestAnimationFrame(()=>{if(open&&document.activeElement!==input)input.focus({preventScroll:true});});schedule();
   }
   window.careLessScout={open:show,close};
   launcher.addEventListener('click',()=>open?close():show());panel.querySelector('.scout-close').addEventListener('click',close);
@@ -70,6 +72,8 @@
   });
   document.addEventListener('visibilitychange',()=>{if(document.hidden)clearTimeout(timer);else schedule();});
   const film=document.querySelector('#film'),stage=film.querySelector('.film-stage');let visibleFrame=0;
+  function declined(){let noThanks=false;try{noThanks=sessionStorage.getItem('scout_declined')==='true';}catch{};if(noThanks){launcher.setAttribute('aria-label','Changed your mind?');launcher.querySelector('.scout-tooltip').textContent='Changed your mind?';}}
+  addEventListener('careless:scout-declined',declined);declined();
   function reveal(){visibleFrame=0;const rect=film.getBoundingClientRect(),origin=rect.top+scrollY,distance=film.offsetHeight-stage.offsetHeight;const threshold=origin+(distance>0?distance*36.1/45.866667:stage.offsetHeight),visible=scrollY>=threshold&&scrollY>origin+1;launcher.dataset.visible=String(visible);const image=launcher.querySelector('img');if(visible&&!image.getAttribute('src'))image.src=image.dataset.src;}
   const check=()=>{if(!visibleFrame)visibleFrame=requestAnimationFrame(reveal);};addEventListener('scroll',check,{passive:true});addEventListener('resize',check,{passive:true});reveal();
 })();

@@ -10,15 +10,18 @@ const SCOUT_ENABLED = false;
   const cue = document.querySelector('#scroll-cue');
   const captions = [...document.querySelectorAll('.film-caption')];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const connection = navigator.connection;
+  const light = connection?.saveData || /(^|-)2g$|^3g$/.test(connection?.effectiveType || '') || (connection?.downlink > 0 && connection.downlink < 1.5);
   const sources = {
     loop: '/careless/video/v1/1_loop.mp4',
-    film: matchMedia('(max-width: 700px)').matches ? '/careless/video/film-v4/film-540.mp4' : '/careless/video/film-v4/film-720.mp4',
+    film: light || matchMedia('(max-width: 700px)').matches ? '/careless/video/film-v4/film-540.mp4' : '/careless/video/film-v4/film-720.mp4',
     end: '/careless/video/film-v4/film-last.webp',
   };
   const clamp = value => Math.max(0, Math.min(1, value));
   let target = 0, current = 0, frame = 0, lastTick = 0, duration = 45.866667;
   let start = 0, distance = 1, primed = false, visible = true, endLoaded = false;
   let movieReady = false, sunsetReady = false;
+  let begun = false, held = false;
   const seekSamples = [];
   let seekStarted = 0, lastSeek = -1;
 
@@ -28,11 +31,12 @@ const SCOUT_ENABLED = false;
     readScroll();
   }
   function readScroll() {
+    if (held) return;
     target = clamp((scrollY - start) / distance);
     wake();
   }
   function wake() {
-    if (!frame && !motion.matches && !document.hidden && visible) frame = requestAnimationFrame(tick);
+    if (!frame && begun && !held && !motion.matches && !document.hidden && visible) frame = requestAnimationFrame(tick);
   }
   function presentCopy(time) {
     const first = 1 - clamp(time / 3.8);
@@ -77,6 +81,7 @@ const SCOUT_ENABLED = false;
       }
     }
     section.dataset.progress = current.toFixed(4);
+    dispatchEvent(new CustomEvent('careless:film', { detail: { time: movieReady ? movie.currentTime : time } }));
     if (Math.abs(target - current) > .00008 || (movieReady && Math.abs(movie.currentTime - time) > 1 / 30)) wake();
   }
   function primeFilm() {
@@ -88,17 +93,16 @@ const SCOUT_ENABLED = false;
   }
   function loadMedia() {
     if (motion.matches) return;
+    primeFilm();
+    if (!begun || sunset.getAttribute('src')) return;
     sunset.src = sources.loop;
     sunset.preload = 'auto';
     sunset.load();
     sunset.play().catch(() => {});
-    // The first poster is already decoded before either video is requested.
-      // The scrub movie stays lazy until the visitor scrolls.
     sunset.addEventListener('playing', () => {
       sunsetReady = true;
       sunset.dataset.ready = 'true';
     }, { once: true });
-    setTimeout(() => { if (target > 0) primeFilm(); }, 1800);
   }
   movie.addEventListener('loadedmetadata', () => {
     duration = movie.duration || duration;
@@ -139,6 +143,28 @@ const SCOUT_ENABLED = false;
     } else { loadMedia(); wake(); }
     measure();
   });
+  window.careLessFilm = {
+    preload() { primeFilm(); },
+    lighter() {
+      const lower = '/careless/video/film-v4/film-540.mp4';
+      if (sources.film === lower || motion.matches) return;
+      sources.film = lower; primed = false; movieReady = false; primeFilm();
+    },
+    buffer() {
+      let end = 0;
+      for (let i=0;i<movie.buffered.length;i++) if (movie.buffered.start(i) <= .1) end = movie.buffered.end(i);
+      return { ready: motion.matches || (movie.readyState >= 3 && end >= Math.min(12,duration)), progress: motion.matches ? 1 : clamp(end/Math.min(12,duration)), end, state: movie.readyState };
+    },
+    begin() { begun = true; loadMedia(); measure(); wake(); },
+    hold(time) {
+      held = true; cancelAnimationFrame(frame); frame = 0;
+      current = target = time/duration;
+      if (movieReady) movie.currentTime = time;
+      presentCopy(time); scrollTo(0,start+distance*target);
+      section.dataset.progress = current.toFixed(4);
+    },
+    release() { held = false; lastTick = 0; readScroll(); },
+  };
   measure();
   if (poster.complete && poster.naturalWidth) loadMedia();
   else poster.addEventListener('load', loadMedia, { once: true });

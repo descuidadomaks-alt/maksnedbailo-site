@@ -11,14 +11,21 @@
   <link rel="stylesheet" href="/careless/new3/plate.css">
   <link rel="stylesheet" href="/careless/new3/chapters.css">
   <link rel="stylesheet" href="/careless/new3/closing.css">
+  <link rel="stylesheet" href="/careless/new3/arrival.css">
   <script src="/careless/new3/film.js" defer></script>
+  <script src="/careless/new3/arrival.js" defer></script>
   <script src="/careless/new3/plate.js" defer></script>
   <script src="/careless/new3/chapters.js" defer></script>
   <script src="/careless/new3/closing.js" defer></script>
   <script src="/careless/new3/scout.js" defer></script>
 </head>
 <body>
-  <main>
+  <header class="quiet-header"><span class="careless-wordmark">care less<span>®</span></span></header>
+  <section class="loading-gate" aria-label="Setting the scene." aria-busy="true">
+    <div class="gate-content"><p>Setting the scene.</p><div class="gate-line" role="progressbar" aria-label="Setting the scene." aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div><button class="gate-begin" type="button" hidden>Begin</button></div>
+  </section>
+  <noscript><style>.loading-gate{display:none}.opening p{opacity:1}</style></noscript>
+  <main id="page-content">
     <section class="film-section" id="film">
       <div class="film-stage">
         <img class="film-poster" id="poster" src="/careless/video/v1/posters/1_loop-first.webp" width="720" height="720" alt="" fetchpriority="high" decoding="async">
@@ -27,7 +34,7 @@
         <div class="film-shade" aria-hidden="true"></div>
         <div class="opening" id="opening">
           <h1>Big plans.</h1>
-          <p>For founders who've explained them ten times already.</p>
+          <p>For founders with more plan than hours.</p>
         </div>
         <div class="scroll-cue" id="scroll-cue"><span class="scroll-line" aria-hidden="true"></span><span>Scroll</span></div>
         <div class="film-caption" data-start="5.8" data-end="10.0"><p>You know exactly where this is going.</p></div>
@@ -36,6 +43,31 @@
         <div class="film-caption" data-start="22.0" data-end="34.9"><p>A hundred moving parts. And you're the instruction manual.</p></div>
         <div class="film-caption scout-caption" data-start="36.1" data-end="40.4"><p>Meet Scout. Tell him once.</p></div>
         <div class="film-caption final-caption" data-start="42.1" data-end="46.0"><p>Follow me. This is where it gets handled.</p></div>
+        <section class="scout-encounter" aria-labelledby="scout-whisper" aria-hidden="true" inert>
+          <img class="encounter-background" data-src="/careless/images/04-colony.webp" alt="" width="1254" height="1254" loading="lazy">
+          <div class="encounter-shade"></div>
+          <div class="scout-actor" aria-hidden="true">
+            <svg class="scout-front" viewBox="0 0 1254 1254" preserveAspectRatio="xMidYMid slice" role="presentation">
+              <defs>
+                <clipPath id="scout-head-crop"><path d="M556 420Q552 391 575 383Q600 371 634 380Q679 378 703 402L716 442Q710 483 694 509L669 546Q639 557 605 541L577 511Q563 482 556 443Z"/></clipPath>
+                <clipPath id="scout-antenna-crop"><path d="M601 395L593 351L576 297Q571 285 550 288L517 314L513 326L526 329L556 308L565 302L581 353L589 396ZM681 398L711 345Q732 325 747 327L792 358L822 402L834 417L820 423L806 401L780 370L745 341L721 354L696 402Z"/></clipPath>
+              </defs>
+              <image class="scout-body-art" data-scout-art width="1254" height="1254"/>
+              <g class="scout-head-art"><image data-scout-art width="1254" height="1254" clip-path="url(#scout-head-crop)"/><g class="scout-antenna-art"><image data-scout-art width="1254" height="1254" clip-path="url(#scout-antenna-crop)"/></g></g>
+            </svg>
+            <svg class="scout-back" viewBox="260 620 350 390" role="presentation"><defs><clipPath id="scout-back-crop"><path d="M285 925L330 901L354 891L357 854L367 809L393 776L417 750L413 733L412 698L423 679L449 674L471 681L485 703L484 732L473 753L483 776L496 794L515 813L536 823L540 842L526 853L518 871L515 899L539 918L552 932L560 951L551 971L519 984L487 989L437 989L385 980L338 970L296 953ZM444 683L485 646L519 637L557 642L558 648L520 644L489 654L452 687ZM425 685L401 671L397 655L402 650L407 666L430 681Z"/></clipPath></defs><image data-scout-back width="1254" height="1254" clip-path="url(#scout-back-crop)"/></svg>
+          </div>
+          <div class="scout-speech">
+            <div class="speech-copy"><p id="scout-whisper"><span class="sr-only">Psst. It's quiet down here.</span><span class="typed-whisper" aria-hidden="true"></span></p><p class="scout-introduction"><span class="sr-only">I'm Scout. I ask a few questions and tell you what I'd fix first. Or we skip it.</span><span class="typed-introduction" aria-hidden="true"></span></p></div>
+            <p class="scout-patience" hidden>Take your time. Ants are patient.</p>
+            <div class="encounter-choices"><a class="encounter-talk" href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer">Say hi to Maks</a><button class="encounter-decline" type="button">Just show me around</button></div>
+            <button class="encounter-continue" type="button" hidden>Keep going</button>
+          </div>
+        </section>
+        <aside class="scout-comic" aria-label="Who was that?" hidden>
+          <div class="comic-panel"><img data-src="/careless/images/04-colony.webp" alt="" width="1254" height="1254" loading="lazy"><div class="comic-lines"><p>Who was that?</p><p>Regular visitor. I asked if they needed guidance.</p></div></div>
+          <div class="comic-panel"><img data-src="/careless/images/05-scout.webp" alt="" width="1254" height="1254" loading="lazy"><div class="comic-lines"><p>Did they?</p><p>Eventually.</p></div></div>
+        </aside>
       </div>
     </section>
     <section class="tilt-section" id="thoughtful" aria-labelledby="tilt-title">
@@ -140,6 +172,7 @@
       <section class="human-section" id="human" aria-labelledby="human-title">
         <h2 id="human-title">Say it <em>once.</em></h2>
         <div class="human-copy">
+          <p class="human-refrain">For founders who've explained them ten times already.</p>
           <p class="human-question">How many times did you explain the same thing this month?</p>
           <p>That's the number we bring down. Tell me what's stuck, in whatever order it comes out, and I'll tell you what I'd do first. <em>No pitch deck. Promise.</em></p>
           <a class="human-book" href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer">Book the call</a>
