@@ -26,7 +26,7 @@
   </section>
   <noscript><style>.loading-gate{display:none}.opening p{opacity:1}</style></noscript>
   <main id="page-content">
-    <section class="film-section" id="film">
+    <section class="film-section has-interface" id="film">
       <div class="film-stage">
         <img class="film-poster" id="poster" src="/careless/video/v1/posters/1_loop-first.webp" width="720" height="720" alt="" fetchpriority="high" decoding="async">
         <video class="film-layer sunset" id="sunset" muted autoplay loop playsinline preload="none" aria-hidden="true" disablepictureinpicture></video>
@@ -69,97 +69,54 @@
           <div class="comic-panel"><img data-src="/careless/images/05-scout.webp" alt="" width="1254" height="1254" loading="lazy"><div class="comic-lines"><p>Did they?</p><p>Eventually.</p></div></div>
         </aside>
       </div>
-    </section>
-    <section class="tilt-section" id="thoughtful" aria-labelledby="tilt-title">
-      <div class="tilt-intro">
-        <h2 id="tilt-title"><span>What feels effortless</span> <span>has something <em>thoughtful</em> behind it.</span></h2>
-        <p><span>Every business runs on the same seven things.</span> <span>Founders usually hold all seven.</span></p>
-      </div>
-      <div class="chapter-experience">
-      <div class="shared-plate-stick">
-      <div class="plate-scene" data-intro-plate>
-        <div class="plate-tilt">
-          <div class="plate-window" tabindex="0" role="region" aria-labelledby="plate-title">
-            <svg class="seven-plate" data-plate viewBox="0 0 1200 260" role="img" aria-labelledby="plate-title plate-legend">
-              <title id="plate-title">Direction, People, Selling, Money, Delivery, Quality, Growth</title>
-              <defs>
-                <marker id="plate-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M1 1L6 4L1 7" fill="none" stroke="currentColor" stroke-width="1"/></marker>
-                <clipPath id="plate-clip"><rect width="128" height="76" rx="8"/></clipPath>
-              </defs>
-              <path class="plate-flow" d="M24 102H1174" marker-end="url(#plate-arrow)"/>
-              <g class="plate-block" data-ai="0.36" data-block="direction" transform="translate(64 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Direction</text>
-              </g>
-              <g class="plate-block" data-ai="0.26" data-block="people" transform="translate(220 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">People</text>
-              </g>
-              <g class="plate-block" data-ai="0.58" data-block="selling" transform="translate(376 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Selling</text>
-              </g>
-              <g class="plate-block" data-ai="0.72" data-block="money" transform="translate(532 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Money</text>
-              </g>
-              <g class="plate-block" data-ai="0.64" data-block="delivery" transform="translate(688 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Delivery</text>
-              </g>
-              <g class="plate-block" data-ai="0.49" data-block="quality" transform="translate(844 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Quality</text>
-              </g>
-              <g class="plate-block" data-ai="0.31" data-block="growth" transform="translate(1000 64)">
-                <g class="block-tones" clip-path="url(#plate-clip)"><rect class="people-fill" width="128" height="76"/><rect class="ai-fill" width="128" height="76"/></g>
-                <rect class="block-outline" width="128" height="76" rx="8"/>
-                <text class="block-label" x="64" y="122" text-anchor="middle">Growth</text>
-              </g>
-            </svg>
-          </div>
-          <p class="plate-legend" id="plate-legend"><span class="legend-ai">AI repeats</span> <span class="legend-slash">/</span> <span class="legend-people">People decide</span></p>
-        </div>
-      </div>
-        <div class="chapter-progress" aria-hidden="true"><i class="active"></i><i></i><i></i><i></i></div>
-      </div>
-      <section class="chapters" id="chapters" aria-label="Brand, Design, Content, AI, Automation, Sales systems, Onboarding, Customer experience, Strategy, Consulting, Development">
-        <div class="chapter-stage">
-          <div class="chapter-track">
-            <article class="chapter" id="better-than-it-looks" data-blocks="direction selling" data-ai="0.3">
+      <section class="interface-sequence" id="thoughtful" aria-labelledby="tilt-title">
+        <div class="interface-stage">
+          <div class="tilt-slide"><div class="tilt-perspective"><div class="tilt-card">
+            <h2 id="tilt-title">What feels effortless has something <em>thoughtful</em> behind it.</h2>
+            <p>Every business runs on the same seven things. Founders usually hold all seven.</p>
+          </div></div></div>
+          <section class="chapter-layout" id="chapters" aria-label="Brand, Design, Content, AI, Automation, Sales systems, Onboarding, Customer experience, Strategy, Consulting, Development">
+            <figure class="pillar-graphic" aria-labelledby="pillar-legend">
+  <table class="pillar-table"><caption class="sr-only">Direction, People, Selling, Money, Delivery, Quality, Growth</caption><colgroup><col class="service-column"><col><col><col><col><col><col><col></colgroup>
+    <thead><tr><td></td><th scope="col" data-pillar-label="Direction"><span>Direction</span></th><th scope="col" data-pillar-label="People"><span>People</span></th><th scope="col" data-pillar-label="Selling"><span>Selling</span></th><th scope="col" data-pillar-label="Money"><span>Money</span></th><th scope="col" data-pillar-label="Delivery"><span>Delivery</span></th><th scope="col" data-pillar-label="Quality"><span>Quality</span></th><th scope="col" data-pillar-label="Growth"><span>Growth</span></th></tr><tr class="pillar-flow-row" aria-hidden="true"><td></td><td colspan="7"><svg viewBox="0 0 1200 22" preserveAspectRatio="none"><defs><marker id="pillar-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M1 1L6 4L1 7" fill="none" stroke="currentColor"/></marker></defs><path d="M12 11H1185" marker-end="url(#pillar-arrow)"/></svg></td></tr></thead>
+    <tbody><tr><th scope="row">Consulting</th><td data-pillar="Direction" data-service="Consulting" aria-label="Direction, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="People" data-service="Consulting" aria-label="People, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Selling" data-service="Consulting" aria-label="Selling, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Money" data-service="Consulting" aria-label="Money, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Delivery" data-service="Consulting" aria-label="Delivery, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Quality" data-service="Consulting" aria-label="Quality, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Growth" data-service="Consulting" aria-label="Growth, Consulting: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td></tr>
+<tr><th scope="row">Design</th><td data-pillar="Direction" data-service="Design" aria-label="Direction, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="People" data-service="Design" aria-label="People, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Selling" data-service="Design" aria-label="Selling, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Money" data-service="Design" aria-label="Money, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Delivery" data-service="Design" aria-label="Delivery, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Quality" data-service="Design" aria-label="Quality, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Growth" data-service="Design" aria-label="Growth, Design: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td></tr>
+<tr><th scope="row">Marketing</th><td data-pillar="Direction" data-service="Marketing" aria-label="Direction, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="People" data-service="Marketing" aria-label="People, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Selling" data-service="Marketing" aria-label="Selling, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Money" data-service="Marketing" aria-label="Money, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Delivery" data-service="Marketing" aria-label="Delivery, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Quality" data-service="Marketing" aria-label="Quality, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Growth" data-service="Marketing" aria-label="Growth, Marketing: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td></tr>
+<tr><th scope="row">Development</th><td data-pillar="Direction" data-service="Development" aria-label="Direction, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="People" data-service="Development" aria-label="People, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Selling" data-service="Development" aria-label="Selling, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Money" data-service="Development" aria-label="Money, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Delivery" data-service="Development" aria-label="Delivery, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Quality" data-service="Development" aria-label="Quality, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Growth" data-service="Development" aria-label="Growth, Development: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td></tr>
+<tr class="ai-service"><th scope="row">AI</th><td data-pillar="Direction" data-service="AI" aria-label="Direction, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="People" data-service="AI" aria-label="People, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Selling" data-service="AI" aria-label="Selling, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Money" data-service="AI" aria-label="Money, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Delivery" data-service="AI" aria-label="Delivery, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Quality" data-service="AI" aria-label="Quality, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td><td data-pillar="Growth" data-service="AI" aria-label="Growth, AI: 0"><span class="service-cell" data-level="0" aria-hidden="true"></span></td></tr>
+    </tbody>
+  </table>
+  <figcaption id="pillar-legend">Brighter = more of our work here. Illustrative.</figcaption>
+</figure>
+            <div class="chapter-viewport"><div class="chapter-progress" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="chapter-track"><article class="chapter" id="better-than-it-looks" data-intensities='{"Direction":{"Consulting":2,"Design":2},"Selling":{"Design":3,"Marketing":3,"Development":1,"AI":1}}'>
               <h2>Better than it looks.</h2>
               <p class="chapter-line">The idea is clear in your head. We make it clear to everyone else.</p>
               <ul class="chapter-tags"><li>Brand</li><li>Design</li><li>Content</li></ul>
               <a class="chapter-offer" data-offer="5s_test" href="https://zcal.co/carelessmaks/ai-map" title="The 5-second test: send us your site. We'll tell you what a stranger sees.">The 5-second test <span aria-hidden="true">↗</span></a>
             </article>
-            <article class="chapter" id="nobody-waits" data-blocks="selling money" data-ai="0.7">
+<article class="chapter" id="nobody-waits" data-intensities='{"Selling":{"AI":3,"Marketing":2,"Development":2,"Design":1},"Money":{"AI":2,"Development":1}}'>
               <h2>Nobody waits until Monday.</h2>
               <p class="chapter-line">Every enquiry answered, qualified and handed to you warm.</p>
               <ul class="chapter-tags"><li>AI</li><li>Automation</li><li>Sales systems</li></ul>
               <a class="chapter-offer" data-offer="leak_check" href="https://zcal.co/carelessmaks/ai-map" title="The leak check: send your last 30 days of enquiries. We'll show who waited, who left and what they were worth.">The leak check <span aria-hidden="true">↗</span></a>
             </article>
-            <article class="chapter" id="twice-is-a-business" data-blocks="delivery quality" data-ai="0.5">
+<article class="chapter" id="twice-is-a-business" data-intensities='{"Delivery":{"AI":2,"Design":2,"Development":2,"Consulting":1},"Quality":{"AI":3,"Consulting":1}}'>
               <h2><span>Once is a sale.</span> <span>Twice is a business.</span></h2>
               <p class="chapter-line">Onboarding that doesn't need a manual. Follow-ups that don't need you.</p>
               <ul class="chapter-tags"><li>Onboarding</li><li>Customer experience</li></ul>
               <a class="chapter-offer" data-offer="walkthrough" href="https://zcal.co/carelessmaks/ai-map" title="The new-customer walkthrough: we go through your onboarding as a first-timer and send back every place they'd get lost.">The new-customer walkthrough <span aria-hidden="true">↗</span></a>
             </article>
-            <article class="chapter" id="built-to-grow" data-blocks="growth direction money" data-ai="0.3">
+<article class="chapter" id="built-to-grow" data-intensities='{"Growth":{"Consulting":3,"Marketing":2,"Development":2,"AI":1},"Direction":{"Consulting":3},"Money":{"Consulting":2,"AI":1}}'>
               <h2>Built to grow. Or to sell.</h2>
               <p class="chapter-line">New markets, new products, or a clean handover. Without you in every room.</p>
               <ul class="chapter-tags"><li>Strategy</li><li>Consulting</li><li>Development</li></ul>
               <a class="chapter-offer" data-offer="dependency_map" href="https://zcal.co/carelessmaks/ai-map" title="The dependency map: Scout asks a few questions, you get a one-page map of what still depends on you.">The dependency map <span aria-hidden="true">↗</span></a>
-            </article>
-          </div>
+            </article></div>
+
+            </div>
+          </section>
         </div>
       </section>
-      </div>
     </section>
     <section class="proof-strip" id="proof" aria-label="Recently:" hidden>
       <p>Recently:</p><ul></ul>

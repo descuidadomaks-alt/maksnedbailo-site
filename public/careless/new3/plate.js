@@ -1,70 +1,33 @@
 (() => {
   'use strict';
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const touch = matchMedia('(hover: none), (pointer: coarse)');
-  const scenes = [...document.querySelectorAll('.plate-scene')];
-
-  // Reusable contract: .lit controls appearance; data-ai controls only the split.
-  document.querySelectorAll('[data-plate]').forEach(plate => {
-    const sync = block => {
-      const raw = Number(block.getAttribute('data-ai'));
-      block.style.setProperty('--ai', String(Number.isFinite(raw) ? Math.max(0, Math.min(1, raw)) : .5));
-    };
-    plate.querySelectorAll('.plate-block').forEach(sync);
-    new MutationObserver(records => records.forEach(record => sync(record.target)))
-      .observe(plate, {subtree:true, attributes:true, attributeFilter:['data-ai']});
-  });
-
-  scenes.forEach(scene => {
-    const card = scene.querySelector('.plate-tilt');
-    let targetX = 0, targetY = 0, x = 0, y = 0;
-    let visible = false, frame = 0, last = 0, entered = false;
-    const clamp = value => Math.max(-6, Math.min(6, value));
-    function render(now) {
-      frame = 0;
-      if (!visible || document.hidden || reduced.matches) return;
-      const elapsed = last ? Math.min(now-last,64) : 16.667;
-      last = now;
-      if (touch.matches) {
-        targetX = Math.sin(now/2600)*.65;
-        targetY = Math.sin(now/3200)*1.1;
-      }
-      const ease = 1-Math.exp(-elapsed/95);
-      x += (targetX-x)*ease; y += (targetY-y)*ease;
-      card.style.setProperty('--rx',x.toFixed(3)+'deg');
-      card.style.setProperty('--ry',y.toFixed(3)+'deg');
-      if (touch.matches || Math.abs(targetX-x)>.005 || Math.abs(targetY-y)>.005) wake();
-    }
-    function wake() {
-      if (!frame && visible && !reduced.matches && !document.hidden) frame = requestAnimationFrame(render);
-    }
-    scene.addEventListener('pointermove',event => {
-      if (touch.matches || event.pointerType==='touch') return;
-      const r=scene.getBoundingClientRect();
-      targetX=clamp(-(event.clientY-r.top-r.height/2)/(r.height/2)*6);
-      targetY=clamp((event.clientX-r.left-r.width/2)/(r.width/2)*6);
-      wake();
-    },{passive:true});
-    scene.addEventListener('pointerleave',()=>{targetX=0;targetY=0;wake();},{passive:true});
-    const stop=()=>{cancelAnimationFrame(frame);frame=0;last=0;};
-    const visibility=new IntersectionObserver(([entry])=>{
-      visible=entry.isIntersecting;
-      if(visible){
-        if(!entered&&scene.hasAttribute('data-intro-plate')){
-          entered=true;
-          if(!scene.closest('.chapter-experience')?.classList.contains('is-reading'))
-            scene.querySelectorAll('.plate-block').forEach(block=>block.classList.add('lit'));
-        }
-        wake();
-      } else stop();
-    },{threshold:.25});
-    visibility.observe(scene);
-    document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else wake();});
-    reduced.addEventListener('change',()=>{
-      stop();
-      if(reduced.matches){x=0;y=0;targetX=0;targetY=0;card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');}
-      else wake();
-    });
-    touch.addEventListener('change',()=>{last=0;wake();});
-  });
+  const card=document.querySelector('.tilt-card'),reduced=matchMedia('(prefers-reduced-motion:reduce)'),coarse=matchMedia('(pointer:coarse)');
+  let x=0,y=0,tx=0,ty=0,frame=0,last=0,visible=false,drag=null,baseline=null,gyroAt=0;
+  const clamp=n=>Math.max(-6,Math.min(6,n));
+  function render(now){
+    frame=0;if(!visible||document.hidden)return;
+    if(reduced.matches){tx=Math.sin(now/7000)*.22;ty=Math.sin(now/9000)*.32;}
+    const ease=1-Math.exp(-Math.min(last?now-last:16.7,64)/110);last=now;x+=(tx-x)*ease;y+=(ty-y)*ease;
+    card.style.setProperty('--rx',x.toFixed(3)+'deg');card.style.setProperty('--ry',y.toFixed(3)+'deg');
+    if(reduced.matches||Math.abs(x-tx)>.005||Math.abs(y-ty)>.005)wake();
+  }
+  function wake(){if(!frame&&visible&&!document.hidden)frame=requestAnimationFrame(render);}
+  function stop(){cancelAnimationFrame(frame);frame=0;last=0;}
+  card.addEventListener('pointermove',event=>{
+    if(reduced.matches)return;
+    if(event.pointerType==='touch'&&drag){tx=clamp((drag.y-event.clientY)/18);ty=clamp((event.clientX-drag.x)/18);wake();return;}
+    if(coarse.matches||event.pointerType==='touch')return;
+    const r=card.getBoundingClientRect();tx=clamp(-(event.clientY-r.top-r.height/2)/(r.height/2)*6);ty=clamp((event.clientX-r.left-r.width/2)/(r.width/2)*6);wake();
+  },{passive:true});
+  card.addEventListener('pointerdown',event=>{if(event.pointerType==='touch'&&!reduced.matches){drag={x:event.clientX,y:event.clientY};card.setPointerCapture(event.pointerId);}});
+  const rest=()=>{drag=null;if(!reduced.matches&&performance.now()-gyroAt>800){tx=0;ty=0;wake();}};
+  card.addEventListener('pointerup',rest);card.addEventListener('pointercancel',rest);card.addEventListener('pointerleave',()=>{if(!coarse.matches)rest();});
+  addEventListener('deviceorientation',event=>{
+    if(!visible||!coarse.matches||reduced.matches||drag||!Number.isFinite(event.beta)||!Number.isFinite(event.gamma))return;
+    if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'&&!window.careLessMotionAllowed)return;
+    if(!baseline)baseline={beta:event.beta,gamma:event.gamma};
+    const b=event.beta-baseline.beta,g=event.gamma-baseline.gamma,landscape=Math.abs(screen.orientation?.angle||0)===90;
+    tx=clamp((landscape?g:-b)*.25);ty=clamp((landscape?b:g)*.25);gyroAt=performance.now();wake();
+  },{passive:true});
+  new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;if(visible){baseline=null;wake();}else stop();},{threshold:.15}).observe(card);
+  reduced.addEventListener('change',()=>{baseline=null;tx=ty=0;wake();});document.addEventListener('visibilitychange',()=>document.hidden?stop():wake());
 })();

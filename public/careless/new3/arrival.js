@@ -40,7 +40,7 @@
     setTimeout(()=>{gate.hidden=true;},700);
     setTimeout(()=>document.querySelector('.opening p').classList.add('is-revealed'),reduced.matches?0:2000);
   });
-  function protectRest(value){[...content.children].filter(node=>node!==section).forEach(node=>{node.inert=value;});}
+  function protectRest(value){[...content.children,document.querySelector('#thoughtful')].filter(node=>node&&node!==section).forEach(node=>{node.inert=value;});}
   function type(){
     clearTimeout(typing);const whisper=document.querySelector('.typed-whisper'),introduction=document.querySelector('.typed-introduction');
     const first="Psst. It's quiet down here.",second="I'm Scout. I ask a few questions and tell you what I'd fix first. Or we skip it.";
@@ -69,16 +69,17 @@
   function updateFallback(){
     if(SCOUT_ENABLED||!declined)return;
     if(!fallback){fallback=document.createElement('a');fallback.className='scout-launcher scout-booking';fallback.href='https://zcal.co/carelessmaks/ai-map';fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.setAttribute('aria-label','Changed your mind?');fallback.innerHTML='<span class="scout-face"><img src="/careless/images/05-scout.webp" width="56" height="56" alt="" loading="lazy"></span><span class="scout-tooltip" aria-hidden="true">Changed your mind?</span>';document.body.append(fallback);}
-    fallback.dataset.visible=String(begun&&scrollY>section.offsetTop+1&&scrollY>=section.offsetTop+(section.offsetHeight-innerHeight)*.79&&!moment);
+    const range=film.range(),threshold=range.start+(range.distance>0?range.distance*.79:section.querySelector('.film-stage').offsetHeight);
+    fallback.dataset.visible=String(begun&&scrollY>range.start+1&&scrollY>=threshold&&!moment);
   }
   function updateComic(time){
-    const show=declined&&time>=42.5&&!moment;
+    const show=declined&&time>=42.5&&!moment&&scrollY<film.range().end;
     if(show===comicShown)return;comicShown=show;comic.hidden=!show;section.classList.toggle('has-comic',show);
     if(show)comic.querySelectorAll('[data-src]').forEach(image=>{if(!image.getAttribute('src'))image.src=image.dataset.src;});
   }
   let warmed=false;
   function warmScout(){if(warmed)return;warmed=true;encounter.querySelector('.encounter-background').src=encounter.querySelector('.encounter-background').dataset.src;encounter.querySelectorAll('[data-scout-art]').forEach(image=>image.setAttribute('href','/careless/images/05-scout.webp'));encounter.querySelector('[data-scout-back]').setAttribute('href','/careless/images/06-hq.webp');}
-  addEventListener('careless:film',event=>{const time=event.detail.time;if(time>33)warmScout();if(begun&&!handled&&time>=37.6)enter();updateComic(time);});
+  addEventListener('careless:film',event=>{const time=event.detail.time;if(time>33)warmScout();if(begun&&!handled&&time>=37.6&&scrollY<film.range().end)enter();updateComic(time);});
   let scrollFrame=0;addEventListener('scroll',()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;updateFallback();});},{passive:true});
   reduced.addEventListener('change',()=>{if(reduced.matches){ready();if(moment)leave(false);updateComic(0);}updateFallback();});
   updateFallback();

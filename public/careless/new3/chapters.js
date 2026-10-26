@@ -1,75 +1,30 @@
 (() => {
   'use strict';
-  const experience=document.querySelector('.chapter-experience');
-  const section=document.querySelector('.chapters');
-  const shared=document.querySelector('.shared-plate-stick');
-  const articles=[...section.querySelectorAll('.chapter')];
-  const blocks=[...shared.querySelectorAll('.plate-block')];
-  const ticks=[...shared.querySelectorAll('.chapter-progress i')];
-  const original=blocks.map(block=>block.dataset.ai);
-  const vertical=matchMedia('(max-width:767px), (prefers-reduced-motion:reduce)');
-  const native=CSS.supports('animation-timeline: view()');
-  let active=-2,reading=false,frame=0,hasRead=false;
+  const sequence=document.querySelector('.interface-sequence'),film=document.querySelector('#film'),layout=document.querySelector('.chapter-layout'),track=document.querySelector('.chapter-track');
+  const articles=[...layout.querySelectorAll('.chapter')],cells=[...layout.querySelectorAll('td[data-pillar]')],labels=[...layout.querySelectorAll('[data-pillar-label]')],ticks=[...layout.querySelectorAll('.chapter-progress i')];
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),mobile=matchMedia('(max-width:767px)');
+  const maps=articles.map(article=>JSON.parse(article.dataset.intensities));
+  const clamp=n=>Math.max(0,Math.min(1,n));let active=-2,frame=0;
   function light(index){
-    if(index===active)return;
-    active=index;
-    if(index<0&&!hasRead)return;
-    if(index>=0)hasRead=true;
-    const names=index<0?null:articles[index].dataset.blocks.split(' ');
-    blocks.forEach((block,i)=>{
-      block.dataset.ai=index<0?original[i]:articles[index].dataset.ai;
-      block.classList.toggle('lit',!names||names.includes(block.dataset.block));
-    });
-    ticks.forEach((tick,i)=>tick.classList.toggle('active',i===index));
-    articles.forEach((article,i)=>{if(i===index)article.setAttribute('aria-current','step');else article.removeAttribute('aria-current');});
-    if(index>=0&&vertical.matches){
-      const window=shared.querySelector('.plate-window');
-      if(window.scrollWidth>window.clientWidth){
-        const selected=blocks.filter(b=>names.includes(b.dataset.block)).map(b=>b.getBoundingClientRect());
-        const origin=window.getBoundingClientRect().left-window.scrollLeft;
-        const left=Math.min(...selected.map(r=>r.left))-origin,right=Math.max(...selected.map(r=>r.right))-origin;
-        const target=right-left<window.clientWidth?(left+right-window.clientWidth)/2:left-24;
-        window.scrollTo({left:Math.max(0,target),behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});
-      }
-    }
+    if(index===active)return;active=index;const map=maps[index]||{};
+    cells.forEach(cell=>{const level=map[cell.dataset.pillar]?.[cell.dataset.service]||0;cell.firstElementChild.dataset.level=String(level);cell.setAttribute('aria-label',cell.dataset.pillar+', '+cell.dataset.service+': '+level);});
+    labels.forEach(label=>label.classList.toggle('is-active',!!map[label.dataset.pillarLabel]));ticks.forEach((tick,i)=>tick.classList.toggle('active',i===index));
+    articles.forEach((article,i)=>{if(i===index)article.setAttribute('aria-current','step');else article.removeAttribute('aria-current');});sequence.dataset.chapter=String(index);
   }
-  // CSS owns horizontal motion when supported. This coalesced fallback also
-  // supplies the nearest chapter for the plate; it performs no continuous RAF.
   function update(){
-    frame=0;
-    const rect=section.getBoundingClientRect();
-    const stacked=vertical.matches;
-    section.dataset.pan=stacked?'vertical':native?'css':'js';
-    let index=0;
-    if(stacked){
-      const focus=(shared.getBoundingClientRect().bottom+innerHeight)/2;
-      reading=rect.top<focus;
-      let nearest=Infinity;
-      articles.forEach((article,i)=>{const r=article.getBoundingClientRect(),d=Math.abs(r.top+r.height/2-focus);if(d<nearest){nearest=d;index=i;}});
-    }else{
-      const progress=Math.max(0,Math.min(1,-rect.top/Math.max(1,section.offsetHeight-innerHeight)));
-      if(!native)section.style.setProperty('--chapter-progress',progress.toFixed(6));
-      reading=rect.top<=1;
-      index=Math.round(progress*(articles.length-1));
+    frame=0;const r=sequence.getBoundingClientRect(),h=innerHeight,u=Math.max(0,-r.top/h);
+    if(reduced.matches){
+      sequence.style.removeProperty('--rise');sequence.style.removeProperty('--side');film.style.removeProperty('--handoff');
+      const focus=mobile.matches?h*.67:h*.5;let nearest=-1,distance=Infinity;
+      articles.forEach((article,i)=>{const q=article.getBoundingClientRect(),d=Math.abs(q.top+q.height/2-focus);if(d<distance){distance=d;nearest=i;}});light(layout.getBoundingClientRect().top<h*.7?nearest:-1);return;
     }
-    experience.classList.toggle('is-reading',reading);
-    light(reading?index:-1);
+    const rise=clamp(u/.9),side=clamp((u-1.2));sequence.style.setProperty('--rise',String(rise));sequence.style.setProperty('--side',String(side));film.style.setProperty('--handoff',String(rise));
+    const v=Math.max(0,u-2.2),step=Math.floor(v/1.1),part=v-step*1.1,pos=Math.min(3,step+clamp((part-.6)/.5));
+    track.style.setProperty('--chapter-shift',(-pos*25).toFixed(4)+'%');sequence.dataset.phase=u<.9?'rising':u<1.2?'card':side<1?'handoff':'chapters';
+    light(side>.999?Math.round(pos):-1);
   }
-  const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
-  addEventListener('scroll',schedule,{passive:true});
-  addEventListener('resize',()=>{active=-2;schedule();},{passive:true});
-  vertical.addEventListener('change',()=>{active=-2;schedule();});
-  document.fonts.ready.then(schedule);
-  section.querySelectorAll('.chapter-offer').forEach(link=>link.addEventListener('click',event=>{
-    if(!SCOUT_ENABLED||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-    const adapter=window.careLessScout;
-    if(adapter&&typeof adapter.open==='function'){
-      event.preventDefault();
-      adapter.open({offerId:link.dataset.offer});
-    }
-  }));
-  articles.forEach((article,index)=>article.addEventListener('focusin',()=>{
-    if(!vertical.matches){const top=section.getBoundingClientRect().top+scrollY;scrollTo({top:top+(section.offsetHeight-innerHeight)*index/(articles.length-1),behavior:'instant'});}
-  }));
+  const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule,{passive:true});reduced.addEventListener('change',()=>{active=-2;schedule();});document.fonts.ready.then(schedule);
+  articles.forEach((article,index)=>article.addEventListener('focusin',()=>{if(!reduced.matches)scrollTo({top:sequence.getBoundingClientRect().top+scrollY+innerHeight*(2.3+index*1.1),behavior:'instant'});}));
+  layout.querySelectorAll('.chapter-offer').forEach(link=>link.addEventListener('click',event=>{if(!SCOUT_ENABLED||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;const adapter=window.careLessScout;if(adapter&&typeof adapter.open==='function'){event.preventDefault();adapter.open({offerId:link.dataset.offer});}}));
   update();
 })();

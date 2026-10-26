@@ -27,7 +27,7 @@ const SCOUT_ENABLED = false;
 
   function measure() {
     start = section.getBoundingClientRect().top + scrollY;
-    distance = Math.max(1, section.offsetHeight - stage.offsetHeight);
+    distance = Math.max(1, section.classList.contains('has-interface') ? stage.offsetHeight*5 : section.offsetHeight-stage.offsetHeight);
     readScroll();
   }
   function readScroll() {
@@ -56,6 +56,7 @@ const SCOUT_ENABLED = false;
     lastTick = now;
     // The single exponential easing is refresh-rate independent.
     current += (target - current) * (1 - Math.exp(-elapsed / 95));
+    if (section.classList.contains('has-interface') && scrollY >= start+distance) current=target=1;
     if (Math.abs(target - current) < .00008) current = target;
     const time = Math.min(duration - 1 / 30, current * duration);
     const atSurface = current < .001;
@@ -144,6 +145,7 @@ const SCOUT_ENABLED = false;
     measure();
   });
   window.careLessFilm = {
+    range() { return { start, distance: motion.matches ? 0 : distance, end: start+(motion.matches ? stage.offsetHeight : distance) }; },
     preload() { primeFilm(); },
     lighter() {
       const lower = '/careless/video/film-v4/film-540.mp4';

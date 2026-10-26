@@ -74,6 +74,6 @@
   const film=document.querySelector('#film'),stage=film.querySelector('.film-stage');let visibleFrame=0;
   function declined(){let noThanks=false;try{noThanks=sessionStorage.getItem('scout_declined')==='true';}catch{};if(noThanks){launcher.setAttribute('aria-label','Changed your mind?');launcher.querySelector('.scout-tooltip').textContent='Changed your mind?';}}
   addEventListener('careless:scout-declined',declined);declined();
-  function reveal(){visibleFrame=0;const rect=film.getBoundingClientRect(),origin=rect.top+scrollY,distance=film.offsetHeight-stage.offsetHeight;const threshold=origin+(distance>0?distance*36.1/45.866667:stage.offsetHeight),visible=scrollY>=threshold&&scrollY>origin+1;launcher.dataset.visible=String(visible);const image=launcher.querySelector('img');if(visible&&!image.getAttribute('src'))image.src=image.dataset.src;}
+  function reveal(){visibleFrame=0;const range=window.careLessFilm.range(),origin=range.start,distance=range.distance;const threshold=origin+(distance>0?distance*36.1/45.866667:stage.offsetHeight),visible=scrollY>=threshold&&scrollY>origin+1;launcher.dataset.visible=String(visible);const image=launcher.querySelector('img');if(visible&&!image.getAttribute('src'))image.src=image.dataset.src;}
   const check=()=>{if(!visibleFrame)visibleFrame=requestAnimationFrame(reveal);};addEventListener('scroll',check,{passive:true});addEventListener('resize',check,{passive:true});reveal();
 })();
