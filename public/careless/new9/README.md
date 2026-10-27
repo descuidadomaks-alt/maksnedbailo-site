@@ -58,7 +58,7 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - Comic images use crops of the existing HQ and Scout stills (`/careless/new7/media/comic-*.webp`), replace with the new art when ready.
 
 ## Added in /new9 (Hormozi pass)
-- **The Care Less Map** card in "Say it once": 90-minute session, one-page ROI-ranked map within 48 h, Phase 1 quoted or an honest "not yet", €1,470 struck through, "Free for now", and the €10k "tell you straight" guarantee. Wording comes from Maks's own /ai-map offer; the price line and guarantee need his OK before this goes wide.
+- **The AI Map** card in "Say it once": 90-minute session, one-page ranked map within 48 h, Phase 1 quoted or an honest "not yet", "Free. Permanently.", and the live /ai-map promise ("the 90 minutes and the map are yours either way"). Keep it in step with `app/ai-map/new/lib/copy.ts`: no price anchor, no deadline, no €10k guarantee (those were retired with /ai-map/old).
 - **5-second test, live**: the first chapter's offer runs `/api/site-check` (fetches the homepage server-side, public hosts only, 10 checks) and shows the score before asking for contact details. The lead note carries the URL, score and what was missing.
 - **Missed-enquiry calculator**: the second chapter's offer shows a live monthly estimate (enquiries × % missed × % normally won × average sale); the numbers go into the lead note.
 - **Last screen**: a reply promise line (needs Maks's OK), "One thing to care less about" email signup (offer id `letter` in the lead intake), and a like button in the footer.
