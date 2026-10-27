@@ -27,7 +27,7 @@ const BOOKING_EMBED = 'https://zcal.co/i/O0g63S4u';
    flash before Scout's scene became dissolves. Scout faces the camera and waves from 16.4 s to 17.3 s; the hold is mid-wave. */
 const M12 = '/careless/new12/media/';
 const FILM = {
-  src720: M12 + 'film-720.mp4', src540: M12 + 'film-540.mp4', last: M12 + 'last.webp',
+  src720: M12 + 'film-720.mp4', src540: M12 + 'film-540.mp4',
   duration: 34.5,
   map: [[0,0],[0.9,1.6],[2.0,4.6],[3.0,8.3],[3.4,9.2],[4.6,13.5],[5.6,15.7],[6.3,16.7],[7.4,19.9],[8.4,22.5],[9.5,25.5],[10.6,28.7],[11.3,31.0],[12.2,34.46],[12.9,34.46]],
   captions: { view:[1.0,4.4], takes:[5.0,8.2], jobs:[9.2,13.4], colony:[13.6,15.6], scout:[15.8,16.72], follow:[17.5,19.9], answers:[20.3,22.4], quotes:[22.8,25.4], unseen:[25.8,28.6], hq:[31.0,99] },
@@ -54,6 +54,8 @@ const root = document.documentElement;
 const conn = navigator.connection;
 const light = !!(conn && (conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveType || '')));
 const small = matchMedia('(max-width: 760px)').matches;
+// Screens that crop the 16:9 film hard (phones, portrait tablets): the idle hero pans, and the film's crop is steered.
+const panning = matchMedia('(max-aspect-ratio: 4/3)');
 const wa = text => 'https://wa.me/' + WHATSAPP + (text ? '?text=' + encodeURIComponent(text) : '');
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
 /* Language: English or Spanish (Spain). ?lang= wins, then the visitor's choice, then the browser.
@@ -339,6 +341,7 @@ function startLoop() {
   loop.addEventListener('playing', () => { loopReady = true; wake(); }, { once: true });
   loop.play().catch(() => {});
 }
+let panFrom = 50; // where the idle pan was when the visitor started scrolling (object-position x, %)
 function wake() { if (!frame) frame = requestAnimationFrame(tick); }
 function tick(now) {
   frame = 0;
@@ -359,7 +362,14 @@ function tick(now) {
   if (!atSurface) primeMovie();
   if (movieReady && !movie.seeking && Math.abs(movie.currentTime - vTime) > 1 / 50) movie.currentTime = Math.min(FILM.duration - .04, vTime);
   movie.classList.toggle('on', !atSurface && movieReady);
-  if (small) { const fx = lerpMap(FILM.focus, vTime, 0, 1).toFixed(1); if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; } }
+  // Crop on narrow screens: leaving the surface freezes the idle pan where it is; the film starts from that spot
+  // and eases to its own framing by the time the camera reaches the ant hill (~7 s), then follows FILM.focus.
+  if (panning.matches) {
+    if (!atSurface && !filmBox.classList.contains('still')) { panFrom = parseFloat(getComputedStyle(loop.classList.contains('on') ? loop : poster).objectPosition) || 50; filmBox.classList.add('still'); }
+    else if (atSurface && filmBox.classList.contains('still') && vTime < .05) filmBox.classList.remove('still');
+    const b = smooth(vTime / 7), fx = (panFrom * (1 - b) + lerpMap(FILM.focus, vTime, 0, 1) * b).toFixed(1);
+    if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; }
+  }
   loop.classList.toggle('on', loopReady && (atSurface || !movieReady));
   if (atSurface && loopReady && loop.paused && !document.hidden) loop.play().catch(() => {});
   if (!atSurface && !loop.paused) loop.pause();
@@ -1264,11 +1274,11 @@ hire.addEventListener('submit', async e => {
 });
 
 /* ───────────────────────── Final ───────────────────────── */
-// A slow, seamless colony loop behind the last question; it only loads and plays while that screen is in view.
+// The pool at sunset, looping behind the last question (narrow screens pan across it); it only loads and plays while that screen is in view.
 const finalLoop = $('#final-loop');
 new IntersectionObserver(([e]) => {
   if (e.isIntersecting && !motion.matches) {
-    if (!finalLoop.getAttribute('src')) { finalLoop.src = MEDIA + ((small || light) ? 'final-loop-480.mp4' : 'final-loop-624.mp4'); finalLoop.preload = 'auto'; }
+    if (!finalLoop.getAttribute('src')) { finalLoop.src = M12 + 'final-loop.mp4'; finalLoop.preload = 'auto'; }
     finalLoop.play().catch(() => {});
   } else finalLoop.pause();
 }, { rootMargin: '30% 0px' }).observe(finalSec);

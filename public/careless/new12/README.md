@@ -96,3 +96,5 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - The film names the five teams itself, so the team chips under "Five teams. One conversation." show on phones only.
 - Sound layers are timed to film moments (uAt), not fixed scroll positions.
 - Includes the Scout live-chat safeguards from branch care-less-scout-v12 (inactive while SCOUT_MODE is preview).
+- Narrow screens (aspect ≤ 4:3): the idle hero (poster + loop) pans 50% → 0% (sunset) → 100% → 50% on a 36 s sine curve (`@keyframes pan`). The first scroll pauses it (`.film.still`), and the film starts from that exact object-position (`panFrom`), easing to its own framing by ~7 s (the ant hill). Back at the top the pan resumes where it stopped.
+- Last screen: LAST_VIDEO.mp4 (pool at sunset, 5 s loop, 832×464) as `media/final-loop.mp4` + `final-first.webp`; pans the same way on narrow screens (40 s cycle).

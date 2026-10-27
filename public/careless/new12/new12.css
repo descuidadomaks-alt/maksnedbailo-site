@@ -103,6 +103,15 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 .film-loop,.film-movie{opacity:0;transition:opacity .5s var(--ease)}
 .film-loop.on,.film-movie.on{opacity:1}
 .film-shade{background:linear-gradient(90deg,rgba(15,14,12,.62) 0%,rgba(15,14,12,.18) 46%,transparent 70%),linear-gradient(0deg,rgba(15,14,12,.55),transparent 42%);opacity:var(--shade,1)}
+/* Narrow screens see a third of the 16:9 shots, so the idle hero and the last screen drift across them:
+   centre → left (the sunset) → right → back to centre, on a sine curve: it only slows at the edges, like a slow camera pan.
+   The hero pan pauses the moment the visitor scrolls; new12.js picks the film up from that same spot. */
+@keyframes pan{0%{object-position:50% 50%;animation-timing-function:cubic-bezier(.61,1,.88,1)}25%{object-position:0% 50%;animation-timing-function:cubic-bezier(.37,0,.63,1)}75%{object-position:100% 50%;animation-timing-function:cubic-bezier(.12,0,.39,0)}100%{object-position:50% 50%}}
+@media (max-aspect-ratio:4/3){
+  .film-poster,.film-loop{animation:pan 36s infinite}
+  .film.still .film-poster,.film.still .film-loop{animation-play-state:paused}
+  .final-bg video{animation:pan 40s infinite}
+}
 .film{transform:scale(var(--film-scale,1));filter:brightness(var(--film-bright,1)) blur(var(--film-blur,0px));will-change:transform,filter}
 
 .hero{position:absolute;left:var(--gx);bottom:calc(17svh + var(--safe-b));max-width:min(880px,86vw);opacity:var(--hero,1);transform:translateY(calc((1 - var(--hero,1)) * -30px));will-change:opacity,transform}
