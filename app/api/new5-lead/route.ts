@@ -13,6 +13,7 @@ const offers: Record<string, string> = {
   needs_me: 'The "does it need me?" check',
   scout_chat: 'Scout chat — confirmed contact',
   final_note: 'Final question — what they want to care less about',
+  letter: 'Email list — one thing to care less about',
 };
 const attempts = new Map<string, { count: number; until: number }>();
 const receipts = new Map<string, number>();
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
   let data;
   try { data = await request.json(); } catch { return reply({ accepted: false }, 400); }
   const { offerId, contact, note = '', key, startedAt, company_fax, page: rawPage } = data || {};
-  const page = ['new6', 'new7', 'new8'].includes(rawPage) ? rawPage : 'new5'; // /new6–/new8 share this intake
+  const page = ['new7', 'new8', 'new9'].includes(rawPage) ? rawPage : 'new5'; // the care_less pages share this intake
   if (typeof offerId !== 'string' || !Object.hasOwn(offers, offerId) || typeof contact !== 'string' || contact.length > 320 || typeof note !== 'string' || note.length > 2000 || typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key) || typeof startedAt !== 'number' || Date.now() - startedAt < 700 || Date.now() - startedAt > 86400000 || company_fax) return reply({ accepted: false }, 400);
   const value = contact.trim();
   const kind = kindOf(value);
