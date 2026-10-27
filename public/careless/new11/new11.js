@@ -12,9 +12,11 @@ const BOOKING = 'https://zcal.co/carelessmaks/ai-map';
 // 'live' = MCB widget transport (+ voice adapter if present) · 'preview' = scripted, labelled demo · 'off' = WhatsApp handoff
 const SCOUT_MODE = window.CARELESS_SCOUT_MODE || 'preview';
 const LEAD_ENDPOINT = '/api/new5-lead';
-// The agent offer's capacity line. Leave null for the general line; set it to real numbers only, e.g.
-// { perMonth: 4, left: 2, month: ['November', 'noviembre'] } → "4 builds a month. 2 places left for November."
-const CAPACITY = null;
+// The "first AI hire" capacity line (Maks: about 5 new businesses a month). Set `perMonth` to null for the general line.
+const CAPACITY = { perMonth: 5 };
+// zcal's embed link for the booking pop-up (zcal → the invite's menu → Embed → the https://zcal.co/i/… link in the code).
+// Until it's set, every "book a call" link opens zcal in a new tab, as before.
+const BOOKING_EMBED = null;
 
 /* Each film: scroll map [u (viewport heights of scroll), t (seconds)], caption windows [start, end] in film seconds,
    the Scout hold moment and which side Scout stands on (the card goes on the other side).
@@ -627,7 +629,7 @@ document.addEventListener('click', e => {
   }
   if (!e.target.closest('#dock, #dock-pill') && !dockMenu.hidden) { dockMenu.hidden = true; dockBtn.setAttribute('aria-expanded', 'false'); wake(); }
   const close = e.target.closest('[data-close]');
-  if (close) { if (close.dataset.close === 'chat') closeChat(); if (close.dataset.close === 'offer') closeOffer(); if (close.dataset.close === 'stories') closeStories(); }
+  if (close) { if (close.dataset.close === 'chat') closeChat(); if (close.dataset.close === 'offer') closeOffer(); if (close.dataset.close === 'stories') closeStories(); if (close.dataset.close === 'booking') closeBooking(); }
 });
 function showComic() {
   comicAt = performance.now();
@@ -982,10 +984,10 @@ $('#proof-open').addEventListener('click', e => openStories(0, e.currentTarget))
 
 /* ───────────────────────── Offers ───────────────────────── */
 function renderCapacity() {
-  const c = CAPACITY, cap = $('#agent-cap');
-  cap.textContent = c ? L(`${c.perMonth} builds a month. ${c.left} ${c.left === 1 ? 'place' : 'places'} left for ${c.month[0]}.`, `${c.perMonth} al mes. ${c.left === 1 ? 'Queda 1 plaza' : `Quedan ${c.left} plazas`} para ${c.month[1]}.`)
-    : L('We take on a few of these a month, so each one gets built properly.', 'Hacemos unos pocos al mes, para que cada uno quede bien hecho.');
-  cap.classList.toggle('live', !!c);
+  const n = CAPACITY.perMonth;
+  $('#agent-cap').textContent = n
+    ? L(`We onboard ${n} businesses a month, so every one is built, tested and tuned by people, not a template.`, `Incorporamos ${n} negocios al mes, para que a cada uno lo construyan, prueben y ajusten personas, no una plantilla.`)
+    : L('We take on a few businesses a month, so every one is built, tested and tuned by people, not a template.', 'Incorporamos unos pocos negocios al mes, para que a cada uno lo construyan, prueben y ajusten personas, no una plantilla.');
 }
 const OFFERS = {
   look: ['The 5-second test', "Paste your website. In a few seconds you'll see what a stranger meets first, and what's missing.",
@@ -994,8 +996,6 @@ const OFFERS = {
     '¿Cuántas consultas pierdes?', 'Mueve los controles y tendrás una cifra aproximada ya. Envíanosla y buscamos la real.'],
   shopper: ['The mystery-shopper run', "We pose as a new customer, from first enquiry to after the sale, and show you exactly where we'd have walked away.",
     'El cliente misterioso', 'Nos hacemos pasar por un cliente nuevo, de la primera consulta a la posventa, y te enseñamos justo dónde nos habríamos ido.'],
-  agent: ['Your agent, free for 14 days', "Built in 7 days, live for 14, then you decide. Leave a way to reach you and we'll come back with a time for the 30-minute kickoff call.",
-    'Tu agente, gratis 14 días', 'Hecho en 7 días, funcionando 14, y luego decides tú. Déjanos cómo contactarte y te proponemos una hora para la llamada de arranque de 30 minutos.'],
   needs_me: ['The "does it need me?" check', "A few questions, one page back: everything that still can't happen without you, and what it costs you in hours.",
     'El test «¿me necesita?»', 'Unas pocas preguntas y te devolvemos una página: todo lo que aún no puede pasar sin ti y lo que te cuesta en horas.'],
 };
@@ -1013,11 +1013,7 @@ function openOffer(id, opener) {
   skipBtn.textContent = L('Skip the check, just send it to Maks', 'Sáltate la comprobación y envíasela a Maks');
   $('#offer-contact-label').textContent = id === 'look' ? L('Want my full read? Your email or phone', '¿Quieres mi lectura completa? Tu email o teléfono')
     : id === 'leak' ? L('Want the real number? Your email or phone', '¿Quieres la cifra real? Tu email o teléfono')
-    : id === 'agent' ? L('Your email or phone', 'Tu email o teléfono') : L('Website, email or phone', 'Web, email o teléfono');
-  // The agent build asks its one qualifying question in the note field.
-  const noteLabel = $('label[for="offer-note"]');
-  if (id === 'agent') noteLabel.replaceChildren(L('Where do enquiries come in, and how many a week?', '¿Por dónde llegan las consultas y cuántas a la semana?'));
-  else noteLabel.replaceChildren(L('Anything we should know? ', '¿Algo que debamos saber? '), el('span', '', L('(optional)', '(opcional)')));
+    : L('Website, email or phone', 'Web, email o teléfono');
   if (id === 'leak') calcUpdate();
   $('#offer-wa').href = wa(L(`Hi Maks, I'd like ${title}.`, `Hola Maks, me interesa: ${title}.`));
   offerEl.hidden = false; modal++; setTimeout(() => (id === 'look' ? checkUrl : id === 'leak' ? $('#calc-enq') : offerContact).focus({ preventScroll: true }), 60);
@@ -1104,6 +1100,49 @@ function calcUpdate() {
 }
 calc.addEventListener('input', calcUpdate);
 
+/* ───────────────────────── Booking ───────────────────────── */
+// zcal inside our own frame. zcal refuses to be framed from the personal links (zcal.co/name/…), only from its
+// embed links, so this stays off until BOOKING_EMBED is set.
+const bookingEl = $('#booking'), bookingFrame = $('#booking-frame');
+let bookingOpener = null;
+function openBooking(opener) {
+  bookingOpener = opener;
+  if (!bookingFrame.firstChild) {
+    const f = document.createElement('iframe');
+    f.title = L('Pick a time with Maks', 'Elige una hora con Maks');
+    f.src = BOOKING_EMBED + (BOOKING_EMBED.includes('?') ? '&' : '?') + 'embed=1&embedType=inline&embedVersion=1.0.2&embedDomain=' + location.hostname;
+    bookingFrame.append(f);
+  }
+  bookingEl.hidden = false; modal++; setTimeout(() => $('.booking-close', bookingEl).focus({ preventScroll: true }), 60);
+  track('booking_open');
+}
+function closeBooking() { if (bookingEl.hidden) return; bookingEl.hidden = true; modal = Math.max(0, modal - 1); bookingOpener?.focus({ preventScroll: true }); }
+bookingEl.addEventListener('click', e => { if (e.target === bookingEl) closeBooking(); });
+bookingEl.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="https://zcal.co/"]');
+  if (!a || a.closest('#booking')) return;
+  track('booking_click');
+  if (!BOOKING_EMBED || e.metaKey || e.ctrlKey || e.shiftKey) return; // no embed yet, or they asked for a new tab
+  e.preventDefault(); openBooking(a);
+});
+
+/* The "first AI hire": an email for the details, then nurture. Not a sale on the spot. */
+const hire = $('#hire'), hireEmail = $('#hire-email'), hireStatus = $('#hire-status');
+hireEmail.addEventListener('focus', () => { openedAt = Math.min(openedAt, Date.now() - 1000); }, { once: true });
+hireEmail.addEventListener('input', () => hireEmail.setCustomValidity(''));
+hire.addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = hireEmail.value.trim();
+  hireEmail.setCustomValidity(isEmail(v) ? '' : L('Add your email.', 'Añade tu email.'));
+  if (!hireEmail.reportValidity()) return;
+  const btn = $('button', hire); btn.disabled = true; hireStatus.className = 'hire-status'; hireStatus.textContent = L('Sending…', 'Enviando…');
+  const sent = await submitLead('agent', v, `Wants the details: first AI hire, 14 days free. Language: ${lang}`);
+  btn.disabled = false;
+  if (sent) { $('.hire-row', hire).hidden = true; hireStatus.className = 'hire-status ok'; hireStatus.textContent = L(`Got it. We'll send the details to ${v}.`, `Recibido. Te enviaremos los detalles a ${v}.`); track('hire_submit'); }
+  else hireStatus.textContent = L("That didn't go through. Try again in a moment.", 'No ha funcionado. Prueba otra vez en un momento.');
+});
+
 /* ───────────────────────── Final ───────────────────────── */
 // A slow, seamless colony loop behind the last question; it only loads and plays while that screen is in view.
 const finalLoop = $('#final-loop');
@@ -1147,13 +1186,12 @@ letter.addEventListener('submit', async e => {
 letterEmail.addEventListener('input', () => letterEmail.setCustomValidity(''));
 
 // Like button: the real count, always shown next to the heart. A tap fills the heart and bursts a few small ones.
-const likeBtn = $('#like'), likeCount = $('#like-count'), likeNoteEl = $('#like-note');
-// After a tap, a short thank-you floats above the heart for a few seconds; the rest of the time the chip speaks for itself.
-let noteTimer = 0;
-function likeNote() {
-  likeNoteEl.replaceChildren(L('Thank you. ', 'Gracias. '), el('span', '', L('That means a lot to us.', 'Para nosotros significa mucho.')));
-  likeNoteEl.classList.remove('show'); void likeNoteEl.offsetWidth; likeNoteEl.classList.add('show');
-  clearTimeout(noteTimer); noteTimer = setTimeout(() => likeNoteEl.classList.remove('show'), 3800);
+const likeBtn = $('#like'), likeCount = $('#like-count'), likeLabelEl = $('#like-label');
+// The chip carries its own words: an invitation before the tap, a thank-you right after, then just the heart and count.
+let labelTimer = 0;
+function likeWords(state) {
+  likeLabelEl.textContent = state === 'ask' ? L('Liked the ride?', '¿Te ha gustado?') : state === 'thanks' ? L('Thank you!', '¡Gracias!') : '';
+  likeBtn.classList.toggle('worded', state !== 'none');
 }
 let likes = null;
 const showLikes = n => { if (typeof n !== 'number') return; likes = n; likeCount.textContent = n.toLocaleString(lang === 'es' ? 'es-ES' : 'en-GB'); likeLabel(); };
@@ -1174,7 +1212,7 @@ function likeBurst() {
 }
 const liked = () => { try { return localStorage.getItem('cl-liked') === '1'; } catch { return false; } };
 if (liked()) likeBtn.setAttribute('aria-pressed', 'true');
-likeLabel();
+likeLabel(); likeWords(liked() ? 'none' : 'ask');
 new IntersectionObserver(([e], obs) => {
   if (!e.isIntersecting) return; obs.disconnect();
   fetch('/api/likes').then(r => r.json()).then(j => showLikes(j.count)).catch(() => {});
@@ -1184,7 +1222,8 @@ likeBtn.addEventListener('click', async () => {
   likeBtn.setAttribute('aria-pressed', 'true'); likeBtn.classList.remove('pop'); void likeBtn.offsetWidth; likeBtn.classList.add('pop'); likeBurst();
   if (typeof likes === 'number') showLikes(likes + 1);
   try { localStorage.setItem('cl-liked', '1'); } catch {}
-  likeLabel(); likeNote();
+  likeLabel(); likeWords('thanks');
+  clearTimeout(labelTimer); labelTimer = setTimeout(() => likeWords('none'), 2600);
   track('like');
   try { const j = await (await fetch('/api/likes', { method: 'POST' })).json(); if (typeof j.count === 'number' && j.count > (likes || 0)) showLikes(j.count); } catch {}
 });
@@ -1218,7 +1257,7 @@ function applyLang() {
   if (!root.classList.contains('begun')) gateStatus.textContent = gateDone ? L('Schedule cleared.', 'Agenda despejada.') : greet();
   if (encTyped) $$('.enc-line', enc).forEach(l => l.textContent = l.dataset.type);
   root.classList.remove('i18n-wait');
-  likeLabel(); renderCapacity();
+  likeLabel(); renderCapacity(); if (!liked()) likeWords('ask');
   layout(); wake();
 }
 langBtn.addEventListener('click', () => {

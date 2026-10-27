@@ -78,3 +78,11 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - The capacity line reads from `CAPACITY` in `new11.js`. It stays general until Maks gives a real number; never put a made-up one there.
 - Last screen: the question, the field, and one line ("Rather talk? Call Scout or book a call with Maks"), always shown so nothing jumps in later. The reply promise is gone until Maks confirms it.
 - Footer is one slim line: the sign-off, a smaller like chip (thank-you floats above it for a few seconds after a tap), and "One email every two weeks →", which opens into the email field.
+
+## Changed in /new11 (round 2, updated in place)
+- Gate button fills with the italic amber (`--amber`) on hover, not the old orange.
+- Desktop: "Say it once" pins on the left while the right column scrolls.
+- The big agent card is gone. "Book a call with me" leads the section; under the client proof sits "Your first AI hire. Two weeks on us." with one email field (lead offer `agent`), for people not ready to call. `CAPACITY.perMonth` is 5.
+- Booking pop-up (`#booking`) frames zcal's embed. zcal blocks framing of personal links (zcal.co/name/slug sends X-Frame-Options: DENY), so it stays off until `BOOKING_EMBED` holds the zcal.co/i/… link from zcal's Embed menu.
+- Like chip carries its own words: "Liked the ride?" → "Thank you!" → heart + count.
+- Footer list link: "Steal one fix every two weeks →".

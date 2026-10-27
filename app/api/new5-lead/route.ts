@@ -14,7 +14,7 @@ const offers: Record<string, string> = {
   scout_chat: 'Scout chat — confirmed contact',
   final_note: 'Final question — what they want to care less about',
   letter: 'Email list — one thing to care less about',
-  agent: 'Free 7-day agent build, live 14 days',
+  agent: 'Wants the details — first AI hire, 14 days free',
 };
 const attempts = new Map<string, { count: number; until: number }>();
 const receipts = new Map<string, number>();

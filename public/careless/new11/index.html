@@ -182,21 +182,8 @@
           </div>
           <p>Tell me what's stuck, and I'll tell you what I'd do first. You talk to me, then one team does the work: 16+ years of design, development and marketing, now with the new tools.</p>
           <p class="human-promise">No pitch deck. Promise.</p>
-          <!-- Option A (Notion: "care_less — offer options"). The capacity line is set in new11.js (CAPACITY). -->
-          <div class="agent-offer" aria-labelledby="agent-title">
-            <p class="agent-eyebrow">Where we start</p>
-            <h3 id="agent-title">Your agent, working in <em>7&nbsp;days.</em> Free for&nbsp;14.</h3>
-            <p class="agent-lede">One AI agent, built on your real business. It answers every enquiry within minutes, asks the right questions, and books the call or hands it to you warm.</p>
-            <ol class="agent-steps">
-              <li><b>Day 1</b><span>A 30-minute call: how enquiries reach you, and what a good answer sounds like.</span></li>
-              <li><b>Day 7</b><span>Your agent goes live where your enquiries already arrive.</span></li>
-              <li><b>Day 21</b><span>Keep it, for a monthly fee agreed before we start. Or we switch it off.</span></li>
-            </ol>
-            <p class="agent-guarantee"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg><span>Switch it off and you owe nothing. You keep every conversation it had.</span></p>
-            <p class="agent-fit"><span>For businesses with 10+ enquiries a week.</span> <span class="agent-cap" id="agent-cap">We take on a few of these a month, so each one gets built properly.</span></p>
-          </div>
           <div class="human-actions">
-            <button class="btn btn-paper" type="button" data-offer="agent">Start my free build <span aria-hidden="true">→</span></button>
+            <a class="btn btn-paper" href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer" data-book>Book a call with me <span aria-hidden="true">→</span></a>
             <a class="btn btn-wa" href="https://wa.me/34641935207?text=Hi%20Maks%2C%20I%20saw%20your%20site." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2Zm5.8 14.03c-.25.69-1.44 1.32-1.98 1.37-.51.05-.99.23-3.32-.69-2.8-1.1-4.58-3.97-4.72-4.15-.14-.18-1.12-1.49-1.12-2.85 0-1.35.71-2.02.96-2.29.25-.28.55-.35.73-.35l.53.01c.17 0 .4-.06.62.48.23.55.78 1.9.85 2.04.07.14.11.3.02.48-.09.18-.14.3-.27.46-.14.16-.29.36-.41.48-.14.14-.28.29-.12.57.16.28.71 1.17 1.53 1.9 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.18.69-.8.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.76 1.87.9.28.14.46.2.53.32.07.12.07.67-.18 1.36Z"/></svg>Prefer WhatsApp? Message me</a>
           </div>
           <button class="proof" id="proof-open" type="button" aria-haspopup="dialog">
@@ -204,6 +191,20 @@
             <span class="proof-text"><b><span class="stars" aria-hidden="true">★★★★★</span> Hear it from clients</b><small>On camera and in writing</small></span>
             <span class="proof-arrow" aria-hidden="true">→</span>
           </button>
+          <!-- For people not ready to talk: the offer is the reason to leave an email, not a sale on the spot.
+               Leads arrive as offer `agent`; the capacity line is set in new11.js (CAPACITY). -->
+          <form class="hire" id="hire" data-clarity-mask="true" aria-labelledby="hire-title">
+            <p class="hire-eyebrow">Not ready for a call?</p>
+            <h3 id="hire-title">Your first AI hire. <em>Two weeks on&nbsp;us.</em></h3>
+            <p class="hire-lede">Trained on your business, it takes the job you're most tired of: answering enquiries, chasing quotes, booking calls. Leave your email and we'll send how it works, and what it would do for a business like yours.</p>
+            <div class="hire-row">
+              <label class="sr-only" for="hire-email">Your email</label>
+              <input id="hire-email" type="email" autocomplete="email" placeholder="you@business.com" required maxlength="320">
+              <button class="btn btn-paper" type="submit">Send me the details</button>
+            </div>
+            <p class="hire-fine"><span>Free to try for 14 days. If you keep it, it's a monthly fee agreed up front.</span> <span class="hire-cap" id="agent-cap"></span></p>
+            <p class="hire-status" id="hire-status" role="status"></p>
+          </form>
         </div>
       </div>
     </section>
@@ -229,13 +230,13 @@
             <button class="like" id="like" type="button" aria-pressed="false">
               <span class="like-heart" aria-hidden="true"><svg viewBox="0 0 24 24"><defs><linearGradient id="like-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3c98e"/><stop offset="1" stop-color="#d9894a"/></linearGradient></defs><path d="M12 20.6s-7.6-4.7-9.4-9.6C1.4 7.7 3.5 4.4 7 4.4c2 0 3.6 1.1 5 2.9 1.4-1.8 3-2.9 5-2.9 3.5 0 5.6 3.3 4.4 6.6-1.8 4.9-9.4 9.6-9.4 9.6z"/></svg></span>
               <span class="like-count" id="like-count"></span>
+              <span class="like-label" id="like-label"></span>
             </button>
-            <p class="like-note" id="like-note" role="status"></p>
           </div>
           <form class="letter" id="letter" data-clarity-mask="true">
-            <button class="letter-open" id="letter-open" type="button" aria-expanded="false" aria-controls="letter-row">One email every two weeks <span aria-hidden="true">→</span></button>
+            <button class="letter-open" id="letter-open" type="button" aria-expanded="false" aria-controls="letter-row"><b>Steal one fix</b> every two weeks <span aria-hidden="true">→</span></button>
             <div class="letter-row" id="letter-row" hidden>
-              <label class="sr-only" for="letter-email">Your email, for one short note every two weeks</label>
+              <label class="sr-only" for="letter-email">Your email, for one fix you can copy every two weeks</label>
               <input id="letter-email" type="email" autocomplete="email" placeholder="you@business.com" required maxlength="320">
               <button class="letter-join" type="submit">Join</button>
             </div>
@@ -332,6 +333,21 @@
     </div>
     <button class="story-arrow story-arrow-prev" type="button" data-story="-1" aria-label="Previous"><span aria-hidden="true">←</span></button>
     <button class="story-arrow story-arrow-next" type="button" data-story="1" aria-label="Next"><span aria-hidden="true">→</span></button>
+  </section>
+
+  <!-- Booking: our own frame around zcal's embed. Active once BOOKING_EMBED is set in new11.js; until then every
+       "book" link simply opens zcal in a new tab. -->
+  <section class="booking" id="booking" role="dialog" aria-modal="true" aria-labelledby="booking-title" hidden>
+    <div class="booking-card">
+      <button class="icon-btn booking-close" type="button" data-close="booking" aria-label="Close">×</button>
+      <header class="booking-head">
+        <img src="/careless/new7/media/maks-avatar.webp" alt="" width="56" height="56" decoding="async">
+        <div><p class="booking-eyebrow">30 minutes · Google Meet</p><h2 id="booking-title">Book a call with <em>Maks</em></h2></div>
+      </header>
+      <ul class="booking-points"><li>What's stuck, in your words</li><li>What I'd do first, and what it would take</li><li>An honest "not yet", if that's the answer</li></ul>
+      <div class="booking-frame" id="booking-frame"></div>
+      <p class="booking-alt">Calendar not loading? <a href="https://zcal.co/carelessmaks/ai-map" target="_blank" rel="noopener noreferrer" id="booking-direct">Open it in a new tab</a>.</p>
+    </div>
   </section>
 
   <section class="offer" id="offer" role="dialog" aria-modal="true" aria-labelledby="offer-title" hidden data-clarity-mask="true">

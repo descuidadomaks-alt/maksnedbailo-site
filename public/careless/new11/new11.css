@@ -86,7 +86,7 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 /* It's focused automatically when ready (Enter starts it); the pulse is its focus cue, so no second outline ring. */
 .gate-btn:focus-visible{outline:none}
 /* Hover: the solid button grows out to where the pulse ring sits, so only the button remains. */
-.gate-btn:not(:disabled):hover{transform:scale(1.16);background:linear-gradient(180deg,#c47f3d,#a2602a);color:#fff;animation:none;box-shadow:0 22px 60px -14px rgba(224,177,116,.7)}
+.gate-btn:not(:disabled):hover{transform:scale(1.16);background:var(--amber);color:var(--ink);animation:none;box-shadow:0 22px 60px -14px rgba(224,177,116,.7)}
 .gate-btn:disabled{cursor:progress}
 .gate-hint{margin:0;font-size:12px;color:var(--dim);max-width:36ch;animation:rise 1.2s var(--ease) both .5s}
 .gate-quiet{display:inline;margin-left:4px;padding:4px 2px;border:0;background:none;font-size:inherit;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px;transition:color .25s,opacity .4s}
@@ -187,7 +187,8 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 /* 3 · Human */
 .human{position:relative;padding:clamp(96px,16svh,180px) var(--gx);background:radial-gradient(60% 50% at 80% 30%,rgba(224,177,116,.08),transparent 70%),var(--ink)}
 .human-inner{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.85fr);grid-template-areas:"head video" "copy video";column-gap:clamp(32px,6vw,110px);row-gap:40px;align-items:start}
-.human-inner.no-video{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"head copy";align-items:end}
+.human-inner.no-video{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"head copy";align-items:start}
+@media (min-width:761px){.human-inner.no-video .human-head{align-self:start;position:sticky;top:clamp(96px,14svh,140px)}}
 .human-head{grid-area:head;align-self:end}
 .human h2{margin:0;font:300 clamp(56px,7.4vw,124px)/.98 var(--sans);letter-spacing:-.06em}
 .human h2 em{font-size:1.06em}
@@ -506,19 +507,39 @@ html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
 .calc-result{margin:4px 0 0;padding:16px 18px;border-radius:16px;background:rgba(224,177,116,.08);border:1px solid rgba(224,177,116,.3);display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px;color:var(--muted)}
 .calc-result b{font:300 32px/1 var(--sans);letter-spacing:-.03em;color:var(--amber);white-space:nowrap}
 
-/* /new11 · Option A: the free agent build, where "Say it once" starts. */
-.agent-offer{margin-top:28px;max-width:46ch;padding:22px 24px 20px;border-radius:20px;border:1px solid rgba(224,177,116,.32);background:linear-gradient(160deg,rgba(224,177,116,.08),rgba(224,177,116,.02) 60%)}
-.agent-eyebrow{margin:0!important;font:400 10.5px/1 var(--mono)!important;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)!important}
-.agent-offer h3{margin:10px 0 0;font:300 clamp(24px,2.1vw,30px)/1.12 var(--sans);letter-spacing:-.03em;text-wrap:balance}
-.agent-offer h3 em{font:italic 400 1.08em/1 var(--serif);color:var(--amber)}
-.agent-lede{margin:12px 0 0!important;font-size:15px!important;line-height:1.5!important;color:var(--muted)}
-.agent-steps{list-style:none;margin:16px 0 0;padding:14px 0 0;border-top:1px solid var(--line);display:grid;gap:10px}
-.agent-steps li{display:grid;grid-template-columns:64px 1fr;gap:12px;font-size:14.5px;line-height:1.45;color:var(--muted)}
-.agent-steps b{font:400 11px/1.9 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--paper)}
-.agent-guarantee{margin:16px 0 0!important;display:flex;gap:10px;align-items:flex-start;font-size:14px!important;line-height:1.5!important;color:var(--paper)}
-.agent-guarantee svg{flex:none;width:20px;height:20px;margin-top:1px;fill:none;stroke:var(--amber);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.agent-fit{margin:14px 0 0!important;font-size:13px!important;line-height:1.5!important;color:var(--dim)}
-.agent-cap.live{color:var(--amber)}
+/* /new11 · "Your first AI hire": an email capture for people not ready to call. Sits after the client proof. */
+.hire{margin-top:44px;padding-top:30px;border-top:1px solid var(--line);max-width:46ch}
+.hire-eyebrow{margin:0!important;font:400 10.5px/1 var(--mono)!important;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)!important}
+.hire h3{margin:12px 0 0;font:300 clamp(24px,2.1vw,30px)/1.12 var(--sans);letter-spacing:-.03em;text-wrap:balance}
+.hire h3 em{font:italic 400 1.08em/1 var(--serif);color:var(--amber)}
+.hire .hire-lede{margin:12px 0 0;font-size:15px;line-height:1.55}
+.hire-row{display:flex;gap:8px;margin-top:18px}
+.hire-row[hidden]{display:none}
+.hire-row input{flex:1;min-width:0;padding:0 18px;min-height:50px;border-radius:999px;border:1px solid var(--line-2);background:rgba(15,14,12,.5);color:var(--paper);font:300 15px/1.4 var(--sans);outline:none}
+.hire-row input:focus{border-color:var(--amber)}
+.hire-row .btn{flex:none}
+.hire .hire-fine{margin:12px 0 0;font-size:13px;line-height:1.55;color:var(--dim)}
+.hire-cap{color:var(--muted)}
+.hire .hire-status{margin:10px 0 0;font-size:14px;color:var(--muted)}
+.hire .hire-status:empty{display:none}
+.hire .hire-status.ok{color:var(--scout)}
+
+/* Booking pop-up: our header and points around zcal's calendar. */
+.booking{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:24px;background:rgba(8,7,6,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:rise .4s var(--ease) both}
+.booking[hidden]{display:none}
+.booking-card{position:relative;width:min(760px,100%);max-height:calc(100svh - 48px);overflow-y:auto;overscroll-behavior:contain;padding:28px 28px 20px;border-radius:24px;border:1px solid var(--line-2);background:var(--ink-2);box-shadow:0 40px 120px -30px rgba(0,0,0,.8)}
+.booking-close{position:absolute;top:14px;right:14px}
+.booking-head{display:flex;align-items:center;gap:14px;padding-right:44px}
+.booking-head img{width:52px;height:52px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1.5px rgba(224,177,116,.6)}
+.booking-eyebrow{margin:0;font:400 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--amber)}
+.booking h2{margin:8px 0 0;font:300 clamp(26px,2.6vw,34px)/1.05 var(--sans);letter-spacing:-.04em}
+.booking h2 em{font:italic 400 1.08em/1 var(--serif);color:var(--amber)}
+.booking-points{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.booking-points li{padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.booking-frame{margin-top:20px;border-radius:16px;overflow:hidden;background:#fff;min-height:620px}
+.booking-frame iframe{display:block;width:100%;height:660px;border:0}
+.booking-alt{margin:14px 0 0;font-size:13px;color:var(--dim);text-align:center}
+.booking-alt a{color:var(--muted);text-decoration:underline;text-underline-offset:3px}
 
 /* /new11 · Last screen: the question, the field, one quiet line of alternatives. Nothing else. */
 .final-alt{margin:22px 0 0;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;font-size:14px;color:var(--muted)}
@@ -538,6 +559,7 @@ html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
 .letter{position:relative;display:flex;align-items:center;margin:0}
 .letter-open{padding:0;border:0;background:none;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;transition:color .3s}
 .letter-open:hover{color:var(--paper)}
+.letter-open b{font-weight:500;color:var(--paper)}
 .letter-row{display:flex;gap:6px;animation:note-in .5s var(--ease) both}
 .letter-row[hidden]{display:none}
 .letter-row input{width:min(220px,52vw);padding:8px 14px;border-radius:999px;border:1px solid var(--line-2);background:rgba(15,14,12,.5);color:var(--paper);font:300 14px/1.3 var(--sans);outline:none}
@@ -576,10 +598,11 @@ html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
 @keyframes count-bump{0%{transform:translateY(0)}35%{transform:translateY(-5px);color:#f3c98e}100%{transform:none}}
 .like.pop{animation:like-glow 1.2s var(--ease)}
 @keyframes like-glow{0%{box-shadow:0 0 0 0 rgba(224,177,116,0)}30%{box-shadow:0 0 24px 1px rgba(224,177,116,.32)}100%{box-shadow:0 0 0 0 rgba(224,177,116,0)}}
-/* The thank-you: a small bubble above the chip, visible for a few seconds after the tap. */
-.like-note{position:absolute;left:50%;bottom:calc(100% + 10px);margin:0;padding:8px 12px;border-radius:12px;background:rgba(28,26,22,.94);border:1px solid rgba(224,177,116,.35);box-shadow:0 10px 30px -10px rgba(0,0,0,.6);font-size:12.5px;line-height:1.35;color:var(--amber);white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,6px) scale(.96);transition:opacity .35s var(--ease),transform .5s var(--spring)}
-.like-note span{color:var(--paper)}
-.like-note.show{opacity:1;transform:translate(-50%,0) scale(1)}
+/* The chip's own words: "Liked the ride?" before, "Thank you!" right after, then it settles to heart + count. */
+.like-label{display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;font-size:13px;color:var(--muted);opacity:0;transition:max-width .6s var(--ease),opacity .4s var(--ease),margin .6s var(--ease)}
+.like.worded .like-label{max-width:16ch;opacity:1;margin-left:3px}
+.like.worded{padding-right:14px}
+.like[aria-pressed="true"] .like-label{color:var(--amber)}
 
 /* Mobile */
 @media (max-width:760px){
@@ -643,8 +666,12 @@ html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
   .foot{flex-direction:column-reverse;gap:14px;padding-top:22px;text-align:center}
   .foot-sign{justify-content:center;gap:4px 12px}
   .foot-acts{flex-wrap:wrap;justify-content:center;gap:12px 18px}
-  .agent-offer{padding:18px 18px 16px;max-width:none}
-  .agent-steps li{grid-template-columns:52px 1fr;gap:10px}
+  .hire{max-width:none}
+  .hire-row{flex-direction:column}
+  .hire-row .btn{width:100%}
+  .booking{padding:0;place-items:end stretch}
+  .booking-card{width:100%;max-height:92svh;border-radius:24px 24px 0 0;padding:22px 16px calc(16px + var(--safe-b))}
+  .booking-frame iframe{height:600px}
   .calc-result{flex-direction:column;align-items:flex-start;gap:8px}
   .offer-card{padding:28px 22px;max-height:calc(100svh - 32px);overflow-y:auto;overscroll-behavior:contain}
 }
