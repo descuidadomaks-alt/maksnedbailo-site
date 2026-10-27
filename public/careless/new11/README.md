@@ -83,6 +83,6 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - Gate button fills with the italic amber (`--amber`) on hover, not the old orange.
 - Desktop: "Say it once" pins on the left while the right column scrolls.
 - The big agent card is gone. "Book a call with me" leads the section; under the client proof sits "Your first AI hire. Two weeks on us." with one email field (lead offer `agent`), for people not ready to call. `CAPACITY.perMonth` is 5.
-- Booking pop-up (`#booking`) frames zcal's embed. zcal blocks framing of personal links (zcal.co/name/slug sends X-Frame-Options: DENY), so it stays off until `BOOKING_EMBED` holds the zcal.co/i/… link from zcal's Embed menu.
+- Booking pop-up (`#booking`) frames zcal's embed. zcal blocks framing of personal links (zcal.co/name/slug sends X-Frame-Options: DENY), so it uses the embed link `zcal.co/i/O0g63S4u` (`BOOKING_EMBED`); every book link points there too.
 - Like chip carries its own words: "Liked the ride?" → "Thank you!" → heart + count.
 - Footer list link: "Steal one fix every two weeks →".

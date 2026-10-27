@@ -8,7 +8,7 @@ const BASE = '/careless/shared/'; // shared film, avatar and fonts
 const MEDIA = '/careless/new7/media/'; // /new11 reuses /new7's media (frozen) instead of a second copy
 const LOOP = { src: '/careless/video/v1/1_loop.mp4' };
 const WHATSAPP = '34641935207';
-const BOOKING = 'https://zcal.co/carelessmaks/ai-map';
+const BOOKING = 'https://zcal.co/i/O0g63S4u';
 // 'live' = MCB widget transport (+ voice adapter if present) · 'preview' = scripted, labelled demo · 'off' = WhatsApp handoff
 const SCOUT_MODE = window.CARELESS_SCOUT_MODE || 'preview';
 const LEAD_ENDPOINT = '/api/new5-lead';
@@ -16,7 +16,7 @@ const LEAD_ENDPOINT = '/api/new5-lead';
 const CAPACITY = { perMonth: 5 };
 // zcal's embed link for the booking pop-up (zcal → the invite's menu → Embed → the https://zcal.co/i/… link in the code).
 // Until it's set, every "book a call" link opens zcal in a new tab, as before.
-const BOOKING_EMBED = null;
+const BOOKING_EMBED = 'https://zcal.co/i/O0g63S4u';
 
 /* Each film: scroll map [u (viewport heights of scroll), t (seconds)], caption windows [start, end] in film seconds,
    the Scout hold moment and which side Scout stands on (the card goes on the other side).
@@ -247,7 +247,7 @@ function glideTo(y, tau = 120) {
   sTarget = clamp(y, 0, maxScroll); sTau = motion.matches ? 1 : tau;
   if (!sRaf) { sCur = scrollY; sLast = 0; sRaf = requestAnimationFrame(animateScroll); }
 }
-function inScrollable(t) { return t && t.closest && t.closest('.chat-log, textarea, .offer-card'); }
+function inScrollable(t) { return t && t.closest && t.closest('.chat-log, textarea, .offer-card, .booking-card'); }
 function inChapters() { const u = (scrollY - journeyTop) / H; return u > P_SWAP && u < STAGE_U; }
 addEventListener('wheel', e => {
   if (e.ctrlKey || !root.classList.contains('begun')) { if (!root.classList.contains('begun')) e.preventDefault(); return; }
