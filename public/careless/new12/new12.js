@@ -1,40 +1,40 @@
-/* care_less /new7 — single readable script, no build step.
+/* care_less /new12 — single readable script, no build step.
    Sections: config · utilities · sound · layout · smooth scroll + settle · stage (film, plate, board) · gate · Scout (encounter, dock, chat, call) · client stories · offers · final. */
 (() => {
 'use strict';
 
 /* ───────────────────────── Config ───────────────────────── */
 const BASE = '/careless/shared/'; // shared film, avatar and fonts
-const OWN = '/careless/new7/';
-const LOOP = { src: '/careless/video/v1/1_loop.mp4' };
+const MEDIA = '/careless/shared/media/'; // comic, final loop, stories, Maks's avatar
+// The idle loop is the film's own first two seconds, forward then back, so the first scroll picks up the same shot.
+const LOOP = { src: '/careless/new12/media/loop.mp4' };
 const WHATSAPP = '34641935207';
-const BOOKING = 'https://zcal.co/carelessmaks/ai-map';
+const BOOKING = 'https://zcal.co/i/O0g63S4u';
 // 'live' = MCB widget transport (+ voice adapter if present) · 'preview' = scripted, labelled demo · 'off' = WhatsApp handoff
-const SCOUT_MODE = window.CARELESS_SCOUT_MODE || 'preview';
+// ?scout=live works on localhost only, for QA against the staging widget.
+const SCOUT_MODE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('scout')) || window.CARELESS_SCOUT_MODE || 'preview';
 const LEAD_ENDPOINT = '/api/new5-lead';
+// The "first AI hire" capacity line (Maks: about 5 new businesses a month). Set `perMonth` to null for the general line.
+const CAPACITY = { perMonth: 5 };
+// zcal's embed link for the booking pop-up (zcal → the invite's menu → Embed → the https://zcal.co/i/… link in the code).
+// Until it's set, every "book a call" link opens zcal in a new tab, as before.
+const BOOKING_EMBED = 'https://zcal.co/i/O0g63S4u';
 
-/* Each film: scroll map [u (viewport heights of scroll), t (seconds)], caption windows [start, end] in film seconds,
-   the Scout hold moment and which side Scout stands on (the card goes on the other side).
-   Swap in the final Blender render by replacing media/film-*.mp4 — same camera, same timings. */
-const FILMS = {
-  cam: {
-    src720: BASE + 'media/film-720.mp4', src540: BASE + 'media/film-540.mp4', last: BASE + 'media/film-last.webp',
-    duration: 30,
-    map: [[0,0],[0.9,1.2],[2.1,3.5],[2.9,4.7],[4.1,7.5],[5.0,9.9],[6.6,13.9],[7.3,16.3],[8.7,20.2],[9.9,23.9],[10.8,26.9],[12.0,29.96],[12.7,29.96]],
-    captions: { view:[1.1,3.6], takes:[4.8,7.7], jobs:[10.1,14.1], colony:[16.6,20.4], scout:[20.7,23.9], follow:[24.3,27.0], hq:[27.4,99] },
-    hold: 23.85, scoutSide: 'right',
-  },
-  v4: {
-    src720: '/careless/shared/media/film-720-intra.mp4', src540: '/careless/shared/media/film-540-intra.mp4', last: '/careless/video/film-v4/film-last.webp',
-    duration: 45.866667,
-    map: [[0,0],[0.9,2.2],[2.1,6.8],[2.9,9.6],[4.1,15.0],[5.0,20.6],[6.6,27.2],[7.3,29.3],[8.7,34.8],[9.9,39.7],[10.8,42.9],[12.0,45.8],[12.7,45.8]],
-    captions: { view:[2.8,7.1], takes:[10.0,15.2], jobs:[21.3,27.4], colony:[29.4,35.0], scout:[35.4,39.7], follow:[40.1,43.1], hq:[43.4,99] },
-    hold: 39.65, scoutSide: 'left',
-  },
+/* The film: scroll map [u (viewport heights of scroll), t (seconds)], caption windows [start, end] in film seconds,
+   the Scout hold moment, which side Scout is on (the card goes on the other side), and on phones where to aim the crop
+   ([t, x%] of object-position, so Scout stays in frame when he's off-centre).
+   new12 film = the designer's NEW_MAIN_VIDEO (37 s) re-cut to 34.5 s: the black frame after the ant hole and the white
+   flash before Scout's scene became dissolves. Scout faces the camera and waves from 16.4 s to 17.3 s; the hold is mid-wave. */
+const M12 = '/careless/new12/media/';
+const FILM = {
+  src720: M12 + 'film-720.mp4', src540: M12 + 'film-540.mp4', last: M12 + 'last.webp',
+  duration: 34.5,
+  map: [[0,0],[0.9,1.6],[2.0,4.6],[3.0,8.3],[3.4,9.2],[4.6,13.5],[5.6,15.7],[6.3,16.7],[7.4,19.9],[8.4,22.5],[9.5,25.5],[10.6,28.7],[11.3,31.0],[12.2,34.46],[12.9,34.46]],
+  captions: { view:[1.0,4.4], takes:[5.0,8.2], jobs:[9.2,13.4], colony:[13.6,15.6], scout:[15.8,16.72], follow:[17.5,19.9], answers:[20.3,22.4], quotes:[22.8,25.4], unseen:[25.8,28.6], hq:[31.0,99] },
+  hold: 16.7, scoutSide: 'right',
+  focus: [[0,50],[15.0,50],[15.7,62],[17.2,62],[18.3,50],[99,50]],
 };
-// Default is the rendered film; the Blender camera blockout stays reachable at ?film=cam until its final render lands.
-const filmKey = /[?&]film=cam\b/.test(location.search) || location.hash === '#cam' ? 'cam' : 'v4';
-const FILM = FILMS[filmKey];
+const filmKey = 'v5';
 const FILM_U = FILM.map[FILM.map.length - 1][0];
 // Phases after the film, in viewport heights.
 const PH = { plateIn: 1.0, plateHold: 0.9, swap: 1.0, chapter: 1.2, chapters: 4, tail: 0.35 };
@@ -62,7 +62,7 @@ let lang = (location.search.match(/[?&]lang=(en|es)\b/) || [])[1] || (() => { tr
 if (!window.CL_ES) lang = 'en';
 const L = (en, es) => lang === 'es' ? es : en;
 function track(name, detail = {}) {
-  const event = { event: name, page: 'new7', lang, ...detail };
+  const event = { event: name, page: 'new12', lang, ...detail };
   (window.dataLayer = window.dataLayer || []).push(event);
   if (navigator.doNotTrack === '1') return;
   window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
@@ -156,7 +156,8 @@ const sound = (() => {
     if (!on || !ctx) return;
     const dt = Math.max(16, now - lastT), v = lastT ? Math.abs(y - lastY) / dt * 1000 : 0; lastY = y; lastT = now;
     const t = ctx.currentTime, set = (p, val, tau) => p.setTargetAtTime(val, t, tau);
-    const down = smooth((u - 1.6) / 2.4), colony = smooth((u - 6.2) / 2.2), after = smooth((u - FILM_U) / 2);
+    // Sea until the camera dips to the ant hole, the hum through the tunnel, the chord as the city opens up.
+    const down = smooth((u - uAt(4.6)) / (uAt(10.5) - uAt(4.6))), colony = smooth((u - uAt(13.8)) / (uAt(16.9) - uAt(13.8))), after = smooth((u - FILM_U) / 2);
     const fin = clamp(1 - finalSec.getBoundingClientRect().top / innerHeight);
     // The last screen is the colony again, so its chord comes back up there.
     set(n.sea.gain, .5 * (1 - down) + .1 * fin, .5);
@@ -238,10 +239,11 @@ function animateScroll(now) {
   if (sCur !== sTarget) sRaf = requestAnimationFrame(animateScroll); else { sLast = 0; scheduleSettle(); }
 }
 function glideTo(y, tau = 120) {
+  maxScroll = document.documentElement.scrollHeight - innerHeight;
   sTarget = clamp(y, 0, maxScroll); sTau = motion.matches ? 1 : tau;
   if (!sRaf) { sCur = scrollY; sLast = 0; sRaf = requestAnimationFrame(animateScroll); }
 }
-function inScrollable(t) { return t && t.closest && t.closest('.chat-log, textarea'); }
+function inScrollable(t) { return t && t.closest && t.closest('.chat-log, textarea, .offer-card, .booking-card'); }
 function inChapters() { const u = (scrollY - journeyTop) / H; return u > P_SWAP && u < STAGE_U; }
 addEventListener('wheel', e => {
   if (e.ctrlKey || !root.classList.contains('begun')) { if (!root.classList.contains('begun')) e.preventDefault(); return; }
@@ -254,6 +256,7 @@ addEventListener('wheel', e => {
   if (motion.matches) return;
   e.preventDefault();
   lastInput = performance.now(); clearTimeout(settleTimer);
+  maxScroll = document.documentElement.scrollHeight - innerHeight;
   if (!sRaf) sTarget = scrollY;
   sTarget = clamp(sTarget + clamp(dy, -260, 260), 0, maxScroll);
   glideTo(sTarget, Math.abs(e.deltaY) < 40 && e.deltaMode === 0 ? 90 : 130);
@@ -310,7 +313,7 @@ function settle() {
 }
 
 /* ───────────────────────── Stage: film, captions, plate, board ───────────────────────── */
-let movieReady = false, loopReady = false, primed = false, vTime = 0, frame = 0, tLast = 0, lastU = -1, comicShown = false, chapterIdx = -1, dockMini = false, railIdx = -2, duckLevel = 1, holdY = 0, comicAt = 0;
+let movieReady = false, loopReady = false, primed = false, vTime = 0, frame = 0, tLast = 0, lastU = -1, comicShown = false, chapterIdx = -1, dockMini = false, dockAway = false, typing = false, railIdx = -2, duckLevel = 1, holdY = 0, comicAt = 0;
 const rail = $('#rail'), railBtns = $$('button', rail), progress = $('#progress');
 rail.addEventListener('click', e => {
   const b = e.target.closest('[data-go]'); if (!b) return;
@@ -356,6 +359,7 @@ function tick(now) {
   if (!atSurface) primeMovie();
   if (movieReady && !movie.seeking && Math.abs(movie.currentTime - vTime) > 1 / 50) movie.currentTime = Math.min(FILM.duration - .04, vTime);
   movie.classList.toggle('on', !atSurface && movieReady);
+  if (small) { const fx = lerpMap(FILM.focus, vTime, 0, 1).toFixed(1); if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; } }
   loop.classList.toggle('on', loopReady && (atSurface || !movieReady));
   if (atSurface && loopReady && loop.paused && !document.hidden) loop.play().catch(() => {});
   if (!atSurface && !loop.paused) loop.pause();
@@ -400,17 +404,18 @@ function tick(now) {
   dots.forEach((d, i) => d.style.setProperty('--f', clamp(c - i).toFixed(3)));
   const idx = swap < .7 ? -2 : u < P_CH + .12 ? -1 : Math.round(pos);
   if (idx !== chapterIdx) { chapterIdx = idx; highlight(idx); }
-  // Phones: through the four chapters Scout folds into his small mark on the right, in the free gap mid-screen,
-  // clear of the buttons. Tapping it, or leaving the chapters, brings the full avatar back to the corner.
+  // Phones: through the four chapters Scout folds into a small solid pill that glides to the bottom centre, low enough to clear the buttons.
+  // Tapping it, or leaving the chapters, glides it back into the full avatar in the corner.
   const mini = small && !dock.hidden && swap > .98 && u < STAGE_U - .05 && dockMenu.hidden && chat.hidden && call.hidden && !modal;
-  if (mini) {
-    const gapTop = org.getBoundingClientRect().bottom, gapEnd = chapters[Math.max(0, chapterIdx)].getBoundingClientRect().top, home = dock.getBoundingClientRect();
-    const midY = (gapTop + gapEnd) / 2;
-    dockPill.style.setProperty('--py', midY.toFixed(1) + 'px');
-    dockBtn.style.setProperty('--mx', (dockPill.getBoundingClientRect().right - 20 - (home.right - 32)).toFixed(1) + 'px');
-    dockBtn.style.setProperty('--my', (midY - (home.bottom - 32)).toFixed(1) + 'px');
+  if (mini !== dockMini) {
+    dockMini = mini;
+    const off = (dock.getBoundingClientRect().right - 32) - innerWidth / 2; // corner avatar centre, measured from the screen centre
+    dockPill.style.setProperty('--dx', off.toFixed(1) + 'px'); dockBtn.style.setProperty('--mx', (-off).toFixed(1) + 'px');
+    dockBtn.classList.toggle('mini', mini); dockPill.classList.toggle('on', mini);
   }
-  if (mini !== dockMini) { dockMini = mini; dockBtn.classList.toggle('mini', mini); dockPill.classList.toggle('on', mini); }
+  // The last screen has its own "Call Scout", so the corner one steps aside there (and while a phone keyboard is up).
+  const away = finalSec.getBoundingClientRect().top < H * .4 || typing;
+  if (away !== dockAway) { dockAway = away; dock.classList.toggle('away', away); if (away && !dockMenu.hidden) { dockMenu.hidden = true; dockBtn.setAttribute('aria-expanded', 'false'); } }
 
   cue.style.setProperty('--cue', (held || modal || u > STAGE_U - .5 || (small && u > P_SWAP) || performance.now() - lastInput < 900) ? '0' : '1');
 
@@ -479,7 +484,7 @@ function begin(withSound = true) {
 function greeting() {
   const d = new Date(), h = d.getHours();
   let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
-  const time = loc => d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
+  const time = loc => d.toLocaleTimeString(loc, { hour: 'numeric', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
   return () => {
     const tail = L('Clearing your schedule…', 'Despejando tu agenda…');
     if (seen) return L('Welcome back. ', 'Hola de nuevo. ') + tail;
@@ -598,6 +603,13 @@ function showDock(fromRect) {
   setTimeout(() => { dock.style.opacity = ''; fly.remove(); }, 880);
 }
 dockPill.addEventListener('click', () => dockBtn.click());
+dock.addEventListener('animationend', e => { if (e.target === dock) dock.classList.remove('arrive'); });
+// Phones: hide the corner Scout while the keyboard is up, so he never sits half under it.
+if (small) {
+  const field = t => t.matches && t.matches('input:not([type=checkbox]):not([type=radio]), textarea');
+  document.addEventListener('focusin', e => { if (field(e.target)) { typing = true; wake(); } });
+  document.addEventListener('focusout', e => { if (field(e.target)) { typing = false; wake(); } });
+}
 // Tapping Scout while his chat is open minimises it; otherwise it opens the call/message menu.
 dockBtn.addEventListener('click', () => {
   if (!chat.hidden) { closeChat(); return; }
@@ -614,7 +626,7 @@ document.addEventListener('click', e => {
   }
   if (!e.target.closest('#dock, #dock-pill') && !dockMenu.hidden) { dockMenu.hidden = true; dockBtn.setAttribute('aria-expanded', 'false'); wake(); }
   const close = e.target.closest('[data-close]');
-  if (close) { if (close.dataset.close === 'chat') closeChat(); if (close.dataset.close === 'offer') closeOffer(); if (close.dataset.close === 'stories') closeStories(); }
+  if (close) { if (close.dataset.close === 'chat') closeChat(); if (close.dataset.close === 'offer') closeOffer(); if (close.dataset.close === 'stories') closeStories(); if (close.dataset.close === 'booking') closeBooking(); }
 });
 function showComic() {
   comicAt = performance.now();
@@ -658,7 +670,7 @@ const emailOf = v => { const m = v.match(/[^\s@]+@[^\s@]+\.[^\s@]{2,}/); return 
 async function submitLead(offerId, contact, note) {
   try {
     const r = await fetch(LEAD_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(15000),
-      body: JSON.stringify({ offerId, contact, note: note.slice(0, 1900), key: crypto.randomUUID(), startedAt: openedAt, company_fax: '', page: 'new7' }) });
+      body: JSON.stringify({ offerId, contact, note: note.slice(0, 1900), key: crypto.randomUUID(), startedAt: openedAt, company_fax: '', page: 'new12' }) });
     const j = await r.json(); return r.ok && j.accepted === true;
   } catch { return false; }
 }
@@ -718,7 +730,47 @@ const engines = {
   live: (() => {
     // Existing public MCB widget identifiers (not an admin credential). Mirrors the provider's widget: send, then poll replies.
     const account = '625cd09c-4f5a-439a-ad55-379f6e056950', widget = window.CARELESS_SCOUT_WIDGET || 'careless-scout-staging', api = 'https://api.mychatbot.app';
-    let session = store.get('cl5-scout-session') || '', timer = 0, waiting = false, deadline = 0;
+    let session = store.get('cl5-scout-session') || '', timer = 0, waiting = false, deadline = 0, typingEl = null;
+    // Turns that save a lead run several CRM actions and can take ~60 s, so show Scout typing and wait up to 90 s.
+    const showTyping = () => { if (typingEl) return; typingEl = document.createElement('p'); typingEl.className = 'msg scout typing'; typingEl.innerHTML = '<i></i><i></i><i></i>'; log.append(typingEl); toBottom(); };
+    const hideTyping = () => { typingEl?.remove(); typingEl = null; };
+    // Message cap (the five-minute limit is for voice calls only). Nothing reaches MCB before the first message;
+    // the 20th carries [site: final] so Scout closes, and after its reply the chat locks with the booking and WhatsApp routes.
+    const MAX_SENT = 20;
+    let sent = +store.get('cl5-scout-sent') || 0, ended = store.get('cl5-scout-ended') === '1', endAfterReply = false;
+    const tag = () => sent >= MAX_SENT ? '\n\n[site: final]' : '';
+    // MCB's own moderation hands any message it flags as harassment to a human and Scout never answers (it isn't configurable).
+    // So insults aimed at Scout get Scout's three calm lines here, never reach MCB, and never ping Max. Complaints about
+    // someone else's tools ("our CRM is useless") don't match: the mild words only count when aimed at "you".
+    const RUDE_RE = /\b(?:you(?:'re| are)?|u r|ur|eres|sois)\W+(?:\w+\W+){0,2}?(?:useless|stupid|dumb|idiot|moron|retard\w*|pathetic|trash|garbage|in[uú]til|tont[oa]|idiota|imb[eé]cil|est[uú]pid[oa])|(?:^|\s)(?:ты|ти)\s+(?:\S+\s+){0,2}?(?:туп\S*|дебил|идиот|ідіот|дурн\S*)|\b(?:f+u+c+k+\s*(?:you|off|u)|f\W{1,4}k?\s*(?:you|off|yourself)|go\s+f\W*\w*\s+yourself|stfu|shut\s+up|bitch|asshole|dickhead|wanker|hijo de puta|gilipollas|que te den|vete a la mierda|c[aá]llate)\b|нахуй|пош[её]л\s+на|сука|бля[дт]|хуй|пизд/i;
+    let rude = +store.get('cl5-scout-rude') || 0, quiet = false;
+    // Moderation also takes self-harm messages away from Scout silently. Show a kind reply at once; the message still goes
+    // to MCB so the flagged chat reaches a person, and the "no reply" fallback stays quiet for it.
+    const DISTRESS_RE = /\b(?:kill myself|suicid\w*|want to die|don'?t want to (?:be alive|live)|end it all|hurt myself|self[- ]harm|quiero morir|no quiero vivir|matarme|suicidarme|quitarme la vida)\b|не хочу жить|хочу умереть|покончить с собой|суицид|не хочу жити|хочу померти/i;
+    const RUDE_LINES = [
+      () => L("Ha, I'll take that as a compliment. So, what does your business actually do?", 'Ja, me lo tomo como un cumplido. Entonces, ¿a qué se dedica tu negocio?'),
+      () => L("I'm only good for one thing: finding where a business loses time. Want to try that, or shall I let you go?", 'Solo sirvo para una cosa: encontrar dónde pierde tiempo un negocio. ¿Lo probamos o te dejo seguir?'),
+      () => L("I'll leave it there. If you ever want to look at your business, the booking button is on the page.", 'Lo dejo aquí. Si algún día quieres mirar tu negocio, el botón para reservar está en la página.'),
+    ];
+    function end(reason) {
+      if (ended && reason !== 'restore') return;
+      ended = true; store.set('cl5-scout-ended', '1'); endAfterReply = false;
+      chatInput.disabled = true; chatInput.placeholder = L('Chat ended', 'Chat terminado'); $('button', chatForm).disabled = true; setQuick([]);
+      if (reason === 'rude' || (reason === 'restore' && rude >= 3)) { if (reason === 'rude') track('scout_chat_end', { reason }); return; }
+      addLinkMsg(L("Thanks for the chat. Max takes it from here:", 'Gracias por la charla. Ahora sigue Maks:'), BOOKING, L('Book a call →', 'Reservar llamada →'));
+      addLinkMsg('', wa(), L('Or message Maks on WhatsApp →', 'O escribe a Maks por WhatsApp →'));
+      if (reason !== 'restore') track('scout_chat_end', { reason });
+    }
+    // Scout's replies are plain text; only the two approved routes become links.
+    const ROUTE_RE = /(https:\/\/(?:zcal\.co\/i\/O0g63S4u|wa\.me\/34641935207)\S*?)(?=[\s)»".,;!?]*(?:\s|$))/g;
+    function addReply(text) {
+      const p = addMsg('');
+      text.replace(/\[([^\]]*)\]\((https:\/\/[^)\s]+)\)/g, '$2').replace(/\*\*(.+?)\*\*/g, '$1').split(ROUTE_RE).forEach((part, i) => {
+        if (i % 2 === 0) { if (part) p.append(part); return; }
+        const a = document.createElement('a'); a.href = part; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = part.includes('zcal') ? L('Book a call', 'Reservar llamada') : 'WhatsApp'; a.style.color = 'var(--scout)'; p.append(a);
+      });
+      toBottom();
+    }
     const sid = () => { if (!session) { session = [...crypto.getRandomValues(new Uint8Array(15))].map(n => n.toString(16).padStart(2, '0')).join(''); store.set('cl5-scout-session', session); } return session; };
     const req = async (path, body) => {
       const r = await fetch(api + path, { method: body ? 'POST' : 'GET', headers: { 'Content-Type': 'application/json', Authorization: account + widget }, credentials: 'omit', cache: 'no-store', signal: AbortSignal.timeout(12000), ...(body ? { body: JSON.stringify(body) } : {}) });
@@ -726,17 +778,35 @@ const engines = {
     };
     const poll = async () => {
       clearTimeout(timer); if (chat.hidden && !waiting) return;
-      try { const r = await req(`/sw-replies/${account}/${widget}/${sid()}`); if (typeof r.message === 'string' && r.message.trim()) { const tmp = document.createElement('template'); tmp.innerHTML = r.message; addMsg(tmp.content.textContent.trim()); waiting = false; busy = false; } } catch {}
-      if (waiting && Date.now() > deadline) { waiting = false; busy = false; addLinkMsg(L("I'm slow right now. Message Maks directly?", 'Voy lento ahora mismo. ¿Escribes directamente a Maks?'), wa(), 'WhatsApp →'); }
+      try { const r = await req(`/sw-replies/${account}/${widget}/${sid()}`); if (typeof r.message === 'string' && r.message.trim()) { const tmp = document.createElement('template'); tmp.innerHTML = r.message; hideTyping(); addReply(tmp.content.textContent.trim()); waiting = false; busy = false; if (endAfterReply) end('messages'); } } catch {}
+      if (waiting && Date.now() > deadline && quiet) { waiting = false; busy = false; hideTyping(); }
+      if (waiting && Date.now() > deadline) { waiting = false; busy = false; hideTyping(); addLinkMsg(L("No reply from me this time. If you'd like a person, Maks is on WhatsApp:", 'Esta vez no tengo respuesta. Si prefieres hablar con una persona, Maks está en WhatsApp:'), wa(), 'WhatsApp →'); if (endAfterReply) end('messages'); }
       timer = setTimeout(poll, waiting ? 1500 : 5000);
     };
     return {
-      async start() { await scoutSays(L("Hey, I'm Scout. What does your business do, in a line?", 'Hola, soy Scout. ¿A qué se dedica tu negocio, en una frase?'), 200); poll(); },
-      async reply(text) {
-        busy = true; waiting = true; deadline = Date.now() + 45000;
-        try { await req(`/webhook/sw-widget/${account}/${widget}/${sid()}`, { action: 'my_chat_send', widget_id: widget, session: sid(), payload: { message: text, wp_context: location.origin + '/new7' } }); poll(); }
-        catch { waiting = false; busy = false; addLinkMsg(L("I couldn't reach my desk. Message Maks instead?", 'No consigo llegar a mi mesa. ¿Escribes a Maks?'), wa(text), 'WhatsApp →'); }
+      async start() {
+        await scoutSays(L("Hey, I'm Scout. What does your business do, in a few words?", 'Hola, soy Scout. ¿A qué se dedica tu negocio, en pocas palabras?'), 200);
+        if (ended) end('restore');
+        poll();
       },
+      async reply(text) {
+        if (ended) return;
+        if (RUDE_RE.test(text)) {
+          rude++; store.set('cl5-scout-rude', String(rude)); track('scout_rude', { n: rude });
+          busy = true; await scoutSays(RUDE_LINES[Math.min(rude, 3) - 1]()); busy = false;
+          if (rude >= 3) end('rude');
+          return;
+        }
+        quiet = DISTRESS_RE.test(text);
+        if (quiet) { track('scout_distress'); await scoutSays(L("I'm really sorry you're feeling this way. Please talk to someone right now: in Spain and the EU you can call 112, and in Spain 024 is a free, 24-hour line for anyone having thoughts of suicide.", 'Siento mucho que te sientas así. Por favor, habla con alguien ahora: en España y la UE puedes llamar al 112, y en España el 024 es una línea gratuita, 24 horas, para quien tiene pensamientos de suicidio.'), 200); }
+        sent++; store.set('cl5-scout-sent', String(sent));
+        const message = text + tag();
+        if (sent >= MAX_SENT) endAfterReply = true;
+        busy = true; waiting = true; deadline = Date.now() + (quiet ? 20000 : 90000); if (!quiet) showTyping();
+        try { await req(`/webhook/sw-widget/${account}/${widget}/${sid()}`, { action: 'my_chat_send', widget_id: widget, session: sid(), payload: { message, wp_context: location.origin + '/new12' } }); poll(); }
+        catch { waiting = false; busy = false; hideTyping(); addLinkMsg(L("I couldn't reach my desk. Message Maks instead?", 'No consigo llegar a mi mesa. ¿Escribes a Maks?'), wa(text), 'WhatsApp →'); }
+      },
+      _qa: { tag, state: () => ({ sent, ended }) },
     };
   })(),
 };
@@ -823,7 +893,7 @@ let storyIdx = 0, storyRaf = 0, storyLast = 0, storyElapsed = 0, storyPaused = f
 // One video element for every clip: once a tap has let it play with sound, iPhone keeps letting it.
 const storyVideo = document.createElement('video');
 storyVideo.playsInline = true; storyVideo.setAttribute('playsinline', ''); storyVideo.preload = 'auto'; storyVideo.disablePictureInPicture = true;
-const media = name => `${OWN}media/${name}`;
+const media = name => MEDIA + name;
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 const current = () => STORIES[storyIdx];
 const sv = (st, k) => (lang === 'es' && st.es && st.es[k]) || st[k];
@@ -968,11 +1038,17 @@ storyFrame.addEventListener('touchend', e => { if (e.changedTouches[0].clientY -
 $('#proof-open').addEventListener('click', e => openStories(0, e.currentTarget));
 
 /* ───────────────────────── Offers ───────────────────────── */
+function renderCapacity() {
+  const n = CAPACITY.perMonth;
+  $('#agent-cap').textContent = n
+    ? L(`We onboard ${n} businesses a month, so every one is built, tested and tuned by people, not a template.`, `Incorporamos ${n} negocios al mes, para que a cada uno lo construyan, prueben y ajusten personas, no una plantilla.`)
+    : L('We take on a few businesses a month, so every one is built, tested and tuned by people, not a template.', 'Incorporamos unos pocos negocios al mes, para que a cada uno lo construyan, prueben y ajusten personas, no una plantilla.');
+}
 const OFFERS = {
-  look: ['The 5-second test', "Send your website. We'll show you what a stranger understands in five seconds, and what they miss.",
-    'El test de 5 segundos', 'Envíanos tu web. Te enseñamos qué entiende un desconocido en cinco segundos, y qué se le escapa.'],
-  leak: ['The missed-enquiry check', "Tell us how enquiries reach you. We'll show who waited, who left, and roughly what they were worth.",
-    '¿Cuántas consultas pierdes?', 'Cuéntanos cómo te llegan las consultas. Te enseñamos quién esperó, quién se fue y, más o menos, cuánto valían.'],
+  look: ['The 5-second test', "Paste your website. In a few seconds you'll see what a stranger meets first, and what's missing.",
+    'El test de 5 segundos', 'Pega tu web. En unos segundos verás qué encuentra primero un desconocido, y qué falta.'],
+  leak: ['The missed-enquiry check', "Move the sliders for a rough number now. Send it over and we'll find the real one.",
+    '¿Cuántas consultas pierdes?', 'Mueve los controles y tendrás una cifra aproximada ya. Envíanosla y buscamos la real.'],
   shopper: ['The mystery-shopper run', "We pose as a new customer, from first enquiry to after the sale, and show you exactly where we'd have walked away.",
     'El cliente misterioso', 'Nos hacemos pasar por un cliente nuevo, de la primera consulta a la posventa, y te enseñamos justo dónde nos habríamos ido.'],
   needs_me: ['The "does it need me?" check', "A few questions, one page back: everything that still can't happen without you, and what it costs you in hours.",
@@ -985,9 +1061,17 @@ $$('[data-offer]').forEach(b => b.addEventListener('click', () => openOffer(b.da
 function openOffer(id, opener) {
   offerId = id; offerOpener = opener; openedAt = Date.now();
   const [title, desc] = offerText(id); $('#offer-title').textContent = title; $('#offer-desc').textContent = desc;
-  offerForm.reset(); offerForm.hidden = false; offerStatus.textContent = ''; offerStatus.className = 'offer-status';
+  offerForm.reset(); offerStatus.textContent = ''; offerStatus.className = 'offer-status';
+  // The 5-second test runs right here first; the missed-enquiry check shows a live estimate above the form.
+  checkForm.hidden = id !== 'look'; calc.hidden = id !== 'leak'; checkOut.replaceChildren(); lastCheck = null; checkForm.reset();
+  offerForm.hidden = id === 'look'; skipLine.hidden = id !== 'look';
+  skipBtn.textContent = L('Skip the check, just send it to Maks', 'Sáltate la comprobación y envíasela a Maks');
+  $('#offer-contact-label').textContent = id === 'look' ? L('Want my full read? Your email or phone', '¿Quieres mi lectura completa? Tu email o teléfono')
+    : id === 'leak' ? L('Want the real number? Your email or phone', '¿Quieres la cifra real? Tu email o teléfono')
+    : L('Website, email or phone', 'Web, email o teléfono');
+  if (id === 'leak') calcUpdate();
   $('#offer-wa').href = wa(L(`Hi Maks, I'd like ${title}.`, `Hola Maks, me interesa: ${title}.`));
-  offerEl.hidden = false; modal++; setTimeout(() => offerContact.focus({ preventScroll: true }), 60);
+  offerEl.hidden = false; modal++; setTimeout(() => (id === 'look' ? checkUrl : id === 'leak' ? $('#calc-enq') : offerContact).focus({ preventScroll: true }), 60);
   track('offer_open', { offer_id: id });
 }
 function closeOffer() { if (offerEl.hidden) return; offerEl.hidden = true; modal = Math.max(0, modal - 1); offerOpener?.focus({ preventScroll: true }); }
@@ -1001,25 +1085,195 @@ offerForm.addEventListener('submit', async e => {
   offerContact.setCustomValidity(ok ? '' : L('Add a website, email or phone number.', 'Añade una web, un email o un teléfono.'));
   if (!offerContact.reportValidity()) return;
   const btn = $('button[type="submit"]', offerForm); btn.disabled = true; offerStatus.textContent = L('Sending…', 'Enviando…');
-  const sent = await submitLead(offerId, v, $('#offer-note').value.trim());
+  const extra = offerId === 'look' && lastCheck ? `\n5-second check: ${lastCheck.url} scored ${lastCheck.score}/${lastCheck.total}; missing: ${lastCheck.checks.filter(c => !c.ok).map(c => c.id).join(', ') || 'nothing'}`
+    : offerId === 'leak' ? `\nCalculator: ${calcSummary()}` : '';
+  const sent = await submitLead(offerId, v, ($('#offer-note').value.trim() + extra).trim());
   btn.disabled = false;
   if (sent) { offerForm.hidden = true; offerStatus.textContent = L("Got it. We'll be in touch soon.", 'Recibido. Te escribimos pronto.'); offerStatus.className = 'offer-status ok'; track('offer_submit', { offer_id: offerId }); }
   else offerStatus.textContent = L("That didn't send. Try again, or use WhatsApp below.", 'No se ha enviado. Inténtalo de nuevo o usa WhatsApp.');
 });
 offerContact.addEventListener('input', () => offerContact.setCustomValidity(''));
 
+// The 5-second test, run live: /api/site-check fetches the homepage and checks what a stranger meets first.
+const checkForm = $('#sitecheck'), checkUrl = $('#sitecheck-url'), checkOut = $('#sitecheck-out');
+const skipLine = el('p', 'offer-skip'), skipBtn = el('button', '', '');
+skipBtn.type = 'button'; skipLine.append(skipBtn); checkForm.after(skipLine);
+skipBtn.addEventListener('click', () => { offerForm.hidden = false; skipLine.hidden = true; offerContact.focus(); });
+let lastCheck = null;
+const secs = ms => (ms / 1000).toFixed(1);
+const CHECKS = {
+  https: [['Secure connection (https)', 'Conexión segura (https)'], ['Not secure (no https)', 'No es segura (sin https)']],
+  speed: [[ms => `Opens fast (${secs(ms)} s)`, ms => `Abre rápido (${secs(ms).replace('.', ',')} s)`], [ms => `Slow to open (${secs(ms)} s)`, ms => `Tarda en abrir (${secs(ms).replace('.', ',')} s)`]],
+  title: [['A clear page title', 'Un título de página claro'], ['Page title missing, too short or too long', 'Título de página ausente, muy corto o muy largo']],
+  headline: [['One clear main headline', 'Un titular principal claro'], ['No clear main headline', 'Sin un titular principal claro']],
+  description: [['Says what you do in Google results', 'Dice qué haces en los resultados de Google'], ['No description for Google results', 'Sin descripción para los resultados de Google']],
+  mobile: [['Set up for phones', 'Preparada para móviles'], ['Not set up for phones', 'No está preparada para móviles']],
+  contact: [['Easy to contact (phone, email, WhatsApp or a form)', 'Fácil de contactar (teléfono, email, WhatsApp o formulario)'], ['No quick way to contact you', 'Sin una forma rápida de contactarte']],
+  action: [['A clear next step (book, call, quote…)', 'Un siguiente paso claro (reservar, llamar, presupuesto…)'], ['No clear next step for the visitor', 'Sin un siguiente paso claro para el visitante']],
+  preview: [['Looks good when shared (preview image)', 'Se ve bien al compartirla (imagen de vista previa)'], ['No preview image when shared', 'Sin imagen de vista previa al compartirla']],
+  structured: [['Readable by Google and AI assistants', 'Legible para Google y los asistentes de IA'], ['Not marked up for Google and AI assistants', 'Sin datos estructurados para Google y la IA']],
+};
+const checkLabel = c => { const t = CHECKS[c.id]?.[c.ok ? 0 : 1]; if (!t) return c.id; const x = L(t[0], t[1]); return typeof x === 'function' ? x(c.detail) : x; };
+checkForm.addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = $('button', checkForm); btn.disabled = true;
+  checkOut.replaceChildren(el('p', 'sc-wait', L('Looking at it like a stranger would…', 'Mirándola como lo haría un desconocido…')));
+  let j = null;
+  try {
+    const r = await fetch('/api/site-check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: checkUrl.value.trim() }), signal: AbortSignal.timeout(20000) });
+    j = await r.json();
+  } catch {}
+  btn.disabled = false;
+  if (!j?.ok) {
+    checkOut.replaceChildren(el('p', 'sc-error', j?.error === 'url' ? L("That doesn't look like a website address.", 'Eso no parece la dirección de una web.')
+      : j?.error === 'busy' ? L('Too many checks for now. Try again in a few minutes.', 'Demasiadas comprobaciones por ahora. Prueba en unos minutos.')
+      : L("We couldn't open that site. Check the address, or just send it to Maks below.", 'No hemos podido abrir esa web. Revisa la dirección o envíasela a Maks abajo.')));
+    offerForm.hidden = false; skipLine.hidden = true; track('site_check', { ok: false, error: j?.error || 'network' });
+    return;
+  }
+  lastCheck = j;
+  const seen = (j.checks.find(c => c.id === 'headline' && c.detail)?.detail || j.checks.find(c => c.id === 'title')?.detail || '').slice(0, 120);
+  const score = el('p', 'sc-score'); score.append(el('b', '', `${j.score}/${j.total}`), L(' basics in place', ' básicos en orden'));
+  const list = el('ul', 'sc-list');
+  [...j.checks].sort((a, b) => a.ok - b.ok).forEach(c => list.append(el('li', c.ok ? 'ok' : 'no', checkLabel(c))));
+  const nodes = [score];
+  if (seen) { const p = el('p', 'sc-seen', L('A stranger reads first: ', 'Lo primero que lee un desconocido: ')); p.append(el('q', '', seen)); nodes.push(p); }
+  nodes.push(list);
+  checkOut.replaceChildren(...nodes);
+  offerForm.hidden = false; skipLine.hidden = true;
+  track('site_check', { ok: true, score: j.score });
+});
+
+// The missed-enquiry calculator: a rough monthly figure from four inputs, before anyone sends anything.
+const calc = $('#calc'), calcIn = id => Math.max(0, Number($('#calc-' + id).value) || 0);
+const euros = n => new Intl.NumberFormat(lang === 'es' ? 'es-ES' : 'en-GB', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+const calcMonthly = () => Math.round(calcIn('enq') * 52 / 12 * calcIn('miss') / 100 * calcIn('win') / 100 * calcIn('value'));
+const calcSummary = () => `${calcIn('enq')} enquiries/week, ${calcIn('miss')}% late or missed, €${calcIn('value')} average sale, ${calcIn('win')}% normally won → about ${euros(calcMonthly())}/month`;
+function calcUpdate() {
+  $('#calc-miss-out').textContent = calcIn('miss') + '%'; $('#calc-win-out').textContent = calcIn('win') + '%';
+  $('#calc-total').textContent = euros(calcMonthly());
+}
+calc.addEventListener('input', calcUpdate);
+
+/* ───────────────────────── Booking ───────────────────────── */
+// Our own picker on Maks's Google Calendar (/api/booking): days, times in the visitor's own time zone, a short form,
+// and Google sends the invite with the Meet link. If the API isn't connected (or fails), zcal's embed loads instead.
+const bookingEl = $('#booking'), bookingFrame = $('#booking-frame'), bk = $('#bk');
+let bookingOpener = null, bkLoad = null, bkSlots = [], bkDay = '', bkPick = null, bkOpenedAt = 0;
+const visitorTZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return ''; } })();
+const dayKey = d => d.toLocaleDateString('en-CA'); // YYYY-MM-DD in the visitor's zone
+const fmt = (d, o) => d.toLocaleString(lang === 'es' ? 'es-ES' : undefined, o);
+function zcalFallback() {
+  bk.hidden = true; bookingFrame.hidden = false; $('.booking-alt', bookingEl).hidden = false;
+  if (bookingFrame.firstChild) return;
+  const f = document.createElement('iframe');
+  f.title = L('Pick a time with Maks', 'Elige una hora con Maks');
+  f.src = BOOKING_EMBED + (BOOKING_EMBED.includes('?') ? '&' : '?') + 'embed=1&embedType=inline&embedVersion=1.0.2&embedDomain=' + location.hostname;
+  bookingFrame.append(f);
+}
+const fetchSlots = () => fetch('/api/booking', { cache: 'no-store' }).then(r => r.json()).catch(() => ({}));
+function bkRender() {
+  const days = new Map();
+  bkSlots.forEach(t => { const d = new Date(t), k = dayKey(d); if (!days.has(k)) days.set(k, []); days.get(k).push(d); });
+  if (!days.size) return zcalFallback();
+  if (!days.has(bkDay)) bkDay = days.keys().next().value;
+  $('#bk-days').replaceChildren(...[...days].map(([k, list]) => {
+    const d = list[0], b = el('button', 'bk-day'); b.type = 'button'; b.dataset.day = k; b.setAttribute('aria-pressed', String(k === bkDay));
+    b.append(el('span', '', fmt(d, { weekday: 'short' })), el('b', '', fmt(d, { day: 'numeric' })), el('small', '', fmt(d, { month: 'short' })));
+    return b;
+  }));
+  $('#bk-times').replaceChildren(...days.get(bkDay).map(d => { const b = el('button', 'bk-time', fmt(d, { hour: 'numeric', minute: '2-digit' })); b.type = 'button'; b.dataset.t = d.toISOString(); return b; }));
+  $('#bk-tz').textContent = L(`Times in your time zone${visitorTZ ? ` (${visitorTZ.replace(/_/g, ' ')})` : ''}. 30 minutes on Google Meet.`, `Horas en tu zona horaria${visitorTZ ? ` (${visitorTZ.replace(/_/g, ' ')})` : ''}. 30 minutos por Google Meet.`);
+}
+function bkStep(step) { $('#bk-pick').hidden = step !== 'pick'; $('#bk-form').hidden = step !== 'form'; $('#bk-done').hidden = step !== 'done'; }
+async function openBooking(opener) {
+  bookingOpener = opener;
+  bookingEl.hidden = false; modal++; setTimeout(() => $('.booking-close', bookingEl).focus({ preventScroll: true }), 60);
+  track('booking_open');
+  if (!$('#bk-done').hidden) return; // already booked in this visit: keep showing the confirmation
+  bkLoad ||= fetchSlots();
+  const j = await bkLoad;
+  if (!j.configured || !Array.isArray(j.slots)) { bkLoad = null; return zcalFallback(); }
+  bkSlots = j.slots; bk.hidden = false; bookingFrame.hidden = true; $('.booking-alt', bookingEl).hidden = true;
+  bkRender(); bkStep('pick');
+}
+bk.addEventListener('click', e => {
+  const day = e.target.closest('.bk-day'), time = e.target.closest('.bk-time');
+  if (day) { bkDay = day.dataset.day; bkRender(); return; }
+  if (time) {
+    bkPick = new Date(time.dataset.t); bkOpenedAt = Date.now();
+    const end = new Date(+bkPick + 30 * 60000);
+    $('#bk-when').textContent = `${fmt(bkPick, { weekday: 'long', day: 'numeric', month: 'long' })} · ${fmt(bkPick, { hour: 'numeric', minute: '2-digit' })}–${fmt(end, { hour: 'numeric', minute: '2-digit' })}`;
+    const care = $('#bk-care'); if (!care.value && finalInput.value.trim()) care.value = finalInput.value.trim();
+    $('#bk-status').textContent = ''; bkStep('form'); setTimeout(() => $('#bk-name').focus({ preventScroll: true }), 40);
+    track('booking_time');
+  }
+  if (e.target.closest('#bk-change')) bkStep('pick');
+});
+$('#bk-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.currentTarget, email = $('#bk-email');
+  email.setCustomValidity(isEmail(email.value) ? '' : L('Add your email.', 'Añade tu email.'));
+  if (!f.reportValidity()) return;
+  const btn = $('button[type="submit"]', f), status = $('#bk-status');
+  btn.disabled = true; status.className = 'bk-status'; status.textContent = L('Booking…', 'Reservando…');
+  let j = {}, code = 0;
+  try {
+    const r = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      start: bkPick.toISOString(), name: $('#bk-name').value, email: email.value.trim(), site: $('#bk-site').value, care: $('#bk-care').value,
+      enquiries: $('#bk-enq').value, lang, startedAt: bkOpenedAt, company_fax: $('.honey', f).value }) });
+    code = r.status; j = await r.json();
+  } catch {}
+  btn.disabled = false;
+  if (j.ok) {
+    $('#bk-done-when').textContent = $('#bk-when').textContent;
+    $('#bk-done-mail').textContent = L(`The invite with the Google Meet link is on its way to ${email.value.trim()}.`, `La invitación con el enlace de Google Meet va de camino a ${email.value.trim()}.`);
+    bkStep('done'); track('booking_done');
+  } else if (code === 409) {
+    status.textContent = L('Someone just took that time. Pick another one.', 'Alguien acaba de coger esa hora. Elige otra.');
+    bkLoad = fetchSlots(); const n = await bkLoad; if (Array.isArray(n.slots)) { bkSlots = n.slots; bkRender(); } setTimeout(() => bkStep('pick'), 1600);
+  } else status.textContent = code === 429 ? L('Too many tries. Try again in a while, or use WhatsApp.', 'Demasiados intentos. Prueba más tarde o usa WhatsApp.')
+    : L("That didn't go through. Try again, or message Maks on WhatsApp.", 'No ha funcionado. Inténtalo de nuevo o escribe a Maks por WhatsApp.');
+});
+$('#bk-email').addEventListener('input', e => e.target.setCustomValidity(''));
+function closeBooking() { if (bookingEl.hidden) return; bookingEl.hidden = true; modal = Math.max(0, modal - 1); bookingOpener?.focus({ preventScroll: true }); }
+bookingEl.addEventListener('click', e => { if (e.target === bookingEl) closeBooking(); });
+bookingEl.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="https://zcal.co/"]');
+  if (!a || a.closest('#booking')) return;
+  track('booking_click');
+  if (e.metaKey || e.ctrlKey || e.shiftKey) return; // they asked for a new tab
+  e.preventDefault(); openBooking(a);
+});
+
+/* The "first AI hire": an email for the details, then nurture. Not a sale on the spot. */
+const hire = $('#hire'), hireEmail = $('#hire-email'), hireStatus = $('#hire-status');
+hireEmail.addEventListener('focus', () => { openedAt = Math.min(openedAt, Date.now() - 1000); }, { once: true });
+hireEmail.addEventListener('input', () => hireEmail.setCustomValidity(''));
+hire.addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = hireEmail.value.trim();
+  hireEmail.setCustomValidity(isEmail(v) ? '' : L('Add your email.', 'Añade tu email.'));
+  if (!hireEmail.reportValidity()) return;
+  const btn = $('button', hire); btn.disabled = true; hireStatus.className = 'hire-status'; hireStatus.textContent = L('Sending…', 'Enviando…');
+  const sent = await submitLead('agent', v, `Wants the details: first AI hire, 14 days free. Language: ${lang}`);
+  btn.disabled = false;
+  if (sent) { $('.hire-row', hire).hidden = true; hireStatus.className = 'hire-status ok'; hireStatus.textContent = L(`Got it. We'll send the details to ${v}.`, `Recibido. Te enviaremos los detalles a ${v}.`); track('hire_submit'); }
+  else hireStatus.textContent = L("That didn't go through. Try again in a moment.", 'No ha funcionado. Prueba otra vez en un momento.');
+});
+
 /* ───────────────────────── Final ───────────────────────── */
 // A slow, seamless colony loop behind the last question; it only loads and plays while that screen is in view.
 const finalLoop = $('#final-loop');
 new IntersectionObserver(([e]) => {
   if (e.isIntersecting && !motion.matches) {
-    if (!finalLoop.getAttribute('src')) { finalLoop.src = OWN + ((small || light) ? 'media/final-loop-480.mp4' : 'media/final-loop-624.mp4'); finalLoop.preload = 'auto'; }
+    if (!finalLoop.getAttribute('src')) { finalLoop.src = MEDIA + ((small || light) ? 'final-loop-480.mp4' : 'final-loop-624.mp4'); finalLoop.preload = 'auto'; }
     finalLoop.play().catch(() => {});
   } else finalLoop.pause();
 }, { rootMargin: '30% 0px' }).observe(finalSec);
 
 const finalInput = $('#final-input'), finalTalk = $('#final-talk');
-let talkTimer = 0;
 // Rotating placeholder: short enough for one line on a phone.
 (() => {
   const ideas = () => L(['repeating myself…', 'chasing quotes…', 'answering the same emails…', 'being the bottleneck…', 'posting on social…'],
@@ -1027,10 +1281,72 @@ let talkTimer = 0;
   let i = 0;
   setInterval(() => { if (document.activeElement === finalInput || finalInput.value || motion.matches) return; i = (i + 1) % 5; finalInput.placeholder = ideas()[i]; }, 2600);
 })();
-finalInput.addEventListener('focus', () => { clearTimeout(talkTimer); talkTimer = setTimeout(() => finalTalk.hidden = false, 1000); });
 finalInput.addEventListener('input', () => { finalInput.style.height = 'auto'; finalInput.style.height = Math.min(160, finalInput.scrollHeight) + 'px'; });
 finalInput.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#final-form').requestSubmit(); } });
 finalTalk.addEventListener('click', () => { track('final_talk'); startCall(); });
+
+// "One thing to care less about": a short email every two weeks, through the same lead intake.
+const letter = $('#letter'), letterEmail = $('#letter-email'), letterStatus = $('#letter-status'), letterOpen = $('#letter-open');
+letterEmail.addEventListener('focus', () => { openedAt = Math.min(openedAt, Date.now() - 1000); }, { once: true });
+letterOpen.addEventListener('click', () => {
+  letterOpen.hidden = true; letterOpen.setAttribute('aria-expanded', 'true'); $('#letter-row').hidden = false;
+  letterEmail.focus({ preventScroll: true }); track('letter_open');
+});
+letter.addEventListener('submit', async e => {
+  e.preventDefault();
+  const v = letterEmail.value.trim();
+  letterEmail.setCustomValidity(isEmail(v) ? '' : L('Add your email.', 'Añade tu email.'));
+  if (!letterEmail.reportValidity()) return;
+  const btn = $('button', letter); btn.disabled = true; letterStatus.className = 'letter-status'; letterStatus.textContent = L('Sending…', 'Enviando…');
+  const sent = await submitLead('letter', v, `Language: ${lang}`);
+  btn.disabled = false;
+  if (sent) { $('#letter-row').hidden = true; letterStatus.className = 'letter-status ok'; letterStatus.textContent = L("You're in. First one soon.", 'Dentro. El primero llega pronto.'); track('letter_join'); }
+  else letterStatus.textContent = L("That didn't go through. Try again in a moment.", 'No ha funcionado. Prueba otra vez en un momento.');
+});
+letterEmail.addEventListener('input', () => letterEmail.setCustomValidity(''));
+
+// Like button: the real count, always shown next to the heart. A tap fills the heart and bursts a few small ones.
+const likeBtn = $('#like'), likeCount = $('#like-count'), likeLabelEl = $('#like-label');
+// The chip carries its own words: an invitation before the tap, a thank-you right after, then just the heart and count.
+let labelTimer = 0;
+function likeWords(state) {
+  likeLabelEl.textContent = state === 'ask' ? L('Liked the ride?', '¿Te ha gustado?') : state === 'thanks' ? L('Thank you!', '¡Gracias!') : '';
+  likeBtn.classList.toggle('worded', state !== 'none');
+}
+let likes = null;
+const showLikes = n => { if (typeof n !== 'number') return; likes = n; likeCount.textContent = n.toLocaleString(lang === 'es' ? 'es-ES' : 'en-GB'); likeLabel(); };
+const likeLabel = () => {
+  const n = typeof likes === 'number' ? likes : null;
+  const a = liked() ? L('You liked this site. Thank you', 'Te ha gustado esta web. Gracias') : L('Like this site', 'Me gusta esta web');
+  likeBtn.setAttribute('aria-label', n === null ? a : a + L(`. ${n} likes so far`, `. ${n} hasta ahora`)); likeBtn.title = a;
+};
+function likeBurst() {
+  if (motion.matches) return;
+  const heart = $('.like-heart', likeBtn);
+  for (let i = 0; i < 9; i++) {
+    const p = el('i', 'like-spark'); const a = (i / 9) * Math.PI * 2 + Math.random() * .4, r = 17 + Math.random() * 11;
+    p.style.setProperty('--x', (Math.cos(a) * r).toFixed(1) + 'px'); p.style.setProperty('--y', (Math.sin(a) * r - 4).toFixed(1) + 'px');
+    p.style.setProperty('--s', (.5 + Math.random() * .6).toFixed(2)); p.style.animationDelay = (Math.random() * 60).toFixed(0) + 'ms';
+    heart.append(p); setTimeout(() => p.remove(), 900);
+  }
+}
+const liked = () => { try { return localStorage.getItem('cl-liked') === '1'; } catch { return false; } };
+if (liked()) likeBtn.setAttribute('aria-pressed', 'true');
+likeLabel(); likeWords(liked() ? 'none' : 'ask');
+new IntersectionObserver(([e], obs) => {
+  if (!e.isIntersecting) return; obs.disconnect();
+  fetch('/api/likes').then(r => r.json()).then(j => showLikes(j.count)).catch(() => {});
+}).observe(likeBtn);
+likeBtn.addEventListener('click', async () => {
+  if (liked()) return;
+  likeBtn.setAttribute('aria-pressed', 'true'); likeBtn.classList.remove('pop'); void likeBtn.offsetWidth; likeBtn.classList.add('pop'); likeBurst();
+  if (typeof likes === 'number') showLikes(likes + 1);
+  try { localStorage.setItem('cl-liked', '1'); } catch {}
+  likeLabel(); likeWords('thanks');
+  clearTimeout(labelTimer); labelTimer = setTimeout(() => likeWords('none'), 2600);
+  track('like');
+  try { const j = await (await fetch('/api/likes', { method: 'POST' })).json(); if (typeof j.count === 'number' && j.count > (likes || 0)) showLikes(j.count); } catch {}
+});
 $('#final-form').addEventListener('submit', e => {
   e.preventDefault(); const t = finalInput.value.trim(); if (!t) { finalInput.focus(); return; }
   track('final_submit');
@@ -1061,6 +1377,7 @@ function applyLang() {
   if (!root.classList.contains('begun')) gateStatus.textContent = gateDone ? L('Schedule cleared.', 'Agenda despejada.') : greet();
   if (encTyped) $$('.enc-line', enc).forEach(l => l.textContent = l.dataset.type);
   root.classList.remove('i18n-wait');
+  likeLabel(); renderCapacity(); if (!liked()) likeWords('ask');
   layout(); wake();
 }
 langBtn.addEventListener('click', () => {
@@ -1077,5 +1394,5 @@ applyLang();
 addEventListener('load', () => { layout(); wake(); });
 setInterval(() => { if (!document.hidden && root.classList.contains('begun')) wake(); }, 450);
 if (document.fonts) document.fonts.ready.then(layout);
-window.CL5 = { film: filmKey, rests: () => rests, layout, hold, decide, startCall, openChat, openOffer, state: () => ({ scoutState, held, modal, u: (scrollY - journeyTop) / H, t: vTime }) };
+window.CL5 = { film: filmKey, rests: () => rests, layout, hold, decide, startCall, openChat, openOffer, scout: engine, state: () => ({ scoutState, held, modal, u: (scrollY - journeyTop) / H, t: vTime }) };
 })();

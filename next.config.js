@@ -2,16 +2,10 @@
 const nextConfig = {
   async headers() {
     return [
-      { source: "/new7", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new8", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new9", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new10", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/new12", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/careless/new12/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/new11", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new11/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new10/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new9/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new8/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new7/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/shared/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
     ];
   },
@@ -21,24 +15,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
+        source: "/new12",
+        destination: "/careless/new12/index.html",
+      },
+      {
         source: "/new11",
         destination: "/careless/new11/index.html",
-      },
-      {
-        source: "/new10",
-        destination: "/careless/new10/index.html",
-      },
-      {
-        source: "/new9",
-        destination: "/careless/new9/index.html",
-      },
-      {
-        source: "/new8",
-        destination: "/careless/new8/index.html",
-      },
-      {
-        source: "/new7",
-        destination: "/careless/new7/index.html",
       },
       {
         source: "/projects/aelia",

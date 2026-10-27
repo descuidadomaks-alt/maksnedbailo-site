@@ -5,7 +5,7 @@
 
 /* ───────────────────────── Config ───────────────────────── */
 const BASE = '/careless/shared/'; // shared film, avatar and fonts
-const MEDIA = '/careless/new7/media/'; // /new11 reuses /new7's media (frozen) instead of a second copy
+const MEDIA = '/careless/shared/media/'; // comic, final loop, stories, Maks's avatar
 const LOOP = { src: '/careless/video/v1/1_loop.mp4' };
 const WHATSAPP = '34641935207';
 const BOOKING = 'https://zcal.co/i/O0g63S4u';
