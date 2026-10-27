@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   let data;
   try { data = await request.json(); } catch { return reply({ accepted: false }, 400); }
   const { offerId, contact, note = '', key, startedAt, company_fax, page: rawPage } = data || {};
-  const page = rawPage === 'new6' ? 'new6' : 'new5'; // /new6 shares this intake
+  const page = rawPage === 'new6' || rawPage === 'new7' ? rawPage : 'new5'; // /new6 and /new7 share this intake
   if (typeof offerId !== 'string' || !Object.hasOwn(offers, offerId) || typeof contact !== 'string' || contact.length > 320 || typeof note !== 'string' || note.length > 2000 || typeof key !== 'string' || !/^[a-f0-9-]{36}$/i.test(key) || typeof startedAt !== 'number' || Date.now() - startedAt < 700 || Date.now() - startedAt > 86400000 || company_fax) return reply({ accepted: false }, 400);
   const value = contact.trim();
   const kind = kindOf(value);
