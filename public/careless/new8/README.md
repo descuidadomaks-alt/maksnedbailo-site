@@ -1,8 +1,8 @@
 # /new8
 
-Buildless page served by the rewrite `/new8 → /careless/new8/index.html` (next.config.js). noindex. It reuses /new5's film, fonts and Scout avatar (`BASE`); its own media (`OWN`) is the comic panels, the final-screen loop, the client story videos and Maks's avatar. /new5 and /new6 stay untouched.
+Buildless page served by the rewrite `/new8 → /careless/new8/index.html` (next.config.js). noindex. It reuses /new5's film, fonts and Scout avatar (`BASE`); its media (`MEDIA`: the comic panels, the final-screen loop, the client story videos and Maks's avatar) is read from `/careless/new7/media/`, which is frozen, instead of keeping a second copy (the repo is already ~420 MB of public files). /new5 and /new6 stay untouched.
 
-Files: `index.html`, `new8.css`, `new8.js` (readable, no build step), `es.js` (Spanish), `media/`, `fonts/`.
+Files: `index.html`, `new8.css`, `new8.js` (readable, no build step), `es.js` (Spanish), `fonts/`.
 
 ## Languages
 English and Spanish (Spain, tú). The header button (ES/EN, also on the gate) switches in place and is remembered in localStorage `cl-lang`; `?lang=es` / `?lang=en` forces one; otherwise a Spanish browser gets Spanish.
@@ -50,9 +50,9 @@ On the last screen the corner Scout steps aside (`.dock.away`), since "Rather ta
 A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), past the last one it carries on to "Say it once".
 
 ## Comic
-`media/comic-*.webp` are print-style treatments of the HQ and Scout stills (halftone + ink). Replace with drawn comic art when available, same size (640×545).
+`/careless/new7/media/comic-*.webp` (shared with /new7) are print-style treatments of the HQ and Scout stills (halftone + ink). Replace with drawn comic art when available, same size (640×545).
 
 ## Content slots still empty
 - Maks video in "Say it once" (`.human-video` is `hidden` and `.human-inner` has `no-video`; remove both when the video is in).
 - Client logos and brand names for the written reviews.
-- Comic images use crops of the existing HQ and Scout stills (`media/comic-*.webp`), replace with the new art when ready.
+- Comic images use crops of the existing HQ and Scout stills (`/careless/new7/media/comic-*.webp`), replace with the new art when ready.

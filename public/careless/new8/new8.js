@@ -5,7 +5,7 @@
 
 /* ───────────────────────── Config ───────────────────────── */
 const BASE = '/careless/new5/'; // shared film, avatar and fonts
-const OWN = '/careless/new8/';
+const MEDIA = '/careless/new7/media/'; // /new8 reuses /new7's media (frozen) instead of a second copy
 const LOOP = { src: '/careless/video/v1/1_loop.mp4' };
 const WHATSAPP = '34641935207';
 const BOOKING = 'https://zcal.co/carelessmaks/ai-map';
@@ -826,7 +826,7 @@ let storyIdx = 0, storyRaf = 0, storyLast = 0, storyElapsed = 0, storyPaused = f
 // One video element for every clip: once a tap has let it play with sound, iPhone keeps letting it.
 const storyVideo = document.createElement('video');
 storyVideo.playsInline = true; storyVideo.setAttribute('playsinline', ''); storyVideo.preload = 'auto'; storyVideo.disablePictureInPicture = true;
-const media = name => `${OWN}media/${name}`;
+const media = name => MEDIA + name;
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 const current = () => STORIES[storyIdx];
 const sv = (st, k) => (lang === 'es' && st.es && st.es[k]) || st[k];
@@ -1016,7 +1016,7 @@ offerContact.addEventListener('input', () => offerContact.setCustomValidity(''))
 const finalLoop = $('#final-loop');
 new IntersectionObserver(([e]) => {
   if (e.isIntersecting && !motion.matches) {
-    if (!finalLoop.getAttribute('src')) { finalLoop.src = OWN + ((small || light) ? 'media/final-loop-480.mp4' : 'media/final-loop-624.mp4'); finalLoop.preload = 'auto'; }
+    if (!finalLoop.getAttribute('src')) { finalLoop.src = MEDIA + ((small || light) ? 'final-loop-480.mp4' : 'final-loop-624.mp4'); finalLoop.preload = 'auto'; }
     finalLoop.play().catch(() => {});
   } else finalLoop.pause();
 }, { rootMargin: '30% 0px' }).observe(finalSec);
