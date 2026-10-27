@@ -4,7 +4,7 @@
 'use strict';
 
 /* ───────────────────────── Config ───────────────────────── */
-const BASE = '/careless/new5/'; // shared film, avatar and fonts
+const BASE = '/careless/shared/'; // shared film, avatar and fonts
 const MEDIA = '/careless/new7/media/'; // /new8 reuses /new7's media (frozen) instead of a second copy
 const LOOP = { src: '/careless/video/v1/1_loop.mp4' };
 const WHATSAPP = '34641935207';
@@ -25,7 +25,7 @@ const FILMS = {
     hold: 23.85, scoutSide: 'right',
   },
   v4: {
-    src720: '/careless/new4/media/film-720-intra.mp4', src540: '/careless/new4/media/film-540-intra.mp4', last: '/careless/video/film-v4/film-last.webp',
+    src720: '/careless/shared/media/film-720-intra.mp4', src540: '/careless/shared/media/film-540-intra.mp4', last: '/careless/video/film-v4/film-last.webp',
     duration: 45.866667,
     map: [[0,0],[0.9,2.2],[2.1,6.8],[2.9,9.6],[4.1,15.0],[5.0,20.6],[6.6,27.2],[7.3,29.3],[8.7,34.8],[9.9,39.7],[10.8,42.9],[12.0,45.8],[12.7,45.8]],
     captions: { view:[2.8,7.1], takes:[10.0,15.2], jobs:[21.3,27.4], colony:[29.4,35.0], scout:[35.4,39.7], follow:[40.1,43.1], hq:[43.4,99] },

@@ -2,17 +2,11 @@
 const nextConfig = {
   async headers() {
     return [
-      { source: "/new3", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new4", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new5", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/new6", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/new7", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/new8", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new8/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new7/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new6/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new5/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
-      { source: "/careless/new4/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/careless/shared/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
     ];
   },
   // Proxy Connecto API through our own domain so the browser makes
@@ -27,22 +21,6 @@ const nextConfig = {
       {
         source: "/new7",
         destination: "/careless/new7/index.html",
-      },
-      {
-        source: "/new6",
-        destination: "/careless/new6/index.html",
-      },
-      {
-        source: "/new5",
-        destination: "/careless/new5/index.html",
-      },
-      {
-        source: "/new4",
-        destination: "/careless/new4/index.html",
-      },
-      {
-        source: "/new3",
-        destination: "/careless/new3/index.html",
       },
       {
         source: "/projects/aelia",

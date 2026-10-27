@@ -1,9 +1,9 @@
 /* care_less /new5 — one pinned cinematic stage, then two human sections.
    Deliberately single-theme (a film is dark). Tokens below drive every colour. */
-@font-face{font-family:Sora;src:url('../new5/fonts/sora-latin.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:swap}
-@font-face{font-family:'Playfair Display';src:url('../new5/fonts/playfair-italic-latin.woff2') format('woff2');font-weight:400 900;font-style:italic;font-display:swap}
-@font-face{font-family:'Roboto Mono';src:url('../new5/fonts/roboto-mono-latin.woff2') format('woff2');font-weight:100 700;font-style:normal;font-display:swap}
-@font-face{font-family:'Source Code Pro';src:url('../new5/fonts/source-code-pro-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:Sora;src:url('../shared/fonts/sora-latin.woff2') format('woff2');font-weight:100 800;font-style:normal;font-display:swap}
+@font-face{font-family:'Playfair Display';src:url('../shared/fonts/playfair-italic-latin.woff2') format('woff2');font-weight:400 900;font-style:italic;font-display:swap}
+@font-face{font-family:'Roboto Mono';src:url('../shared/fonts/roboto-mono-latin.woff2') format('woff2');font-weight:100 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Source Code Pro';src:url('../shared/fonts/source-code-pro-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
 
 :root{
   --ink:#0f0e0c; --ink-2:#1a1814; --paper:#f2eee5; --muted:#b9b4a8; --dim:#7d786d;
