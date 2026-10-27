@@ -487,7 +487,7 @@ function begin(withSound = true) {
 function greeting() {
   const d = new Date(), h = d.getHours();
   let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
-  const time = loc => d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
+  const time = loc => d.toLocaleTimeString(loc, { hour: 'numeric', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
   return () => {
     const tail = L('Clearing your schedule…', 'Despejando tu agenda…');
     if (seen) return L('Welcome back. ', 'Hola de nuevo. ') + tail;
@@ -1101,21 +1101,86 @@ function calcUpdate() {
 calc.addEventListener('input', calcUpdate);
 
 /* ───────────────────────── Booking ───────────────────────── */
-// zcal inside our own frame. zcal refuses to be framed from the personal links (zcal.co/name/…), only from its
-// embed links, so this stays off until BOOKING_EMBED is set.
-const bookingEl = $('#booking'), bookingFrame = $('#booking-frame');
-let bookingOpener = null;
-function openBooking(opener) {
+// Our own picker on Maks's Google Calendar (/api/booking): days, times in the visitor's own time zone, a short form,
+// and Google sends the invite with the Meet link. If the API isn't connected (or fails), zcal's embed loads instead.
+const bookingEl = $('#booking'), bookingFrame = $('#booking-frame'), bk = $('#bk');
+let bookingOpener = null, bkLoad = null, bkSlots = [], bkDay = '', bkPick = null, bkOpenedAt = 0;
+const visitorTZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone; } catch { return ''; } })();
+const dayKey = d => d.toLocaleDateString('en-CA'); // YYYY-MM-DD in the visitor's zone
+const fmt = (d, o) => d.toLocaleString(lang === 'es' ? 'es-ES' : undefined, o);
+function zcalFallback() {
+  bk.hidden = true; bookingFrame.hidden = false; $('.booking-alt', bookingEl).hidden = false;
+  if (bookingFrame.firstChild) return;
+  const f = document.createElement('iframe');
+  f.title = L('Pick a time with Maks', 'Elige una hora con Maks');
+  f.src = BOOKING_EMBED + (BOOKING_EMBED.includes('?') ? '&' : '?') + 'embed=1&embedType=inline&embedVersion=1.0.2&embedDomain=' + location.hostname;
+  bookingFrame.append(f);
+}
+const fetchSlots = () => fetch('/api/booking', { cache: 'no-store' }).then(r => r.json()).catch(() => ({}));
+function bkRender() {
+  const days = new Map();
+  bkSlots.forEach(t => { const d = new Date(t), k = dayKey(d); if (!days.has(k)) days.set(k, []); days.get(k).push(d); });
+  if (!days.size) return zcalFallback();
+  if (!days.has(bkDay)) bkDay = days.keys().next().value;
+  $('#bk-days').replaceChildren(...[...days].map(([k, list]) => {
+    const d = list[0], b = el('button', 'bk-day'); b.type = 'button'; b.dataset.day = k; b.setAttribute('aria-pressed', String(k === bkDay));
+    b.append(el('span', '', fmt(d, { weekday: 'short' })), el('b', '', fmt(d, { day: 'numeric' })), el('small', '', fmt(d, { month: 'short' })));
+    return b;
+  }));
+  $('#bk-times').replaceChildren(...days.get(bkDay).map(d => { const b = el('button', 'bk-time', fmt(d, { hour: 'numeric', minute: '2-digit' })); b.type = 'button'; b.dataset.t = d.toISOString(); return b; }));
+  $('#bk-tz').textContent = L(`Times in your time zone${visitorTZ ? ` (${visitorTZ.replace(/_/g, ' ')})` : ''}. 30 minutes on Google Meet.`, `Horas en tu zona horaria${visitorTZ ? ` (${visitorTZ.replace(/_/g, ' ')})` : ''}. 30 minutos por Google Meet.`);
+}
+function bkStep(step) { $('#bk-pick').hidden = step !== 'pick'; $('#bk-form').hidden = step !== 'form'; $('#bk-done').hidden = step !== 'done'; }
+async function openBooking(opener) {
   bookingOpener = opener;
-  if (!bookingFrame.firstChild) {
-    const f = document.createElement('iframe');
-    f.title = L('Pick a time with Maks', 'Elige una hora con Maks');
-    f.src = BOOKING_EMBED + (BOOKING_EMBED.includes('?') ? '&' : '?') + 'embed=1&embedType=inline&embedVersion=1.0.2&embedDomain=' + location.hostname;
-    bookingFrame.append(f);
-  }
   bookingEl.hidden = false; modal++; setTimeout(() => $('.booking-close', bookingEl).focus({ preventScroll: true }), 60);
   track('booking_open');
+  if (!$('#bk-done').hidden) return; // already booked in this visit: keep showing the confirmation
+  bkLoad ||= fetchSlots();
+  const j = await bkLoad;
+  if (!j.configured || !Array.isArray(j.slots)) { bkLoad = null; return zcalFallback(); }
+  bkSlots = j.slots; bk.hidden = false; bookingFrame.hidden = true; $('.booking-alt', bookingEl).hidden = true;
+  bkRender(); bkStep('pick');
 }
+bk.addEventListener('click', e => {
+  const day = e.target.closest('.bk-day'), time = e.target.closest('.bk-time');
+  if (day) { bkDay = day.dataset.day; bkRender(); return; }
+  if (time) {
+    bkPick = new Date(time.dataset.t); bkOpenedAt = Date.now();
+    const end = new Date(+bkPick + 30 * 60000);
+    $('#bk-when').textContent = `${fmt(bkPick, { weekday: 'long', day: 'numeric', month: 'long' })} · ${fmt(bkPick, { hour: 'numeric', minute: '2-digit' })}–${fmt(end, { hour: 'numeric', minute: '2-digit' })}`;
+    const care = $('#bk-care'); if (!care.value && finalInput.value.trim()) care.value = finalInput.value.trim();
+    $('#bk-status').textContent = ''; bkStep('form'); setTimeout(() => $('#bk-name').focus({ preventScroll: true }), 40);
+    track('booking_time');
+  }
+  if (e.target.closest('#bk-change')) bkStep('pick');
+});
+$('#bk-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.currentTarget, email = $('#bk-email');
+  email.setCustomValidity(isEmail(email.value) ? '' : L('Add your email.', 'Añade tu email.'));
+  if (!f.reportValidity()) return;
+  const btn = $('button[type="submit"]', f), status = $('#bk-status');
+  btn.disabled = true; status.className = 'bk-status'; status.textContent = L('Booking…', 'Reservando…');
+  let j = {}, code = 0;
+  try {
+    const r = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+      start: bkPick.toISOString(), name: $('#bk-name').value, email: email.value.trim(), site: $('#bk-site').value, care: $('#bk-care').value,
+      enquiries: $('#bk-enq').value, lang, startedAt: bkOpenedAt, company_fax: $('.honey', f).value }) });
+    code = r.status; j = await r.json();
+  } catch {}
+  btn.disabled = false;
+  if (j.ok) {
+    $('#bk-done-when').textContent = $('#bk-when').textContent;
+    $('#bk-done-mail').textContent = L(`The invite with the Google Meet link is on its way to ${email.value.trim()}.`, `La invitación con el enlace de Google Meet va de camino a ${email.value.trim()}.`);
+    bkStep('done'); track('booking_done');
+  } else if (code === 409) {
+    status.textContent = L('Someone just took that time. Pick another one.', 'Alguien acaba de coger esa hora. Elige otra.');
+    bkLoad = fetchSlots(); const n = await bkLoad; if (Array.isArray(n.slots)) { bkSlots = n.slots; bkRender(); } setTimeout(() => bkStep('pick'), 1600);
+  } else status.textContent = code === 429 ? L('Too many tries. Try again in a while, or use WhatsApp.', 'Demasiados intentos. Prueba más tarde o usa WhatsApp.')
+    : L("That didn't go through. Try again, or message Maks on WhatsApp.", 'No ha funcionado. Inténtalo de nuevo o escribe a Maks por WhatsApp.');
+});
+$('#bk-email').addEventListener('input', e => e.target.setCustomValidity(''));
 function closeBooking() { if (bookingEl.hidden) return; bookingEl.hidden = true; modal = Math.max(0, modal - 1); bookingOpener?.focus({ preventScroll: true }); }
 bookingEl.addEventListener('click', e => { if (e.target === bookingEl) closeBooking(); });
 bookingEl.addEventListener('keydown', e => { if (e.key === 'Escape') closeBooking(); });
@@ -1123,7 +1188,7 @@ document.addEventListener('click', e => {
   const a = e.target.closest('a[href^="https://zcal.co/"]');
   if (!a || a.closest('#booking')) return;
   track('booking_click');
-  if (!BOOKING_EMBED || e.metaKey || e.ctrlKey || e.shiftKey) return; // no embed yet, or they asked for a new tab
+  if (e.metaKey || e.ctrlKey || e.shiftKey) return; // they asked for a new tab
   e.preventDefault(); openBooking(a);
 });
 

@@ -345,6 +345,36 @@
         <div><p class="booking-eyebrow">Video call · Google Meet</p><h2 id="booking-title">Book a call with <em>Maks</em></h2></div>
       </header>
       <ul class="booking-points"><li>What's stuck, in your words</li><li>What I'd do first, and what it would take</li><li>An honest "not yet", if that's the answer</li></ul>
+      <!-- Our own picker on Maks's Google Calendar (/api/booking). Hidden until it has slots; zcal loads below otherwise. -->
+      <div class="bk" id="bk" hidden data-clarity-mask="true">
+        <div class="bk-pick" id="bk-pick">
+          <p class="bk-label">Pick a day</p>
+          <div class="bk-days" id="bk-days"></div>
+          <p class="bk-label">Pick a time</p>
+          <div class="bk-times" id="bk-times"></div>
+          <p class="bk-tz" id="bk-tz"></p>
+        </div>
+        <form class="bk-form" id="bk-form" hidden>
+          <p class="bk-when-row"><span class="bk-when" id="bk-when"></span> <button class="bk-change" id="bk-change" type="button">Change</button></p>
+          <div class="bk-fields">
+            <label><span>Your name</span><input id="bk-name" type="text" autocomplete="name" required maxlength="80"></label>
+            <label><span>Email</span><input id="bk-email" type="email" autocomplete="email" required maxlength="320"></label>
+            <label><span>Website or Instagram <i>(optional)</i></span><input id="bk-site" type="text" autocomplete="url" maxlength="200"></label>
+            <label><span>Enquiries a week <i>(optional)</i></span><input id="bk-enq" type="text" inputmode="numeric" maxlength="40" placeholder="about 20"></label>
+            <label class="bk-wide"><span>What would you like to care less about?</span><textarea id="bk-care" rows="2" maxlength="600"></textarea></label>
+          </div>
+          <input class="honey" name="company_fax" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn-paper" type="submit">Confirm the call <span aria-hidden="true">→</span></button>
+          <p class="bk-status" id="bk-status" role="status"></p>
+        </form>
+        <div class="bk-done" id="bk-done" hidden>
+          <p class="bk-done-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></p>
+          <h3>You're booked.</h3>
+          <p class="bk-done-when" id="bk-done-when"></p>
+          <p class="bk-done-mail" id="bk-done-mail"></p>
+          <p class="bk-done-note">Need to move it? Reply to the invite, or message me on <a href="https://wa.me/34641935207" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
+        </div>
+      </div>
       <div class="booking-frame" id="booking-frame"></div>
       <p class="booking-alt">Calendar not loading? <a href="https://zcal.co/i/O0g63S4u" target="_blank" rel="noopener noreferrer" id="booking-direct">Open it in a new tab</a>.</p>
     </div>
