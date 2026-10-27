@@ -66,7 +66,8 @@ function track(name, detail = {}) {
 function startAnalytics() {
   if (navigator.doNotTrack === '1' || !/maksnedbailo\.site$/.test(location.hostname)) return;
   const s = document.createElement('script'); s.async = true; s.src = 'https://www.clarity.ms/tag/wley84eoj3';
-  ('requestIdleCallback' in window ? requestIdleCallback : setTimeout)(() => document.head.append(s), 2000);
+  const add = () => document.head.append(s);
+  if ('requestIdleCallback' in window) requestIdleCallback(add, { timeout: 2000 }); else setTimeout(add, 2000);
 }
 function lerpMap(map, x, from, to) {
   if (x <= map[0][from]) return map[0][to];
