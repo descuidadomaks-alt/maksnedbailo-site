@@ -7,6 +7,8 @@ const nextConfig = {
       { source: "/new5", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/new6", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/new7", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/new8", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/careless/new8/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new7/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new6/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new5/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
@@ -18,6 +20,10 @@ const nextConfig = {
   // Vercel forwards the request (HTTP + WebSocket) to api.theconnecto.ai.
   async rewrites() {
     return [
+      {
+        source: "/new8",
+        destination: "/careless/new8/index.html",
+      },
       {
         source: "/new7",
         destination: "/careless/new7/index.html",
