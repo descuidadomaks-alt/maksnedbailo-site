@@ -56,8 +56,13 @@ const light = !!(conn && (conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveTy
 const small = matchMedia('(max-width: 760px)').matches;
 const wa = text => 'https://wa.me/' + WHATSAPP + (text ? '?text=' + encodeURIComponent(text) : '');
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
+/* Language: English or Spanish (Spain). ?lang= wins, then the visitor's choice, then the browser.
+   Fixed page text swaps from es.js; text this script writes picks its language through L(en, es). */
+let lang = (location.search.match(/[?&]lang=(en|es)\b/) || [])[1] || (() => { try { return localStorage.getItem('cl-lang'); } catch { return null; } })() || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en');
+if (!window.CL_ES) lang = 'en';
+const L = (en, es) => lang === 'es' ? es : en;
 function track(name, detail = {}) {
-  const event = { event: name, page: 'new7', ...detail };
+  const event = { event: name, page: 'new7', lang, ...detail };
   (window.dataLayer = window.dataLayer || []).push(event);
   if (navigator.doNotTrack === '1') return;
   window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
@@ -260,18 +265,32 @@ addEventListener('scroll', () => {
   selfScroll = false;
   if (!sRaf) { sTarget = sCur = y; lastInput = performance.now(); scheduleSettle(); }
 }, { passive: true });
-let touchY = 0, touchX = 0;
-addEventListener('touchstart', e => { touching = true; touchY = e.touches[0].clientY; touchX = e.touches[0].clientX; cancelAnimationFrame(sRaf); sRaf = 0; clearTimeout(settleTimer); }, { passive: true });
+let touchY = 0, touchX = 0, swipeX0 = 0, swiping = false;
+addEventListener('touchstart', e => { touching = true; touchY = e.touches[0].clientY; touchX = swipeX0 = e.touches[0].clientX; swiping = false; cancelAnimationFrame(sRaf); sRaf = 0; clearTimeout(settleTimer); }, { passive: true });
 addEventListener('touchmove', e => {
   if (!root.classList.contains('begun')) { e.preventDefault(); return; }
   const y = e.touches[0].clientY, x = e.touches[0].clientX, dy = touchY - y, dx = touchX - x;
   if (modal && !inScrollable(e.target)) { e.preventDefault(); return; }
   if (held && !inScrollable(e.target)) { e.preventDefault(); if (dy < -24) unhold(); return; }
-  if (!modal && inChapters() && Math.abs(dx) > Math.abs(dy) * 1.2 && !inScrollable(e.target)) {
-    e.preventDefault(); selfScroll = true; scrollTo(0, clamp(scrollY + dx * 2.2, 0, maxScroll)); touchX = x; touchY = y;
-  }
+  // A sideways swipe over the chapters turns exactly one page (on release), however long or fast it is.
+  if (!modal && inChapters() && (swiping || Math.abs(dx) > Math.abs(dy) * 1.2) && !inScrollable(e.target)) { e.preventDefault(); swiping = true; }
 }, { passive: false });
-addEventListener('touchend', () => { touching = false; lastInput = performance.now(); scheduleSettle(); }, { passive: true });
+addEventListener('touchend', e => {
+  touching = false; lastInput = performance.now();
+  if (swiping) {
+    swiping = false;
+    const dx = swipeX0 - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 36) return stepChapter(dx > 0 ? 1 : -1);
+  }
+  scheduleSettle();
+}, { passive: true });
+function stepChapter(d) {
+  const pages = rests.slice(-PH.chapters), u = (scrollY - journeyTop) / H;
+  const at = clamp(Math.round((u - P_CH - PH.chapter * .3) / PH.chapter), 0, PH.chapters - 1);
+  // Past the last chapter the swipe carries on to "Say it once"; before the first, back to the plate.
+  const y = at + d >= PH.chapters ? humanSec.getBoundingClientRect().top + scrollY : at + d < 0 ? rests[rests.length - PH.chapters - 1] : pages[at + d];
+  glideTo(y, 240); track('chapter_swipe', { to: at + d });
+}
 addEventListener('keydown', e => {
   if (!held || /INPUT|TEXTAREA/.test(document.activeElement?.tagName || '')) return;
   if (['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)) { e.preventDefault(); nudgeEncounter(); }
@@ -381,15 +400,17 @@ function tick(now) {
   dots.forEach((d, i) => d.style.setProperty('--f', clamp(c - i).toFixed(3)));
   const idx = swap < .7 ? -2 : u < P_CH + .12 ? -1 : Math.round(pos);
   if (idx !== chapterIdx) { chapterIdx = idx; highlight(idx); }
-  // Phones: through the four chapters Scout shrinks to a small mark in the free gap mid-screen, clear of the buttons.
-  // Tapping him, or leaving the chapters, sends him back to his corner.
+  // Phones: through the four chapters Scout folds into his small mark on the right, in the free gap mid-screen,
+  // clear of the buttons. Tapping it, or leaving the chapters, brings the full avatar back to the corner.
   const mini = small && !dock.hidden && swap > .98 && u < STAGE_U - .05 && dockMenu.hidden && chat.hidden && call.hidden && !modal;
   if (mini) {
     const gapTop = org.getBoundingClientRect().bottom, gapEnd = chapters[Math.max(0, chapterIdx)].getBoundingClientRect().top, home = dock.getBoundingClientRect();
-    dockBtn.style.setProperty('--mx', (innerWidth / 2 - (home.right - 32)).toFixed(1) + 'px');
-    dockBtn.style.setProperty('--my', ((gapTop + gapEnd) / 2 - (home.bottom - 32)).toFixed(1) + 'px');
+    const midY = (gapTop + gapEnd) / 2;
+    dockPill.style.setProperty('--py', midY.toFixed(1) + 'px');
+    dockBtn.style.setProperty('--mx', (dockPill.getBoundingClientRect().right - 20 - (home.right - 32)).toFixed(1) + 'px');
+    dockBtn.style.setProperty('--my', (midY - (home.bottom - 32)).toFixed(1) + 'px');
   }
-  if (mini !== dockMini) { dockMini = mini; dockBtn.classList.toggle('mini', mini); }
+  if (mini !== dockMini) { dockMini = mini; dockBtn.classList.toggle('mini', mini); dockPill.classList.toggle('on', mini); }
 
   cue.style.setProperty('--cue', (held || modal || u > STAGE_U - .5 || (small && u > P_SWAP) || performance.now() - lastInput < 900) ? '0' : '1');
 
@@ -454,23 +475,29 @@ function begin(withSound = true) {
   track('begin', { film: filmKey, sound: withSound });
 }
 // The first line notices who's here and when: late nights, early starts, weekends, second visits.
+// Returns a function so the line can be said again in the other language.
 function greeting() {
   const d = new Date(), h = d.getHours();
   let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
-  if (seen) return 'Welcome back. Clearing your schedule…';
-  if (h >= 21 || h < 5) return `It's ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}. Still working? Clearing your schedule…`;
-  if (h < 8) return 'Early start. Clearing your schedule…';
-  if (d.getDay() === 0 || d.getDay() === 6) return `It's ${d.toLocaleDateString('en-GB', { weekday: 'long' })}. Clearing your schedule…`;
-  return 'Clearing your schedule…';
+  const time = loc => d.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
+  return () => {
+    const tail = L('Clearing your schedule…', 'Despejando tu agenda…');
+    if (seen) return L('Welcome back. ', 'Hola de nuevo. ') + tail;
+    if (h >= 21 || h < 5) return L(`It's ${time('en-GB')}. Still working? `, `${h === 1 ? 'Es la' : 'Son las'} ${time('es-ES')}. ¿Todavía trabajando? `) + tail;
+    if (h < 8) return L('Early start. ', 'Madrugón. ') + tail;
+    if (d.getDay() === 0 || d.getDay() === 6) return L(`It's ${day('en-GB')}. `, `Es ${day('es-ES')}. `) + tail;
+    return tail;
+  };
 }
+let greet = () => '', gateDone = false;
 const pageTitle = document.title;
 document.addEventListener('visibilitychange', () => {
   if (!root.classList.contains('begun')) return;
-  document.title = !document.hidden ? pageTitle : scoutState === 'pending' ? 'Scout is waiting for you…' : "The colony's still working…";
+  document.title = !document.hidden ? pageTitle : scoutState === 'pending' ? L('Scout is waiting for you…', 'Scout te está esperando…') : L("The colony's still working…", 'La colonia sigue trabajando…');
 });
 function runGate() {
   root.classList.add('locked');
-  gateStatus.textContent = greeting();
+  greet = greeting(); gateStatus.textContent = greet();
   gateQuiet.addEventListener('click', () => begin(false));
   const t0 = performance.now();
   primeMovie();
@@ -486,7 +513,7 @@ function runGate() {
     const readable = performance.now() - t0 > 2400; // let the greeting be read, even when the film is cached
     gateBtn.style.setProperty('--load', (readable ? load : Math.min(load, (performance.now() - t0) / 2400)).toFixed(3));
     if ((readable && (load >= .999 || (movie.readyState >= 3 && p >= 1))) || motion.matches) {
-      gateBtn.disabled = false; gateQuiet.disabled = false; gateStatus.textContent = 'Schedule cleared.'; gateStatus.classList.add('done');
+      gateDone = true; gateBtn.disabled = false; gateQuiet.disabled = false; gateStatus.textContent = L('Schedule cleared.', 'Agenda despejada.'); gateStatus.classList.add('done');
       gateBtn.focus({ preventScroll: true });
       return;
     }
@@ -500,16 +527,18 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 // Hero typed line: the first phrase holds longest.
 function heroType() {
-  const phrases = ['One team to make them happen.', 'Brand, website, sales and systems. Handled.', 'So the business stops needing you for everything.'];
+  const phrases = () => L(['One team to make them happen.', 'Brand, website, sales and systems. Handled.', 'So the business stops needing you for everything.'],
+    ['Un equipo para hacerlo realidad.', 'Marca, web, ventas y sistemas. Resuelto.', 'Para que tu negocio deje de necesitarte para todo.']);
   if (motion.matches) return;
   let i = 0;
   const cycle = async () => {
     await new Promise(r => setTimeout(r, i === 0 ? 5200 : 3400));
     const t = heroTyped.textContent;
     for (let n = t.length; n >= 0; n--) { heroTyped.textContent = t.slice(0, n); await new Promise(r => setTimeout(r, 18)); }
-    i = (i + 1) % phrases.length;
+    i = (i + 1) % 3;
     await new Promise(r => setTimeout(r, 260));
-    for (let n = 1; n <= phrases[i].length; n++) { heroTyped.textContent = phrases[i].slice(0, n); await new Promise(r => setTimeout(r, 38)); }
+    const next = phrases()[i];
+    for (let n = 1; n <= next.length; n++) { heroTyped.textContent = next.slice(0, n); await new Promise(r => setTimeout(r, 38)); }
     cycle();
   };
   cycle();
@@ -518,7 +547,7 @@ function heroType() {
 /* ───────────────────────── Scout ───────────────────────── */
 let scoutState = store.get('cl5-scout') || 'pending'; // pending · held · decided · declined · passed
 if (scoutState !== 'pending') scoutState = scoutState === 'declined' ? 'declined' : 'passed';
-const enc = $('#encounter'), dock = $('#dock'), dockBtn = $('#dock-btn'), dockMenu = $('#dock-menu');
+const enc = $('#encounter'), dock = $('#dock'), dockBtn = $('#dock-btn'), dockMenu = $('#dock-menu'), dockPill = $('#dock-pill');
 let encTyped = false, comicEl = $('#comic');
 function hold() {
   held = true; cancelAnimationFrame(sRaf); sRaf = 0;
@@ -568,6 +597,7 @@ function showDock(fromRect) {
   requestAnimationFrame(() => requestAnimationFrame(() => { fly.style.transform = 'none'; }));
   setTimeout(() => { dock.style.opacity = ''; fly.remove(); }, 880);
 }
+dockPill.addEventListener('click', () => dockBtn.click());
 // Tapping Scout while his chat is open minimises it; otherwise it opens the call/message menu.
 dockBtn.addEventListener('click', () => {
   if (!chat.hidden) { closeChat(); return; }
@@ -582,7 +612,7 @@ document.addEventListener('click', e => {
     if (v === 'chat') { endCall(true); openChat(); }
     return;
   }
-  if (!e.target.closest('#dock') && !dockMenu.hidden) { dockMenu.hidden = true; dockBtn.setAttribute('aria-expanded', 'false'); wake(); }
+  if (!e.target.closest('#dock, #dock-pill') && !dockMenu.hidden) { dockMenu.hidden = true; dockBtn.setAttribute('aria-expanded', 'false'); wake(); }
   const close = e.target.closest('[data-close]');
   if (close) { if (close.dataset.close === 'chat') closeChat(); if (close.dataset.close === 'offer') closeOffer(); if (close.dataset.close === 'stories') closeStories(); }
 });
@@ -641,48 +671,49 @@ const engines = {
     return {
       async start() {
         busy = true;
-        await scoutSays("Hey, I'm Scout. What does your business do, in a line?", 300);
-        setQuick(['We make things', 'We sell a service', 'Agency or studio', 'Just looking around']); busy = false; step = 1;
+        await scoutSays(L("Hey, I'm Scout. What does your business do, in a line?", 'Hola, soy Scout. ¿A qué se dedica tu negocio, en una frase?'), 300);
+        setQuick(L(['We make things', 'We sell a service', 'Agency or studio', 'Just looking around'], ['Fabricamos algo', 'Vendemos un servicio', 'Agencia o estudio', 'Solo estoy mirando'])); busy = false; step = 1;
       },
       async seed(text) { step = 2; return this.reply(text); },
       async reply(text) {
         busy = true; transcript.push('Visitor: ' + text);
         if (step === 1) {
-          if (/just looking|around|browsing/i.test(text)) { await scoutSays("Fair. Look around, I'll be in the corner. If something makes you think 'we should have that', tap me."); busy = false; return; }
+          if (/just looking|around|browsing|mirando|vistazo|cotilleando/i.test(text)) { await scoutSays(L("Fair. Look around, I'll be in the corner. If something makes you think 'we should have that', tap me.", 'Normal. Echa un vistazo, estaré en la esquina. Si algo te hace pensar «esto lo queremos», tócame.')); busy = false; return; }
           business = text;
-          await scoutSays("Nice. What eats most of your week right now? The thing you'd hand off tomorrow if you could.");
-          setQuick(['Answering the same questions', 'Chasing quotes & follow-ups', 'Content and the website', 'Everything goes through me']); step = 2;
+          await scoutSays(L("Nice. What eats most of your week right now? The thing you'd hand off tomorrow if you could.", '¡Bien! ¿Qué se come la mayor parte de tu semana? Eso que delegarías mañana si pudieras.'));
+          setQuick(L(['Answering the same questions', 'Chasing quotes & follow-ups', 'Content and the website', 'Everything goes through me'], ['Responder siempre lo mismo', 'Perseguir presupuestos', 'El contenido y la web', 'Todo pasa por mí'])); step = 2;
         } else if (step === 2) {
           pain = text;
-          await scoutSays(`Got it. "${text.length > 70 ? text.slice(0, 68) + '…' : text}" is usually where the quickest hours come back.`);
-          await scoutSays("Our team fixes this with a mix of automation and a few human touches. Not a new tool you have to babysit.", 500);
-          await scoutSays("Want someone from the team to look at it properly? Leave an email or phone and I'll read it back to make sure I've got it right.", 400);
-          setQuick(['Sure', 'Not now']); step = 3;
+          const said = text.length > 70 ? text.slice(0, 68) + '…' : text;
+          await scoutSays(L(`Got it. "${said}" is usually where the quickest hours come back.`, `Entendido. «${said}» suele ser donde antes se recuperan horas.`));
+          await scoutSays(L("Our team fixes this with a mix of automation and a few human touches. Not a new tool you have to babysit.", 'El equipo lo resuelve con una mezcla de automatización y algún toque humano. No otra herramienta que tengas que vigilar.'), 500);
+          await scoutSays(L("Want someone from the team to look at it properly? Leave an email or phone and I'll read it back to make sure I've got it right.", '¿Quieres que alguien del equipo lo mire con calma? Déjame un email o un teléfono y te lo repito para confirmar que lo tengo bien.'), 400);
+          setQuick(L(['Sure', 'Not now'], ['Vale', 'Ahora no'])); step = 3;
         } else if (step === 3 || step === 5) {
           const c = emailOf(text) || phoneOf(text);
           if (!c) {
-            if (/not now|no|later/i.test(text)) { await scoutSays("No problem. I'll be in the corner. You know where to find me."); step = 9; }
-            else await scoutSays("Go ahead and type your email or phone number.");
-          } else { contact = c; await scoutSays(`Just to confirm, that's ${c.split('').join(c.includes('@') ? '' : ' ').replace(/\s+/g, ' ')}?`); setQuick(["Yes, that's right", 'Let me fix it']); step = 4; }
+            if (/not now|no|later|luego|después/i.test(text)) { await scoutSays(L("No problem. I'll be in the corner. You know where to find me.", 'Sin problema. Estaré en la esquina. Ya sabes dónde encontrarme.')); step = 9; }
+            else await scoutSays(L("Go ahead and type your email or phone number.", 'Adelante, escribe tu email o tu teléfono.'));
+          } else { contact = c; const spelt = c.split('').join(c.includes('@') ? '' : ' ').replace(/\s+/g, ' '); await scoutSays(L(`Just to confirm, that's ${spelt}?`, `Para confirmar: ${spelt}, ¿correcto?`)); setQuick(L(["Yes, that's right", 'Let me fix it'], ['Sí, correcto', 'Lo corrijo'])); step = 4; }
         } else if (step === 4) {
-          if (/fix|no|wrong/i.test(text)) { await scoutSays('Sure, type it again.'); step = 5; }
+          if (/fix|no|wrong|corrijo|mal/i.test(text)) { await scoutSays(L('Sure, type it again.', 'Claro, escríbelo de nuevo.')); step = 5; }
           else {
-            const ok = await submitLead('scout_chat', contact, `Business: ${business}\nWants to care less about: ${pain}\n\n${transcript.join('\n')}`);
-            if (ok) { await scoutSays("Done. A human from the team will get back to you soon. Meanwhile, keep looking around."); track('scout_lead'); }
-            else addLinkMsg("That didn't go through on my side. Mind sending it on WhatsApp instead?", wa(`Hi Maks, Scout sent me. ${business}. I'd like to care less about: ${pain}. Contact: ${contact}`), 'Open WhatsApp →');
+            const ok = await submitLead('scout_chat', contact, `Language: ${lang}\nBusiness: ${business}\nWants to care less about: ${pain}\n\n${transcript.join('\n')}`);
+            if (ok) { await scoutSays(L("Done. A human from the team will get back to you soon. Meanwhile, keep looking around.", 'Hecho. Una persona del equipo te escribirá pronto. Mientras, sigue mirando.')); track('scout_lead'); }
+            else addLinkMsg(L("That didn't go through on my side. Mind sending it on WhatsApp instead?", 'No me ha llegado bien. ¿Te importa enviarlo por WhatsApp?'), wa(L(`Hi Maks, Scout sent me. ${business}. I'd like to care less about: ${pain}. Contact: ${contact}`, `Hola Maks, vengo de parte de Scout. ${business}. Me gustaría preocuparme menos por: ${pain}. Contacto: ${contact}`)), L('Open WhatsApp →', 'Abrir WhatsApp →'));
             step = 9;
           }
         } else {
-          await scoutSays("I'm a preview right now, so I'll keep it short: book a call or message Maks and you'll get a real answer.");
-          addLinkMsg('', BOOKING, 'Book a call →');
+          await scoutSays(L("I'm a preview right now, so I'll keep it short: book a call or message Maks and you'll get a real answer.", 'Ahora mismo soy una vista previa, así que seré breve: reserva una llamada o escribe a Maks y tendrás una respuesta de verdad.'));
+          addLinkMsg('', BOOKING, L('Book a call →', 'Reservar llamada →'));
         }
         busy = false;
       },
     };
   })(),
   off: {
-    async start() { await scoutSays("Hey, I'm Scout. I'm off duty right now, but type what's on your mind and I'll pass it to Maks on WhatsApp.", 200); },
-    async reply(text) { addLinkMsg('Ready to send.', wa("Hi Maks, I'd like to care less about: " + text), 'Open WhatsApp →'); },
+    async start() { await scoutSays(L("Hey, I'm Scout. I'm off duty right now, but type what's on your mind and I'll pass it to Maks on WhatsApp.", 'Hola, soy Scout. Ahora no estoy de guardia, pero escribe lo que tengas en mente y se lo paso a Maks por WhatsApp.'), 200); },
+    async reply(text) { addLinkMsg(L('Ready to send.', 'Listo para enviar.'), wa(L("Hi Maks, I'd like to care less about: ", 'Hola Maks, me gustaría preocuparme menos por: ') + text), L('Open WhatsApp →', 'Abrir WhatsApp →')); },
   },
   live: (() => {
     // Existing public MCB widget identifiers (not an admin credential). Mirrors the provider's widget: send, then poll replies.
@@ -696,15 +727,15 @@ const engines = {
     const poll = async () => {
       clearTimeout(timer); if (chat.hidden && !waiting) return;
       try { const r = await req(`/sw-replies/${account}/${widget}/${sid()}`); if (typeof r.message === 'string' && r.message.trim()) { const tmp = document.createElement('template'); tmp.innerHTML = r.message; addMsg(tmp.content.textContent.trim()); waiting = false; busy = false; } } catch {}
-      if (waiting && Date.now() > deadline) { waiting = false; busy = false; addLinkMsg("I'm slow right now. Message Maks directly?", wa(), 'WhatsApp →'); }
+      if (waiting && Date.now() > deadline) { waiting = false; busy = false; addLinkMsg(L("I'm slow right now. Message Maks directly?", 'Voy lento ahora mismo. ¿Escribes directamente a Maks?'), wa(), 'WhatsApp →'); }
       timer = setTimeout(poll, waiting ? 1500 : 5000);
     };
     return {
-      async start() { await scoutSays("Hey, I'm Scout. What does your business do, in a line?", 200); poll(); },
+      async start() { await scoutSays(L("Hey, I'm Scout. What does your business do, in a line?", 'Hola, soy Scout. ¿A qué se dedica tu negocio, en una frase?'), 200); poll(); },
       async reply(text) {
         busy = true; waiting = true; deadline = Date.now() + 45000;
         try { await req(`/webhook/sw-widget/${account}/${widget}/${sid()}`, { action: 'my_chat_send', widget_id: widget, session: sid(), payload: { message: text, wp_context: location.origin + '/new7' } }); poll(); }
-        catch { waiting = false; busy = false; addLinkMsg("I couldn't reach my desk. Message Maks instead?", wa(text), 'WhatsApp →'); }
+        catch { waiting = false; busy = false; addLinkMsg(L("I couldn't reach my desk. Message Maks instead?", 'No consigo llegar a mi mesa. ¿Escribes a Maks?'), wa(text), 'WhatsApp →'); }
       },
     };
   })(),
@@ -719,8 +750,8 @@ async function startCall() {
   if (!call.hidden) return;
   const token = ++callToken;
   modal++; call.hidden = false; call.classList.remove('leaving'); showDock(); track('scout_call_start');
-  callState.textContent = 'Connecting…'; callCap.textContent = ''; callFoot.textContent = ''; callTime.textContent = '00:00';
-  muteBtn.setAttribute('aria-pressed', 'false'); muteBtn.setAttribute('aria-label', 'Mute microphone');
+  callState.textContent = L('Connecting…', 'Conectando…'); callCap.textContent = ''; callFoot.textContent = ''; callTime.textContent = '00:00';
+  muteBtn.setAttribute('aria-pressed', 'false'); muteBtn.setAttribute('aria-label', L('Mute microphone', 'Silenciar micrófono'));
   setTimeout(() => $('#call-end').focus({ preventScroll: true }), 50);
   const ui = {
     onState: t => callState.textContent = t,
@@ -730,22 +761,22 @@ async function startCall() {
   const tickTime = () => { const s = Math.floor((Date.now() - callStart) / 1000); callTime.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
   if (SCOUT_MODE === 'live' && window.CarelessVoice) {
     try { session_ = await window.CarelessVoice.start(ui); if (token !== callToken) return session_?.end(); callStart = Date.now(); callTimer = setInterval(tickTime, 500); }
-    catch { callState.textContent = "Couldn't connect"; previewFallback("The line didn't connect. Want to type instead?"); }
+    catch { callState.textContent = L("Couldn't connect", 'No se pudo conectar'); previewFallback(L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?')); }
     return;
   }
   // Preview: Scout speaks his opener so the interface can be judged; clearly labelled, no microphone used.
   await new Promise(r => setTimeout(r, 1300)); if (token !== callToken) return;
-  callStart = Date.now(); callTimer = setInterval(tickTime, 500); callState.textContent = 'Scout · voice preview';
+  callStart = Date.now(); callTimer = setInterval(tickTime, 500); callState.textContent = L('Scout · voice preview', 'Scout · vista previa de voz');
   speaking = true; animateLevel();
-  const lines = ["Hey, Scout here.", "Quick one before the tour: what does your business do?"];
+  const lines = L(["Hey, Scout here.", "Quick one before the tour: what does your business do?"], ['Hola, aquí Scout.', 'Una rápida antes de la visita: ¿a qué se dedica tu negocio?']);
   for (const l of lines) { if (token !== callToken) return; callCap.textContent = ''; const s = document.createElement('span'); callCap.append(s); await typeInto(s, l, 34); await new Promise(r => setTimeout(r, 600)); }
   speaking = false;
   if (token !== callToken) return;
-  previewFallback('This is a preview of the call screen. The live voice line switches on before launch.');
+  previewFallback(L('This is a preview of the call screen. The live voice line switches on before launch.', 'Esto es una vista previa de la pantalla de llamada. La voz en directo se activa antes del lanzamiento.'));
 }
 function previewFallback(text) {
   callFoot.textContent = text + ' ';
-  const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Continue in chat'; b.onclick = () => { endCall(true); openChat(); }; callFoot.append(b);
+  const b = document.createElement('button'); b.type = 'button'; b.textContent = L('Continue in chat', 'Seguir en el chat'); b.onclick = () => { endCall(true); openChat(); }; callFoot.append(b);
 }
 function animateLevel() {
   cancelAnimationFrame(levelRaf);
@@ -761,28 +792,29 @@ function endCall(silent) {
   if (!silent) track('scout_call_end');
 }
 $('#call-end').addEventListener('click', () => endCall());
-muteBtn.addEventListener('click', () => { const m = muteBtn.getAttribute('aria-pressed') !== 'true'; muteBtn.setAttribute('aria-pressed', String(m)); muteBtn.setAttribute('aria-label', m ? 'Unmute microphone' : 'Mute microphone'); try { session_?.mute(m); } catch {} });
+muteBtn.addEventListener('click', () => { const m = muteBtn.getAttribute('aria-pressed') !== 'true'; muteBtn.setAttribute('aria-pressed', String(m)); muteBtn.setAttribute('aria-label', m ? L('Unmute microphone', 'Activar micrófono') : L('Mute microphone', 'Silenciar micrófono')); try { session_?.mute(m); } catch {} });
 call.addEventListener('keydown', e => { if (e.key === 'Escape') endCall(); });
 
 /* ───────────────────────── Client stories ───────────────────────── */
 // Real feedback, ported from /old2: two founders on camera, then written reviews, then one closing card.
+// `es` holds the Spanish; written reviews shown in Spanish are labelled as translated.
 // It behaves like a phone story: videos start on their own, tap right for next, left for back, hold to pause.
 const STORIES = [
-  { video: 'garrett', name: 'Garrett Williams', role: 'Econocraft Materials · USA', cap: 'Garrett, in his own words.', fit: true },
-  { video: 'aj', name: 'AJ', role: 'Folkrm · USA', cap: 'AJ, in his own words.' },
-  { quote: "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!", name: 'Corinna C.', role: 'Edible Health · UK' },
-  { quote: 'Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.', name: 'Sophie M.' },
-  { quote: 'Maksym was a fantastic partner on this project. His attention to detail and willingness to iterate until we got it just right made all the difference.', name: 'David W.' },
-  { quote: 'You are so great to work with! Thank you so much for all your hard work and for being so patient with all of my changes.', name: 'Michelle K.' },
-  { quote: 'Excellent communication and very quick to understand what I was looking for. Delivered high-quality work with great attention to detail.', name: 'Daniel R.' },
-  { quote: 'Maksym is very professional, responsive, and attentive to details. He really took the time to understand our brand and vision.', name: 'Tom H.' },
-  { quote: 'Maksym delivered exactly what we needed. He was proactive with suggestions and very responsive throughout the project.', name: 'Laura P.' },
-  { quote: 'Professional, creative, and great at understanding the business needs behind the design request. Communication was top-notch.', name: 'Sarah L.' },
-  { quote: 'Maksym understood the brief quickly and delivered exactly what was needed. Communication was excellent throughout.', name: 'Eleanor K.' },
-  { quote: 'Great communication, very responsive, and delivered the work on time with high quality. Would definitely work with him again.', name: 'Rachel T.' },
-  { quote: 'Maksym is a great designer who listens carefully to what you need and delivers great results. Very responsive and professional.', name: 'Anna G.' },
-  { quote: 'Very easy to work with, excellent communication, and always available for feedback and revisions.', name: 'Chris B.' },
-  { quote: 'Maksym was a pleasure to work with and very very talented.', name: 'James T.' },
+  { video: 'garrett', name: 'Garrett Williams', role: 'Econocraft Materials · USA', cap: 'Garrett, in his own words.', fit: true, es: { role: 'Econocraft Materials · EE. UU.', cap: 'Garrett, en sus propias palabras.' } },
+  { video: 'aj', name: 'AJ', role: 'Folkrm · USA', cap: 'AJ, in his own words.', es: { role: 'Folkrm · EE. UU.', cap: 'AJ, en sus propias palabras.' } },
+  { quote: "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!", name: 'Corinna C.', role: 'Edible Health · UK', es: { role: 'Edible Health · Reino Unido', quote: '¡Wow, Maks, esto es j***damente increíble! Tengo que mirarlo bien en el portátil, ¡pero estoy alucinando! ¡Eres un genio! ¡¡Gracias!!' } },
+  { quote: 'Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.', name: 'Sophie M.', es: { quote: 'Maksym se tomó el tiempo de entender de verdad lo que necesitaba nuestro negocio y propuso soluciones creativas que encajaban a la perfección. Respondía rápido y fue muy fácil trabajar con él durante todo el proceso.' } },
+  { quote: 'Maksym was a fantastic partner on this project. His attention to detail and willingness to iterate until we got it just right made all the difference.', name: 'David W.', es: { quote: 'Maksym fue un gran compañero en este proyecto. Su atención al detalle y sus ganas de iterar hasta dejarlo perfecto marcaron la diferencia.' } },
+  { quote: 'You are so great to work with! Thank you so much for all your hard work and for being so patient with all of my changes.', name: 'Michelle K.', es: { quote: '¡Es un placer trabajar contigo! Muchísimas gracias por todo tu trabajo y por tener tanta paciencia con todos mis cambios.' } },
+  { quote: 'Excellent communication and very quick to understand what I was looking for. Delivered high-quality work with great attention to detail.', name: 'Daniel R.', es: { quote: 'Comunicación excelente y muy rápido en entender lo que buscaba. Entregó un trabajo de gran calidad, cuidado hasta el detalle.' } },
+  { quote: 'Maksym is very professional, responsive, and attentive to details. He really took the time to understand our brand and vision.', name: 'Tom H.', es: { quote: 'Maksym es muy profesional, responde rápido y cuida los detalles. Se tomó el tiempo de entender de verdad nuestra marca y nuestra visión.' } },
+  { quote: 'Maksym delivered exactly what we needed. He was proactive with suggestions and very responsive throughout the project.', name: 'Laura P.', es: { quote: 'Maksym entregó justo lo que necesitábamos. Propuso ideas por iniciativa propia y respondió rápido durante todo el proyecto.' } },
+  { quote: 'Professional, creative, and great at understanding the business needs behind the design request. Communication was top-notch.', name: 'Sarah L.', es: { quote: 'Profesional, creativo y muy bueno entendiendo lo que necesita el negocio detrás de cada encargo de diseño. Una comunicación de primera.' } },
+  { quote: 'Maksym understood the brief quickly and delivered exactly what was needed. Communication was excellent throughout.', name: 'Eleanor K.', es: { quote: 'Maksym entendió el encargo enseguida y entregó exactamente lo que hacía falta. La comunicación fue excelente de principio a fin.' } },
+  { quote: 'Great communication, very responsive, and delivered the work on time with high quality. Would definitely work with him again.', name: 'Rachel T.', es: { quote: 'Gran comunicación, responde muy rápido y entregó a tiempo y con mucha calidad. Sin duda volvería a trabajar con él.' } },
+  { quote: 'Maksym is a great designer who listens carefully to what you need and delivers great results. Very responsive and professional.', name: 'Anna G.', es: { quote: 'Maksym es un gran diseñador: escucha con atención lo que necesitas y consigue resultados excelentes. Muy rápido y muy profesional.' } },
+  { quote: 'Very easy to work with, excellent communication, and always available for feedback and revisions.', name: 'Chris B.', es: { quote: 'Muy fácil trabajar con él, comunicación excelente y siempre disponible para comentarios y cambios.' } },
+  { quote: 'Maksym was a pleasure to work with and very very talented.', name: 'James T.', es: { quote: 'Un placer trabajar con Maksym, y con muchísimo talento.' } },
   { end: true },
 ];
 const storiesEl = $('#stories'), storyFrame = $('#story-frame'), storyBars = $('#story-bars'), storyStage = $('#story-stage'), storyWho = $('#story-who'), storyMuteBtn = $('#story-mute');
@@ -794,6 +826,7 @@ storyVideo.playsInline = true; storyVideo.setAttribute('playsinline', ''); story
 const media = name => `${OWN}media/${name}`;
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
 const current = () => STORIES[storyIdx];
+const sv = (st, k) => (lang === 'es' && st.es && st.es[k]) || st[k];
 function openStories(i = 0, opener) {
   storyOpener = opener || null;
   // Sound follows the site: music on means the founders talk out loud, music off means they start muted.
@@ -818,7 +851,7 @@ function stopVideo() {
 function syncMute() {
   storyVideo.muted = storyMuted;
   storyMuteBtn.setAttribute('aria-pressed', String(storyMuted));
-  storyMuteBtn.setAttribute('aria-label', storyMuted ? 'Unmute' : 'Mute');
+  storyMuteBtn.setAttribute('aria-label', storyMuted ? L('Unmute', 'Activar sonido') : L('Mute', 'Silenciar'));
   storyFrame.classList.toggle('loud', !!current().video && !storyMuted);
   wake();
 }
@@ -852,7 +885,7 @@ function showStory(i) {
   storyMuteBtn.hidden = !st.video;
   // Header: who is speaking.
   const av = st.video ? Object.assign(el('img', 'av'), { src: media(`face-${st.video}.webp`), alt: '' }) : el('span', 'av', st.end ? '✦' : st.name[0]);
-  const who = el('span'); who.append(st.end ? 'care_less' : st.name, el('small', '', st.end ? 'Your turn' : st.role || 'Verified client'));
+  const who = el('span'); who.append(st.end ? 'care_less' : st.name, el('small', '', st.end ? L('Your turn', 'Tu turno') : sv(st, 'role') || L('Verified client', 'Cliente verificado')));
   storyWho.replaceChildren(av, who);
   let node;
   if (st.video) {
@@ -860,21 +893,24 @@ function showStory(i) {
     node.style.setProperty('--poster', `url("${media(`story-${st.video}.webp`)}")`);
     storyVideo.poster = media(`story-${st.video}.webp`);
     storyVideo.src = media(`story-${st.video}.mp4`);
-    node.append(storyVideo, el('p', 'story-cap', st.cap), el('i', 'story-spin'), el('i', 'story-glyph'));
+    node.append(storyVideo, el('p', 'story-cap', sv(st, 'cap')), el('i', 'story-spin'), el('i', 'story-glyph'));
     storyStage.replaceChildren(node);
     storyFrame.classList.add('loading'); playVideo(); track('stories_video', { who: st.name, muted: storyMuted });
   } else {
     stopVideo();
     if (st.quote) {
-      node = el('div', 'story story-quote' + (st.quote.length > 150 ? ' long' : ''));
-      node.append(el('div', 'mark', '“'), el('blockquote', '', st.quote), el('p', 'stars', '★★★★★'), el('i', 'story-glyph'));
+      const q = sv(st, 'quote');
+      node = el('div', 'story story-quote' + (q.length > 150 ? ' long' : ''));
+      node.append(el('div', 'mark', '“'), el('blockquote', '', q), el('p', 'stars', '★★★★★'));
+      if (q !== st.quote) node.append(el('p', 'src', 'Traducido del inglés'));
+      node.append(el('i', 'story-glyph'));
     } else {
       node = el('div', 'story story-end');
-      const book = Object.assign(el('a', 'btn btn-paper'), { href: BOOKING, target: '_blank', rel: 'noopener noreferrer' }); book.innerHTML = 'Book a call with me <span aria-hidden="true">→</span>';
+      const book = Object.assign(el('a', 'btn btn-paper'), { href: BOOKING, target: '_blank', rel: 'noopener noreferrer' }); book.innerHTML = L('Book a call with me', 'Reserva una llamada conmigo') + ' <span aria-hidden="true">→</span>';
       book.addEventListener('click', () => track('book', { from: 'stories' }));
-      const again = Object.assign(el('button', 'story-all'), { type: 'button', textContent: '↺ Watch again' });
+      const again = Object.assign(el('button', 'story-all'), { type: 'button', textContent: L('↺ Watch again', '↺ Ver de nuevo') });
       again.addEventListener('click', () => showStory(0));
-      node.append(el('h3', '', 'Want to be the next one?'), el('p', '', 'These are just a few of them. Every one, five stars.'), book, again);
+      node.append(el('h3', '', L('Want to be the next one?', '¿Hablamos de tu negocio?')), el('p', '', L('These are just a few of them. Every one, five stars.', 'Esto es solo una muestra. Todas, de cinco estrellas.')), book, again);
     }
     storyStage.replaceChildren(node);
   }
@@ -933,19 +969,24 @@ $('#proof-open').addEventListener('click', e => openStories(0, e.currentTarget))
 
 /* ───────────────────────── Offers ───────────────────────── */
 const OFFERS = {
-  look: ['The 5-second test', "Send your website. We'll show you what a stranger understands in five seconds, and what they miss."],
-  leak: ['The missed-enquiry check', "Tell us how enquiries reach you. We'll show who waited, who left, and roughly what they were worth."],
-  shopper: ['The mystery-shopper run', "We pose as a new customer, from first enquiry to after the sale, and show you exactly where we'd have walked away."],
-  needs_me: ['The "does it need me?" check', "A few questions, one page back: everything that still can't happen without you, and what it costs you in hours."],
+  look: ['The 5-second test', "Send your website. We'll show you what a stranger understands in five seconds, and what they miss.",
+    'El test de 5 segundos', 'Envíanos tu web. Te enseñamos qué entiende un desconocido en cinco segundos, y qué se le escapa.'],
+  leak: ['The missed-enquiry check', "Tell us how enquiries reach you. We'll show who waited, who left, and roughly what they were worth.",
+    '¿Cuántas consultas pierdes?', 'Cuéntanos cómo te llegan las consultas. Te enseñamos quién esperó, quién se fue y, más o menos, cuánto valían.'],
+  shopper: ['The mystery-shopper run', "We pose as a new customer, from first enquiry to after the sale, and show you exactly where we'd have walked away.",
+    'El cliente misterioso', 'Nos hacemos pasar por un cliente nuevo, de la primera consulta a la posventa, y te enseñamos justo dónde nos habríamos ido.'],
+  needs_me: ['The "does it need me?" check', "A few questions, one page back: everything that still can't happen without you, and what it costs you in hours.",
+    'El test «¿me necesita?»', 'Unas pocas preguntas y te devolvemos una página: todo lo que aún no puede pasar sin ti y lo que te cuesta en horas.'],
 };
+const offerText = id => L(OFFERS[id].slice(0, 2), OFFERS[id].slice(2));
 const offerEl = $('#offer'), offerForm = $('#offer-form'), offerStatus = $('#offer-status'), offerContact = $('#offer-contact');
 let offerId = '', offerOpener = null;
 $$('[data-offer]').forEach(b => b.addEventListener('click', () => openOffer(b.dataset.offer, b)));
 function openOffer(id, opener) {
   offerId = id; offerOpener = opener; openedAt = Date.now();
-  $('#offer-title').textContent = OFFERS[id][0]; $('#offer-desc').textContent = OFFERS[id][1];
+  const [title, desc] = offerText(id); $('#offer-title').textContent = title; $('#offer-desc').textContent = desc;
   offerForm.reset(); offerForm.hidden = false; offerStatus.textContent = ''; offerStatus.className = 'offer-status';
-  $('#offer-wa').href = wa(`Hi Maks, I'd like ${OFFERS[id][0]}.`);
+  $('#offer-wa').href = wa(L(`Hi Maks, I'd like ${title}.`, `Hola Maks, me interesa: ${title}.`));
   offerEl.hidden = false; modal++; setTimeout(() => offerContact.focus({ preventScroll: true }), 60);
   track('offer_open', { offer_id: id });
 }
@@ -957,13 +998,13 @@ offerForm.addEventListener('submit', async e => {
   const v = offerContact.value.trim();
   let site = false; try { const u = new URL(/^https?:\/\//i.test(v) ? v : 'https://' + v); site = u.hostname.includes('.') && !v.includes('@') && !/\s/.test(v); } catch {}
   const ok = isEmail(v) || site || phoneOf(v);
-  offerContact.setCustomValidity(ok ? '' : 'Add a website, email or phone number.');
+  offerContact.setCustomValidity(ok ? '' : L('Add a website, email or phone number.', 'Añade una web, un email o un teléfono.'));
   if (!offerContact.reportValidity()) return;
-  const btn = $('button[type="submit"]', offerForm); btn.disabled = true; offerStatus.textContent = 'Sending…';
+  const btn = $('button[type="submit"]', offerForm); btn.disabled = true; offerStatus.textContent = L('Sending…', 'Enviando…');
   const sent = await submitLead(offerId, v, $('#offer-note').value.trim());
   btn.disabled = false;
-  if (sent) { offerForm.hidden = true; offerStatus.textContent = "Got it. We'll be in touch soon."; offerStatus.className = 'offer-status ok'; track('offer_submit', { offer_id: offerId }); }
-  else offerStatus.textContent = "That didn't send. Try again, or use WhatsApp below.";
+  if (sent) { offerForm.hidden = true; offerStatus.textContent = L("Got it. We'll be in touch soon.", 'Recibido. Te escribimos pronto.'); offerStatus.className = 'offer-status ok'; track('offer_submit', { offer_id: offerId }); }
+  else offerStatus.textContent = L("That didn't send. Try again, or use WhatsApp below.", 'No se ha enviado. Inténtalo de nuevo o usa WhatsApp.');
 });
 offerContact.addEventListener('input', () => offerContact.setCustomValidity(''));
 
@@ -981,9 +1022,10 @@ const finalInput = $('#final-input'), finalTalk = $('#final-talk');
 let talkTimer = 0;
 // Rotating placeholder: short enough for one line on a phone.
 (() => {
-  const ideas = ['repeating myself…', 'chasing quotes…', 'answering the same emails…', 'being the bottleneck…', 'posting on social…'];
+  const ideas = () => L(['repeating myself…', 'chasing quotes…', 'answering the same emails…', 'being the bottleneck…', 'posting on social…'],
+    ['repetirme…', 'perseguir presupuestos…', 'responder los mismos emails…', 'ser el cuello de botella…', 'publicar en redes…']);
   let i = 0;
-  setInterval(() => { if (document.activeElement === finalInput || finalInput.value || motion.matches) return; i = (i + 1) % ideas.length; finalInput.placeholder = ideas[i]; }, 2600);
+  setInterval(() => { if (document.activeElement === finalInput || finalInput.value || motion.matches) return; i = (i + 1) % 5; finalInput.placeholder = ideas()[i]; }, 2600);
 })();
 finalInput.addEventListener('focus', () => { clearTimeout(talkTimer); talkTimer = setTimeout(() => finalTalk.hidden = false, 1000); });
 finalInput.addEventListener('input', () => { finalInput.style.height = 'auto'; finalInput.style.height = Math.min(160, finalInput.scrollHeight) + 'px'; });
@@ -992,19 +1034,46 @@ finalTalk.addEventListener('click', () => { track('final_talk'); startCall(); })
 $('#final-form').addEventListener('submit', e => {
   e.preventDefault(); const t = finalInput.value.trim(); if (!t) { finalInput.focus(); return; }
   track('final_submit');
-  if (SCOUT_MODE === 'off') { window.open(wa("Hi Maks, I'd like to care less about: " + t), '_blank', 'noopener'); return; }
+  if (SCOUT_MODE === 'off') { window.open(wa(L("Hi Maks, I'd like to care less about: ", 'Hola Maks, me gustaría preocuparme menos por: ') + t), '_blank', 'noopener'); return; }
   finalInput.value = '';
   if (SCOUT_MODE === 'preview') {
     chatStarted = true; log.replaceChildren(); setQuick([]);
     chat.hidden = false; chat.classList.remove('leaving'); showDock(); $('#chat-mode').hidden = false; track('scout_chat_open');
-    addMsg("Hey, I'm Scout. You'd like to care less about…", 'scout'); addMsg(t, 'user');
+    addMsg(L("Hey, I'm Scout. You'd like to care less about…", 'Hola, soy Scout. Te gustaría preocuparte menos por…'), 'scout'); addMsg(t, 'user');
     engines.preview.seed(t);
   } else openChat(t);
+});
+
+/* ───────────────────────── Language switch ───────────────────────── */
+// Swaps every fixed text in place (originals are kept, so it switches back), then re-says the few live lines.
+const langBtn = $('#lang'), origHTML = new Map(), origText = new Map(), origAttr = new Map();
+const textNode = n => [...n.childNodes].find(c => c.nodeType === 3 && c.textContent.trim());
+function applyLang() {
+  const es = lang === 'es', T = window.CL_ES;
+  root.lang = lang;
+  if (T) {
+    for (const [sel, html] of Object.entries(T.html)) $$(sel).forEach(n => { if (!origHTML.has(n)) origHTML.set(n, n.innerHTML); n.innerHTML = es ? html : origHTML.get(n); });
+    for (const [sel, text] of Object.entries(T.text)) $$(sel).forEach(n => { const t = textNode(n); if (!t) return; if (!origText.has(n)) origText.set(n, t.textContent); t.textContent = es ? text : origText.get(n); });
+    for (const [sel, a, v] of T.attr) $$(sel).forEach(n => { const m = origAttr.get(n) || {}; origAttr.set(n, m); if (!(a in m)) m[a] = n.getAttribute(a); n.setAttribute(a, es ? v : m[a]); });
+  }
+  langBtn.textContent = es ? 'EN' : 'ES'; langBtn.lang = es ? 'en' : 'es';
+  langBtn.setAttribute('aria-label', es ? 'View in English' : 'Ver en español');
+  if (!root.classList.contains('begun')) gateStatus.textContent = gateDone ? L('Schedule cleared.', 'Agenda despejada.') : greet();
+  if (encTyped) $$('.enc-line', enc).forEach(l => l.textContent = l.dataset.type);
+  root.classList.remove('i18n-wait');
+  layout(); wake();
+}
+langBtn.addEventListener('click', () => {
+  lang = lang === 'es' ? 'en' : 'es';
+  try { localStorage.setItem('cl-lang', lang); } catch {}
+  if (/[?&]lang=/.test(location.search)) history.replaceState(null, '', location.pathname + location.search.replace(/([?&]lang=)(en|es)/, '$1' + lang) + location.hash);
+  applyLang(); track('lang', { to: lang });
 });
 
 /* ───────────────────────── Boot ───────────────────────── */
 layout();
 runGate();
+applyLang();
 addEventListener('load', () => { layout(); wake(); });
 setInterval(() => { if (!document.hidden && root.classList.contains('begun')) wake(); }, 450);
 if (document.fonts) document.fonts.ready.then(layout);

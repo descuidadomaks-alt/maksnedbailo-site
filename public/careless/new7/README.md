@@ -2,7 +2,14 @@
 
 Buildless page served by the rewrite `/new7 → /careless/new7/index.html` (next.config.js). noindex. It reuses /new5's film, fonts and Scout avatar (`BASE`); its own media (`OWN`) is the comic panels, the final-screen loop, the client story videos and Maks's avatar. /new5 and /new6 stay untouched.
 
-Files: `index.html`, `new7.css`, `new7.js` (readable, no build step), `media/`, `fonts/`.
+Files: `index.html`, `new7.css`, `new7.js` (readable, no build step), `es.js` (Spanish), `media/`, `fonts/`.
+
+## Languages
+English and Spanish (Spain, tú). The header button (ES/EN, also on the gate) switches in place and is remembered in localStorage `cl-lang`; `?lang=es` / `?lang=en` forces one; otherwise a Spanish browser gets Spanish.
+- Fixed page text: `es.js` maps a CSS selector to its Spanish (`html`, `text` for buttons with icons, `attr`). English stays in `index.html`; the originals are kept so the switch goes both ways.
+- Text the script writes (gate greeting, hero lines, Scout's chat and call, offers, stories): `L('English', 'Spanish')` next to each other in `new7.js`.
+- Written reviews shown in Spanish are translations and are labelled "Traducido del inglés"; the videos stay in English.
+- A Spanish visitor's gate waits for its Spanish text (`i18n-wait` class set by the inline script in `<head>`), so it never flashes English.
 
 ## Film
 - Default film = the rendered /new4 film (`FILMS.v4`), so the live page never shows the grey blockout.
@@ -38,7 +45,8 @@ Files: `index.html`, `new7.css`, `new7.js` (readable, no build step), `media/`, 
 Background is `media/final-loop-*.mp4`: the colony push-in from `video/v1/7.mp4`, slowed and played forward-then-back so it loops without a cut. It only loads when the screen is near.
 
 ## Scout on phones
-Through the four chapters the dock shrinks to a small glowing mark centred in the gap between the org chart and the chapter (`.dock-btn.mini`, position set in the stage tick). Tapping it, opening chat/call, or leaving the chapters sends it back to the corner. To use a custom mark instead of the avatar, swap the image inside `.dock-btn` while `.mini` is on.
+Through the four chapters the avatar folds away and Scout's mark (`#dock-pill`: Maks's Scout symbol SVG + "scout_") sits on the right edge, level with the chapter dashes, glowing slowly. Tapping it, opening chat/call, or leaving the chapters brings the avatar back to the corner. Position is set in the stage tick (`--py`).
+A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), past the last one it carries on to "Say it once".
 
 ## Comic
 `media/comic-*.webp` are print-style treatments of the HQ and Scout stills (halftone + ink). Replace with drawn comic art when available, same size (640×545).

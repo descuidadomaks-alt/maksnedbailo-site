@@ -37,6 +37,13 @@ em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--amber)
 html.begun .top-book{opacity:1;transform:none}
 .top-book:hover{background:var(--paper);color:var(--ink)}
 .top-right{display:flex;align-items:center;gap:10px}
+/* Language: visible from the gate on, so a Spanish visitor can switch before the film starts. */
+.lang{pointer-events:auto;height:37px;min-width:37px;padding:0 11px;border:1px solid var(--line);border-radius:999px;background:rgba(15,14,12,.25);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--muted);font:500 11px/1 var(--mono);letter-spacing:.1em;transition:color .25s,border-color .25s}
+.lang:hover{color:var(--paper);border-color:var(--line-2)}
+html:not(.begun) .topbar{z-index:91}
+html:not(.begun) .sound,html:not(.begun) .top-book{visibility:hidden}
+/* Spanish visitors: the gate waits for its Spanish text instead of flashing English (class set in <head>, removed in new7.js). */
+html.i18n-wait .gate-inner,html.i18n-wait .topbar{opacity:0}
 .sound{pointer-events:auto;display:inline-flex;align-items:center;gap:2px;height:37px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:rgba(15,14,12,.25);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--muted);font-size:12px;opacity:0;transform:translateY(-6px);transition:opacity .6s var(--ease) .1s,transform .6s var(--ease) .1s,color .25s,border-color .25s}
 html.begun .sound{opacity:1;transform:none}
 .sound:hover{color:var(--paper);border-color:var(--line-2)}
@@ -199,7 +206,7 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 .human-sig p{margin:0;display:grid;gap:3px;max-width:none!important}
 .human-sig b{font:500 16px/1.2 var(--sans);color:var(--paper);letter-spacing:-.01em}
 .human-sig span{font:400 10.5px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
-.human-sig em{font:italic 400 14px/1.35 var(--serif);color:var(--muted);margin-top:2px}
+.human-sig b em{font:italic 400 1.12em/1 var(--serif);color:var(--amber);letter-spacing:0;padding-right:.04em}
 
 /* Client stories trigger */
 .proof{margin-top:26px;display:inline-flex;align-items:center;gap:14px;padding:8px 18px 8px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(242,238,229,.03);text-align:left;transition:border-color .3s,background .3s,transform .4s var(--spring)}
@@ -262,6 +269,7 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 .story-quote blockquote{margin:18px 0 0;font:300 clamp(23px,6.4vw,30px)/1.3 var(--sans);letter-spacing:-.025em;text-wrap:pretty}
 .story-quote.long blockquote{font-size:clamp(20px,5.4vw,24px)}
 .story-quote .stars{margin-top:26px;color:var(--amber);letter-spacing:.14em;font-size:14px}
+.story-quote .src{margin-top:6px;font:400 10.5px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
 .story-end{align-content:center;justify-items:start;gap:18px;padding:84px 30px 60px;background:radial-gradient(80% 60% at 50% 30%,rgba(224,177,116,.18),transparent 65%),#16130f}
 .story-end h3{margin:0;font:300 34px/1.1 var(--sans);letter-spacing:-.04em}
 .story-end p{margin:0;color:var(--muted)}
@@ -302,6 +310,8 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 .final-inner{position:relative;align-self:center;display:grid;justify-items:center;text-align:center;gap:0;width:min(900px,100%);margin:0 auto;padding:18svh max(16px,env(safe-area-inset-right,0px)) 10svh max(16px,env(safe-area-inset-left,0px))}
 .final h2{margin:0;font:300 clamp(40px,5.6vw,88px)/1.04 var(--sans);letter-spacing:-.055em;text-wrap:balance}
 .final h2 em{font-size:1.05em}
+/* Spanish runs longer: the last question steps down a size so it stays three lines on a phone. */
+html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
 .final-form{position:relative;width:min(680px,100%);margin-top:clamp(36px,6svh,64px);display:flex;align-items:center;gap:12px;padding:8px 8px 8px 30px;border-radius:999px;border:1px solid var(--line-2);background:rgba(15,14,12,.5);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);transition:border-color .3s,box-shadow .4s}
 .final-form:focus-within{border-color:rgba(224,177,116,.7);box-shadow:0 0 0 6px rgba(224,177,116,.08)}
 .final-form textarea{flex:1;min-width:0;resize:none;border:0;background:transparent;color:var(--paper);font:300 clamp(17px,1.4vw,21px)/1.5 var(--sans);padding:10px 0;max-height:160px;outline:none}
@@ -351,10 +361,15 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 @keyframes dock-ping{0%{opacity:.8;transform:scale(1)}80%,100%{opacity:0;transform:scale(1.5)}}
 .dock-btn:hover{transform:scale(1.07)}
 /* Phones, during the chapters: a small mark mid-screen with a slow glow. --mx/--my are set in new7.js. */
-.dock-btn.mini{transform:translate(var(--mx,0),var(--my,0)) scale(.5);box-shadow:0 0 0 2.5px var(--scout),0 0 0 8px rgba(212,248,58,.1),0 8px 24px -6px rgba(0,0,0,.7);transition:transform .8s var(--spring),box-shadow .4s}
-.dock-btn.mini::after{inset:-4px;box-shadow:0 0 22px 4px rgba(212,248,58,.5);animation:mini-glow 3.4s ease-in-out infinite}
-@keyframes mini-glow{0%,100%{opacity:.15;transform:scale(.92)}50%{opacity:.7;transform:scale(1.04)}}
-.dock-btn{transition:transform .7s var(--spring),box-shadow .4s}
+/* Phones, during the chapters: the avatar folds away toward the right edge and Scout's mark takes its place. */
+.dock-btn{transition:transform .7s var(--spring),box-shadow .4s,opacity .35s .15s}
+.dock-btn.mini{transform:translate(var(--mx,0),var(--my,0)) scale(.3);opacity:0;pointer-events:none;transition:transform .7s var(--ease),box-shadow .4s,opacity .3s .25s}
+.dock-pill{position:fixed;z-index:55;right:var(--gx);top:var(--py,50%);display:flex;align-items:center;gap:7px;height:30px;margin-top:-15px;padding:0 12px 0 10px;border-radius:999px;border:1px solid rgba(212,248,58,.45);background:rgba(15,14,12,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--scout);box-shadow:0 8px 24px -8px rgba(0,0,0,.8);opacity:0;transform:scale(.6);transform-origin:right center;pointer-events:none;visibility:hidden;transition:opacity .25s,transform .4s var(--ease),visibility 0s .4s}
+.dock-pill.on{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .4s .35s,transform .6s .3s var(--spring),visibility 0s}
+.dock-pill svg{width:15px;height:15px;fill:currentColor;flex:none}
+.dock-pill span{font:500 11.5px/1 var(--mono);letter-spacing:.04em}
+.dock-pill::after{content:"";position:absolute;inset:-1px;border-radius:inherit;box-shadow:0 0 18px 2px rgba(212,248,58,.45);opacity:.2;animation:pill-glow 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes pill-glow{0%,100%{opacity:.12}50%{opacity:.6}}
 .dock.arrive{animation:dock-in .9s var(--spring) both}
 @keyframes dock-in{from{opacity:0;transform:translateY(24px) scale(.6);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
 .dock-menu{display:grid;gap:8px;justify-items:end;animation:rise .35s var(--ease) both}
@@ -463,6 +478,8 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
   :root{--gx:22px}
   .wordmark{font-size:16px}
   .top-book{font-size:12px;padding:8px 13px}
+  .top-right{gap:8px}
+  .lang{height:33px;min-width:33px;padding:0 9px;font-size:10.5px}
   .sound{height:33px;padding:0 11px}.sound span{display:none}
   .rail{display:none}
   html.begun .progress{opacity:.9}
