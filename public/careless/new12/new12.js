@@ -87,6 +87,9 @@ if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() =
     preload: load,
     async start(cb) {
       if (used() >= VOICE.perDay) throw Object.assign(new Error('limit'), { limit: true });
+      // Ask for the microphone first, straight from the tap (iPhone browsers only prompt then), and keep the reason if refused.
+      try { const st = await navigator.mediaDevices.getUserMedia({ audio: true }); st.getTracks().forEach(t => t.stop()); }
+      catch (e) { throw Object.assign(new Error('mic'), { mic: true, why: e?.name || 'unavailable' }); }
       await load();
       const C = window.MyChatBotCalls; ui = cb;
       if (!wired) {
@@ -914,7 +917,9 @@ async function startCall() {
       if (token !== callToken) return;
       callState.textContent = e.limit ? L("That's today's calls", 'Por hoy, ya no hay más llamadas') : L("Couldn't connect", 'No se pudo conectar');
       previewFallback(e.limit ? L("Scout takes two calls a day per visitor. He's still here in chat.", 'Scout atiende dos llamadas al día por visitante. Sigue aquí en el chat.')
-        : e.mic ? L('Scout needs your microphone for a call. Allow it in the browser, or type instead.', 'Scout necesita tu micrófono para la llamada. Permítelo en el navegador o escribe.')
+        : e.mic ? (/iP(hone|ad|od)/.test(navigator.userAgent)
+          ? L('Your browser blocked the microphone. On iPhone: Settings → your browser (Safari or Chrome) → Microphone on, and allow it for this site; then reload. Or type instead.', 'Tu navegador ha bloqueado el micrófono. En iPhone: Ajustes → tu navegador (Safari o Chrome) → Micrófono activado, y permítelo para esta web; luego recarga. O escribe.')
+          : L('Your browser blocked the microphone. Allow it for this site (the icon next to the address), then try again. Or type instead.', 'Tu navegador ha bloqueado el micrófono. Permítelo para esta web (el icono junto a la dirección) y vuelve a intentarlo. O escribe.')) + (e.why ? ' (' + e.why + ')' : '')
         : L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?'));
       track('scout_call_fail', { reason: e.limit ? 'limit' : e.mic ? 'mic' : 'error' });
     }
