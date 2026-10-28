@@ -23,7 +23,7 @@ English and Spanish (Spain, tú). The header button (ES/EN, also on the gate) sw
 - Scroll mapping: `map` is `[scroll in viewport heights, film seconds]`. Caption windows get more scroll per second (dwell), transitions less. After the user stops, a soft settle glides to the nearest beat if it's within 30% of a screen.
 
 ## Scout
-- `SCOUT_MODE` (`window.CARELESS_SCOUT_MODE`): `preview` (default, labelled scripted demo; confirmed contacts are posted to `/api/new5-lead`), `live` (MCB widget transport), `off` (WhatsApp handoff).
+- `SCOUT_MODE` (`window.CARELESS_SCOUT_MODE`): `live` (default since 2026-10-28: MCB widget transport to Scout 21406, widget careless-scout-staging), `preview` (labelled scripted demo; confirmed contacts are posted to `/api/new5-lead`), `off` (WhatsApp handoff). Rollback: set the default back to `preview` or switch the widget off in MCB.
 - Voice: define `window.CarelessVoice.start({ onState, onLevel, onCaption })` → `Promise<{ mute(bool), end() }>` and set mode `live`. The call screen is already wired to it.
 - Agent instructions: `docs/scout-website-prompt.md`.
 
@@ -95,6 +95,6 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - Phones crop the 16:9 film; `FILM.focus` aims the crop at 62% while Scout is on screen, then back to centre.
 - The film names the five teams itself, so the team chips under "Five teams. One conversation." show on phones only.
 - Sound layers are timed to film moments (uAt), not fixed scroll positions.
-- Includes the Scout live-chat safeguards from branch care-less-scout-v12 (inactive while SCOUT_MODE is preview).
+- Includes the Scout live-chat safeguards from branch care-less-scout-v12: 20-message cap, insult guard (answered on the page, never sent), distress guard (112/024), typing dots + 90 s wait, only the zcal and wa.me links clickable. Voice stays the labelled preview.
 - Narrow screens (aspect ≤ 4:3): the idle hero (poster + loop) pans 50% → 0% (sunset) → 100% → 50% on a 36 s sine curve (`@keyframes pan`). The first scroll pauses it (`.film.still`), and the film starts from that exact object-position (`panFrom`), easing to its own framing by ~7 s (the ant hill). Back at the top the pan resumes where it stopped.
 - Last screen: LAST_VIDEO.mp4 (pool at sunset, 5 s loop, 832×464) as `media/final-loop.mp4` + `final-first.webp`; pans the same way on narrow screens (40 s cycle).

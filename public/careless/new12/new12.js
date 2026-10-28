@@ -12,7 +12,7 @@ const WHATSAPP = '34641935207';
 const BOOKING = 'https://zcal.co/i/O0g63S4u';
 // 'live' = MCB widget transport (+ voice adapter if present) · 'preview' = scripted, labelled demo · 'off' = WhatsApp handoff
 // ?scout=live works on localhost only, for QA against the staging widget.
-const SCOUT_MODE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('scout')) || window.CARELESS_SCOUT_MODE || 'preview';
+const SCOUT_MODE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('scout')) || window.CARELESS_SCOUT_MODE || 'live';
 const LEAD_ENDPOINT = '/api/new5-lead';
 // The "first AI hire" capacity line (Maks: about 5 new businesses a month). Set `perMonth` to null for the general line.
 const CAPACITY = { perMonth: 5 };
