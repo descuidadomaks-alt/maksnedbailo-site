@@ -6,13 +6,16 @@
 /* ───────────────────────── Config ───────────────────────── */
 const BASE = '/careless/shared/'; // shared film, avatar and fonts
 const MEDIA = '/careless/shared/media/'; // comic, final loop, stories, Maks's avatar
-// The idle loop is the film's own first two seconds, forward then back, so the first scroll picks up the same shot.
-const LOOP = { src: '/careless/new12/media/loop.mp4' };
+// The idle hero: STATIC_NEW_MAIN_VIDEO (5 s loop, same first frame as the film, so the dissolve into the film is clean).
+const LOOP = { src: '/careless/new12/media/hero-loop.mp4' };
 const WHATSAPP = '34641935207';
 const BOOKING = 'https://zcal.co/i/O0g63S4u';
 // 'live' = MCB widget transport (+ voice adapter if present) · 'preview' = scripted, labelled demo · 'off' = WhatsApp handoff
 // ?scout=live works on localhost only, for QA against the staging widget.
 const SCOUT_MODE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('scout')) || window.CARELESS_SCOUT_MODE || 'live';
+// Scout's voice: MyChatBot's Web SDK agent on the Calls channel. Every minute is billed, so the page guards it:
+// a call hangs up at 5 minutes and each browser gets 2 calls a day. The SDK (~480 KB) loads only when someone taps Call.
+const VOICE = { agent: 'agent_2901m5zws6k0e5gsj0jb222npste', sdk: 'https://storage.googleapis.com/mychatbot-widget-assets/v1/calls.js', maxSeconds: 300, perDay: 2 };
 const LEAD_ENDPOINT = '/api/new5-lead';
 // The "first AI hire" capacity line (Maks: about 5 new businesses a month). Set `perMonth` to null for the general line.
 const CAPACITY = { perMonth: 5 };
@@ -29,7 +32,7 @@ const M12 = '/careless/new12/media/';
 const FILM = {
   src720: M12 + 'film-720.mp4', src540: M12 + 'film-540.mp4',
   duration: 34.5,
-  map: [[0,0],[0.9,1.6],[2.0,4.6],[3.0,8.3],[3.4,9.2],[4.6,13.5],[5.6,15.7],[6.3,16.7],[7.4,19.9],[8.4,22.5],[9.5,25.5],[10.6,28.7],[11.3,31.0],[12.2,34.46],[12.9,34.46]],
+  map: [[0,0],[1.06,1.6],[2.36,4.6],[3.54,8.3],[4.01,9.2],[5.21,13.5],[6.21,15.7],[6.91,16.7],[8.01,19.9],[9.01,22.5],[10.11,25.5],[11.21,28.7],[11.91,31.0],[12.81,34.46],[13.51,34.46]],
   captions: { view:[1.0,4.4], takes:[5.0,8.2], jobs:[9.2,13.4], colony:[13.6,15.6], scout:[15.8,16.72], follow:[17.5,19.9], answers:[20.3,22.4], quotes:[22.8,25.4], unseen:[25.8,28.6], hq:[31.0,99] },
   hold: 16.7, scoutSide: 'right',
   focus: [[0,50],[15.0,50],[15.7,62],[17.2,62],[18.3,50],[99,50]],
@@ -70,6 +73,39 @@ function track(name, detail = {}) {
   window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
   window.clarity('event', name);
 }
+/* Voice adapter for the call screen: CarelessVoice.start(ui) → { mute(bool), end() }. ui gets onState, onCaption,
+   onSpeaking and onEnd; MyChatBotCalls does the audio. */
+if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() => {
+  let ui = null, wired = false, capTimer = 0;
+  const load = () => window.MyChatBotCalls ? Promise.resolve() : new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = VOICE.sdk; sc.onload = ok; sc.onerror = no; document.head.append(sc); });
+  const today = () => new Date().toISOString().slice(0, 10);
+  const used = () => { try { const v = JSON.parse(localStorage.getItem('cl-voice') || '{}'); return v.day === today() ? v.n : 0; } catch { return 0; } };
+  const count = () => { try { localStorage.setItem('cl-voice', JSON.stringify({ day: today(), n: used() + 1 })); } catch {} };
+  return {
+    async start(cb) {
+      if (used() >= VOICE.perDay) throw Object.assign(new Error('limit'), { limit: true });
+      await load();
+      const C = window.MyChatBotCalls; ui = cb;
+      if (!wired) {
+        wired = true; C.init({ agent_id: VOICE.agent });
+        C.on('modeChange', m => ui?.onSpeaking(m.mode === 'speaking'));
+        C.on('message', m => m.message && ui?.onCaption(m.message, m.role === 'user' ? 'user' : 'scout'));
+        C.on('disconnect', () => { clearTimeout(capTimer); const u = ui; ui = null; u?.onEnd(); });
+      }
+      return new Promise((resolve, reject) => {
+        const off = () => { C.off('connect', ok); C.off('error', bad); };
+        const ok = () => {
+          off(); count(); cb.onState(L('Scout · live', 'Scout · en directo'));
+          clearTimeout(capTimer); capTimer = setTimeout(() => C.stop(), VOICE.maxSeconds * 1000);
+          resolve({ mute: m => { if (C.isMuted() !== m) C.toggleMute(); }, end: () => { clearTimeout(capTimer); ui = null; C.stop(); } });
+        };
+        const bad = e => { off(); ui = null; reject(Object.assign(new Error(e?.message || 'failed'), { mic: /microphone/i.test(e?.message || '') })); };
+        C.on('connect', ok); C.on('error', bad);
+        C.start({ caller_id: C.defaultCallerId() });
+      });
+    },
+  };
+})();
 function startAnalytics() {
   if (navigator.doNotTrack === '1' || !/maksnedbailo\.site$/.test(location.hostname)) return;
   const s = document.createElement('script'); s.async = true; s.src = 'https://www.clarity.ms/tag/wley84eoj3';
@@ -342,6 +378,38 @@ function startLoop() {
   loop.play().catch(() => {});
 }
 let panFrom = 50; // where the idle pan was when the visitor started scrolling (object-position x, %)
+/* Narrow screens see a third of these 16:9 shots, so the hero and last-screen clips pan across them: from the centre
+   toward the sunset (left), to the far right, and back. Both clips already sway on their own (the camera drifts left and
+   returns once per 5 s loop), so the pan never fights them: it only moves while the clip's camera moves the same way,
+   and in step with it, then holds while the clip swings back. `sway` is the measured drift of the scenery, 0..1. */
+function clipPan(video, els, sway, perLoop) {
+  const D = t => lerpMap(sway, t, 0, 1), end = sway[sway.length - 1][0];
+  const p = { x: 50, dir: -1, prev: -1, active: false };
+  p.step = () => {
+    const t = video.currentTime;
+    if (p.prev >= 0 && !video.paused) {
+      const dD = t >= p.prev ? D(t) - D(p.prev) : (D(end) - D(p.prev)) + (D(t) - D(0));
+      // Scenery moving right = camera moving left = our frame moving toward 0%.
+      if ((p.dir < 0 && dD > 0) || (p.dir > 0 && dD < 0)) {
+        p.x = Math.min(100, Math.max(0, p.x + p.dir * perLoop * Math.abs(dD)));
+        if (p.x <= 0) p.dir = 1; else if (p.x >= 100) p.dir = -1;
+      }
+    }
+    p.prev = t;
+    const v = p.x.toFixed(2) + '% 50%';
+    els.forEach(e => { if (e.style.objectPosition !== v) e.style.objectPosition = v; });
+  };
+  return p;
+}
+const finalPan = clipPan($('#final-loop'), [$('#final-loop')], [[0,0],[.5,.3],[1,.53],[1.5,.69],[2,.8],[2.5,.93],[3,1],[3.5,.95],[4,.79],[4.5,.48],[5.04,0]], 9);
+const heroPan = clipPan(loop, [loop, poster], [[0,0],[.5,.49],[1,.78],[1.5,.93],[2,1],[2.5,.89],[3,.82],[3.5,.68],[4,.5],[4.5,.29],[5.04,0]], 10);
+let panRaf = 0;
+function panLoop() {
+  panRaf = 0;
+  for (const p of [heroPan, finalPan]) if (p.active) p.step(); else p.prev = -1;
+  if (heroPan.active || finalPan.active) panRaf = requestAnimationFrame(panLoop);
+}
+const runPans = () => { if (!panRaf && (heroPan.active || finalPan.active)) panRaf = requestAnimationFrame(panLoop); };
 function wake() { if (!frame) frame = requestAnimationFrame(tick); }
 function tick(now) {
   frame = 0;
@@ -365,8 +433,9 @@ function tick(now) {
   // Crop on narrow screens: leaving the surface freezes the idle pan where it is; the film starts from that spot
   // and eases to its own framing by the time the camera reaches the ant hill (~7 s), then follows FILM.focus.
   if (panning.matches) {
-    if (!atSurface && !filmBox.classList.contains('still')) { panFrom = parseFloat(getComputedStyle(loop.classList.contains('on') ? loop : poster).objectPosition) || 50; filmBox.classList.add('still'); }
-    else if (atSurface && filmBox.classList.contains('still') && vTime < .05) filmBox.classList.remove('still');
+    // At the top the hero clip pans; the first scroll freezes it, and the film picks up from that exact spot.
+    heroPan.active = atSurface && loopReady && !motion.matches;
+    if (heroPan.active) { panFrom = heroPan.x; runPans(); }
     const b = smooth(vTime / 7), fx = (panFrom * (1 - b) + lerpMap(FILM.focus, vTime, 0, 1) * b).toFixed(1);
     if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; }
   }
@@ -837,11 +906,20 @@ async function startCall() {
     onState: t => callState.textContent = t,
     onLevel: l => callOrb.style.setProperty('--level', clamp(l).toFixed(3)),
     onCaption: (t, who) => { callCap.replaceChildren(); const s = document.createElement('span'); if (who === 'user') s.className = 'you'; s.textContent = t; callCap.append(s); },
+    onSpeaking: on => { speaking = on; if (on) animateLevel(); },
+    onEnd: () => { if (token !== callToken) return; speaking = false; clearInterval(callTimer); callState.textContent = L('Call ended', 'Llamada terminada'); setTimeout(() => { if (token === callToken) endCall(true); }, 1400); },
   };
   const tickTime = () => { const s = Math.floor((Date.now() - callStart) / 1000); callTime.textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
   if (SCOUT_MODE === 'live' && window.CarelessVoice) {
     try { session_ = await window.CarelessVoice.start(ui); if (token !== callToken) return session_?.end(); callStart = Date.now(); callTimer = setInterval(tickTime, 500); }
-    catch { callState.textContent = L("Couldn't connect", 'No se pudo conectar'); previewFallback(L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?')); }
+    catch (e) {
+      if (token !== callToken) return;
+      callState.textContent = e.limit ? L("That's today's calls", 'Por hoy, ya no hay más llamadas') : L("Couldn't connect", 'No se pudo conectar');
+      previewFallback(e.limit ? L("Scout takes two calls a day per visitor. He's still here in chat.", 'Scout atiende dos llamadas al día por visitante. Sigue aquí en el chat.')
+        : e.mic ? L('Scout needs your microphone for a call. Allow it in the browser, or type instead.', 'Scout necesita tu micrófono para la llamada. Permítelo en el navegador o escribe.')
+        : L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?'));
+      track('scout_call_fail', { reason: e.limit ? 'limit' : e.mic ? 'mic' : 'error' });
+    }
     return;
   }
   // Preview: Scout speaks his opener so the interface can be judged; clearly labelled, no microphone used.
@@ -1176,10 +1254,10 @@ const fmt = (d, o) => d.toLocaleString(lang === 'es' ? 'es-ES' : undefined, o);
 function zcalFallback() {
   bk.hidden = true; bookingFrame.hidden = false; $('.booking-alt', bookingEl).hidden = false;
   if (bookingFrame.firstChild) return;
-  const f = document.createElement('iframe');
-  f.title = L('Pick a time with Maks', 'Elige una hora con Maks');
-  f.src = BOOKING_EMBED + (BOOKING_EMBED.includes('?') ? '&' : '?') + 'embed=1&embedType=inline&embedVersion=1.0.2&embedDomain=' + location.hostname;
-  bookingFrame.append(f);
+  // zcal's embed script builds the iframe and keeps it as tall as the calendar (no inner scrollbar), so only our card scrolls.
+  const w = el('div', 'zcal-inline-widget'), a = el('a', '', L('Pick a time with Maks', 'Elige una hora con Maks')); a.href = BOOKING_EMBED; w.append(a);
+  bookingFrame.append(w);
+  const sc = document.createElement('script'); sc.src = 'https://static.zcal.co/embed/v1/embed.js'; sc.async = true; document.head.append(sc);
 }
 const fetchSlots = () => fetch('/api/booking', { cache: 'no-store' }).then(r => r.json()).catch(() => ({}));
 function bkRender() {
@@ -1281,6 +1359,7 @@ new IntersectionObserver(([e]) => {
     if (!finalLoop.getAttribute('src')) { finalLoop.src = M12 + 'final-loop.mp4'; finalLoop.preload = 'auto'; }
     finalLoop.play().catch(() => {});
   } else finalLoop.pause();
+  finalPan.active = e.isIntersecting && panning.matches && !motion.matches; runPans();
 }, { rootMargin: '30% 0px' }).observe(finalSec);
 
 const finalInput = $('#final-input'), finalTalk = $('#final-talk');

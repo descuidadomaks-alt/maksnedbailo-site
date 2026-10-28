@@ -96,5 +96,9 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - The film names the five teams itself, so the team chips under "Five teams. One conversation." show on phones only.
 - Sound layers are timed to film moments (uAt), not fixed scroll positions.
 - Includes the Scout live-chat safeguards from branch care-less-scout-v12: 20-message cap, insult guard (answered on the page, never sent), distress guard (112/024), typing dots + 90 s wait, only the zcal and wa.me links clickable. Voice stays the labelled preview.
-- Narrow screens (aspect ≤ 4:3): the idle hero (poster + loop) pans 50% → 0% (sunset) → 100% → 50% on a 36 s sine curve (`@keyframes pan`). The first scroll pauses it (`.film.still`), and the film starts from that exact object-position (`panFrom`), easing to its own framing by ~7 s (the ant hill). Back at the top the pan resumes where it stopped.
-- Last screen: LAST_VIDEO.mp4 (pool at sunset, 5 s loop, 832×464) as `media/final-loop.mp4` + `final-first.webp`; pans the same way on narrow screens (40 s cycle).
+- Hero: STATIC_NEW_MAIN_VIDEO (5 s loop, same first frame as the film) as `media/hero-loop.mp4` + `hero-first.webp`.
+- Narrow screens (aspect ≤ 4:3): the hero and last-screen clips pan across the frame (`clipPan`): toward the sunset, to the far right, back. Both clips sway on their own (camera drifts left and back once per 5 s loop; measured drift curves are in the code), so the pan moves only while the clip's camera moves the same way and holds while it swings back. The first scroll freezes the hero pan and the film starts from that object-position (`panFrom`), easing to its own framing by ~7 s.
+- Last screen: LAST_VIDEO.mp4 (pool at sunset, 5 s loop, 832×464) as `media/final-loop.mp4` + `final-first.webp`.
+- Scroll into the ant hill is 18% longer than the first cut (map keyframes up to t 9.2 s stretched).
+- Booking pop-up: zcal's own embed.js builds the frame, so it grows to the calendar's height and only the card scrolls.
+- Voice: `window.CarelessVoice` wraps MyChatBot's Web SDK (v1 calls.js, agent in `VOICE`), loaded on first Call. Guards: hang-up at 5 min, 2 calls per browser per day. Scout 21406 runs 24/7 (work hours 00–00).
