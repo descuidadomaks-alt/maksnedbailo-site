@@ -26,16 +26,18 @@ const BOOKING_EMBED = 'https://zcal.co/i/O0g63S4u';
 /* The film: scroll map [u (viewport heights of scroll), t (seconds)], caption windows [start, end] in film seconds,
    the Scout hold moment, which side Scout is on (the card goes on the other side), and on phones where to aim the crop
    ([t, x%] of object-position, so Scout stays in frame when he's off-centre).
-   new12 film = the designer's NEW_MAIN_VIDEO (37 s) re-cut to 34.5 s: the black frame after the ant hole and the white
-   flash before Scout's scene became dissolves. Scout faces the camera and waves from 16.4 s to 17.3 s; the hold is mid-wave. */
+   new12 film = the designer's NEW_MAIN_VIDEO, uncut (37 s): pool → ant hill (5–9 s) → dark → tunnel (9.6–16.6 s) →
+   flash → Scout's scene (17.5 s). Scout faces the camera and waves from 18.7 to 19.7 s; the hold is mid-wave.
+   The tunnel, "Look closer" and "Meet Scout" get extra scroll so each caption can be read before the next. */
 const M12 = '/careless/new12/media/';
 const FILM = {
   src720: M12 + 'film-720.mp4', src540: M12 + 'film-540.mp4',
-  duration: 34.5,
-  map: [[0,0],[1.06,1.6],[2.36,4.6],[3.54,8.3],[4.01,9.2],[5.21,13.5],[6.21,15.7],[6.91,16.7],[8.01,19.9],[9.01,22.5],[10.11,25.5],[11.21,28.7],[11.91,31.0],[12.81,34.46],[13.51,34.46]],
-  captions: { view:[1.0,4.4], takes:[5.0,8.2], jobs:[9.2,13.4], colony:[13.6,15.6], scout:[15.8,16.72], follow:[17.5,19.9], answers:[20.3,22.4], quotes:[22.8,25.4], unseen:[25.8,28.6], hq:[31.0,99] },
-  hold: 16.7, scoutSide: 'right',
-  focus: [[0,50],[15.0,50],[15.7,62],[17.2,62],[18.3,50],[99,50]],
+  duration: 37.08,
+  map: [[0,0],[1.06,1.6],[2.36,4.6],[3.54,8.3],[4.01,9.2],[4.25,9.7],[5.75,14.2],[7.2,16.5],[7.5,17.45],[9.5,18.95],[9.95,19.25],
+        [11.05,22.48],[12.05,25.08],[13.15,28.08],[14.25,31.28],[14.95,33.58],[15.85,37.04],[16.55,37.04]],
+  captions: { view:[1.0,4.4], takes:[5.0,8.2], jobs:[9.8,14.2], colony:[14.4,16.5], scout:[17.45,18.95], follow:[20.08,22.48], answers:[22.88,24.98], quotes:[25.38,27.98], unseen:[28.38,31.18], hq:[33.58,99] },
+  hold: 19.25, scoutSide: 'right',
+  focus: [[0,50],[17.3,50],[17.9,62],[19.8,62],[20.9,50],[99,50]],
 };
 const filmKey = 'v5';
 const FILM_U = FILM.map[FILM.map.length - 1][0];
@@ -195,7 +197,7 @@ const sound = (() => {
     const dt = Math.max(16, now - lastT), v = lastT ? Math.abs(y - lastY) / dt * 1000 : 0; lastY = y; lastT = now;
     const t = ctx.currentTime, set = (p, val, tau) => p.setTargetAtTime(val, t, tau);
     // Sea until the camera dips to the ant hole, the hum through the tunnel, the chord as the city opens up.
-    const down = smooth((u - uAt(4.6)) / (uAt(10.5) - uAt(4.6))), colony = smooth((u - uAt(13.8)) / (uAt(16.9) - uAt(13.8))), after = smooth((u - FILM_U) / 2);
+    const down = smooth((u - uAt(4.6)) / (uAt(10.5) - uAt(4.6))), colony = smooth((u - uAt(16.2)) / (uAt(19.4) - uAt(16.2))), after = smooth((u - FILM_U) / 2);
     const fin = clamp(1 - finalSec.getBoundingClientRect().top / innerHeight);
     // The last screen is the colony again, so its chord comes back up there.
     set(n.sea.gain, .5 * (1 - down) + .1 * fin, .5);
@@ -378,35 +380,25 @@ function startLoop() {
   loop.play().catch(() => {});
 }
 let panFrom = 50; // where the idle pan was when the visitor started scrolling (object-position x, %)
-/* Narrow screens see a third of these 16:9 shots, so the hero and last-screen clips pan across them: from the centre
-   toward the sunset (left), to the far right, and back. Both clips already sway on their own (the camera drifts left and
-   returns once per 5 s loop), so the pan never fights them: it only moves while the clip's camera moves the same way,
-   and in step with it, then holds while the clip swings back. `sway` is the measured drift of the scenery, 0..1. */
-function clipPan(video, els, sway, perLoop) {
-  const D = t => lerpMap(sway, t, 0, 1), end = sway[sway.length - 1][0];
-  const p = { x: 50, dir: -1, prev: -1, active: false };
-  p.step = () => {
-    const t = video.currentTime;
-    if (p.prev >= 0 && !video.paused) {
-      const dD = t >= p.prev ? D(t) - D(p.prev) : (D(end) - D(p.prev)) + (D(t) - D(0));
-      // Scenery moving right = camera moving left = our frame moving toward 0%.
-      if ((p.dir < 0 && dD > 0) || (p.dir > 0 && dD < 0)) {
-        p.x = Math.min(100, Math.max(0, p.x + p.dir * perLoop * Math.abs(dD)));
-        if (p.x <= 0) p.dir = 1; else if (p.x >= 100) p.dir = -1;
-      }
-    }
-    p.prev = t;
-    const v = p.x.toFixed(2) + '% 50%';
-    els.forEach(e => { if (e.style.objectPosition !== v) e.style.objectPosition = v; });
+/* Narrow screens see a third of these 16:9 shots, so the hero and last-screen clips pan across them in one slow,
+   continuous flow: centre → left (the sunset) → far right → back, on a sine curve that only eases at the two ends. */
+function slowPan(els, seconds) {
+  const p = { x: 50, phase: 0, last: 0, active: false };
+  p.step = now => {
+    if (p.last) p.phase += Math.min(100, now - p.last) / 1000 / seconds;
+    p.last = now;
+    p.x = 50 - 50 * Math.sin(p.phase * 2 * Math.PI);
+    const v = p.x.toFixed(3) + '% 50%';
+    els.forEach(e => { e.style.objectPosition = v; });
   };
   return p;
 }
-const finalPan = clipPan($('#final-loop'), [$('#final-loop')], [[0,0],[.5,.3],[1,.53],[1.5,.69],[2,.8],[2.5,.93],[3,1],[3.5,.95],[4,.79],[4.5,.48],[5.04,0]], 9);
-const heroPan = clipPan(loop, [loop, poster], [[0,0],[.5,.49],[1,.78],[1.5,.93],[2,1],[2.5,.89],[3,.82],[3.5,.68],[4,.5],[4.5,.29],[5.04,0]], 10);
+const finalPan = slowPan([$('#final-loop')], 44);
+const heroPan = slowPan([loop, poster], 40);
 let panRaf = 0;
-function panLoop() {
+function panLoop(now) {
   panRaf = 0;
-  for (const p of [heroPan, finalPan]) if (p.active) p.step(); else p.prev = -1;
+  for (const p of [heroPan, finalPan]) if (p.active) p.step(now); else p.last = 0;
   if (heroPan.active || finalPan.active) panRaf = requestAnimationFrame(panLoop);
 }
 const runPans = () => { if (!panRaf && (heroPan.active || finalPan.active)) panRaf = requestAnimationFrame(panLoop); };
@@ -434,7 +426,7 @@ function tick(now) {
   // and eases to its own framing by the time the camera reaches the ant hill (~7 s), then follows FILM.focus.
   if (panning.matches) {
     // At the top the hero clip pans; the first scroll freezes it, and the film picks up from that exact spot.
-    heroPan.active = atSurface && loopReady && !motion.matches;
+    heroPan.active = atSurface && !motion.matches;
     if (heroPan.active) { panFrom = heroPan.x; runPans(); }
     const b = smooth(vTime / 7), fx = (panFrom * (1 - b) + lerpMap(FILM.focus, vTime, 0, 1) * b).toFixed(1);
     if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; }

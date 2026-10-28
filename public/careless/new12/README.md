@@ -102,3 +102,8 @@ A sideways swipe over the chapters turns exactly one chapter (`stepChapter`), pa
 - Scroll into the ant hill is 18% longer than the first cut (map keyframes up to t 9.2 s stretched).
 - Booking pop-up: zcal's own embed.js builds the frame, so it grows to the calendar's height and only the card scrolls.
 - Voice: `window.CarelessVoice` wraps MyChatBot's Web SDK (v1 calls.js, agent in `VOICE`), loaded on first Call. Guards: hang-up at 5 min, 2 calls per browser per day. Scout 21406 runs 24/7 (work hours 00–00).
+
+## Homepage (2026-10-28)
+- `/` serves this page (rewrite in next.config.js, the same index.html as /new12). The page has a canonical to `/` and no robots meta; `/new12` keeps its noindex header. The previous homepage (app/page.tsx, "Win more work") moved to `/old4` (noindex).
+- Film is the designer's video uncut again (37 s, flash and dark frame kept). The tunnel, "Look closer" and "Meet Scout" get extra scroll; the hold is at 19.25 s (Scout's wave).
+- Phone pans (hero and last screen) are one slow continuous sine (`slowPan`, 40 s and 44 s), no longer tied to the clips' own sway.

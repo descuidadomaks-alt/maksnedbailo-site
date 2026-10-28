@@ -14,6 +14,12 @@ const nextConfig = {
   // Vercel forwards the request (HTTP + WebSocket) to api.theconnecto.ai.
   async rewrites() {
     return [
+      // Homepage = the care_less experience (same file as /new12; "/" is indexable, /new12 keeps its noindex header).
+      // The previous homepage lives at /old4.
+      {
+        source: "/",
+        destination: "/careless/new12/index.html",
+      },
       {
         source: "/new12",
         destination: "/careless/new12/index.html",
