@@ -84,6 +84,7 @@ if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() =
   const used = () => { try { const v = JSON.parse(localStorage.getItem('cl-voice') || '{}'); return v.day === today() ? v.n : 0; } catch { return 0; } };
   const count = () => { try { localStorage.setItem('cl-voice', JSON.stringify({ day: today(), n: used() + 1 })); } catch {} };
   return {
+    preload: load,
     async start(cb) {
       if (used() >= VOICE.perDay) throw Object.assign(new Error('limit'), { limit: true });
       await load();
@@ -1476,6 +1477,8 @@ langBtn.addEventListener('click', () => {
 /* ───────────────────────── Boot ───────────────────────── */
 layout();
 runGate();
+// iPhone only lets a call use the mic and speaker straight from the tap, so the voice SDK must already be here by then.
+if (window.CarelessVoice?.preload) setTimeout(() => window.CarelessVoice.preload().catch(() => {}), 6000);
 applyLang();
 addEventListener('load', () => { layout(); wake(); });
 setInterval(() => { if (!document.hidden && root.classList.contains('begun')) wake(); }, 450);
