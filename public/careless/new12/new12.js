@@ -222,6 +222,7 @@ const sound = (() => {
   let unlocked = false;
   function unlockIOS() {
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
+    nowPlaying();
     if (unlocked || !/iP(hone|ad|od)|Macintosh/.test(navigator.userAgent) || !('ontouchend' in document)) return;
     unlocked = true;
     const rate = 8000, len = rate / 2, b = new DataView(new ArrayBuffer(44 + len));
@@ -557,12 +558,11 @@ function greeting() {
   let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
   const time = loc => d.toLocaleTimeString(loc, { hour: 'numeric', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
   return () => {
-    const tail = L('Clearing your schedule…', 'Despejando tu agenda…');
-    if (seen) return L('Welcome back. ', 'Hola de nuevo. ') + tail;
-    if (h >= 21 || h < 5) return L(`It's ${time('en-GB')}. Still working? `, `${h === 1 ? 'Es la' : 'Son las'} ${time('es-ES')}. ¿Todavía trabajando? `) + tail;
-    if (h < 8) return L('Early start. ', 'Madrugón. ') + tail;
-    if (d.getDay() === 0 || d.getDay() === 6) return L(`It's ${day('en-GB')}. `, `Es ${day('es-ES')}. `) + tail;
-    return tail;
+    const tail = L('Clearing your schedule…', 'Despejando tu agenda…'), back = seen ? L('Welcome back. ', 'Hola de nuevo. ') : '';
+    if (h >= 21 || h < 5) return back + L(`It's ${time('en-GB')}. Still working? `, `${h === 1 ? 'Es la' : 'Son las'} ${time('es-ES')}. ¿Todavía trabajando? `) + tail;
+    if (h < 8) return back + L('Early start. ', 'Madrugón. ') + tail;
+    if (d.getDay() === 0 || d.getDay() === 6) return back + L(`It's ${day('en-GB')}. `, `Es ${day('es-ES')}. `) + tail;
+    return back + tail;
   };
 }
 let greet = () => '', gateDone = false;
@@ -570,7 +570,12 @@ const pageTitle = document.title;
 document.addEventListener('visibilitychange', () => {
   if (!root.classList.contains('begun')) return;
   document.title = !document.hidden ? pageTitle : scoutState === 'pending' ? L('Scout is waiting for you…', 'Scout te está esperando…') : L("The colony's still working…", 'La colonia sigue trabajando…');
+  nowPlaying();
 });
+// The phone's lock-screen "now playing" card (shown while the sound is on): page title + the square C.
+function nowPlaying() {
+  try { if ('mediaSession' in navigator && window.MediaMetadata) navigator.mediaSession.metadata = new MediaMetadata({ title: document.title, artist: 'care_less®', artwork: [{ src: '/careless/new12/media/icon-square.png', sizes: '256x256', type: 'image/png' }] }); } catch {}
+}
 function runGate() {
   root.classList.add('locked');
   greet = greeting(); gateStatus.textContent = greet();
@@ -1357,8 +1362,8 @@ new IntersectionObserver(([e]) => {
 const finalInput = $('#final-input'), finalTalk = $('#final-talk');
 // Rotating placeholder: short enough for one line on a phone.
 (() => {
-  const ideas = () => L(['repeating myself…', 'chasing quotes…', 'answering the same emails…', 'being the bottleneck…', 'posting on social…'],
-    ['repetirme…', 'perseguir presupuestos…', 'responder los mismos emails…', 'ser el cuello de botella…', 'publicar en redes…']);
+  const ideas = () => L(['repeating myself…', 'chasing quotes…', 'the same emails…', 'being the bottleneck…', 'posting on social…'],
+    ['repetirme…', 'los presupuestos…', 'emails repetidos…', 'ser imprescindible…', 'las redes sociales…']);
   let i = 0;
   setInterval(() => { if (document.activeElement === finalInput || finalInput.value || motion.matches) return; i = (i + 1) % 5; finalInput.placeholder = ideas()[i]; }, 2600);
 })();
