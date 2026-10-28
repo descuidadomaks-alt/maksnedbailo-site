@@ -648,6 +648,7 @@ html[lang="es"] .final h2{font-size:clamp(34px,4.8vw,76px)}
 
 /* Mobile */
 @media (max-width:760px){
+  input,textarea,select{font-size:16px!important}
   :root{--gx:22px}
   .wordmark{font-size:16px}
   .top-book{font-size:12px;padding:8px 13px}

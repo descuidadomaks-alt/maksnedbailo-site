@@ -61,6 +61,8 @@ const light = !!(conn && (conn.saveData || /(^|-)2g$|^3g$/.test(conn.effectiveTy
 const small = matchMedia('(max-width: 760px)').matches;
 // Screens that crop the 16:9 film hard (phones, portrait tablets): the idle hero pans, and the film's crop is steered.
 const panning = matchMedia('(max-aspect-ratio: 4/3)');
+// Built-in browsers in Telegram, Instagram, Facebook, LinkedIn and TikTok block the microphone whatever the phone allows.
+const inApp = !!window.TelegramWebviewProxy || /Instagram|FBAN|FBAV|FB_IAB|LinkedInApp|BytedanceWebview|musical_ly|Line\//i.test(navigator.userAgent);
 const wa = text => 'https://wa.me/' + WHATSAPP + (text ? '?text=' + encodeURIComponent(text) : '');
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
 /* Language: English or Spanish (Spain). ?lang= wins, then the visitor's choice, then the browser.
@@ -917,11 +919,13 @@ async function startCall() {
       if (token !== callToken) return;
       callState.textContent = e.limit ? L("That's today's calls", 'Por hoy, ya no hay más llamadas') : L("Couldn't connect", 'No se pudo conectar');
       previewFallback(e.limit ? L("Scout takes two calls a day per visitor. He's still here in chat.", 'Scout atiende dos llamadas al día por visitante. Sigue aquí en el chat.')
+        : e.mic && inApp ? L("This app's built-in browser doesn't let websites use the microphone. To talk to Scout, open this page in Safari or Chrome (tap ⋯ → Open in browser). Or type instead.", 'El navegador integrado de esta app no deja que las webs usen el micrófono. Para hablar con Scout, abre esta página en Safari o Chrome (toca ⋯ → Abrir en el navegador). O escribe.')
         : e.mic ? (/iP(hone|ad|od)/.test(navigator.userAgent)
           ? L('Your browser blocked the microphone. On iPhone: Settings → your browser (Safari or Chrome) → Microphone on, and allow it for this site; then reload. Or type instead.', 'Tu navegador ha bloqueado el micrófono. En iPhone: Ajustes → tu navegador (Safari o Chrome) → Micrófono activado, y permítelo para esta web; luego recarga. O escribe.')
           : L('Your browser blocked the microphone. Allow it for this site (the icon next to the address), then try again. Or type instead.', 'Tu navegador ha bloqueado el micrófono. Permítelo para esta web (el icono junto a la dirección) y vuelve a intentarlo. O escribe.')) + (e.why ? ' (' + e.why + ')' : '')
         : L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?'));
-      track('scout_call_fail', { reason: e.limit ? 'limit' : e.mic ? 'mic' : 'error' });
+      if (e.mic && inApp && navigator.clipboard) { const c = el('button', '', L('Copy link', 'Copiar enlace')); c.type = 'button'; c.style.marginLeft = '10px'; c.onclick = () => navigator.clipboard.writeText(location.origin + '/').then(() => { c.textContent = L('Copied', 'Copiado'); }).catch(() => {}); callFoot.append(c); }
+      track('scout_call_fail', { reason: e.limit ? 'limit' : e.mic ? (inApp ? 'mic_inapp' : 'mic') : 'error', why: e.why || '' });
     }
     return;
   }
