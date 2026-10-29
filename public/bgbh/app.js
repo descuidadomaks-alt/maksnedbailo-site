@@ -28,14 +28,16 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* ---------- language ---------- */
-  let lang = store.get('lang', null) || ((navigator.language || 'en').startsWith('uk') ? 'uk' : (navigator.language || '').startsWith('ru') ? 'ru' : 'en');
+  const tgUser = (() => { try { return window.Telegram?.WebApp?.initDataUnsafe?.user; } catch { return null; } })();
+  const pickLang = c => { c = (c || '').toLowerCase(); return c.startsWith('uk') ? 'uk' : c.startsWith('ru') ? 'ru' : c.startsWith('bg') ? 'bg' : c ? 'en' : null; };
+  let lang = store.get('lang', null) || pickLang(tgUser?.language_code) || pickLang(navigator.language) || 'en';
   const D = () => window.BG_I18N[lang] || window.BG_I18N.en;
   function t(k, v) {
     let s = D()[k] ?? window.BG_I18N.en[k] ?? k;
     if (v) for (const [a, b] of Object.entries(v)) s = s.replaceAll('{' + a + '}', b);
     return s;
   }
-  const locale = () => ({ en: 'en-GB', uk: 'uk-UA', ru: 'ru-RU' }[lang]);
+  const locale = () => ({ en: 'en-GB', uk: 'uk-UA', ru: 'ru-RU', bg: 'bg-BG' }[lang]);
   const eur = n => new Intl.NumberFormat(locale(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
   const num = n => new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(n);
   function dist(km) {
@@ -49,6 +51,7 @@
   function age(iso) { const d = new Date(iso); return (NOW.getFullYear() - d.getFullYear()) * 12 + NOW.getMonth() - d.getMonth(); }
   const freshness = L => { const a = age(L.date); return a <= 6 ? 'fresh' : a <= 12 ? 'old' : 'stale'; };
   const townName = k => t('town.' + k);
+  const noF = f => t('miss.no', { f: lang === 'en' ? f.toLowerCase() : f });
   const hasCyr = s => /[а-яё]/i.test(s || '');
   const cxName = L => !L.cx ? '' : (lang === 'en' && hasCyr(L.cx) ? L.cxl : L.cx);
   function typeLabel(L) {
@@ -168,7 +171,7 @@
       if (m) { fn(m); done = true; break; }
     }
     if (!done) notFound();
-    paintNav(); paintSaved(); applyI18n(); reveal();
+    paintNav(); paintSaved(); applyI18n(); reveal(); tgBack();
     if (restore != null) requestAnimationFrame(() => scrollTo(0, restore));
     else if (!location.hash) scrollTo(0, 0);
   }
@@ -223,7 +226,7 @@
     const badges = [];
     if (L.f.includes('pool')) badges.push(`<span class="tag">${t('feat.pool')}</span>`);
     if (L.f.includes('seaview')) badges.push(`<span class="tag">${t('feat.seaview')}</span>`);
-    const why = o.why ? `<div class="why">${o.why.map(w => `<span class="tag grey">${esc(w)}</span>`).join('')}</div>` : '';
+    const why = (o.why?.length || o.miss?.length) ? `<div class="why">${(o.miss || []).map(w => `<span class="tag miss">${esc(w)}</span>`).join('')}${(o.why || []).map(w => `<span class="tag grey">${esc(w)}</span>`).join('')}</div>` : '';
     return `<a class="card" href="${urlOf(L)}">
       <div class="card-media">
         <img src="${card(L)}" alt="${esc(typeLabel(L) + ', ' + townName(L.town))}" loading="lazy" decoding="async" width="640" height="480">
@@ -261,7 +264,7 @@
     main.innerHTML = `
     <section class="hero"><div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Sveti Vlas · Sunny Beach · Nessebar · Ravda</p>
+        <p class="eyebrow">${towns.map(k => esc(townName(k))).join(' · ')}</p>
         <h1 style="margin-top:14px">${t('hero.h1')}</h1>
         <p class="lede">${esc(t('hero.lede'))}</p>
         <form class="ask" id="ask">
@@ -365,7 +368,7 @@
       <rect x="${VB[0]}" y="${VB[1]}" width="${VB[2]}" height="${VB[3]}" fill="url(#seaG)"/>
       ${[18, 34, 52].map((d, i) => `<g transform="translate(${d},${d * .12})">${COAST.d.slice(0, 1).map(p => `<path class="ripple" d="${p}" style="opacity:${.16 - i * .045}"/>`).join('')}</g>`).join('')}
       ${COAST.d.map((p, i) => `<path class="shore${i ? ' isle' : ''}" d="${p}"/>`).join('')}
-      <g class="poi euro"><rect class="mk" x="${ax - 6}" y="${ay - 6}" width="12" height="12" rx="3" transform="rotate(45 ${ax} ${ay})"/><text x="${ax + 14}" y="${ay + 26}">${esc(t('coast.arena'))}</text></g>
+      <g class="poi euro"><rect class="mk" x="${ax - 6}" y="${ay - 6}" width="12" height="12" rx="3" transform="rotate(45 ${ax} ${ay})"/><text x="${ax - 4}" y="${ay - 16}">${esc(t('coast.arena'))}</text></g>
       <g class="poi"><path class="mk" transform="translate(${px - 9} ${py - 9}) scale(.75)" d="${'M10.5 3.5c0-1 3-1 3 0V9l7 4v2l-7-2v4l2 1.5V20l-3.5-1-3.5 1v-1.5l2-1.5v-4l-7 2v-2l7-4z'}"/><text x="${px + 12}" y="${py + 4}">BOJ</text></g>
       ${towns}
     </svg><p class="coast-note">${esc(t('coast.note'))}</p>`;
@@ -398,22 +401,24 @@
     const s = p.toString();
     history.replaceState(history.state, '', location.pathname + (s ? '?' + s : ''));
   }
-  function filterList(q) {
-    return DATA.filter(L => {
-      if (L.kind !== q.kind) return false;
-      if (q.town?.length && !q.town.includes(L.town)) return false;
-      if (q.beds?.length && !q.beds.some(b => b === '3' ? (L.beds >= 3 || L.house) : String(L.beds) === b)) return false;
-      if (q.month && q.kind === 'rent' && !rateFor(L, q.month)) return false;
-      const p = monthly(L, q.month);
-      if (q.min && (p == null || p < q.min)) return false;
-      if (q.max && (p == null || p > q.max)) return false;
-      if (q.sea && (L.sea_m == null || L.sea_m > q.sea)) return false;
-      for (const f of q.feat || []) {
-        if (f === 'act16' ? !L.act16 : !L.f.includes(f)) return false;
-      }
-      for (const n of q.near || []) { const [k, lim] = NEAR[n] || []; if (!k || L.near?.[k] == null || L.near[k] > lim) return false; }
-      return true;
-    });
+  // Every filter a listing fails, with a weight and a short "what differs" label (used for the closest-match fallback).
+  function misses(L, q) {
+    const out = [], add = (w, label) => out.push({ w, label });
+    if (q.town?.length && !q.town.includes(L.town)) add(2, townName(L.town));
+    if (q.beds?.length && !q.beds.some(b => b === '3' ? (L.beds >= 3 || L.house) : String(L.beds) === b)) add(1.5, typeLabel(L) || '?');
+    if (q.month && q.kind === 'rent' && !rateFor(L, q.month)) add(2, t('miss.month', { m: q.month === 'long' ? t('f.long') : D().mon[q.month - 1] }));
+    const p = monthly(L, q.month);
+    if (q.max && (p == null || p > q.max)) add(p == null ? 2 : 1 + Math.min(3, (p - q.max) / q.max * 4), p == null ? t('card.onReq') : t('miss.over', { p: eur(p - q.max) }));
+    if (q.min && p != null && p < q.min) add(.5, t('miss.under', { p: eur(q.min - p) }));
+    if (q.sea && (L.sea_m == null || L.sea_m > q.sea)) add(1, L.sea_m == null ? t('l.sea') + ' ?' : t('card.sea', { m: seaTxt(L) }));
+    for (const f of q.feat || []) if (f === 'act16' ? !L.act16 : !L.f.includes(f)) add(1, noF(t('feat.' + f)));
+    for (const n of q.near || []) { const [k, lim] = NEAR[n] || []; if (k && (L.near?.[k] == null || L.near[k] > lim)) add(1, t('n.' + k) + ' ' + dist(L.near?.[k])); }
+    return out;
+  }
+  function filterList(q) { return DATA.filter(L => L.kind === q.kind && !misses(L, q).length); }
+  function closest(q, n = 6) {
+    return DATA.filter(L => L.kind === q.kind).map(L => { const m = misses(L, q); return { L, m, w: m.reduce((a, x) => a + x.w, 0) }; })
+      .filter(x => x.m.length && x.m.length <= 2).sort((a, b) => a.w - b.w || b.L.date.localeCompare(a.L.date)).slice(0, n);
   }
   function sortList(list, q) {
     const s = q.sort, pr = L => monthly(L, q.month) ?? Infinity;
@@ -475,8 +480,10 @@
       const rb = $('#rbody');
       if (map) { map.remove(); map = null; }
       if (!list.length) {
-        rb.innerHTML = `<div class="empty"><h3>${esc(t('res.empty'))}</h3><p class="muted">${esc(t('res.emptyP'))}</p><div style="display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap"><button class="btn btn-line btn-sm" id="freset" type="button">${esc(t('f.reset'))}</button><button class="btn btn-sun btn-sm" type="button" data-open-chat>${esc(t('res.ask'))}</button></div></div>`;
+        const near = closest(q, 9);
+        rb.innerHTML = `${near.length ? `<div class="near-head"><h2>${esc(t('near.h'))}</h2><p class="muted" style="margin-top:6px">${esc(t('near.p'))}</p></div><div class="grid" style="margin-top:18px">${near.map(x => cardWrap(x.L, { month: q.month, miss: x.m.map(m => m.label) })).join('')}</div><div style="height:28px"></div>` : ''}<div class="empty"><h3>${esc(t('res.empty'))}</h3><p class="muted">${esc(t('res.emptyP'))}</p><div style="display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap"><button class="btn btn-line btn-sm" id="freset" type="button">${esc(t('f.reset'))}</button><button class="btn btn-sun btn-sm" type="button" data-open-chat>${esc(t('res.ask'))}</button></div></div>`;
         $('#freset').onclick = () => { Object.assign(q, readQuery(kind), { town: [], beds: [], min: 0, max: 0, sea: 0, feat: [], near: [], month: '', older: false }); apply(); };
+        paintSaved(); reveal();
         return;
       }
       if (q.view === 'map') {
@@ -813,7 +820,8 @@
     const save = () => sessionStorage.setItem('bgbh.match', JSON.stringify(A));
     const steps = () => A.kind === 'sale' ? ['kind', 'who', 'budget', 'matters', 'town', 'results'] : ['kind', 'who', 'when', 'budget', 'matters', 'town', 'results'];
     function opts(field, list, multi, max) {
-      return `<div class="m-opts">${list.map(([v, ic, label]) => `<button type="button" class="m-opt" data-f="${field}" data-v="${v}" aria-pressed="${multi ? A[field].includes(v) : A[field] === v}"><span class="ic" aria-hidden="true">${ic}</span>${esc(label)}</button>`).join('')}</div>`;
+      const hint = multi ? `<p class="m-hint">☑ ${esc(t('m.multi'))}${A[field].length ? ` · <span>${esc(t('m.selected', { n: A[field].length }))}</span>` : ''}</p>` : '';
+      return `${hint}<div class="m-opts" role="${multi ? 'group' : 'radiogroup'}">${list.map(([v, ic, label]) => `<button type="button" class="m-opt${multi ? '' : ' radio'}" role="${multi ? 'checkbox' : 'radio'}" data-f="${field}" data-v="${v}" aria-pressed="${multi ? A[field].includes(v) : A[field] === v}" aria-checked="${multi ? A[field].includes(v) : A[field] === v}"><span class="ic" aria-hidden="true">${ic}</span>${esc(label)}<span class="box" aria-hidden="true">${I.check}</span></button>`).join('')}</div>`;
     }
     function draw() {
       const S = steps(); step = Math.min(step, S.length - 1);
@@ -821,7 +829,7 @@
       if (s === 'results') return matchResults(A, () => { step = 0; Object.assign(A, { kind: '', who: [], when: '', budget: 0, matters: [], town: '' }); save(); draw(); });
       let q = '';
       if (s === 'kind') q = `<h1>${esc(t('m.q1'))}</h1>${opts('kind', [['rent', '🏖', t('m.rent')], ['sale', '🔑', t('m.buy')]])}`;
-      if (s === 'who') q = `<h1>${esc(t('m.q2'))}</h1><p class="muted">${esc(t('m.q2p'))}</p>${opts('who', (A.kind === 'sale' ? [['live', '🏡', t('m.live')], ['invest', '📈', t('m.invest')]] : []).concat([['solo', '🙋', t('m.solo')], ['couple', '💑', t('m.couple')], ['kids', '👨‍👩‍👧', t('m.kids')], ['friends', '👯', t('m.friends')], ['remote', '💻', t('m.remote')], ['pet', '🐕', t('m.pet')]]), true)}`;
+      if (s === 'who') q = `<h1>${esc(t('m.q2'))}</h1>${opts('who', (A.kind === 'sale' ? [['live', '🏡', t('m.live')], ['invest', '📈', t('m.invest')]] : []).concat([['solo', '🙋', t('m.solo')], ['couple', '💑', t('m.couple')], ['kids', '👨‍👩‍👧', t('m.kids')], ['friends', '👯', t('m.friends')], ['remote', '💻', t('m.remote')], ['pet', '🐕', t('m.pet')]]), true)}`;
       if (s === 'when') q = `<h1>${esc(t('m.q3'))}</h1>${opts('when', [['summer', '☀️', t('m.summer')], ['winter', '🍂', t('m.winter')], ['year', '📅', t('m.year')], ['euro', '🎤', t('m.euro')], ['flex', '🤷', t('m.flex')]])}`;
       if (s === 'budget') {
         const rent = A.kind !== 'sale';
@@ -862,35 +870,40 @@
     if (A.who.includes('friends') || A.who.includes('kids')) wants.add('space');
     if (A.who.includes('remote') || A.when === 'winter' || A.when === 'year') wants.add('yearround');
     return DATA.filter(L => L.kind === kind && (!A.town || L.town === A.town) && true).map(L => {
-      let got = 0, total = 0; const why = [];
-      const add = (w, ok, label) => { total += w; if (ok) { got += w; if (label) why.push(label); } };
+      let got = 0, total = 0; const why = [], miss = [];
+      // hard = something the person asked for; a home that fails it is only shown as "closest", with the difference named
+      const add = (w, ok, label, missLabel, hard = true) => { total += w; if (ok) { got += w; if (label) why.push(label); } else if (hard && missLabel) miss.push(missLabel); };
       const p = monthly(L, month);
-      const inBudget = !A.budget || (p != null && p <= A.budget * 1.1);
-      add(3, inBudget && p != null, p != null && p <= A.budget ? t('why.budget') : null);
-      if (month) add(2, !!rateFor(L, month), null);
-      if (wants.has('walkSea')) add(2, L.sea_m != null && L.sea_m <= 400, L.sea_m != null && L.sea_m <= 400 ? t('why.sea', { m: seaTxt(L) }) : null);
-      if (wants.has('school')) add(2, L.near?.school <= 1.2, L.near?.school <= 1.2 ? t('why.school', { m: dist(L.near.school) }) : null);
-      if (wants.has('kinder')) add(2, L.near?.kindergarten <= 1, L.near?.kindergarten <= 1 ? t('why.kinder', { m: dist(L.near.kindergarten) }) : null);
-      if (wants.has('shop')) add(1, L.near?.supermarket <= .5, L.near?.supermarket <= .5 ? t('why.shop', { m: dist(L.near.supermarket) }) : null);
-      if (wants.has('pool')) add(1.5, L.f.includes('pool'), t('why.pool'));
-      if (wants.has('view')) add(1.5, L.f.includes('seaview'), t('why.view'));
-      if (wants.has('quiet')) add(1, QUIET.includes(L.town), t('why.quiet'));
-      if (wants.has('yearround')) add(1, YEAR_TOWNS.includes(L.town) || L.f.includes('yearround'), t('why.year'));
-      if (wants.has('parking')) add(1, L.f.includes('parking'), t('why.parking'));
-      if (wants.has('space')) add(1.5, (L.beds || 0) >= 2, (L.beds || 0) >= 2 ? t('why.space', { n: L.beds }) : null);
-      if (wants.has('kids-area')) add(.5, L.f.includes('kids'), null);
-      if (A.who.includes('pet')) add(1, L.f.includes('pets'), t('why.pets'));
-      add(1, freshness(L) === 'fresh', kind === 'rent' && freshness(L) === 'fresh' ? t('why.fresh') : null);
-      return { L, score: Math.round(got / total * 100), why: why.slice(0, 4), inBudget };
-    }).filter(x => x.inBudget).sort((a, b) => b.score - a.score || b.L.date.localeCompare(a.L.date));
+      const inBudget = !A.budget || (p != null && p <= A.budget);
+      add(3, inBudget && p != null, p != null && p <= A.budget ? t('why.budget') : null, p == null ? t('card.onReq') : t('miss.over', { p: eur(p - A.budget) }));
+      if (month) add(2, !!rateFor(L, month), null, t('miss.month', { m: t('m.' + A.when) }));
+      if (wants.has('walkSea')) add(2, L.sea_m != null && L.sea_m <= 400, L.sea_m != null && L.sea_m <= 400 ? t('why.sea', { m: seaTxt(L) }) : null, L.sea_m != null ? t('card.sea', { m: seaTxt(L) }) : t('l.sea') + ' ?');
+      if (wants.has('school')) add(2, L.near?.school <= 1.2, L.near?.school <= 1.2 ? t('why.school', { m: dist(L.near.school) }) : null, t('why.school', { m: dist(L.near?.school) }));
+      if (wants.has('kinder')) add(2, L.near?.kindergarten <= 1, L.near?.kindergarten <= 1 ? t('why.kinder', { m: dist(L.near.kindergarten) }) : null, t('why.kinder', { m: dist(L.near?.kindergarten) }));
+      if (wants.has('shop')) add(1, L.near?.supermarket <= .5, L.near?.supermarket <= .5 ? t('why.shop', { m: dist(L.near.supermarket) }) : null, t('why.shop', { m: dist(L.near?.supermarket) }));
+      if (wants.has('pool')) add(1.5, L.f.includes('pool'), t('why.pool'), noF(t('feat.pool')));
+      if (wants.has('view')) add(1.5, L.f.includes('seaview'), t('why.view'), noF(t('feat.seaview')));
+      if (wants.has('quiet')) add(1, QUIET.includes(L.town), t('why.quiet'), townName(L.town));
+      if (wants.has('yearround')) add(1, YEAR_TOWNS.includes(L.town) || L.f.includes('yearround'), t('why.year'), townName(L.town), A.matters.includes('yearround'));
+      if (wants.has('parking')) add(1, L.f.includes('parking'), t('why.parking'), noF(t('feat.parking')));
+      if (wants.has('space')) add(1.5, (L.beds || 0) >= 2, (L.beds || 0) >= 2 ? t('why.space', { n: L.beds }) : null, typeLabel(L), A.matters.includes('space'));
+      if (wants.has('kids-area')) add(.5, L.f.includes('kids'), null, null, false);
+      if (A.who.includes('pet')) add(1, L.f.includes('pets'), t('why.pets'), null, false);
+      add(1, freshness(L) === 'fresh', kind === 'rent' && freshness(L) === 'fresh' ? t('why.fresh') : null, null, false);
+      return { L, score: Math.round(got / total * 100), why: why.slice(0, 4), miss, inBudget, over: p != null && A.budget ? p / A.budget : 9 };
+    }).sort((a, b) => a.miss.length - b.miss.length || b.score - a.score || b.L.date.localeCompare(a.L.date));
   }
   function matchResults(A, restart) {
-    const res = scoreAll(A).slice(0, 18);
+    const all = scoreAll(A);
+    const res = all.filter(x => !x.miss.length).slice(0, 18);
+    // Booking-style: when the exact list is short, show what is closest and say exactly what differs
+    const near = all.filter(x => x.miss.length && x.miss.length <= 2 && x.over <= 1.5).slice(0, res.length >= 9 ? 6 : 12);
     const month = A.kind === 'rent' ? whenMonth(A) : '';
     const brief = [A.kind === 'sale' ? t('m.buy') : t('m.rent'), ...A.who.map(w => t('m.' + w)), A.when && t('m.' + A.when), A.budget && eur(A.budget), ...A.matters.map(m => t('m.' + m)), A.town ? townName(A.town) : ''].filter(Boolean);
     main.innerHTML = `<div class="wrap"><div class="page-hero"><p class="eyebrow">${esc(t('matchb.eyebrow'))}</p><h1 style="margin-top:12px">${esc(t('m.results'))}</h1><p class="lede">${esc(t('m.resultsP'))}</p></div>
       <div class="brief">${brief.map(b => `<span class="tag grey">${esc(b)}</span>`).join('')}<button type="button" class="btn btn-ghost btn-sm" id="mrestart" style="margin-left:auto">${esc(t('m.restart'))}</button></div>
-      ${res.length ? `<div class="grid">${res.map(x => cardWrap(x.L, { score: x.score, why: x.why, month })).join('')}</div>` : `<div class="empty"><h3>${esc(t('res.empty'))}</h3><p class="muted">${esc(t('res.emptyP'))}</p></div>`}
+      ${res.length ? `<div class="grid">${res.map(x => cardWrap(x.L, { score: x.score, why: x.why, month })).join('')}</div>` : `<div class="empty"><h3>${esc(t('m.none'))}</h3><p class="muted">${esc(t('m.noneP'))}</p></div>`}
+      ${near.length ? `<div class="near-head"><h2>${esc(res.length ? t('near.more') : t('near.h'))}</h2><p class="muted" style="margin-top:6px">${esc(t('near.p'))}</p></div><div class="grid" style="margin-top:18px">${near.map(x => cardWrap(x.L, { score: x.score, why: x.why.slice(0, 2), miss: x.miss, month })).join('')}</div>` : ''}
       <div class="section"><div class="form-card" id="mbrief" style="max-width:640px">
         <h2 style="font-size:26px">${esc(t('m.sendBrief'))}</h2>
         <form novalidate data-type="match" style="display:grid;gap:12px">
@@ -900,7 +913,7 @@
         </form>${contactButtons('match')}
       </div></div></div>`;
     $('#mrestart').onclick = restart;
-    wireEnquiry($('#mbrief'), null, () => ({ brief: brief.join(' · '), top: res.slice(0, 6).map(x => `${x.L.kind}:${x.L.id}(${x.score}%)`).join(', ') }));
+    wireEnquiry($('#mbrief'), null, () => ({ brief: brief.join(' · '), top: res.concat(near).slice(0, 8).map(x => `${x.L.kind}:${x.L.id}(${x.score}%${x.miss.length ? ' ~' + x.miss.join('/') : ''})`).join(', ') }));
   }
 
   /* ---------- saved ---------- */
@@ -986,12 +999,31 @@
 
   function footer() {
     $('#foot').innerHTML = `<div class="wrap"><div class="foot-grid">
-      <div><a class="brand" href="${BASE}" style="color:#fff"><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="17" r="8" fill="#FF5A36"/><path d="M3 27c4 0 4-3 8.5-3S16 27 20 27s4-3 8.5-3S33 27 37 27" fill="none" stroke="#7FD0D6" stroke-width="3" stroke-linecap="round"/></svg><span class="brand-name">BG Beach Homes</span></a><p style="margin-top:14px;font-size:14.5px;color:#AFC2C6;max-width:30em">${esc(t('foot.about'))}</p></div>
+      <div><a class="brand" href="${BASE}" style="color:#fff"><img class="brand-mark" src="/bgbh/logo.svg" alt="" width="44" height="37" style="background:#E8C7B0;border-radius:12px;padding:5px"><span class="brand-name">BG Beach Homes</span></a><p style="margin-top:14px;font-size:14.5px;color:#AFC2C6;max-width:30em">${esc(t('foot.about'))}</p></div>
       <div><h3>${esc(t('foot.find'))}</h3><a href="${BASE}/rent">${esc(t('nav.rent'))}</a><a href="${BASE}/buy">${esc(t('nav.buy'))}</a><a href="${BASE}/match">${esc(t('nav.match'))}</a><a href="${BASE}/eurovision-2027">${esc(t('nav.euro'))}</a><a href="${BASE}/journal">${esc(t('nav.journal'))}</a></div>
       <div><h3>${esc(t('foot.channels'))}</h3><a href="${CH.rent}" target="_blank" rel="noopener">${esc(t('foot.rentCh'))} ↗</a><a href="${CH.sale}" target="_blank" rel="noopener">${esc(t('foot.saleCh'))} ↗</a><a href="https://www.instagram.com/bg.beachhomes" target="_blank" rel="noopener">Instagram ↗</a></div>
       <div><h3>${esc(t('foot.contact'))}</h3><a href="${TG_TEAM}" target="_blank" rel="noopener">Telegram ↗</a><a href="${TG_BOT}" target="_blank" rel="noopener">${esc(t('foot.bot'))} ↗</a><a href="tel:${PHONE}">${PHONE}</a></div>
     </div><div class="fine"><span>${esc(t('foot.fine1'))}</span><span>© ${NOW.getFullYear()} BG Beach Homes · ${esc(t('foot.fine2'))}</span></div></div>`;
   }
+
+  /* ---------- Telegram Mini App ---------- */
+  const TG = window.Telegram?.WebApp;
+  const inTG = !!(TG && TG.initData);
+  if (inTG) {
+    document.documentElement.classList.add('in-tg');
+    try {
+      TG.ready(); TG.expand();
+      TG.disableVerticalSwipes?.(); // the listing walkthrough scrolls; don't let a swipe close the app
+      TG.setHeaderColor?.('#F4F2EC'); TG.setBackgroundColor?.('#F4F2EC');
+      TG.BackButton.onClick(() => history.back());
+    } catch { /* older Telegram clients */ }
+    // t.me links stay inside Telegram instead of opening a browser
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href^="https://t.me/"]');
+      if (a) { e.preventDefault(); TG.openTelegramLink(a.href); }
+    }, true);
+  }
+  function tgBack() { if (inTG) { try { (location.pathname.replace(BASE, '') || '/') === '/' ? TG.BackButton.hide() : TG.BackButton.show(); } catch { /* ignore */ } } }
 
   /* ---------- boot ---------- */
   Promise.all([fetch('/bgbh/data/listings.json').then(r => r.json()), fetch('/bgbh/data/coast.json').then(r => r.json()).catch(() => null)]).then(([d, c]) => {

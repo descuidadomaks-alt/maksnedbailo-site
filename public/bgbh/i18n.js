@@ -1,6 +1,7 @@
 /* UI strings. Listing descriptions stay in the language they were posted in (Russian) until the translation step runs. */
 window.BG_I18N = {
   en: {
+    'm.multi': 'Choose as many as you like', 'm.selected': '{n} selected', 'm.none': 'Nothing ticks every box yet.', 'm.noneP': 'Below are the homes closest to what you asked for — each one says exactly what is different. Send us your brief and we will also ask owners who are not in our channels.', 'near.h': 'Closest to what you asked', 'near.more': 'Almost there', 'near.p': 'Each home shows what is different from your request, so you can decide in a second.', 'miss.month': 'not listed for {m}', 'miss.over': '+{p} over budget', 'miss.under': '{p} under your minimum', 'miss.no': 'no {f}',
     'nav.rent': 'Rent', 'nav.buy': 'Buy', 'nav.match': 'Find my match', 'nav.matchShort': 'Match', 'nav.euro': 'Eurovision 2027', 'nav.journal': 'Journal', 'nav.saved': 'Saved', 'nav.chat': 'Ask us',
     'town.sveti-vlas': 'Sveti Vlas', 'town.sunny-beach': 'Sunny Beach', 'town.nessebar': 'Nessebar', 'town.ravda': 'Ravda', 'town.pomorie': 'Pomorie', 'town.aheloy': 'Aheloy', 'town.burgas': 'Burgas',
     'hero.h1': 'Your place on the <em>Black Sea</em>, without the guesswork.',
@@ -72,6 +73,7 @@ window.BG_I18N = {
     'mon': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
   },
   uk: {
+    'm.multi': 'Можна обрати кілька', 'm.selected': 'обрано: {n}', 'm.none': 'Поки що немає варіанту, що відповідає всьому.', 'm.noneP': 'Нижче — найближчі до вашого запиту, і в кожного видно, що саме відрізняється. Надішліть нам запит — ми спитаємо й власників, яких немає в наших каналах.', 'near.h': 'Найближче до вашого запиту', 'near.more': 'Майже те, що треба', 'near.p': 'На кожному видно, чим він відрізняється від запиту, — вирішите за секунду.', 'miss.month': 'немає ціни на {m}', 'miss.over': '+{p} понад бюджет', 'miss.under': 'на {p} нижче мінімуму', 'miss.no': 'без «{f}»',
     'nav.rent': 'Оренда', 'nav.buy': 'Купівля', 'nav.match': 'Підібрати житло', 'nav.matchShort': 'Підбір', 'nav.euro': 'Євробачення 2027', 'nav.journal': 'Журнал', 'nav.saved': 'Збережені', 'nav.chat': 'Запитати',
     'town.sveti-vlas': 'Святий Влас', 'town.sunny-beach': 'Сонячний Берег', 'town.nessebar': 'Несебр', 'town.ravda': 'Равда', 'town.pomorie': 'Поморіє', 'town.aheloy': 'Ахелой', 'town.burgas': 'Бургас',
     'hero.h1': 'Ваше місце біля <em>Чорного моря</em> — без здогадок.',
@@ -143,6 +145,7 @@ window.BG_I18N = {
     'mon': ['січ', 'лют', 'бер', 'квіт', 'трав', 'черв', 'лип', 'серп', 'вер', 'жовт', 'лист', 'груд']
   },
   ru: {
+    'm.multi': 'Можно выбрать несколько', 'm.selected': 'выбрано: {n}', 'm.none': 'Пока нет варианта, который подходит по всему.', 'm.noneP': 'Ниже — самые близкие к вашему запросу, и у каждого видно, что именно отличается. Отправьте нам запрос — мы спросим и владельцев, которых нет в наших каналах.', 'near.h': 'Ближе всего к вашему запросу', 'near.more': 'Почти то, что нужно', 'near.p': 'У каждого видно, чем он отличается от запроса, — решите за секунду.', 'miss.month': 'нет цены на {m}', 'miss.over': '+{p} сверх бюджета', 'miss.under': 'на {p} ниже минимума', 'miss.no': 'без «{f}»',
     'nav.rent': 'Аренда', 'nav.buy': 'Покупка', 'nav.match': 'Подобрать жильё', 'nav.matchShort': 'Подбор', 'nav.euro': 'Евровидение 2027', 'nav.journal': 'Журнал', 'nav.saved': 'Избранное', 'nav.chat': 'Спросить',
     'town.sveti-vlas': 'Свети Влас', 'town.sunny-beach': 'Солнечный Берег', 'town.nessebar': 'Несебр', 'town.ravda': 'Равда', 'town.pomorie': 'Поморие', 'town.aheloy': 'Ахелой', 'town.burgas': 'Бургас',
     'hero.h1': 'Ваше место у <em>Чёрного моря</em> — без догадок.',
