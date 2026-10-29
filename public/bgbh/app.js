@@ -638,7 +638,7 @@
       return ms.map(m => mons[m - 1]).join(', ');
     };
     return `<table class="rates"><thead><tr><th>${esc(t('l.period'))}</th><th>${esc(t('l.monthly'))}</th><th>${esc(t('l.nightly'))}</th></tr></thead><tbody>
-      ${L.rates.map(r => `<tr class="${r.booked ? 'booked' : ''}"><td>${esc(label(r))}</td><td>${r.booked && !r.month ? esc(t('l.booked')) : r.month ? eur(r.month) : '—'}</td><td>${r.day ? eur(r.day) : '—'}</td></tr>`).join('')}
+      ${L.rates.map(r => `<tr class="${r.booked ? 'booked' : ''}"><td>${esc(label(r))}${r.total ? `<br><span class="tiny">${eur(r.total)} ${esc(t('l.total'))}</span>` : ''}</td><td>${r.booked && !r.month ? esc(t('l.booked')) : r.month ? eur(r.month) : '—'}</td><td>${r.day ? eur(r.day) : '—'}</td></tr>`).join('')}
     </tbody></table>`;
   }
 
