@@ -381,7 +381,18 @@ function primeMovie() {
   if (primed) return; primed = true;
   movie.src = filmSrc(); movie.preload = 'auto'; movie.load();
 }
-movie.addEventListener('loadeddata', () => { movieReady = true; wake(); });
+movie.addEventListener('loadeddata', () => { movieReady = true; reviving = false; wake(); });
+// Phones drop a backgrounded page's video decoder (e.g. after the "colony's still working" notification), and a seek can
+// stall after very fast scrolling. Either way the film stops following the scroll, so reload it in place and re-seek.
+let reviving = false, seekAt = 0, hiddenAt = 0;
+movie.addEventListener('seeking', () => { seekAt = performance.now(); });
+function reviveFilm() {
+  if (!primed || reviving) return;
+  reviving = true; movieReady = false;
+  const src = movie.currentSrc || movie.getAttribute('src'); movie.removeAttribute('src'); movie.load();
+  movie.src = src; movie.preload = 'auto'; movie.load(); wake();
+}
+addEventListener('pageshow', e => { if (e.persisted) reviveFilm(); });
 movie.addEventListener('seeked', wake);
 movie.addEventListener('error', () => {
   if (movie.src.includes(FILM.src720.split('/').pop()) && FILM.src540) { movie.src = FILM.src540; movie.load(); }
@@ -434,7 +445,8 @@ function tick(now) {
   const atSurface = u < .015;
   if (!atSurface) primeMovie();
   if (movieReady && !movie.seeking && Math.abs(movie.currentTime - vTime) > 1 / 50) movie.currentTime = Math.min(FILM.duration - .04, vTime);
-  movie.classList.toggle('on', !atSurface && movieReady);
+  if (movieReady && movie.seeking && !document.hidden && performance.now() - seekAt > 2500) reviveFilm();
+  movie.classList.toggle('on', !atSurface && (movieReady || reviving));
   // Crop on narrow screens: leaving the surface freezes the idle pan where it is; the film starts from that spot
   // and eases to its own framing by the time the camera reaches the ant hill (~7 s), then follows FILM.focus.
   if (panning.matches) {
@@ -444,7 +456,7 @@ function tick(now) {
     const b = smooth(vTime / 7), fx = (panFrom * (1 - b) + lerpMap(FILM.focus, vTime, 0, 1) * b).toFixed(1);
     if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; }
   }
-  loop.classList.toggle('on', loopReady && (atSurface || !movieReady));
+  loop.classList.toggle('on', loopReady && (atSurface || (!movieReady && !reviving)));
   if (atSurface && loopReady && loop.paused && !document.hidden) loop.play().catch(() => {});
   if (!atSurface && !loop.paused) loop.pause();
 
@@ -529,7 +541,7 @@ function highlight(i) {
 }
 addEventListener('scroll', wake, { passive: true });
 addEventListener('resize', () => { layout(); wake(); }, { passive: true });
-document.addEventListener('visibilitychange', () => { if (document.hidden) loop.pause(); else { tLast = 0; wake(); } });
+document.addEventListener('visibilitychange', () => { if (document.hidden) { loop.pause(); hiddenAt = Date.now(); } else { tLast = 0; if (hiddenAt && Date.now() - hiddenAt > 3000) reviveFilm(); wake(); } });
 
 // Plate tilt: eased pointer tilt on desktop, a slow idle sway elsewhere.
 (() => {
