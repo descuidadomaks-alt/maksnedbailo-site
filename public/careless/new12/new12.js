@@ -15,7 +15,9 @@ const BOOKING = 'https://zcal.co/i/O0g63S4u';
 const SCOUT_MODE = (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && new URLSearchParams(location.search).get('scout')) || window.CARELESS_SCOUT_MODE || 'live';
 // Scout's voice: MyChatBot's Web SDK agent on the Calls channel. Every minute is billed, so the page guards it:
 // a call hangs up at 5 minutes and each browser gets 2 calls a day. The SDK (~480 KB) loads only when someone taps Call.
-const VOICE = { agent: 'agent_2901m5zws6k0e5gsj0jb222npste', sdk: 'https://storage.googleapis.com/mychatbot-widget-assets/v1/calls.js', maxSeconds: 300, perDay: 2 };
+const VOICE = { agent: 'agent_2901m5zws6k0e5gsj0jb222npste', sdk: 'https://storage.googleapis.com/mychatbot-widget-assets/v1/calls.js', maxSeconds: 300, perDay: 4 };
+// Testing: ?calls=reset clears this browser's daily call count.
+if (/[?&]calls=reset/.test(location.search)) try { localStorage.removeItem('cl-voice'); } catch {}
 const LEAD_ENDPOINT = '/api/new5-lead';
 // The "first AI hire" capacity line (Maks: about 5 new businesses a month). Set `perMonth` to null for the general line.
 const CAPACITY = { perMonth: 5 };
@@ -113,7 +115,7 @@ if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() =
           clearTimeout(capTimer); capTimer = setTimeout(() => C.stop(), VOICE.maxSeconds * 1000);
           resolve({ mute: m => { if (C.isMuted() !== m) C.toggleMute(); }, end: () => { clearTimeout(capTimer); ui = null; C.stop(); } });
         };
-        const bad = e => { off(); ui = null; reject(Object.assign(new Error(e?.message || 'failed'), { mic: /microphone/i.test(e?.message || '') })); };
+        const bad = e => { off(); ui = null; reject(Object.assign(new Error(e?.message || 'failed'), { mic: /microphone/i.test(e?.message || ''), why: e?.message || 'failed' })); };
         C.on('connect', ok); C.on('error', bad);
         C.start({ caller_id: C.defaultCallerId() });
       });
@@ -949,12 +951,12 @@ async function startCall() {
     catch (e) {
       if (token !== callToken) return;
       callState.textContent = e.limit ? L("That's today's calls", 'Por hoy, ya no hay más llamadas') : L("Couldn't connect", 'No se pudo conectar');
-      previewFallback(e.limit ? L("Scout takes two calls a day per visitor. He's still here in chat.", 'Scout atiende dos llamadas al día por visitante. Sigue aquí en el chat.')
+      previewFallback(e.limit ? L("Scout takes a few calls a day per visitor, and that's today's. He's still here in chat.", 'Scout atiende unas pocas llamadas al día por visitante y ya están hechas las de hoy. Sigue aquí en el chat.')
         : e.mic && inApp ? L("This app's built-in browser doesn't let websites use the microphone. Open the page in your browser and the call starts there. Or type instead.", 'El navegador integrado de esta app no deja que las webs usen el micrófono. Abre la página en tu navegador y la llamada empieza allí. O escribe.')
         : e.mic ? (/iP(hone|ad|od)/.test(navigator.userAgent)
           ? L('Your browser blocked the microphone. On iPhone: Settings → your browser (Safari or Chrome) → Microphone on, and allow it for this site; then reload. Or type instead.', 'Tu navegador ha bloqueado el micrófono. En iPhone: Ajustes → tu navegador (Safari o Chrome) → Micrófono activado, y permítelo para esta web; luego recarga. O escribe.')
           : L('Your browser blocked the microphone. Allow it for this site (the icon next to the address), then try again. Or type instead.', 'Tu navegador ha bloqueado el micrófono. Permítelo para esta web (el icono junto a la dirección) y vuelve a intentarlo. O escribe.')) + (e.why ? ' (' + e.why + ')' : '')
-        : L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?'));
+        : L("The line didn't connect. Want to type instead?", 'La llamada no conectó. ¿Prefieres escribir?') + (e.why ? ' (' + e.why + ')' : ''));
       if (e.mic && inApp) { const o = el('a', '', iOS ? L('Open in Safari', 'Abrir en Safari') : android ? L('Open in Chrome', 'Abrir en Chrome') : L('Open in your browser', 'Abrir en el navegador')); o.href = realBrowserURL(); o.style.marginLeft = '10px'; o.style.color = 'var(--scout)'; callFoot.append(o); }
       if (e.mic && inApp && navigator.clipboard) { const c = el('button', '', L('Copy link', 'Copiar enlace')); c.type = 'button'; c.style.marginLeft = '10px'; c.onclick = () => navigator.clipboard.writeText(location.origin + '/').then(() => { c.textContent = L('Copied', 'Copiado'); }).catch(() => {}); callFoot.append(c); }
       track('scout_call_fail', { reason: e.limit ? 'limit' : e.mic ? (inApp ? 'mic_inapp' : 'mic') : 'error', why: e.why || '' });
