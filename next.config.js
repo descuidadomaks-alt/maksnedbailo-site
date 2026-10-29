@@ -9,6 +9,10 @@ const nextConfig = {
       { source: "/careless/shared/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/projects/aelia-2", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/aelia-2/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      // BG Beach Homes preview: will move to its own domain, so it stays out of this site's index.
+      { source: "/projects/bg-beach-homes", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/projects/bg-beach-homes/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/bgbh/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
   // Proxy Connecto API through our own domain so the browser makes
@@ -37,6 +41,15 @@ const nextConfig = {
       {
         source: "/projects/aelia-2",
         destination: "/aelia-2/index.html",
+      },
+      // BG Beach Homes: one buildless app; the client router reads the path.
+      {
+        source: "/projects/bg-beach-homes",
+        destination: "/bgbh/index.html",
+      },
+      {
+        source: "/projects/bg-beach-homes/:path*",
+        destination: "/bgbh/index.html",
       },
       {
         source: "/api/connecto/:path*",
