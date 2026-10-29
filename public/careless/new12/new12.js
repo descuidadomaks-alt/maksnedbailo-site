@@ -381,18 +381,7 @@ function primeMovie() {
   if (primed) return; primed = true;
   movie.src = filmSrc(); movie.preload = 'auto'; movie.load();
 }
-movie.addEventListener('loadeddata', () => { movieReady = true; reviving = false; wake(); });
-// Phones drop a backgrounded page's video decoder (e.g. after the "colony's still working" notification), and a seek can
-// stall after very fast scrolling. Either way the film stops following the scroll, so reload it in place and re-seek.
-let reviving = false, seekAt = 0, hiddenAt = 0;
-movie.addEventListener('seeking', () => { seekAt = performance.now(); });
-function reviveFilm() {
-  if (!primed || reviving) return;
-  reviving = true; movieReady = false;
-  const src = movie.currentSrc || movie.getAttribute('src'); movie.removeAttribute('src'); movie.load();
-  movie.src = src; movie.preload = 'auto'; movie.load(); wake();
-}
-addEventListener('pageshow', e => { if (e.persisted) reviveFilm(); });
+movie.addEventListener('loadeddata', () => { movieReady = true; wake(); });
 movie.addEventListener('seeked', wake);
 movie.addEventListener('error', () => {
   if (movie.src.includes(FILM.src720.split('/').pop()) && FILM.src540) { movie.src = FILM.src540; movie.load(); }
@@ -445,8 +434,7 @@ function tick(now) {
   const atSurface = u < .015;
   if (!atSurface) primeMovie();
   if (movieReady && !movie.seeking && Math.abs(movie.currentTime - vTime) > 1 / 50) movie.currentTime = Math.min(FILM.duration - .04, vTime);
-  if (movieReady && movie.seeking && !document.hidden && performance.now() - seekAt > 2500) reviveFilm();
-  movie.classList.toggle('on', !atSurface && (movieReady || reviving));
+  movie.classList.toggle('on', !atSurface && movieReady);
   // Crop on narrow screens: leaving the surface freezes the idle pan where it is; the film starts from that spot
   // and eases to its own framing by the time the camera reaches the ant hill (~7 s), then follows FILM.focus.
   if (panning.matches) {
@@ -456,7 +444,7 @@ function tick(now) {
     const b = smooth(vTime / 7), fx = (panFrom * (1 - b) + lerpMap(FILM.focus, vTime, 0, 1) * b).toFixed(1);
     if (fx !== movie.dataset.fx) { movie.dataset.fx = fx; movie.style.objectPosition = fx + '% 50%'; }
   }
-  loop.classList.toggle('on', loopReady && (atSurface || (!movieReady && !reviving)));
+  loop.classList.toggle('on', loopReady && (atSurface || !movieReady));
   if (atSurface && loopReady && loop.paused && !document.hidden) loop.play().catch(() => {});
   if (!atSurface && !loop.paused) loop.pause();
 
@@ -541,7 +529,16 @@ function highlight(i) {
 }
 addEventListener('scroll', wake, { passive: true });
 addEventListener('resize', () => { layout(); wake(); }, { passive: true });
-document.addEventListener('visibilitychange', () => { if (document.hidden) { loop.pause(); hiddenAt = Date.now(); } else { tLast = 0; if (hiddenAt && Date.now() - hiddenAt > 3000) reviveFilm(); wake(); } });
+let hiddenAt = 0;
+const restart = () => { try { sessionStorage.setItem('cl-returned', '1'); } catch {} history.scrollRestoration = 'manual'; scrollTo(0, 0); location.reload(); };
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { loop.pause(); hiddenAt = Date.now(); return; }
+  tLast = 0;
+  // Away for more than 30 s, mid-journey and not in a call or chat: restart from the top.
+  if (hiddenAt && Date.now() - hiddenAt > 30000 && root.classList.contains('begun') && scrollY > innerHeight * .5 && call.hidden && chat.hidden) return restart();
+  wake();
+});
+addEventListener('pageshow', e => { if (e.persisted && root.classList.contains('begun') && scrollY > innerHeight * .5) restart(); });
 
 // Plate tilt: eased pointer tilt on desktop, a slow idle sway elsewhere.
 (() => {
@@ -583,7 +580,10 @@ function greeting() {
   let seen = false; try { seen = !!localStorage.getItem('cl5-seen'); localStorage.setItem('cl5-seen', '1'); } catch {}
   const time = loc => d.toLocaleTimeString(loc, { hour: 'numeric', minute: '2-digit' }), day = loc => d.toLocaleDateString(loc, { weekday: 'long' });
   return () => {
-    const tail = L('Clearing your schedule…', 'Despejando tu agenda…'), back = seen ? L('Welcome back. ', 'Hola de nuevo. ') : '';
+    let returned = false; try { returned = sessionStorage.getItem('cl-returned') === '1'; sessionStorage.removeItem('cl-returned'); } catch {}
+    const tail = L('Clearing your schedule…', 'Despejando tu agenda…');
+    if (returned) return L("Thanks for coming back. The world gets loud; that's why we're here. ", 'Gracias por volver. El mundo hace mucho ruido; para eso estamos. ') + tail;
+    const back = seen ? L('Welcome back. ', 'Hola de nuevo. ') : '';
     if (h >= 21 || h < 5) return back + L(`It's ${time('en-GB')}. Still working? `, `${h === 1 ? 'Es la' : 'Son las'} ${time('es-ES')}. ¿Todavía trabajando? `) + tail;
     if (h < 8) return back + L('Early start. ', 'Madrugón. ') + tail;
     if (d.getDay() === 0 || d.getDay() === 6) return back + L(`It's ${day('en-GB')}. `, `Es ${day('es-ES')}. `) + tail;
