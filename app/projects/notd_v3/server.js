@@ -51,7 +51,7 @@ export async function handle(req){
    const {d,m}=await session();if(!d||!m)return json({error:'Сначала перенесите V2.'},400);const body=await req.json();if(body.expectedRevision!==m.etag)return json({error:'Другой экран уже сохранил изменения. Ваш черновик сохранён на этом устройстве. Скачайте его перед обновлением страницы.',conflict:true},409);
    const state=validateState(body.state,d.value);state.versions=m.value.state.versions||[];state.legacyVersions=m.value.state.legacyVersions||[];const updatedAt=new Date().toISOString();let version=null;
    if(path==='/api/recalculate'){
-    if(state.cycle&&state.cycle.status!=='ready')return json({error:'Новый расчёт ожидает свежую выгрузку CRM. Предыдущая проверка сохранена в истории.'},409);
+    if(state.cycle&&(state.cycle.status!=='ready'||state.cycle.pendingTransitConfirmation))return json({error:'Новый расчёт ожидает свежую выгрузку CRM. Предыдущая проверка сохранена в истории.'},409);
     const result=calculate(d.value,state),id=randomUUID(),last=state.versions.at(-1),previous=last?await read('versions/'+last.id+'.json'):null;
     const old=new Map((previous?.value.result.rows||[]).map(r=>[r.id,r]));
     const comparison=result.rows.filter(r=>!old.has(r.id)||r.suggested!==old.get(r.id).suggested||r.quantity!==old.get(r.id).quantity).map(r=>({id:r.id,name:r.name,before:old.get(r.id)?.quantity??null,after:r.quantity,suggested:r.suggested,reason:r.reason}));
