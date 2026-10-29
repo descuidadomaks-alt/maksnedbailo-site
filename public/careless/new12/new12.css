@@ -88,6 +88,7 @@ html.sound-on .sound i:nth-child(4){animation-delay:-.2s;animation-duration:1s}
 /* Hover: the solid button grows out to where the pulse ring sits, so only the button remains. */
 .gate-btn:not(:disabled):hover{transform:scale(1.16);background:var(--amber);color:var(--ink);animation:none;box-shadow:0 22px 60px -14px rgba(224,177,116,.7)}
 .gate-btn:disabled{cursor:progress}
+.gate-away{margin:12px 0 0;font-size:12.5px;color:var(--dim);animation:rise 1.2s var(--ease) both .4s}
 .gate-hint{margin:0;font-size:12px;color:var(--dim);max-width:36ch;animation:rise 1.2s var(--ease) both .5s}
 .gate-quiet{display:inline;margin-left:4px;padding:4px 2px;border:0;background:none;font-size:inherit;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px;transition:color .25s,opacity .4s}
 .gate-quiet:hover{color:var(--paper)}

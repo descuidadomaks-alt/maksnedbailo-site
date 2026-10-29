@@ -67,8 +67,8 @@ const UA = navigator.userAgent, iOS = /iP(hone|ad|od)/.test(UA), android = /Andr
 const inApp = !!window.TelegramWebviewProxy || /Telegram|Instagram|FBAN|FBAV|FB_IAB|LinkedInApp|BytedanceWebview|musical_ly|Line\/|Snapchat|Pinterest|Twitter/i.test(UA)
   || (iOS && !/Safari\//.test(UA) && !/CriOS|FxiOS|EdgiOS/.test(UA)) || (android && /; wv\)/.test(UA));
 // One tap out of the app: Safari on iPhone (x-safari-https), Chrome on Android (intent). ?call=1 starts the call there.
-const realBrowserURL = () => { const u = location.origin + '/?call=1' + (lang === 'es' ? '&lang=es' : '');
-  return iOS ? 'x-safari-' + u : android ? 'intent://' + location.host + '/?call=1#Intent;scheme=https;package=com.android.chrome;end' : u; };
+const realBrowserURL = (call = true) => { const q = '?' + (call ? 'call=1&' : '') + 'lang=' + lang, u = location.origin + '/' + q;
+  return iOS ? 'x-safari-' + u : android ? 'intent://' + location.host + '/' + q + '#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' + encodeURIComponent(u) + ';end' : u; };
 const wa = text => 'https://wa.me/' + WHATSAPP + (text ? '?text=' + encodeURIComponent(text) : '');
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch {} } };
 /* Language: English or Spanish (Spain). ?lang= wins, then the visitor's choice, then the browser.
@@ -614,7 +614,19 @@ function runGate() {
     setTimeout(poll, 160);
   };
   poll();
-  gateBtn.addEventListener('click', () => { begin(true); if (wantsCall) startCall(); });
+  // Inside Telegram/Instagram/Facebook, "I'm ready" moves the visitor to Safari or Chrome (sound and voice calls work
+  // there). If the app won't hand over, the page simply starts here a moment later.
+  if (inApp && (iOS || android)) {
+    gateBtn.after(el('p', 'gate-away', iOS ? L('Opens in Safari for the full experience.', 'Se abre en Safari para la experiencia completa.') : L('Opens in Chrome for the full experience.', 'Se abre en Chrome para la experiencia completa.')));
+  }
+  gateBtn.addEventListener('click', () => {
+    if (inApp && (iOS || android)) {
+      track('open_in_browser'); location.href = realBrowserURL(false);
+      setTimeout(() => { if (!document.hidden) begin(true); }, 1500);
+      return;
+    }
+    begin(true); if (wantsCall) startCall();
+  });
 }
 scrollTo(0, 0);
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
