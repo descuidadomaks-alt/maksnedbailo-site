@@ -999,14 +999,17 @@ muteBtn.addEventListener('click', () => { const m = muteBtn.getAttribute('aria-p
 call.addEventListener('keydown', e => { if (e.key === 'Escape') endCall(); });
 
 /* ───────────────────────── Client stories ───────────────────────── */
-// Real feedback, ported from /old2: two founders on camera, then written reviews, then one closing card.
+// Real feedback: two founders on camera, then written reviews (named clients and their projects first), then one closing card.
 // `es` holds the Spanish; written reviews shown in Spanish are labelled as translated.
 // It behaves like a phone story: videos start on their own, tap right for next, left for back, hold to pause.
 const STORIES = [
   { video: 'garrett', name: 'Garrett Williams', role: 'Econocraft Materials · USA', cap: 'Garrett, in his own words.', fit: true, es: { role: 'Econocraft Materials · EE. UU.', cap: 'Garrett, en sus propias palabras.' } },
   { video: 'aj', name: 'AJ', role: 'Folkrm · USA', cap: 'AJ, in his own words.', es: { role: 'Folkrm · EE. UU.', cap: 'AJ, en sus propias palabras.' } },
   { quote: "Wow Maks — this is f***ing awesome!! I need to check properly on my laptop but I am amazed! You're a genius!! Thank you!!", name: 'Corinna C.', role: 'Edible Health · UK', es: { role: 'Edible Health · Reino Unido', quote: '¡Wow, Maks, esto es j***damente increíble! Tengo que mirarlo bien en el portátil, ¡pero estoy alucinando! ¡Eres un genio! ¡¡Gracias!!' } },
-  { quote: 'Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.', name: 'Sophie M.', es: { quote: 'Maksym se tomó el tiempo de entender de verdad lo que necesitaba nuestro negocio y propuso soluciones creativas que encajaban a la perfección. Respondía rápido y fue muy fácil trabajar con él durante todo el proceso.' } },
+  { quote: 'Maksym really took the time to understand our business requirements and came up with creative solutions that perfectly matched what we needed. He was very responsive and easy to work with throughout the entire process.', name: 'Sophie Hamilton', role: 'Capital Access Group', es: { quote: 'Maksym se tomó el tiempo de entender de verdad lo que necesitaba nuestro negocio y propuso soluciones creativas que encajaban a la perfección. Respondía rápido y fue muy fácil trabajar con él durante todo el proceso.' } },
+  { quote: 'We are truly grateful to Maksym for his invaluable help in building the website for our magazine Villas Antillaises. We have received many compliments on the site. Maksym and his team have a real sense of craftsmanship and dedication. At the beginning, we only had a general idea of what we wanted without knowing exactly how it would look, and thanks to his guidance we now have something both functional and aesthetic. He has been completely transparent about his process, always respectful of budgets, and consistently proactive with creative suggestions.', name: 'Olivier', role: 'Villas Antillaises · magazine website', es: { role: 'Villas Antillaises · web de la revista', quote: 'Estamos muy agradecidos a Maksym por su ayuda inestimable al crear la web de nuestra revista Villas Antillaises. Hemos recibido muchísimos elogios por la web. Maksym y su equipo tienen un verdadero sentido del oficio y de la dedicación. Al principio solo teníamos una idea general de lo que queríamos, sin saber cómo se vería, y gracias a su guía ahora tenemos algo funcional y estético a la vez. Ha sido totalmente transparente con su proceso, siempre respetuoso con los presupuestos y constantemente proactivo con ideas creativas.' } },
+  { quote: 'Maksym is very responsive, talented, and made my product design a breeze. Especially for a first time Upwork user like myself. I could not be more happy with the results of his work, and the helpful feedback he gave through the design process. Maksym is quick to reply, an efficient worker, and brought all my ideas to life on this project.', name: 'Douglas', role: 'Beverage brand · can label design', es: { role: 'Marca de bebidas · diseño de lata', quote: 'Maksym responde muy rápido, tiene mucho talento y me hizo facilísimo el diseño de mi producto. Sobre todo para alguien que usaba Upwork por primera vez, como yo. No podría estar más contento con el resultado de su trabajo ni con los consejos que me dio durante el proceso de diseño. Maksym contesta enseguida, trabaja con eficacia y dio vida a todas mis ideas en este proyecto.' } },
+  { quote: "Outstanding design, I got 100 times more than I've asked without any complain or delays in the project. It was a complex project which was executed in a simple and nice way. Communication was great and the design 100% TOP.", name: 'Mustafa', role: 'Product design · handed to developers', es: { role: 'Diseño de producto · listo para desarrollo', quote: 'Un diseño excelente: recibí cien veces más de lo que pedí, sin ninguna queja ni retraso en el proyecto. Era un proyecto complejo y se resolvió de forma sencilla y bonita. La comunicación fue genial y el diseño, 100 % TOP.' } },
   { quote: 'Maksym was a fantastic partner on this project. His attention to detail and willingness to iterate until we got it just right made all the difference.', name: 'David W.', es: { quote: 'Maksym fue un gran compañero en este proyecto. Su atención al detalle y sus ganas de iterar hasta dejarlo perfecto marcaron la diferencia.' } },
   { quote: 'You are so great to work with! Thank you so much for all your hard work and for being so patient with all of my changes.', name: 'Michelle K.', es: { quote: '¡Es un placer trabajar contigo! Muchísimas gracias por todo tu trabajo y por tener tanta paciencia con todos mis cambios.' } },
   { quote: 'Excellent communication and very quick to understand what I was looking for. Delivered high-quality work with great attention to detail.', name: 'Daniel R.', es: { quote: 'Comunicación excelente y muy rápido en entender lo que buscaba. Entregó un trabajo de gran calidad, cuidado hasta el detalle.' } },
@@ -1021,7 +1024,7 @@ const STORIES = [
   { end: true },
 ];
 const storiesEl = $('#stories'), storyFrame = $('#story-frame'), storyBars = $('#story-bars'), storyStage = $('#story-stage'), storyWho = $('#story-who'), storyMuteBtn = $('#story-mute');
-const QUOTE_MS = 6500;
+const QUOTE_MS = 6500, quoteMs = st => clamp(sv(st, 'quote').length * 62, QUOTE_MS, 24000);
 let storyIdx = 0, storyRaf = 0, storyLast = 0, storyElapsed = 0, storyPaused = false, storyDown = 0, storyHold = 0, storyOpener = null, storyMuted = true, storyMuteChoice = null, storyBlocked = false;
 // One video element for every clip: once a tap has let it play with sound, iPhone keeps letting it.
 const storyVideo = document.createElement('video');
@@ -1076,7 +1079,7 @@ function fraction(i) {
   if (i !== storyIdx) return i < storyIdx ? 1 : 0;
   const st = current();
   if (st.video) return storyVideo.duration ? storyVideo.currentTime / storyVideo.duration : 0;
-  return st.end ? 1 : clamp(storyElapsed / QUOTE_MS);
+  return st.end ? 1 : clamp(storyElapsed / quoteMs(st));
 }
 function setBars() { [...storyBars.children].forEach((b, i) => b.style.setProperty('--f', fraction(i).toFixed(3))); }
 function showStory(i) {
@@ -1088,7 +1091,7 @@ function showStory(i) {
   storyMuteBtn.hidden = !st.video;
   // Header: who is speaking.
   const av = st.video ? Object.assign(el('img', 'av'), { src: media(`face-${st.video}.webp`), alt: '' }) : el('span', 'av', st.end ? '✦' : st.name[0]);
-  const who = el('span'); who.append(st.end ? 'care_less' : st.name, el('small', '', st.end ? L('Your turn', 'Tu turno') : sv(st, 'role') || L('Verified client', 'Cliente verificado')));
+  const who = el('span'); who.append(st.end ? 'care_less' : st.name, el('small', '', st.end ? L('Your turn', 'Tu turno') : sv(st, 'role') || L('Client review · Upwork', 'Reseña de cliente · Upwork')));
   storyWho.replaceChildren(av, who);
   let node;
   if (st.video) {
@@ -1103,7 +1106,7 @@ function showStory(i) {
     stopVideo();
     if (st.quote) {
       const q = sv(st, 'quote');
-      node = el('div', 'story story-quote' + (q.length > 150 ? ' long' : ''));
+      node = el('div', 'story story-quote' + (q.length > 300 ? ' long xlong' : q.length > 150 ? ' long' : ''));
       node.append(el('div', 'mark', '“'), el('blockquote', '', q), el('p', 'stars', '★★★★★'));
       if (q !== st.quote) node.append(el('p', 'src', 'Traducido del inglés'));
       node.append(el('i', 'story-glyph'));
@@ -1124,7 +1127,7 @@ function runStory(now) {
   const dt = storyLast ? Math.min(64, now - storyLast) : 0; storyLast = now;
   if (current().quote && !storyPaused && !document.hidden) storyElapsed += dt;
   setBars();
-  if (current().quote && storyElapsed >= QUOTE_MS) return showStory(storyIdx + 1);
+  if (current().quote && storyElapsed >= quoteMs(current())) return showStory(storyIdx + 1);
   storyRaf = requestAnimationFrame(runStory);
 }
 const stepStory = d => { if (storyIdx + d < 0) return showStory(0); if (storyIdx + d >= STORIES.length) return closeStories(); showStory(storyIdx + d); };
