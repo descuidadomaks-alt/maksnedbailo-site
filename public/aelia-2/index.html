@@ -25,6 +25,7 @@
   --ease:cubic-bezier(.22,.61,.36,1); --soft:cubic-bezier(.16,1,.3,1);
   --gx:max(20px,6vw); --safe-b:env(safe-area-inset-bottom,0px);
   color-scheme:light;
+  --vh:1svh; /* replaced by a fixed px value from JS, see head script */
 }
 *{box-sizing:border-box}
 /* No fixed blend overlay and no CSS smooth scrolling: in-app WebViews (Telegram, Instagram) drop tiles and
@@ -53,11 +54,11 @@ p{margin:0}
 .rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
 
 /* HERO */
-.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding:calc(22px + env(safe-area-inset-top,0px)) var(--gx) calc(26px + var(--safe-b));overflow:hidden;
+.hero{position:relative;min-height:calc(100 * var(--vh));display:grid;grid-template-rows:auto 1fr auto;padding:calc(22px + env(safe-area-inset-top,0px)) var(--gx) calc(26px + var(--safe-b));overflow:hidden;
   background:radial-gradient(70% 45% at 50% 42%,rgba(217,188,183,.34),transparent 70%),var(--milk)}
 .hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
 .hero-top .name{font:400 13px/1 var(--sans);letter-spacing:.42em;padding-left:.42em}
-.hero-mid{display:grid;align-content:center;justify-items:center;text-align:center;gap:clamp(22px,4svh,40px);padding:4svh 0}
+.hero-mid{display:grid;align-content:center;justify-items:center;text-align:center;gap:clamp(22px,calc(4 * var(--vh)),40px);padding:calc(4 * var(--vh)) 0}
 .cycle{position:relative;width:min(62vw,300px);aspect-ratio:1}
 .cycle img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transform:scale(.965);filter:blur(6px);transition:opacity 1.3s var(--ease),transform 2.4s var(--soft),filter 1.3s var(--ease)}
 .cycle img.on{opacity:1;transform:none;filter:none}
@@ -71,7 +72,7 @@ p{margin:0}
 @keyframes drip{to{top:110%}}
 
 /* chapters */
-.chapter{padding:clamp(96px,16svh,180px) 0}
+.chapter{padding:clamp(96px,calc(16 * var(--vh)),180px) 0}
 .chapter h2{font-size:clamp(32px,7.4vw,60px);line-height:1.06}
 .chapter .eyebrow{margin-bottom:22px;display:block}
 
@@ -88,12 +89,12 @@ p{margin:0}
 @media (min-width:760px){.things{grid-template-columns:repeat(4,1fr)}.thing{min-height:200px;padding:28px 24px}}
 
 /* heard — pinned, lines light up in turn */
-.heard{position:relative;height:260vh;height:260svh}
-.heard-pin{position:sticky;top:0;height:100vh;height:100svh;display:grid;align-content:center}
-.heard ol{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:clamp(14px,2.6svh,26px)}
+.heard{position:relative;height:calc(260 * var(--vh))}
+.heard-pin{position:sticky;top:0;height:calc(100 * var(--vh));display:grid;align-content:center}
+.heard ol{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:clamp(14px,calc(2.6 * var(--vh)),26px)}
 .heard li{font:300 clamp(23px,5.6vw,44px)/1.2 var(--serif);max-width:24ch;opacity:calc(.16 + .84 * var(--a,0));transform:translateY(calc((1 - var(--a,0)) * 10px));transition:opacity .25s linear}
 .heard li::before{content:"— ";color:var(--rose)}
-.heard .after{margin-top:clamp(26px,5svh,48px);color:var(--ink-2);max-width:40ch;opacity:var(--a,0)}
+.heard .after{margin-top:clamp(26px,calc(5 * var(--vh)),48px);color:var(--ink-2);max-width:40ch;opacity:var(--a,0)}
 
 /* lotus */
 .lotus{background:var(--paper);border-block:1px solid var(--line)}
@@ -109,7 +110,7 @@ p{margin:0}
 @media (min-width:860px){.facts{grid-template-columns:1fr 1fr}}
 
 /* line intro */
-.line-intro{min-height:88vh;min-height:88svh;display:grid;align-content:center;padding:14svh var(--gx)}
+.line-intro{min-height:calc(88 * var(--vh));display:grid;align-content:center;padding:calc(14 * var(--vh)) var(--gx)}
 .line-intro .num{font:300 clamp(120px,34vw,260px)/.8 var(--serif);color:var(--rose-2);margin-bottom:6px}
 .line-intro h2{font-size:clamp(36px,8.6vw,72px);line-height:1.02}
 .line-intro p{margin-top:22px;max-width:40ch;color:var(--ink-2);font-size:clamp(17px,4.3vw,20px)}
@@ -121,17 +122,17 @@ p{margin:0}
 
 /* OPTION SCENE */
 .opt{position:relative;border-top:1px solid var(--line)}
-.stage{position:relative;height:100vh;height:100svh;display:grid;grid-template-rows:auto 1fr auto;padding:calc(20px + env(safe-area-inset-top,0px)) var(--gx) calc(92px + var(--safe-b));overflow:hidden}
+.stage{position:relative;height:calc(100 * var(--vh));display:grid;grid-template-rows:auto 1fr auto;padding:calc(20px + env(safe-area-inset-top,0px)) var(--gx) calc(92px + var(--safe-b));overflow:hidden}
 .stage-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
 .stage-art{display:grid;place-items:center;min-height:0}
-.stage-art img{width:min(76vw,440px);max-height:min(46svh,440px);object-fit:contain;
-  transform:translateY(calc(var(--p,0) * -7svh)) scale(calc(1 - var(--p,0) * .1));opacity:calc(1 - var(--p,0) * .5)}
+.stage-art img{width:min(76vw,440px);max-height:min(calc(46 * var(--vh)),440px);object-fit:contain;
+  transform:translateY(calc(var(--p,0) * -7 * var(--vh))) scale(calc(1 - var(--p,0) * .1));opacity:calc(1 - var(--p,0) * .5)}
 .stage-art .ap{opacity:0;transform:scale(.94);transition:opacity 1.4s var(--ease),transform 2s var(--soft)}
 .opt.seen .stage-art .ap{opacity:1;transform:none}
 .stage-name{display:flex;align-items:baseline;gap:16px}
 .stage-name .n{font:300 clamp(18px,4.4vw,22px)/1 var(--serif);color:var(--rose)}
 .stage-name h3{font-size:clamp(46px,13vw,92px);line-height:.95}
-.body{padding:0 var(--gx) clamp(80px,12svh,140px);display:grid;gap:clamp(34px,6vw,56px)}
+.body{padding:0 var(--gx) clamp(80px,calc(12 * var(--vh)),140px);display:grid;gap:clamp(34px,6vw,56px)}
 .idea{font:300 clamp(23px,5.6vw,32px)/1.3 var(--serif);max-width:24ch;text-wrap:pretty}
 .story{font-size:clamp(17px,4.3vw,19px);max-width:44ch;color:var(--ink);text-wrap:pretty}
 .story::first-letter{font-family:var(--serif);font-size:1.25em;color:var(--rose)}
@@ -172,7 +173,7 @@ p{margin:0}
 .try-cap{font-size:14px;color:var(--ink-2);min-height:22px}
 
 /* gallery */
-.gallery{padding:0 var(--gx) clamp(90px,14svh,160px);display:grid;gap:14px}
+.gallery{padding:0 var(--gx) clamp(90px,calc(14 * var(--vh)),160px);display:grid;gap:14px}
 .shot{position:relative;border-radius:18px;overflow:hidden;background:#e9e2d8;cursor:zoom-in}
 .shot img{width:100%;height:auto;transition:transform 1.4s var(--soft)}
 .shot:hover img{transform:scale(1.015)}
@@ -297,10 +298,19 @@ footer a{text-underline-offset:3px;text-decoration-color:var(--line-2)}
   .rv{opacity:1}.stage-art .ap{opacity:1}
   .stage-art img{transform:none!important;opacity:1!important}
   .sf-foil .m,.cue i::after{animation:none}
-  .heard{height:auto}.heard-pin{position:static;height:auto;padding:16svh 0}
+  .heard{height:auto}.heard-pin{position:static;height:auto;padding:calc(16 * var(--vh)) 0}
   .heard li,.heard .after{opacity:1!important;transform:none!important}
 }
 </style>
+<script>
+/* Telegram's in-app browser shows its toolbar when you scroll back up and resizes the page viewport.
+   With svh-based sections (7 stages, the pinned list, intros) that grew the page by ~800px mid-scroll
+   and the content jumped. Lock the unit once and only re-measure when the width changes (rotation). */
+(() => { let w = 0; const touch = matchMedia('(pointer:coarse)').matches;
+  const set = () => { if (touch && innerWidth === w) return; w = innerWidth;
+  document.documentElement.style.setProperty('--vh', innerHeight / 100 + 'px'); };
+  set(); addEventListener('resize', set); })();
+</script>
 </head>
 <body>
 <i class="progress" id="progress" aria-hidden="true"></i>
