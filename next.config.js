@@ -7,6 +7,8 @@ const nextConfig = {
       { source: "/new11", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/new11/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
       { source: "/careless/shared/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }] },
+      { source: "/projects/aelia-2", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      { source: "/aelia-2/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
   // Proxy Connecto API through our own domain so the browser makes
@@ -31,6 +33,10 @@ const nextConfig = {
       {
         source: "/projects/aelia",
         destination: "/aelia-presentation/index.html",
+      },
+      {
+        source: "/projects/aelia-2",
+        destination: "/aelia-2/index.html",
       },
       {
         source: "/api/connecto/:path*",
