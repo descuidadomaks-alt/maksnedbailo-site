@@ -91,22 +91,26 @@ if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() =
   let ui = null, wired = false, capTimer = 0;
   const load = () => window.MyChatBotCalls ? Promise.resolve() : new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = VOICE.sdk; sc.onload = ok; sc.onerror = no; document.head.append(sc); });
   const today = () => new Date().toISOString().slice(0, 10);
+  const setSession = t => { try { if (navigator.audioSession) navigator.audioSession.type = t || (root.classList.contains('sound-on') ? 'playback' : 'auto'); } catch {} };
   const used = () => { try { const v = JSON.parse(localStorage.getItem('cl-voice') || '{}'); return v.day === today() ? v.n : 0; } catch { return 0; } };
   const count = () => { try { localStorage.setItem('cl-voice', JSON.stringify({ day: today(), n: used() + 1 })); } catch {} };
   return {
     preload: load,
     async start(cb) {
       if (used() >= VOICE.perDay) throw Object.assign(new Error('limit'), { limit: true });
+      // Safari: the ambient sound sets the page's audio session to 'playback', which refuses the microphone.
+      // A call needs 'play-and-record'; put it back when the call ends.
+      setSession('play-and-record');
       // Ask for the microphone first, straight from the tap (iPhone browsers only prompt then), and keep the reason if refused.
       try { const st = await navigator.mediaDevices.getUserMedia({ audio: true }); st.getTracks().forEach(t => t.stop()); }
-      catch (e) { throw Object.assign(new Error('mic'), { mic: true, why: e?.name || 'unavailable' }); }
+      catch (e) { setSession(); throw Object.assign(new Error('mic'), { mic: true, why: e?.name || 'unavailable' }); }
       await load();
       const C = window.MyChatBotCalls; ui = cb;
       if (!wired) {
         wired = true; C.init({ agent_id: VOICE.agent });
         C.on('modeChange', m => ui?.onSpeaking(m.mode === 'speaking'));
         C.on('message', m => m.message && ui?.onCaption(m.message, m.role === 'user' ? 'user' : 'scout'));
-        C.on('disconnect', () => { clearTimeout(capTimer); const u = ui; ui = null; u?.onEnd(); });
+        C.on('disconnect', () => { clearTimeout(capTimer); setSession(); const u = ui; ui = null; u?.onEnd(); });
       }
       return new Promise((resolve, reject) => {
         const off = () => { C.off('connect', ok); C.off('error', bad); };
@@ -115,7 +119,7 @@ if (SCOUT_MODE === 'live' && !window.CarelessVoice) window.CarelessVoice = (() =
           clearTimeout(capTimer); capTimer = setTimeout(() => C.stop(), VOICE.maxSeconds * 1000);
           resolve({ mute: m => { if (C.isMuted() !== m) C.toggleMute(); }, end: () => { clearTimeout(capTimer); ui = null; C.stop(); } });
         };
-        const bad = e => { off(); ui = null; reject(Object.assign(new Error(e?.message || 'failed'), { mic: /microphone/i.test(e?.message || ''), why: e?.message || 'failed' })); };
+        const bad = e => { off(); ui = null; setSession(); reject(Object.assign(new Error(e?.message || 'failed'), { mic: /microphone/i.test(e?.message || ''), why: e?.message || 'failed' })); };
         C.on('connect', ok); C.on('error', bad);
         C.start({ caller_id: C.defaultCallerId() });
       });
