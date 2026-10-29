@@ -516,7 +516,7 @@ function tick(now) {
   rail.classList.toggle('away', held || modal > 0);
   progress.style.transform = `scaleX(${clamp(y / (maxScroll || 1)).toFixed(4)})`;
   sound.update(u, y, now);
-  const level = !call.hidden ? .2 : !storiesEl.hidden && storyFrame.classList.contains('loud') ? .04 : !storiesEl.hidden ? .4 : !offerEl.hidden ? .5 : !chat.hidden ? .55 : 1;
+  const level = !call.hidden ? 0 : !storiesEl.hidden && storyFrame.classList.contains('loud') ? .04 : !storiesEl.hidden ? .4 : !offerEl.hidden ? .5 : !chat.hidden ? .55 : 1;
   if (level !== duckLevel) { duckLevel = level; sound.duck(level); }
 
   if (u !== lastU || Math.abs(target - vTime) > .002 || (movieReady && Math.abs(movie.currentTime - vTime) > 1 / 50)) wake();
