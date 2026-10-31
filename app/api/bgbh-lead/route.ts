@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
+import { tg, teamChat, botToken, verifyInitData, userLabel } from '@/lib/bgbh/telegram';
+import { pickLang } from '@/lib/bgbh/match';
+import { bt } from '@/lib/bgbh/alerts';
 
 // BG Beach Homes enquiries: every request is kept as a private JSON file in the site's Blob store
 // (bgbh/leads/…) and posted to the team's Telegram chat (BGBH_TG_BOT_TOKEN + BGBH_TG_CHAT_ID).
 // The visitor only gets a reference number when the Telegram message went through.
+// From the Telegram Mini App (valid initData) name and contact come from Telegram, and the confirmation arrives in their chat.
 export const runtime = 'nodejs';
 const reply = (body: object, status = 200) => NextResponse.json(body, { status, headers: { 'Cache-Control': 'no-store' } });
 const recent = new Map<string, number[]>();
@@ -27,13 +31,8 @@ function refCode() {
 }
 
 async function telegram(text: string) {
-  const token = process.env.BGBH_TG_BOT_TOKEN, chat = process.env.BGBH_TG_CHAT_ID;
-  if (!token || !chat) return false;
-  const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chat, text, disable_web_page_preview: true }),
-  });
-  return r.ok;
+  if (!botToken() || !teamChat()) return false;
+  return (await tg('sendMessage', { chat_id: teamChat(), text, link_preview_options: { is_disabled: true } })).ok;
 }
 
 export async function POST(request: NextRequest) {
@@ -48,6 +47,12 @@ export async function POST(request: NextRequest) {
   let body: Record<string, unknown>;
   try { body = await request.json(); } catch { return reply({ ok: false }, 400); }
   const lead = clean(body);
+  const user = verifyInitData(String(body.initData || ''));
+  if (user) {
+    lead.name = lead.name || [user.first_name, user.last_name].filter(Boolean).join(' ') || 'Telegram user';
+    lead.contact = lead.contact || userLabel(user);
+    lead.telegram = user.username ? `https://t.me/${user.username}` : `tg id ${user.id}`;
+  }
   if (!lead.name || !lead.contact || !lead.type) return reply({ ok: false, error: 'missing' }, 400);
   const ref = refCode();
   const record = { ref, receivedAt: new Date(now).toISOString(), ...lead };
@@ -68,5 +73,9 @@ export async function POST(request: NextRequest) {
 
   // Only promise a reply when a person was actually notified; otherwise the page sends the visitor to Telegram.
   if (!sent) return reply({ ok: false, stored, error: 'not-delivered' }, 503);
-  return reply({ ok: true, ref, stored });
+  if (user) {
+    try { await tg('sendMessage', { chat_id: user.id, text: `${bt(pickLang(lead.lang || user.language_code), 'asked')}
+${ref}` }); } catch { /* they may not have started the bot */ }
+  }
+  return reply({ ok: true, ref, stored, inTelegram: !!user });
 }

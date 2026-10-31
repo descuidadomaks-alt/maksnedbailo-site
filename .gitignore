@@ -26,3 +26,6 @@ Thumbs.db
 # editor
 .vscode/
 *.swp
+
+# local BG Beach Homes alert state (dev only)
+.data/

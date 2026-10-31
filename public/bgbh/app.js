@@ -153,6 +153,7 @@
     [/^\/buy\/?$/, () => results('sale')],
     [/^\/(?:rent|buy)\/([rs]\d+)[^/]*\/?$/, m => listing(m[1])],
     [/^\/match\/?$/, matcher],
+    [/^\/feed\/?$/, feed],
     [/^\/saved\/?$/, savedPage],
     [/^\/eurovision-2027\/?$/, euroPage],
     [/^\/journal\/?$/, journalPage],
@@ -193,6 +194,9 @@
   });
   function paintNav() {
     const p = location.pathname;
+    const hasBrief = !!store.get('match', {}).kind;
+    $$('.tab-match').forEach(a => { a.href = `${BASE}/${hasBrief ? 'feed' : 'match'}`; });
+    document.body.classList.toggle('feed-mode', p.startsWith(BASE + '/feed'));
     $$('.nav a, .tabbar a').forEach(a => {
       const h = new URL(a.href).pathname;
       const on = h === p || (h !== BASE && p.startsWith(h + '/')) || (h.endsWith('/rent') && p.startsWith(BASE + '/rent')) || (h.endsWith('/buy') && p.startsWith(BASE + '/buy'));
@@ -815,9 +819,9 @@
   /* ---------- matcher ---------- */
   function matcher() {
     document.title = t('nav.match') + ' — BG Beach Homes';
-    const A = Object.assign({ kind: '', who: [], when: '', budget: 0, matters: [], town: '' }, JSON.parse(sessionStorage.getItem('bgbh.match') || '{}'));
+    const A = Object.assign({ kind: '', who: [], when: '', budget: 0, matters: [], town: '' }, store.get('match', {}));
     let step = +(new URLSearchParams(location.search).get('step') || 0);
-    const save = () => sessionStorage.setItem('bgbh.match', JSON.stringify(A));
+    const save = () => store.set('match', A);
     const steps = () => A.kind === 'sale' ? ['kind', 'who', 'budget', 'matters', 'town', 'results'] : ['kind', 'who', 'when', 'budget', 'matters', 'town', 'results'];
     function opts(field, list, multi, max) {
       const hint = multi ? `<p class="m-hint">☑ ${esc(t('m.multi'))}${A[field].length ? ` · <span>${esc(t('m.selected', { n: A[field].length }))}</span>` : ''}</p>` : '';
@@ -902,6 +906,7 @@
     const brief = [A.kind === 'sale' ? t('m.buy') : t('m.rent'), ...A.who.map(w => t('m.' + w)), A.when && t('m.' + A.when), A.budget && eur(A.budget), ...A.matters.map(m => t('m.' + m)), A.town ? townName(A.town) : ''].filter(Boolean);
     main.innerHTML = `<div class="wrap"><div class="page-hero"><p class="eyebrow">${esc(t('matchb.eyebrow'))}</p><h1 style="margin-top:12px">${esc(t('m.results'))}</h1><p class="lede">${esc(t('m.resultsP'))}</p></div>
       <div class="brief">${brief.map(b => `<span class="tag grey">${esc(b)}</span>`).join('')}<button type="button" class="btn btn-ghost btn-sm" id="mrestart" style="margin-left:auto">${esc(t('m.restart'))}</button></div>
+      <div class="m-actions"><a class="btn btn-sun" href="${BASE}/feed">${esc(t('feed.open'))} →</a><button type="button" class="btn btn-line" data-watch>🔔 ${esc(t('watch.btn'))}</button></div>
       ${res.length ? `<div class="grid">${res.map(x => cardWrap(x.L, { score: x.score, why: x.why, month })).join('')}</div>` : `<div class="empty"><h3>${esc(t('m.none'))}</h3><p class="muted">${esc(t('m.noneP'))}</p></div>`}
       ${near.length ? `<div class="near-head"><h2>${esc(res.length ? t('near.more') : t('near.h'))}</h2><p class="muted" style="margin-top:6px">${esc(t('near.p'))}</p></div><div class="grid" style="margin-top:18px">${near.map(x => cardWrap(x.L, { score: x.score, why: x.why.slice(0, 2), miss: x.miss, month })).join('')}</div>` : ''}
       <div class="section"><div class="form-card" id="mbrief" style="max-width:640px">
@@ -915,6 +920,125 @@
     $('#mrestart').onclick = restart;
     wireEnquiry($('#mbrief'), null, () => ({ brief: brief.join(' · '), top: res.concat(near).slice(0, 8).map(x => `${x.L.kind}:${x.L.id}(${x.score}%${x.miss.length ? ' ~' + x.miss.join('/') : ''})`).join(', ') }));
   }
+
+  /* ---------- feed (phone / Mini App first) ---------- */
+  function feedList(A, showSkipped) {
+    const skip = new Set(store.get('skip', []));
+    return scoreAll(A).filter(x => x.miss.length <= 2 && (x.miss.length === 0 || x.over <= 1.5)).filter(x => showSkipped || !skip.has(x.L.key)).slice(0, 60);
+  }
+  function feed() {
+    const A = store.get('match', {});
+    if (!A.kind) return go(`${BASE}/match`, true);
+    document.title = t('feed.title') + ' — BG Beach Homes';
+    const month = A.kind === 'rent' ? whenMonth(A) : '';
+    let showSkipped = false;
+    const brief = [A.kind === 'sale' ? t('m.buy') : t('m.rent'), A.town ? townName(A.town) : '', A.budget ? '≤ ' + eur(A.budget) : '', ...A.matters.slice(0, 2).map(m => t('m.' + m))].filter(Boolean).join(' · ');
+    function draw() {
+      const list = feedList(A, showSkipped);
+      main.innerHTML = `<div class="feed-wrap"><div class="feed-top"><a class="feed-brief" href="${BASE}/match" title="${esc(t('feed.edit'))}">${esc(brief)} <span aria-hidden="true">✎</span></a><button type="button" class="btn btn-sun btn-sm" data-watch>🔔 ${esc(t('watch.btn'))}</button></div>
+        <div class="feed" id="feed" tabindex="0" aria-label="${esc(t('feed.title'))}">
+          ${list.map((x, i) => feedCard(x, month, i, list.length)).join('')}
+          <section class="fcard fend"><div class="fend-in">
+            <p class="eyebrow">${esc(t('feed.title'))}</p><h2>${esc(list.length ? t('feed.endH') : t('m.none'))}</h2><p class="muted">${esc(t('feed.endP'))}</p>
+            <button type="button" class="btn btn-sun" data-watch>🔔 ${esc(t('watch.btn'))}</button>
+            <a class="btn btn-line" href="${BASE}/match">${esc(t('feed.edit'))}</a>
+            ${store.get('skip', []).length ? `<button type="button" class="btn btn-ghost" id="fskipped">${esc(t('feed.skipped'))}</button>` : ''}
+          </div></section>
+        </div></div>`;
+      paintSaved();
+      const box = $('#feed');
+      const step = dir => box.scrollBy({ top: dir * box.clientHeight, behavior: reduced ? 'auto' : 'smooth' });
+      box.addEventListener('click', e => {
+        const b = e.target.closest('[data-act]'); if (!b) return;
+        const key = b.closest('.fcard').dataset.key, L = BYKEY.get(key);
+        const act = b.dataset.act;
+        if (act === 'skip') { store.set('skip', [...new Set([...store.get('skip', []), key])]); b.closest('.fcard').classList.add('gone'); setTimeout(() => step(1), 120); }
+        if (act === 'save') step(1); // the global [data-save] handler toggles it
+        if (act === 'ask') askOwner(L);
+        if (act === 'open') go(urlOf(L));
+      });
+      $$('.fphotos', box).forEach(ph => ph.addEventListener('scroll', () => {
+        const i = Math.round(ph.scrollLeft / ph.clientWidth);
+        $$('.fdots i', ph.parentElement).forEach((d, j) => d.classList.toggle('on', j === i));
+        const im = ph.children[i]; if (im && im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); }
+      }, { passive: true }));
+      // load a card's first photos only when it comes near the screen
+      const io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { $$('img[data-src]', e.target).slice(0, 2).forEach(im => { im.src = im.dataset.src; im.removeAttribute('data-src'); }); io2.unobserve(e.target); } }), { root: box, rootMargin: '100% 0px' });
+      $$('.fcard[data-key]', box).forEach(c => io2.observe(c));
+      const key = e => {
+        if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) || !$('#sheet').hidden) return;
+        if (e.key === 'ArrowDown' || e.key === 'j') { e.preventDefault(); step(1); }
+        if (e.key === 'ArrowUp' || e.key === 'k') { e.preventDefault(); step(-1); }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          const c = [...box.querySelectorAll('.fcard')].find(x => Math.abs(x.getBoundingClientRect().top - box.getBoundingClientRect().top) < 40);
+          const ph = c && $('.fphotos', c); if (ph) ph.scrollBy({ left: (e.key === 'ArrowRight' ? 1 : -1) * ph.clientWidth, behavior: 'smooth' });
+        }
+      };
+      addEventListener('keydown', key);
+      onLeave(() => { removeEventListener('keydown', key); io2.disconnect(); });
+      $('#fskipped')?.addEventListener('click', () => { showSkipped = true; draw(); });
+      box.focus({ preventScroll: true });
+    }
+    draw();
+  }
+  function feedCard(x, month, i, n) {
+    const L = x.L, f = freshness(L);
+    const photos = Array.from({ length: L.n }, (_, j) => `<img ${j < 1 && i < 2 ? 'src' : 'data-src'}="${img(L, j)}" alt="" decoding="async">`).join('');
+    const chips = x.miss.map(m => `<span class="tag miss">${esc(m)}</span>`).join('') + x.why.slice(0, 3).map(w => `<span class="tag">${esc(w)}</span>`).join('');
+    return `<section class="fcard" data-key="${L.key}" aria-label="${i + 1} / ${n}">
+      <div class="fmedia"><div class="fphotos">${photos}</div><div class="fdots">${Array.from({ length: L.n }, (_, j) => `<i class="${j ? '' : 'on'}"></i>`).join('')}</div>
+        <span class="fscore">${x.miss.length ? esc(t('near.short')) : esc(t('m.fit', { n: x.score }))}</span></div>
+      <div class="finfo">
+        <div class="card-price">${priceHTML(L, month)}</div>
+        <div class="card-title">${esc([typeLabel(L), townName(L.town)].filter(Boolean).join(' · '))}${cxName(L) ? ` <span class="muted">· ${esc(cxName(L))}</span>` : ''}</div>
+        <div class="why">${chips}</div>
+        <div class="tiny"><i class="fresh-dot ${f === 'fresh' ? '' : f}"></i>${f === 'fresh' ? esc(t('fresh.label')) : esc(t('fresh.old', { d: monthYear(L.date) }))} · ID ${L.id}</div>
+        <div class="factions">
+          <button type="button" class="fbtn" data-act="skip" aria-label="${esc(t('feed.skip'))}">✕<span>${esc(t('feed.skip'))}</span></button>
+          <button type="button" class="fbtn" data-act="open">⤢<span>${esc(t('feed.details'))}</span></button>
+          <button type="button" class="fbtn" data-act="save" data-save="${L.key}" aria-pressed="${isSaved(L.key)}">${I.heart}<span>${esc(t('card.save'))}</span></button>
+          <button type="button" class="fbtn fbtn-main" data-act="ask">${esc(L.kind === 'rent' ? t('feed.ask') : t('e.sendBuy'))}</button>
+        </div>
+      </div>
+    </section>`;
+  }
+  // inside Telegram the request is one tap (name and contact come from Telegram); elsewhere a short form
+  async function askOwner(L) {
+    if (inTG) {
+      try {
+        const r = await fetch('/api/bgbh-lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type: 'listing', key: L.key, initData: TG.initData, lang, page: urlOf(L), brief: JSON.stringify(store.get('match', {})) }) });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && j.ok) { try { TG.HapticFeedback?.notificationOccurred('success'); } catch { /* ignore */ } return toast(t('feed.sent')); }
+      } catch { /* fall back to the form */ }
+    }
+    sheet(`<h2 id="sheet-title" style="font-size:22px;margin-bottom:6px">${esc([typeLabel(L), townName(L.town)].filter(Boolean).join(' · '))}</h2>${enquiryPanel(L)}`);
+    wireEnquiry($('#sheet .sheet-body'), L);
+  }
+  let watchCfg = null;
+  async function watch() {
+    const A = store.get('match', {});
+    if (!A.kind) return go(`${BASE}/match`);
+    try { watchCfg = watchCfg || await (await fetch('/api/bgbh-brief')).json(); } catch { watchCfg = { ready: false }; }
+    if (!watchCfg.ready) {
+      sheet(`<h2 id="sheet-title" style="font-size:24px">🔔 ${esc(t('watch.h'))}</h2><p class="muted" style="margin:10px 0 18px">${esc(t('watch.soon'))}</p>
+        <div class="form-card" id="wbrief"><form novalidate data-type="watch" style="display:grid;gap:12px">
+          <label class="field"><span>${esc(t('e.name'))}</span><input class="input" name="name" required></label>
+          <label class="field"><span>${esc(t('e.contact'))}</span><input class="input" name="contact" required></label>
+          <button class="btn btn-sun" type="submit">${esc(t('m.sendBrief'))}</button><p class="tiny">${esc(t('e.priv'))}</p></form></div>`);
+      wireEnquiry($('#wbrief'), null, () => ({ brief: JSON.stringify(A) }));
+      return;
+    }
+    try {
+      const r = await fetch('/api/bgbh-brief', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ brief: A, lang, id: store.get('briefId', ''), initData: inTG ? TG.initData : '' }) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.error);
+      store.set('briefId', j.id);
+      if (j.connected) return toast(t('watch.on'));
+      if (inTG) { TG.openTelegramLink(j.link); return; }
+      sheet(`<h2 id="sheet-title" style="font-size:24px">🔔 ${esc(t('watch.h'))}</h2><p class="muted" style="margin:10px 0 18px">${esc(t('watch.p'))}</p><a class="btn btn-tg" style="width:100%" href="${esc(j.link)}" target="_blank" rel="noopener">${I.tg}${esc(t('watch.tg'))}</a>`);
+    } catch { toast(t('e.fail')); }
+  }
+  document.addEventListener('click', e => { if (e.target.closest('[data-watch]')) { e.preventDefault(); watch(); } });
 
   /* ---------- saved ---------- */
   function savedPage() {
