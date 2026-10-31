@@ -52,6 +52,8 @@ export async function POST(request: NextRequest) {
   }
 
   const m = u.message;
+  // setup helper: in the team group, /chatid answers with the id to put into BGBH_TG_CHAT_ID
+  if (m && /^\/chatid\b/.test(m.text || '')) { await tg('sendMessage', { chat_id: m.chat.id, text: `chat id: ${m.chat.id}` }); return ok(); }
   if (!m || m.chat.type !== 'private' || !m.from) return ok();
   const lang = pickLang(m.from.language_code), text = (m.text || '').trim(), chatId = m.chat.id;
 
